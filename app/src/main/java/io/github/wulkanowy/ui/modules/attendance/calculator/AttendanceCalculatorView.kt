@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.attendance.calculator
 
-import io.github.wulkanowy.data.db.entities.AttendanceSummary
+import io.github.wulkanowy.data.pojos.AttendanceData
 import io.github.wulkanowy.ui.base.BaseView
 
 interface AttendanceCalculatorView : BaseView {
@@ -23,7 +23,7 @@ interface AttendanceCalculatorView : BaseView {
 
     fun setErrorDetails(message: String)
 
-    fun updateData(data: List<Pair<String, AttendanceSummary>>)
+    fun updateData(data: List<AttendanceData>)
 
     fun setTargetAttendance(targetFreq: Double)
 

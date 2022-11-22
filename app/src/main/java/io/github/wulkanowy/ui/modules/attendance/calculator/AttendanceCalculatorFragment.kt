@@ -6,8 +6,8 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.AttendanceSummary
 import io.github.wulkanowy.databinding.FragmentAttendanceCalculatorBinding
+import io.github.wulkanowy.data.pojos.AttendanceData
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
@@ -56,7 +56,7 @@ class AttendanceCalculatorFragment :
         }
     }
 
-    override fun updateData(data: List<Pair<String, AttendanceSummary>>) {
+    override fun updateData(data: List<AttendanceData>) {
         with(attendanceCalculatorAdapter) {
             items = data
             notifyDataSetChanged()

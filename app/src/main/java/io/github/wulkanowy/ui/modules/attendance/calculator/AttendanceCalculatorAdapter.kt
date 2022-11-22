@@ -5,11 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import io.github.wulkanowy.data.db.entities.AttendanceSummary
 import io.github.wulkanowy.databinding.ItemAttendanceCalculatorHeaderBinding
-import io.github.wulkanowy.utils.allAbsences
-import io.github.wulkanowy.utils.allPresences
-import io.github.wulkanowy.utils.calculatePercentage
+import io.github.wulkanowy.data.pojos.AttendanceData
 import javax.inject.Inject
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -19,39 +16,35 @@ class AttendanceCalculatorAdapter @Inject constructor() :
     RecyclerView.Adapter<AttendanceCalculatorAdapter.ViewHolder>() {
 
     var targetFreq: Double = 0.5
-    var items = emptyList<Pair</* subject name */ String, AttendanceSummary>>()
+    var items = emptyList<AttendanceData>()
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return ViewHolder(
-            ItemAttendanceCalculatorHeaderBinding.inflate(inflater, parent, false)
+        parent: ViewGroup, viewType: Int
+    ) = ViewHolder(
+        ItemAttendanceCalculatorHeaderBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
         )
-    }
+    )
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(parent: ViewHolder, position: Int) {
         with(parent.binding) {
-            val (name, item) = items[position]
-            val absences = item.allAbsences
-            val presences = item.allPresences
-            val total = absences + presences
-            attendanceCalculatorPercentage.text = "${item.calculatePercentage().roundToInt()}"
+            val item = items[position]
+            val (name, presences, absences) = item
+            attendanceCalculatorPercentage.text = "${item.presencePercentage.roundToInt()}"
             // The `+ 1` is to avoid false positives in close cases. Eg.:
             // target frequency 99%, 1 presence. Without the `+ 1` this would be reported shown as
             // a positive balance of +1, however that is not actually true as skipping one class
             // would make it so that the balance would actually be negative (-98). The `+ 1`
             // fixes this and makes sure that in situations like these, it's not reporting incorrect
             // balances
-            if (presences / (total + 1f) >= targetFreq) {
+            if (presences / (item.total + 1f) >= targetFreq) {
                 attendanceCalculatorBalancePositive.isVisible = true
                 attendanceCalculatorBalanceNeutral.isVisible = false
                 attendanceCalculatorBalanceNegative.isVisible = false
                 attendanceCalculatorBalancePositive.text =
                     "+${calcMissingAbsences(targetFreq, absences, presences)}"
-            } else if (presences / (total + 0f) < targetFreq) {
+            } else if (presences / (item.total + 0f) < targetFreq) {
                 attendanceCalculatorBalancePositive.isVisible = false
                 attendanceCalculatorBalanceNeutral.isVisible = false
                 attendanceCalculatorBalanceNegative.isVisible = true
@@ -63,7 +56,7 @@ class AttendanceCalculatorAdapter @Inject constructor() :
                 attendanceCalculatorBalanceNegative.isVisible = false
             }
             attendanceCalculatorTitle.text = name
-            attendanceCalculatorTotal.text = "${presences + absences}"
+            attendanceCalculatorTotal.text = "${item.total}"
             attendanceCalculatorPresence.text = "$presences"
         }
     }
