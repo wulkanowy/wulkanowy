@@ -6,8 +6,8 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
-import io.github.wulkanowy.databinding.FragmentAttendanceCalculatorBinding
 import io.github.wulkanowy.data.pojos.AttendanceData
+import io.github.wulkanowy.databinding.FragmentAttendanceCalculatorBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
@@ -60,13 +60,6 @@ class AttendanceCalculatorFragment :
         with(attendanceCalculatorAdapter) {
             items = data
             notifyDataSetChanged()
-        }
-    }
-
-    override fun setTargetAttendance(targetFreq: Double) {
-        with(attendanceCalculatorAdapter) {
-            this.targetFreq = targetFreq
-            notifyItemRangeChanged(0, attendanceCalculatorAdapter.itemCount)
         }
     }
 

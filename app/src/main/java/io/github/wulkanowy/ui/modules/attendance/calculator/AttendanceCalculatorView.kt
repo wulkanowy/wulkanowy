@@ -25,7 +25,5 @@ interface AttendanceCalculatorView : BaseView {
 
     fun updateData(data: List<AttendanceData>)
 
-    fun setTargetAttendance(targetFreq: Double)
-
     fun clearView()
 }
