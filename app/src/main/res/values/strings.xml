@@ -599,6 +599,7 @@
     <string name="pref_view_grade_average_force_calc">Force average calculation by app</string>
     <string name="pref_view_present">Show presence</string>
     <string name="pref_attendance_target">Attendance target</string>
+    <string name="pref_view_attendance_calculator_sorting_mode">Attendance calculator sorting</string>
     <string name="pref_view_app_theme">Theme</string>
     <string name="pref_view_expand_grade">Grades expanding</string>
     <string name="pref_view_timetable_show_timers">Mark current lesson</string>

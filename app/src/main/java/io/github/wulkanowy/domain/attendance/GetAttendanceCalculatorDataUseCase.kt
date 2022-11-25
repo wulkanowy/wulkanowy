@@ -4,6 +4,8 @@ import io.github.wulkanowy.data.*
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Subject
+import io.github.wulkanowy.data.enums.AttendanceCalculatorSortingMode
+import io.github.wulkanowy.data.enums.AttendanceCalculatorSortingMode.*
 import io.github.wulkanowy.data.pojos.AttendanceData
 import io.github.wulkanowy.data.repositories.AttendanceSummaryRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
@@ -53,7 +55,11 @@ class GetAttendanceCalculatorDataUseCase @Inject constructor(
             }
         })
     }
-        .mapResourceData { it.sortedByDescending(AttendanceData::lessonBalance) }
+        .combine(preferencesRepository.attendanceCalculatorSortingModeFlow) { resource, sortMode ->
+            resource.mapData {
+                it.sortedBy(sortMode)
+            }
+        }
         // Every individual combined flow causes separate network requests to update data.
         // When there is N child flows, they can cause up to N-1 items to be emitted. Since all
         // requests are usually completed in less than 5s, there is no need to emit multiple
@@ -90,4 +96,11 @@ class GetAttendanceCalculatorDataUseCase @Inject constructor(
 
     private fun calcMinRequiredAbsencesFor(targetFreq: Double, presences: Int) =
         floor((presences * (1 - targetFreq)) / targetFreq).toInt()
+
+    private fun List<AttendanceData>.sortedBy(mode: AttendanceCalculatorSortingMode) = when (mode) {
+        ALPHABETIC -> sortedBy(AttendanceData::subjectName)
+        ATTENDANCE -> sortedByDescending(AttendanceData::presencePercentage)
+        LESSON_BALANCE -> sortedBy(AttendanceData::lessonBalance)
+    }
+
 }
