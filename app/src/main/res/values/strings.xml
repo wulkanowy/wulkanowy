@@ -204,6 +204,10 @@
     <!--Attendance-->
     <string name="attendance_summary_button">Attendance summary</string>
     <string name="attendance_calculator_button">Attendance calculator</string>
+    <string name="attendance_calculator_summary_balance_positive"><b>%1$d</b> over target</string>
+    <string name="attendance_calculator_summary_balance_neutral">right on target</string>
+    <string name="attendance_calculator_summary_balance_negative"><b>%1$d</b> under target</string>
+    <string name="attendance_calculator_summary_values">%1$d/%2$d presences</string>
     <string name="attendance_absence_school">Absent for school reasons</string>
     <string name="attendance_absence_excused">Excused absence</string>
     <string name="attendance_absence_unexcused">Unexcused absence</string>

@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import io.github.wulkanowy.R
 import io.github.wulkanowy.data.pojos.AttendanceData
 import io.github.wulkanowy.databinding.ItemAttendanceCalculatorHeaderBinding
 import javax.inject.Inject
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 class AttendanceCalculatorAdapter @Inject constructor() :
@@ -32,23 +34,27 @@ class AttendanceCalculatorAdapter @Inject constructor() :
             attendanceCalculatorPercentage.text = "${item.presencePercentage.roundToInt()}"
 
             if (item.lessonBalance > 0) {
-                attendanceCalculatorBalancePositive.isVisible = true
-                attendanceCalculatorBalanceNeutral.isVisible = false
-                attendanceCalculatorBalanceNegative.isVisible = false
-                attendanceCalculatorBalancePositive.text = "+${item.lessonBalance}"
+                attendanceCalculatorSummaryBalance.text = root.context.getString(
+                    R.string.attendance_calculator_summary_balance_positive,
+                    item.lessonBalance
+                )
             } else if (item.lessonBalance < 0) {
-                attendanceCalculatorBalancePositive.isVisible = false
-                attendanceCalculatorBalanceNeutral.isVisible = false
-                attendanceCalculatorBalanceNegative.isVisible = true
-                attendanceCalculatorBalanceNegative.text = "${item.lessonBalance}"
+                attendanceCalculatorSummaryBalance.text = root.context.getString(
+                    R.string.attendance_calculator_summary_balance_negative,
+                    abs(item.lessonBalance)
+                )
             } else {
-                attendanceCalculatorBalancePositive.isVisible = false
-                attendanceCalculatorBalanceNeutral.isVisible = true
-                attendanceCalculatorBalanceNegative.isVisible = false
+                attendanceCalculatorSummaryBalance.text = root.context.getString(
+                    R.string.attendance_calculator_summary_balance_neutral,
+                )
             }
+            attendanceCalculatorWarning.isVisible = item.lessonBalance < 0
             attendanceCalculatorTitle.text = item.subjectName
-            attendanceCalculatorTotal.text = "${item.total}"
-            attendanceCalculatorPresence.text = "${item.presences}"
+            attendanceCalculatorSummaryValues.text = root.context.getString(
+                R.string.attendance_calculator_summary_values,
+                item.presences,
+                item.total
+            )
         }
     }
 
