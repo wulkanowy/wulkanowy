@@ -23,8 +23,8 @@ android {
         testApplicationId "io.github.tests.wulkanowy"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 115
-        versionName "1.8.0"
+        versionCode 116
+        versionName "1.8.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         resValue "string", "app_name", "Wulkanowy"
@@ -161,7 +161,7 @@ play {
     defaultToAppBundles = false
     track = 'production'
     releaseStatus = com.github.triplet.gradle.androidpublisher.ReleaseStatus.IN_PROGRESS
-    userFraction = 0.25d
+    userFraction = 0.10d
     updatePriority = 4
     enabled.set(false)
 }
@@ -186,7 +186,7 @@ ext {
 }
 
 dependencies {
-    implementation "io.github.wulkanowy:sdk:1.8.0"
+    implementation "io.github.wulkanowy:sdk:1.8.1"
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.8'
 
@@ -241,7 +241,7 @@ dependencies {
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'
     implementation 'com.fredporciuncula:flow-preferences:1.8.0'
 
-    playImplementation platform('com.google.firebase:firebase-bom:31.0.3')
+    playImplementation platform('com.google.firebase:firebase-bom:31.1.0')
     playImplementation 'com.google.firebase:firebase-analytics-ktx'
     playImplementation 'com.google.firebase:firebase-messaging:'
     playImplementation 'com.google.firebase:firebase-crashlytics:'
@@ -250,7 +250,7 @@ dependencies {
     playImplementation 'com.google.android.gms:play-services-ads:21.3.0'
 
     hmsImplementation 'com.huawei.hms:hianalytics:6.8.0.300'
-    hmsImplementation 'com.huawei.agconnect:agconnect-crash:1.7.3.300'
+    hmsImplementation 'com.huawei.agconnect:agconnect-crash:1.7.3.302'
 
     releaseImplementation "com.github.ChuckerTeam.Chucker:library-no-op:$chucker"
 
