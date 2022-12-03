@@ -73,10 +73,10 @@
     <string name="login_signed_in">Uczeń jest już zalogowany</string>
     <string name="login_host_standard">Standardowa</string>
     <!--Notifications-->
-    <string name="notifications_header_title">Enable notifications</string>
-    <string name="notifications_header_description">Enable notifications so you don\'t miss message from teacher or new grade</string>
-    <string name="notifications_skip">Skip</string>
-    <string name="notifications_enable">Enable</string>
+    <string name="notifications_header_title">Włącz powiadomienia</string>
+    <string name="notifications_header_description">Włącz powiadomienia, aby nie przegapić wiadomości od nauczyciela lub nowej oceny</string>
+    <string name="notifications_skip">Pomiń</string>
+    <string name="notifications_enable">Włącz</string>
     <!--Main-->
     <string name="main_account_picker">Menadżer kont</string>
     <string name="main_log_in">Zaloguj się</string>
