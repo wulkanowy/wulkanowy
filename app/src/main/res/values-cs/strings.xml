@@ -72,6 +72,11 @@
     <string name="login_recover">Obnovit</string>
     <string name="login_signed_in">Žák je už přihlášen</string>
     <string name="login_host_standard">Standardní</string>
+    <!--Notifications-->
+    <string name="notifications_header_title">Enable notifications</string>
+    <string name="notifications_header_description">Enable notifications so you don\'t miss message from teacher or new grade</string>
+    <string name="notifications_skip">Skip</string>
+    <string name="notifications_enable">Enable</string>
     <!--Main-->
     <string name="main_account_picker">Manažer účtů</string>
     <string name="main_log_in">Přihlásit se</string>
