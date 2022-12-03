@@ -72,6 +72,11 @@
     <string name="login_recover">Відновити</string>
     <string name="login_signed_in">Учня вже авторизовано</string>
     <string name="login_host_standard">Стандартний</string>
+    <!--Notifications-->
+    <string name="notifications_header_title">Enable notifications</string>
+    <string name="notifications_header_description">Enable notifications so you don\'t miss message from teacher or new grade</string>
+    <string name="notifications_skip">Skip</string>
+    <string name="notifications_enable">Enable</string>
     <!--Main-->
     <string name="main_account_picker">Змінити облікові записи</string>
     <string name="main_log_in">Увійти</string>
