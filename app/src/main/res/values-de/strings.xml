@@ -72,6 +72,11 @@
     <string name="login_recover">Wiederherstellen</string>
     <string name="login_signed_in">Student ist bereits angemeldet</string>
     <string name="login_host_standard">Standard</string>
+    <!--Notifications-->
+    <string name="notifications_header_title">Enable notifications</string>
+    <string name="notifications_header_description">Enable notifications so you don\'t miss message from teacher or new grade</string>
+    <string name="notifications_skip">Skip</string>
+    <string name="notifications_enable">Enable</string>
     <!--Main-->
     <string name="main_account_picker">Kundenbetreuer</string>
     <string name="main_log_in">Anmelden</string>
