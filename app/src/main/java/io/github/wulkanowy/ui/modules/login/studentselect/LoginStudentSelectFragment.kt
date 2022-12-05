@@ -9,13 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
+import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.databinding.FragmentLoginStudentSelectBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
-import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.openEmailClient
 import io.github.wulkanowy.utils.openInternetBrowser
+import io.github.wulkanowy.utils.serializable
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -32,6 +33,9 @@ class LoginStudentSelectFragment :
     @Inject
     lateinit var appInfo: AppInfo
 
+    @Inject
+    lateinit var preferencesRepository: PreferencesRepository
+
     companion object {
         const val ARG_STUDENTS = "STUDENTS"
 
@@ -47,7 +51,7 @@ class LoginStudentSelectFragment :
         binding = FragmentLoginStudentSelectBinding.bind(view)
         presenter.onAttachView(
             view = this,
-            students = requireArguments().getSerializable(ARG_STUDENTS) as List<StudentWithSemesters>,
+            students = requireArguments().serializable(ARG_STUDENTS),
         )
     }
 
@@ -75,9 +79,8 @@ class LoginStudentSelectFragment :
         }
     }
 
-    override fun openMainView() {
-        startActivity(MainActivity.getStartIntent(requireContext()))
-        requireActivity().finish()
+    override fun navigateToNext() {
+        (requireActivity() as LoginActivity).navigateToNotifications()
     }
 
     override fun showProgress(show: Boolean) {
@@ -111,10 +114,12 @@ class LoginStudentSelectFragment :
             email = "wulkanowyinc@gmail.com",
             subject = requireContext().getString(R.string.login_email_subject),
             body = requireContext().getString(
-                R.string.login_email_text, appInfo.systemModel,
+                R.string.login_email_text,
+                "${appInfo.systemManufacturer} ${appInfo.systemModel}",
                 appInfo.systemVersion.toString(),
-                appInfo.versionName,
+                "${appInfo.versionName}-${appInfo.buildFlavor}",
                 "Select users to log in",
+                preferencesRepository.installationId,
                 lastError
             )
         )

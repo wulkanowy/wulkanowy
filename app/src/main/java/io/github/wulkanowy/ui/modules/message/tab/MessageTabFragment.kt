@@ -9,21 +9,26 @@ import android.view.View.*
 import android.widget.CompoundButton
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.core.view.updatePadding
+import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.databinding.FragmentMessageTabBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.message.MessageFragment
+import io.github.wulkanowy.ui.modules.message.mailboxchooser.MailboxChooserDialog
 import io.github.wulkanowy.ui.modules.message.preview.MessagePreviewFragment
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.hideSoftInput
+import io.github.wulkanowy.utils.nullableSerializable
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -40,12 +45,8 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
 
         const val MESSAGE_TAB_FOLDER_ID = "message_tab_folder_id"
 
-        fun newInstance(folder: MessageFolder): MessageTabFragment {
-            return MessageTabFragment().apply {
-                arguments = Bundle().apply {
-                    putString(MESSAGE_TAB_FOLDER_ID, folder.name)
-                }
-            }
+        fun newInstance(folder: MessageFolder) = MessageTabFragment().apply {
+            arguments = bundleOf(MESSAGE_TAB_FOLDER_ID to folder.name)
         }
     }
 
@@ -83,6 +84,7 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         }
     }
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -104,6 +106,7 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
             onItemClickListener = presenter::onMessageItemSelected
             onLongItemClickListener = presenter::onMessageItemLongSelected
             onHeaderClickListener = ::onChipChecked
+            onMailboxClickListener = presenter::onMailboxFilterSelected
             onChangesDetectedListener = ::resetListPosition
         }
 
@@ -123,8 +126,15 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
             messageTabErrorRetry.setOnClickListener { presenter.onRetry() }
             messageTabErrorDetails.setOnClickListener { presenter.onDetailsClick() }
         }
+
+        setFragmentResultListener(requireArguments().getString(MESSAGE_TAB_FOLDER_ID)!!) { _, bundle ->
+            presenter.onMailboxSelected(
+                mailbox = bundle.nullableSerializable(MailboxChooserDialog.MAILBOX_KEY),
+            )
+        }
     }
 
+    @Suppress("DEPRECATION")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.action_menu_message_tab, menu)
@@ -243,6 +253,16 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
     override fun showRecyclerBottomPadding(show: Boolean) {
         binding.messageTabRecycler.updatePadding(
             bottom = if (show) requireContext().dpToPx(64f).toInt() else 0
+        )
+    }
+
+    override fun showMailboxChooser(mailboxes: List<Mailbox>) {
+        (activity as? MainActivity)?.showDialogFragment(
+            MailboxChooserDialog.newInstance(
+                mailboxes = mailboxes,
+                isMailboxRequired = false,
+                folder = requireArguments().getString(MESSAGE_TAB_FOLDER_ID)!!,
+            )
         )
     }
 

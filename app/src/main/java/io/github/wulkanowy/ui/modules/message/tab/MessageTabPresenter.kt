@@ -1,10 +1,10 @@
 package io.github.wulkanowy.ui.modules.message.tab
 
 import io.github.wulkanowy.data.*
+import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.data.repositories.MessageRepository
-import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
@@ -26,7 +26,6 @@ class MessageTabPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
     private val messageRepository: MessageRepository,
-    private val semesterRepository: SemesterRepository,
     private val analytics: AnalyticsHelper
 ) : BasePresenter<MessageTabView>(errorHandler, studentRepository) {
 
@@ -35,6 +34,9 @@ class MessageTabPresenter @Inject constructor(
     private lateinit var lastError: Throwable
 
     private var lastSearchQuery = ""
+
+    private var mailboxes: List<Mailbox> = emptyList()
+    private var selectedMailbox: Mailbox? = null
 
     private var messages = emptyList<Message>()
 
@@ -122,7 +124,7 @@ class MessageTabPresenter @Inject constructor(
 
             runCatching {
                 val student = studentRepository.getCurrentStudent(true)
-                messageRepository.deleteMessages(student, messageList)
+                messageRepository.deleteMessages(student, selectedMailbox, messageList)
             }
                 .onFailure(errorHandler::dispatch)
                 .onSuccess { view?.showMessagesDeleted() }
@@ -159,7 +161,7 @@ class MessageTabPresenter @Inject constructor(
     }
 
     fun onMessageItemSelected(messageItem: MessageTabDataItem.MessageItem, position: Int) {
-        Timber.i("Select message ${messageItem.message.id} item (position: $position)")
+        Timber.i("Select message ${messageItem.message.messageGlobalKey} item (position: $position)")
 
         if (!isActionMode) {
             view?.run {
@@ -201,13 +203,28 @@ class MessageTabPresenter @Inject constructor(
         }
     }
 
+    fun onMailboxFilterSelected() {
+        view?.showMailboxChooser(mailboxes)
+    }
+
+    fun onMailboxSelected(mailbox: Mailbox?) {
+        selectedMailbox = mailbox
+        loadData(false)
+    }
+
     private fun loadData(forceRefresh: Boolean) {
         Timber.i("Loading $folder message data started")
 
         flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
-            val semester = semesterRepository.getCurrentSemester(student)
-            messageRepository.getMessages(student, semester, folder, forceRefresh)
+
+            if (selectedMailbox == null && mailboxes.isEmpty()) {
+                selectedMailbox = messageRepository.getMailboxByStudent(student)
+                mailboxes = messageRepository.getMailboxes(student, forceRefresh).toFirstResult()
+                    .dataOrNull.orEmpty()
+            }
+
+            messageRepository.getMessages(student, selectedMailbox, folder, forceRefresh)
         }
             .logResourceStatus("load $folder message")
             .onResourceData {
@@ -326,14 +343,23 @@ class MessageTabPresenter @Inject constructor(
                 MessageTabDataItem.FilterHeader(
                     onlyUnread = onlyUnread.takeIf { folder != MessageFolder.SENT },
                     onlyWithAttachments = onlyWithAttachments,
-                    isEnabled = !isActionMode
+                    isEnabled = !isActionMode,
+                    selectedMailbox = selectedMailbox?.let {
+                        buildString {
+                            if (it.studentName.isNotBlank() && it.studentName != it.userName) {
+                                append(it.studentName)
+                                append(" - ")
+                            }
+                            append(it.userName)
+                        }
+                    },
                 )
             )
 
             addAll(data.map { message ->
                 MessageTabDataItem.MessageItem(
                     message = message,
-                    isSelected = messagesToDelete.any { it.id == message.id },
+                    isSelected = messagesToDelete.any { it.messageGlobalKey == message.messageGlobalKey },
                     isActionMode = isActionMode
                 )
             })
@@ -345,10 +371,9 @@ class MessageTabPresenter @Inject constructor(
     private fun calculateMatchRatio(message: Message, query: String): Int {
         val subjectRatio = FuzzySearch.tokenSortPartialRatio(query.lowercase(), message.subject)
 
-        val senderOrRecipientRatio = FuzzySearch.tokenSortPartialRatio(
+        val correspondentsRatio = FuzzySearch.tokenSortPartialRatio(
             query.lowercase(),
-            if (message.sender.isNotEmpty()) message.sender.lowercase()
-            else message.recipient.lowercase()
+            message.correspondents
         )
 
         val dateRatio = listOf(
@@ -364,7 +389,7 @@ class MessageTabPresenter @Inject constructor(
 
 
         return (subjectRatio.toDouble().pow(2)
-            + senderOrRecipientRatio.toDouble().pow(2)
+            + correspondentsRatio.toDouble().pow(2)
             + dateRatio.toDouble().pow(2) * 2
             ).toInt()
     }

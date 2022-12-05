@@ -8,7 +8,6 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.pojos.GroupNotificationData
 import io.github.wulkanowy.data.pojos.NotificationData
 import io.github.wulkanowy.ui.modules.Destination
-import io.github.wulkanowy.ui.modules.splash.SplashActivity
 import io.github.wulkanowy.utils.getPlural
 import javax.inject.Inject
 
@@ -21,7 +20,7 @@ class NewMessageNotification @Inject constructor(
         val notificationDataList = items.map {
             NotificationData(
                 title = context.getPlural(R.plurals.message_new_items, 1),
-                content = "${it.sender}: ${it.subject}",
+                content = "${it.correspondents}: ${it.subject}",
                 destination = Destination.Message,
             )
         }

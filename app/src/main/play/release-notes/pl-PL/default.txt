@@ -1,5 +1,9 @@
-Wersja 1.6.4
+Wersja 1.8.1
 
-- naprawiliśmy błąd ładowania frekwencji na GPE i Lubelskim Portalu Oświatowym
+- naprawiliśmy liczenie średniej ucznia w ocenach klasy dla wykresu "Wszystkie"
+- zmieniliśmy kolejność przycisków akcji w podglądzie wiadomości
+- ulepszyliśmy oznaczenie nieodczytanych wiadomości
+- naprawiliśmy pokazywanie informacji o odczytanej wiadomości w wysłanych
+- dodaliśmy opcję ręcznego wybierania skrzynki pocztowej
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases
