@@ -1,66 +1,144 @@
 package io.github.wulkanowy.ui.modules.settings.appearance.menuorder
 
 import io.github.wulkanowy.R
-import kotlinx.serialization.Serializable
 
-@Serializable
-sealed class MenuItem(
-    open val icon: Int,
-    open val title: Int
-) {
+@kotlinx.serialization.Serializable
+sealed class MenuItem {
 
     // https://youtrack.jetbrains.com/issue/KT-38958
     abstract var order: Int
 
-    @Serializable
-    data class StartMenuItem(override var order: Int = 0) :
-        MenuItem(R.drawable.ic_main_dashboard, R.string.dashboard_title)
+    abstract val icon: Int
 
-    @Serializable
-    data class GradeMenuItem(override var order: Int = 1) :
-        MenuItem(R.drawable.ic_main_grade, R.string.grade_title)
+    abstract val title: Int
 
-    @Serializable
-    data class AttendanceMenuItem(override var order: Int = 2) :
-        MenuItem(R.drawable.ic_main_attendance, R.string.attendance_title)
+    @kotlinx.serialization.Serializable
+    data class StartMenuItem(override var order: Int = 0) : MenuItem() {
 
-    @Serializable
-    data class TimetableMenuItem(override var order: Int = 3) :
-        MenuItem(R.drawable.ic_main_timetable, R.string.timetable_title)
+        @kotlinx.serialization.Transient
+        override val icon = R.drawable.ic_main_dashboard
 
-    @Serializable
-    data class MessageMenuItem(override var order: Int = 4) :
-        MenuItem(R.drawable.ic_more_messages, R.string.message_title)
+        @kotlinx.serialization.Transient
+        override val title = R.string.dashboard_title
+    }
 
-    @Serializable
-    data class ExamsMenuItem(override var order: Int = 5) :
-        MenuItem(R.drawable.ic_main_exam, R.string.exam_title)
+    @kotlinx.serialization.Serializable
+    data class GradeMenuItem(override var order: Int = 1) : MenuItem() {
 
-    @Serializable
-    data class HomeworkMenuItem(override var order: Int = 6) :
-        MenuItem(R.drawable.ic_more_homework, R.string.homework_title)
+        @kotlinx.serialization.Transient
+        override val icon = R.drawable.ic_main_grade
 
-    @Serializable
-    data class NoteMenuItem(override var order: Int = 7) :
-        MenuItem(R.drawable.ic_more_note, R.string.note_title)
+        @kotlinx.serialization.Transient
+        override val title = R.string.grade_title
+    }
 
-    @Serializable
-    data class LuckyNumberMenuItem(override var order: Int = 8) :
-        MenuItem(R.drawable.ic_more_lucky_number, R.string.lucky_number_title)
+    @kotlinx.serialization.Serializable
+    data class AttendanceMenuItem(override var order: Int = 2) : MenuItem() {
 
-    @Serializable
-    data class ConferenceMenuItem(override var order: Int = 9) :
-        MenuItem(R.drawable.ic_more_conferences, R.string.conferences_title)
+        @kotlinx.serialization.Transient
+        override val icon = R.drawable.ic_main_attendance
 
-    @Serializable
-    data class SchoolAnnouncementsMenuItem(override var order: Int = 10) :
-        MenuItem(R.drawable.ic_all_about, R.string.school_announcement_title)
+        @kotlinx.serialization.Transient
+        override val title = R.string.attendance_title
+    }
 
-    @Serializable
-    data class SchoolAndTeachersMenuItem(override var order: Int = 11) :
-        MenuItem(R.drawable.ic_more_schoolandteachers, R.string.teachers_title)
+    @kotlinx.serialization.Serializable
+    data class TimetableMenuItem(override var order: Int = 3) : MenuItem() {
 
-    @Serializable
-    data class MobileDevicesMenuItem(override var order: Int = 12) :
-        MenuItem(R.drawable.ic_more_mobile_devices, R.string.mobile_devices_title)
+        @kotlinx.serialization.Transient
+        override val icon = R.drawable.ic_main_timetable
+
+        @kotlinx.serialization.Transient
+        override val title = R.string.timetable_title
+    }
+
+    @kotlinx.serialization.Serializable
+    data class MessageMenuItem(override var order: Int = 4) : MenuItem() {
+
+        @kotlinx.serialization.Transient
+        override val icon = R.drawable.ic_more_messages
+
+        @kotlinx.serialization.Transient
+        override val title = R.string.message_title
+    }
+
+    @kotlinx.serialization.Serializable
+    data class ExamsMenuItem(override var order: Int = 5) : MenuItem() {
+
+        @kotlinx.serialization.Transient
+        override val icon = R.drawable.ic_main_exam
+
+        @kotlinx.serialization.Transient
+        override val title = R.string.exam_title
+    }
+
+    @kotlinx.serialization.Serializable
+    data class HomeworkMenuItem(override var order: Int = 6) : MenuItem() {
+
+        @kotlinx.serialization.Transient
+        override val icon = R.drawable.ic_more_homework
+
+        @kotlinx.serialization.Transient
+        override val title = R.string.homework_title
+    }
+
+    @kotlinx.serialization.Serializable
+    data class NoteMenuItem(override var order: Int = 7) : MenuItem() {
+
+        @kotlinx.serialization.Transient
+        override val icon = R.drawable.ic_more_note
+
+        @kotlinx.serialization.Transient
+        override val title = R.string.note_title
+    }
+
+    @kotlinx.serialization.Serializable
+    data class LuckyNumberMenuItem(override var order: Int = 8) : MenuItem() {
+
+        @kotlinx.serialization.Transient
+        override val icon = R.drawable.ic_more_lucky_number
+
+        @kotlinx.serialization.Transient
+        override val title = R.string.lucky_number_title
+    }
+
+    @kotlinx.serialization.Serializable
+    data class ConferenceMenuItem(override var order: Int = 9) : MenuItem() {
+
+        @kotlinx.serialization.Transient
+        override val icon = R.drawable.ic_more_conferences
+
+        @kotlinx.serialization.Transient
+        override val title = R.string.conferences_title
+    }
+
+    @kotlinx.serialization.Serializable
+    data class SchoolAnnouncementsMenuItem(override var order: Int = 10) : MenuItem() {
+
+        @kotlinx.serialization.Transient
+        override val icon = R.drawable.ic_all_about
+
+        @kotlinx.serialization.Transient
+        override val title = R.string.school_announcement_title
+    }
+
+    @kotlinx.serialization.Serializable
+    data class SchoolAndTeachersMenuItem(override var order: Int = 11) : MenuItem() {
+
+        @kotlinx.serialization.Transient
+        override val icon = R.drawable.ic_more_schoolandteachers
+
+        @kotlinx.serialization.Transient
+        override val title = R.string.schoolandteachers_title
+    }
+
+    @kotlinx.serialization.Serializable
+    data class MobileDevicesMenuItem(override var order: Int = 12) : MenuItem() {
+
+        @kotlinx.serialization.Transient
+        override val icon = R.drawable.ic_more_mobile_devices
+
+        @kotlinx.serialization.Transient
+        override val title = R.string.mobile_devices_title
+    }
 }
