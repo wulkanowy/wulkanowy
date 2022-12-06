@@ -32,7 +32,7 @@ class MenuOrderFragment : BaseFragment<FragmentMenuOrderBinding>(R.layout.fragme
 
     override fun initView() {
         val itemTouchHelper = ItemTouchHelper(
-            MenuItemMoveCallback(menuOrderAdapter)
+            MenuItemMoveCallback(menuOrderAdapter, presenter::onDragAndDropEnd)
         )
 
         itemTouchHelper.attachToRecyclerView(binding.menuOrderRecycler)

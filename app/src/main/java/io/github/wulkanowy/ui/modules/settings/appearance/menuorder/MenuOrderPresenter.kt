@@ -42,4 +42,11 @@ class MenuOrderPresenter @Inject constructor(
 
         view?.updateData(savedMenuItemList)
     }
+
+    fun onDragAndDropEnd(list: List<MenuItem>) {
+        val updatedList = list.mapIndexed { index, menuItem -> menuItem.apply { order = index } }
+
+        preferencesRepository.menuItemOrder = updatedList
+        view?.updateData(updatedList)
+    }
 }
