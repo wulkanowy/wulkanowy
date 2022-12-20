@@ -490,6 +490,8 @@
     </plurals>
     <string name="conferences_present">Přítomnost na setkání</string>
     <string name="conference_agenda">Agenda</string>
+    <string name="conference_place">Place</string>
+    <string name="conference_topic">Topic</string>
     <!--Director information-->
     <string name="school_announcement_title">Školní oznámení</string>
     <string name="school_announcement_no_items">Žádná školní oznámení</string>
