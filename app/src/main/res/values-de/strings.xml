@@ -418,6 +418,8 @@
     </plurals>
     <string name="conferences_present">Teilnahme an einem Meeting</string>
     <string name="conference_agenda">Agenda</string>
+    <string name="conference_place">Place</string>
+    <string name="conference_topic">Topic</string>
     <!--Director information-->
     <string name="school_announcement_title">Schulankündigungen</string>
     <string name="school_announcement_no_items">Keine schulankündigungen</string>
