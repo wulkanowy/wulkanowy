@@ -7,6 +7,7 @@
         <item>Lubelski Portal Oświatowy</item>
         <item>EduNet Miasta Tarnowa</item>
         <item>Platforma Edukacyjna Koszalina</item>
+        <item>Gmina-miasto Tomaszów Mazowiecki - System zarządzania oświatą</item>
         <item>ResMan Rzeszów</item>
         <item>Rawa Mazowiecka - Platforma vEdukacja</item>
         <item>Zduńska Wola - e-Urząd</item>
@@ -40,6 +41,7 @@
         <item>https://vulcan.net.pl/?login</item>
         <item>https://vulcan.net.pl/?login</item>
         <item>https://vulcan.net.pl/?login</item>
+        <item>https://vulcan.net.pl/?login</item>
         <item>http://fakelog.cf/?email</item>
     </string-array>
     <string-array name="hosts_symbols">
@@ -49,6 +51,7 @@
         <item>lublin</item>
         <item>tarnow</item>
         <item>koszalin</item>
+        <item>tomaszowmazowieckiprojekt</item>
         <item>rzeszowprojekt</item>
         <item>rawamazowiecka</item>
         <item>zdunskawola</item>
