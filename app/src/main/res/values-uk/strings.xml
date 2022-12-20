@@ -490,6 +490,8 @@
     </plurals>
     <string name="conferences_present">Присутність на зустрічі</string>
     <string name="conference_agenda">Порядок денний</string>
+    <string name="conference_place">Place</string>
+    <string name="conference_topic">Topic</string>
     <!--Director information-->
     <string name="school_announcement_title">Оголошення школи</string>
     <string name="school_announcement_no_items">Немає шкільних оголошень</string>
