@@ -12,7 +12,7 @@ import androidx.core.text.parseAsHtml
 import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.StudentWithSemesters
+import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.databinding.FragmentLoginSymbolBinding
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -125,8 +125,8 @@ class LoginSymbolFragment :
         binding.loginSymbolContainer.visibility = if (show) VISIBLE else GONE
     }
 
-    override fun navigateToStudentSelect(studentsWithSemesters: List<StudentWithSemesters>) {
-        (activity as? LoginActivity)?.navigateToStudentSelect(studentsWithSemesters)
+    override fun navigateToStudentSelect(registerUser: RegisterUser) {
+        (activity as? LoginActivity)?.navigateToStudentSelect(registerUser)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

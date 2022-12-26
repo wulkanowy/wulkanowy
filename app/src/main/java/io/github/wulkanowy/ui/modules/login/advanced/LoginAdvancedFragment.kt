@@ -328,7 +328,7 @@ class LoginAdvancedFragment :
     }
 
     override fun navigateToStudentSelect(studentsWithSemesters: List<StudentWithSemesters>) {
-        (activity as? LoginActivity)?.navigateToStudentSelect(studentsWithSemesters)
+//        (activity as? LoginActivity)?.navigateToStudentSelect(studentsWithSemesters)
     }
 
     override fun onResume() {

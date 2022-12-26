@@ -1,15 +1,20 @@
 package io.github.wulkanowy.ui.modules.login.studentselect
 
 import io.github.wulkanowy.data.Resource
-import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.dataOrNull
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.logResourceStatus
+import io.github.wulkanowy.data.mappers.mapToStudentWithSemesters
+import io.github.wulkanowy.data.pojos.RegisterStudent
+import io.github.wulkanowy.data.pojos.RegisterTeacher
+import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.resourceFlow
 import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
+import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -19,14 +24,18 @@ class LoginStudentSelectPresenter @Inject constructor(
     studentRepository: StudentRepository,
     private val loginErrorHandler: LoginErrorHandler,
     private val syncManager: SyncManager,
-    private val analytics: AnalyticsHelper
+    private val analytics: AnalyticsHelper,
+    private val appInfo: AppInfo,
 ) : BasePresenter<LoginStudentSelectView>(loginErrorHandler, studentRepository) {
 
     private var lastError: Throwable? = null
 
-    private val selectedStudents = mutableListOf<StudentWithSemesters>()
+    private lateinit var registerUser: RegisterUser
+    private lateinit var students: List<StudentWithSemesters>
 
-    fun onAttachView(view: LoginStudentSelectView, students: List<StudentWithSemesters>) {
+    private val selectedSubjects = mutableListOf<LoginStudentSelectItem>()
+
+    fun onAttachView(view: LoginStudentSelectView, registerUser: RegisterUser) {
         super.onAttachView(view)
         with(view) {
             initView()
@@ -38,58 +47,113 @@ class LoginStudentSelectPresenter @Inject constructor(
             }
         }
 
-        if (students.size == 1) registerStudents(students)
-        loadData(students)
+        this.registerUser = registerUser
+        loadData(registerUser)
     }
 
     fun onSignIn() {
-        registerStudents(selectedStudents)
+        registerStudents(selectedSubjects)
     }
 
-    fun onItemSelected(studentWithSemester: StudentWithSemesters, alreadySaved: Boolean) {
-        if (alreadySaved) return
+    fun onItemSelected(item: LoginStudentSelectItem) {
+        when (item) {
+            is LoginStudentSelectItem.Student -> if (!item.isEnabled) return
+            is LoginStudentSelectItem.Teacher -> if (!item.isEnabled) return
+            else -> return
+        }
 
-        selectedStudents
-            .removeAll { it == studentWithSemester }
-            .let { if (!it) selectedStudents.add(studentWithSemester) }
+        selectedSubjects
+            .removeAll {
+                if (it is LoginStudentSelectItem.Student && item is LoginStudentSelectItem.Student) {
+                    it.student == item.student
+                } else true
+            }
+            .let { if (!it) selectedSubjects.add(item) }
 
-        view?.enableSignIn(selectedStudents.isNotEmpty())
+        view?.enableSignIn(selectedSubjects.isNotEmpty())
+        view?.updateData(createItems(registerUser, students))
     }
 
-    private fun compareStudents(a: Student, b: Student): Boolean {
-        return a.email == b.email
-            && a.symbol == b.symbol
-            && a.studentId == b.studentId
-            && a.schoolSymbol == b.schoolSymbol
-            && a.classId == b.classId
-    }
-
-    private fun loadData(studentsWithSemesters: List<StudentWithSemesters>) {
+    private fun loadData(registerUser: RegisterUser) {
         resetSelectedState()
 
         resourceFlow { studentRepository.getSavedStudents(false) }.onEach {
+            students = it.dataOrNull.orEmpty()
             when (it) {
                 is Resource.Loading -> Timber.d("Login student select students load started")
-                is Resource.Success -> view?.updateData(studentsWithSemesters.map { studentWithSemesters ->
-                    studentWithSemesters to it.data.any { item ->
-                        compareStudents(studentWithSemesters.student, item.student)
-                    }
-                })
+                is Resource.Success -> view?.updateData(createItems(registerUser, it.data))
                 is Resource.Error -> {
                     errorHandler.dispatch(it.error)
                     lastError = it.error
-                    view?.updateData(studentsWithSemesters.map { student -> student to false })
+                    view?.updateData(createItems(registerUser, it.dataOrNull.orEmpty()))
                 }
             }
         }.launch()
     }
 
+    private fun createItems(
+        registerUser: RegisterUser,
+        students: List<StudentWithSemesters>,
+    ): List<LoginStudentSelectItem> = buildList {
+        registerUser.symbols.forEach { registerSymbol ->
+            add(LoginStudentSelectItem.SymbolHeader(registerSymbol))
+
+            registerSymbol.schools.forEach { registerUnit ->
+                add(LoginStudentSelectItem.SchoolHeader(registerUnit))
+
+                registerUnit.subjects.forEach { subject ->
+                    when (subject) {
+                        is RegisterStudent -> add(
+                            LoginStudentSelectItem.Student(
+                                symbol = registerSymbol,
+                                unit = registerUnit,
+                                student = subject,
+                                onClick = ::onItemSelected,
+                                isEnabled = students.none {
+                                    it.student.email == registerUser.login
+                                        && it.student.symbol == registerSymbol.symbol
+                                        && it.student.studentId == subject.studentId
+                                        && it.student.schoolSymbol == registerUnit.schoolId
+                                        && it.student.classId == subject.classId
+                                },
+                                isSelected = subject in selectedSubjects.mapNotNull {
+                                    if (it is LoginStudentSelectItem.Student) it.student else null // todo
+                                },
+                            )
+                        )
+                        is RegisterTeacher -> add(
+                            LoginStudentSelectItem.Teacher(
+                                symbol = registerSymbol,
+                                unit = registerUnit,
+                                teacher = subject,
+                                onClick = ::onItemSelected,
+                                isEnabled = true, // todo
+                                isSelected = subject in selectedSubjects.mapNotNull {
+                                    if (it is LoginStudentSelectItem.Teacher) it.teacher else null // todo
+                                },
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     private fun resetSelectedState() {
-        selectedStudents.clear()
+        selectedSubjects.clear()
         view?.enableSignIn(false)
     }
 
-    private fun registerStudents(studentsWithSemesters: List<StudentWithSemesters>) {
+    private fun registerStudents(subjects: List<LoginStudentSelectItem>) {
+        val studentsWithSemesters = subjects
+            .filterIsInstance<LoginStudentSelectItem.Student>().map { item ->
+                item.student.mapToStudentWithSemesters(
+                    user = registerUser,
+                    symbol = item.symbol,
+                    unit = item.unit,
+                    colors = appInfo.defaultColorsForAvatar,
+                )
+            }
         resourceFlow { studentRepository.saveStudents(studentsWithSemesters) }
             .logResourceStatus("registration")
             .onEach {

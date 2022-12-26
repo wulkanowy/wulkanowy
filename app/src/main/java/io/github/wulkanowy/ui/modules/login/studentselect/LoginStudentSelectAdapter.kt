@@ -2,65 +2,142 @@ package io.github.wulkanowy.ui.modules.login.studentselect
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil.ItemCallback
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import io.github.wulkanowy.data.db.entities.StudentWithSemesters
-import io.github.wulkanowy.databinding.ItemLoginStudentSelectBinding
+import io.github.wulkanowy.R
+import io.github.wulkanowy.databinding.ItemLoginStudentSelectHeaderSchoolBinding
+import io.github.wulkanowy.databinding.ItemLoginStudentSelectHeaderSymbolBinding
+import io.github.wulkanowy.databinding.ItemLoginStudentSelectStudentBinding
+import io.github.wulkanowy.databinding.ItemLoginStudentSelectTeacherBinding
 import javax.inject.Inject
 
+@SuppressLint("SetTextI18n")
 class LoginStudentSelectAdapter @Inject constructor() :
-    RecyclerView.Adapter<LoginStudentSelectAdapter.ItemViewHolder>() {
+    ListAdapter<LoginStudentSelectItem, RecyclerView.ViewHolder>(Differ) {
 
-    private val checkedList = mutableMapOf<Int, Boolean>()
+    override fun getItemViewType(position: Int): Int = getItem(position).type.ordinal
 
-    var items = emptyList<Pair<StudentWithSemesters, Boolean>>()
-        set(value) {
-            field = value
-            checkedList.clear()
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return when (LoginStudentSelectItemType.values()[viewType]) {
+            LoginStudentSelectItemType.SYMBOL_HEADER -> SymbolsHeaderViewHolder(
+                ItemLoginStudentSelectHeaderSymbolBinding.inflate(inflater, parent, false)
+            )
+            LoginStudentSelectItemType.SCHOOL_HEADER -> SchoolHeaderViewHolder(
+                ItemLoginStudentSelectHeaderSchoolBinding.inflate(inflater, parent, false)
+            )
+            LoginStudentSelectItemType.STUDENT -> StudentViewHolder(
+                ItemLoginStudentSelectStudentBinding.inflate(inflater, parent, false)
+            )
+            LoginStudentSelectItemType.TEACHER -> TeacherViewHolder(
+                ItemLoginStudentSelectTeacherBinding.inflate(inflater, parent, false)
+            )
         }
+    }
 
-    var onClickListener: (StudentWithSemesters, alreadySaved: Boolean) -> Unit = { _, _ -> }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is SymbolsHeaderViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.SymbolHeader)
+            is SchoolHeaderViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.SchoolHeader)
+            is TeacherViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.Teacher)
+            is StudentViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.Student)
+        }
+    }
 
-    override fun getItemCount() = items.size
+    private class SymbolsHeaderViewHolder(
+        private val binding: ItemLoginStudentSelectHeaderSymbolBinding,
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
-        ItemLoginStudentSelectBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-    )
-
-    @SuppressLint("SetTextI18n")
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val (studentAndSemesters, alreadySaved) = items[position]
-        val student = studentAndSemesters.student
-        val semesters = studentAndSemesters.semesters
-        val diary = semesters.maxByOrNull { it.semesterId }
-
-        with(holder.binding) {
-            loginItemName.text = "${student.studentName} ${diary?.diaryName.orEmpty()}"
-            loginItemSchool.text = student.schoolName
-            loginItemName.isEnabled = !alreadySaved
-            loginItemSchool.isEnabled = !alreadySaved
-            loginItemSignedIn.visibility = if (alreadySaved) View.VISIBLE else View.GONE
-
-            with(loginItemCheck) {
-                isEnabled = !alreadySaved
-                keyListener = null
-                isChecked = checkedList[position] ?: false
+        fun bind(item: LoginStudentSelectItem.SymbolHeader) {
+            with(binding) {
+                loginStudentSelectHeaderSymbolValue.text = item.symbol.symbol
+                loginStudentSelectHeaderSymbolUsername.text = item.symbol.userName
+                loginStudentSelectHeaderSymbolUsername.isVisible = item.symbol.userName.isNotBlank()
+                loginStudentSelectHeaderSymbolError.text = item.symbol.error?.message
+                loginStudentSelectHeaderSymbolError.isVisible = item.symbol.error != null
             }
+        }
+    }
 
-            root.setOnClickListener {
-                onClickListener(studentAndSemesters, alreadySaved)
+    private class SchoolHeaderViewHolder(
+        private val binding: ItemLoginStudentSelectHeaderSchoolBinding,
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: LoginStudentSelectItem.SchoolHeader) {
+            with(binding) {
+                loginStudentSelectHeaderSchoolName.text = item.unit.schoolName
+                loginStudentSelectHeaderSchoolDetails.text = buildString {
+                    append("Uczniów: ")
+                    append(item.unit.studentIds.size)
+                    append(", ")
+                    append("Rodziców: ")
+                    append(item.unit.parentIds.size)
+                    append(", ")
+                    append("Pracowników: ")
+                    append(item.unit.employeeIds.size)
+                }
+                loginStudentSelectHeaderSchoolError.text = item.unit.error?.message
+                loginStudentSelectHeaderSchoolError.isVisible = item.unit.error != null
+            }
+        }
+    }
+
+    private class StudentViewHolder(
+        private val binding: ItemLoginStudentSelectStudentBinding,
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: LoginStudentSelectItem.Student) {
+            val student = item.student
+            val semesters = student.semesters
+            val diary = semesters.maxByOrNull { it.semesterId }
+
+            with(binding) {
+                loginItemName.text = "${student.studentName} ${student.studentSurname}"
+                loginItemName.isEnabled = item.isEnabled
+                loginItemSignedIn.text = if (!item.isEnabled) {
+                    root.context.getString(R.string.login_signed_in)
+                } else diary?.diaryName
 
                 with(loginItemCheck) {
-                    if (isEnabled) {
-                        isChecked = !isChecked
-                        checkedList[position] = isChecked
-                    }
+                    isEnabled = item.isEnabled
+                    keyListener = null
+                    isChecked = item.isSelected
+                }
+
+                root.setOnClickListener {
+                    item.onClick(item)
                 }
             }
         }
     }
 
-    class ItemViewHolder(val binding: ItemLoginStudentSelectBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    private class TeacherViewHolder(
+        private val binding: ItemLoginStudentSelectTeacherBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: LoginStudentSelectItem.Teacher) {
+            with(binding) {
+                loginItemName.text = item.teacher.teacherName
+            }
+        }
+    }
+
+    private object Differ : ItemCallback<LoginStudentSelectItem>() {
+
+        override fun areItemsTheSame(
+            oldItem: LoginStudentSelectItem, newItem: LoginStudentSelectItem
+        ): Boolean = when {
+            oldItem is LoginStudentSelectItem.Student && newItem is LoginStudentSelectItem.Student -> {
+                oldItem.student == newItem.student
+            }
+            else -> oldItem == newItem
+        }
+
+        override fun areContentsTheSame(
+            oldItem: LoginStudentSelectItem, newItem: LoginStudentSelectItem
+        ): Boolean = oldItem == newItem
+    }
 }

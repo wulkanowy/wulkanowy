@@ -2,13 +2,11 @@ package io.github.wulkanowy.ui.modules.login.studentselect
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.core.os.bundleOf
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.StudentWithSemesters
+import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.databinding.FragmentLoginStudentSelectBinding
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -39,9 +37,9 @@ class LoginStudentSelectFragment :
     companion object {
         const val ARG_STUDENTS = "STUDENTS"
 
-        fun newInstance(studentsWithSemesters: List<StudentWithSemesters>) =
+        fun newInstance(registerUser: RegisterUser) =
             LoginStudentSelectFragment().apply {
-                arguments = bundleOf(ARG_STUDENTS to studentsWithSemesters)
+                arguments = bundleOf(ARG_STUDENTS to registerUser)
             }
     }
 
@@ -51,32 +49,23 @@ class LoginStudentSelectFragment :
         binding = FragmentLoginStudentSelectBinding.bind(view)
         presenter.onAttachView(
             view = this,
-            students = requireArguments().serializable(ARG_STUDENTS),
+            registerUser = requireArguments().serializable(ARG_STUDENTS),
         )
     }
 
     override fun initView() {
         (requireActivity() as LoginActivity).showActionBar(true)
 
-        loginAdapter.onClickListener = presenter::onItemSelected
-
         with(binding) {
             loginStudentSelectSignIn.setOnClickListener { presenter.onSignIn() }
             loginStudentSelectContactDiscord.setOnClickListener { presenter.onDiscordClick() }
             loginStudentSelectContactEmail.setOnClickListener { presenter.onEmailClick() }
-
-            with(loginStudentSelectRecycler) {
-                layoutManager = LinearLayoutManager(context)
-                adapter = loginAdapter
-            }
+            loginStudentSelectRecycler.adapter = loginAdapter
         }
     }
 
-    override fun updateData(data: List<Pair<StudentWithSemesters, Boolean>>) {
-        with(loginAdapter) {
-            items = data
-            notifyDataSetChanged()
-        }
+    override fun updateData(data: List<LoginStudentSelectItem>) {
+        loginAdapter.submitList(data)
     }
 
     override fun navigateToNext() {
@@ -84,11 +73,11 @@ class LoginStudentSelectFragment :
     }
 
     override fun showProgress(show: Boolean) {
-        binding.loginStudentSelectProgress.visibility = if (show) VISIBLE else GONE
+        binding.loginStudentSelectProgress.isVisible = show
     }
 
     override fun showContent(show: Boolean) {
-        binding.loginStudentSelectContent.visibility = if (show) VISIBLE else GONE
+        binding.loginStudentSelectContent.isVisible = show
     }
 
     override fun enableSignIn(enable: Boolean) {
@@ -96,12 +85,7 @@ class LoginStudentSelectFragment :
     }
 
     override fun showContact(show: Boolean) {
-        binding.loginStudentSelectContact.visibility = if (show) VISIBLE else GONE
-    }
-
-    override fun onDestroyView() {
-        presenter.onDetachView()
-        super.onDestroyView()
+        binding.loginStudentSelectContact.isVisible = show
     }
 
     override fun openDiscordInvite() {
@@ -123,5 +107,10 @@ class LoginStudentSelectFragment :
                 lastError
             )
         )
+    }
+
+    override fun onDestroyView() {
+        presenter.onDetachView()
+        super.onDestroyView()
     }
 }

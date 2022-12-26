@@ -46,7 +46,7 @@ class LoginSymbolPresenter @Inject constructor(
         }
 
         resourceFlow {
-            studentRepository.getStudentsScrapper(
+            studentRepository.getUserSubjectsFromScrapper(
                 email = loginData.login,
                 password = loginData.password,
                 scrapperBaseUrl = loginData.baseUrl,
@@ -61,7 +61,7 @@ class LoginSymbolPresenter @Inject constructor(
                     showContent(false)
                 }
                 is Resource.Success -> {
-                    when (it.data.size) {
+                    when (it.data.symbols.size) {
                         0 -> {
                             Timber.i("Login with symbol result: Empty student list")
                             view?.run {
@@ -77,7 +77,6 @@ class LoginSymbolPresenter @Inject constructor(
                     analytics.logEvent(
                         "registration_symbol",
                         "success" to true,
-                        "students" to it.data.size,
                         "scrapperBaseUrl" to loginData.baseUrl,
                         "symbol" to symbol,
                         "error" to "No error"
