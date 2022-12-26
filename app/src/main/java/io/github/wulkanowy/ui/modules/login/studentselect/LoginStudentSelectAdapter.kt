@@ -120,7 +120,7 @@ class LoginStudentSelectAdapter @Inject constructor() :
 
         fun bind(item: LoginStudentSelectItem.Teacher) {
             with(binding) {
-                loginItemName.text = item.teacher.teacherName
+                loginItemName.text = item.teacher.employeeName
             }
         }
     }
