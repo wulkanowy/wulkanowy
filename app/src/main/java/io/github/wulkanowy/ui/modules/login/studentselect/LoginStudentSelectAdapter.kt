@@ -66,7 +66,8 @@ class LoginStudentSelectAdapter @Inject constructor() :
 
         fun bind(item: LoginStudentSelectItem.SymbolHeader) {
             with(binding) {
-                loginStudentSelectHeaderSymbolValue.text = item.symbol.symbol
+                loginStudentSelectHeaderSymbolValue.text =
+                    item.humanReadableName ?: item.symbol.symbol
                 loginStudentSelectHeaderSymbolUsername.text = item.symbol.userName
                 loginStudentSelectHeaderSymbolUsername.isVisible = item.symbol.userName.isNotBlank()
                 loginStudentSelectHeaderSymbolError.text = item.symbol.error?.message
@@ -89,7 +90,9 @@ class LoginStudentSelectAdapter @Inject constructor() :
                 }
                 loginStudentSelectHeaderSchoolDetails.text = buildString {
                     if (item.unit.subjects.isEmpty()) {
-                        append("Brak uczniów możliwych do dodania")
+                        append("Nie znaleziono uczniów")
+                    } else {
+                        append("Znaleziono uczniów: ${item.unit.subjects.size}")
                     }
                 }
                 with(loginStudentSelectHeaderSchoolDetails) {

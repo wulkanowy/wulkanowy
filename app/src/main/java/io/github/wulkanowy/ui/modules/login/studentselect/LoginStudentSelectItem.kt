@@ -15,6 +15,7 @@ sealed class LoginStudentSelectItem(val type: LoginStudentSelectItemType) {
 
     data class SymbolHeader(
         val symbol: RegisterSymbol,
+        val humanReadableName: String?,
     ) : LoginStudentSelectItem(LoginStudentSelectItemType.SYMBOL_HEADER)
 
     data class SchoolHeader(

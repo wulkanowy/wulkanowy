@@ -34,6 +34,13 @@ class LoginStudentSelectFragment :
     @Inject
     lateinit var preferencesRepository: PreferencesRepository
 
+    private lateinit var symbolsNames: Array<String>
+    private lateinit var symbolsValues: Array<String>
+
+    override val symbols: Map<String, String> by lazy {
+        symbolsValues.zip(symbolsNames).toMap()
+    }
+
     companion object {
         const val ARG_STUDENTS = "STUDENTS"
 
@@ -47,6 +54,10 @@ class LoginStudentSelectFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLoginStudentSelectBinding.bind(view)
+
+        symbolsNames = resources.getStringArray(R.array.symbols)
+        symbolsValues = resources.getStringArray(R.array.symbols_values)
+
         presenter.onAttachView(
             view = this,
             registerUser = requireArguments().serializable(ARG_STUDENTS),

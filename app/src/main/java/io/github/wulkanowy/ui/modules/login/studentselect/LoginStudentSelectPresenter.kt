@@ -103,7 +103,12 @@ class LoginStudentSelectPresenter @Inject constructor(
         students: List<StudentWithSemesters>,
     ): List<LoginStudentSelectItem> = buildList {
         registerUser.symbols.filter { it.schools.isNotEmpty() }.forEach { registerSymbol ->
-            add(LoginStudentSelectItem.SymbolHeader(registerSymbol))
+            add(
+                LoginStudentSelectItem.SymbolHeader(
+                    symbol = registerSymbol,
+                    humanReadableName = view?.symbols?.get(registerSymbol.symbol),
+                )
+            )
 
             registerSymbol.schools.forEach { registerUnit ->
                 add(LoginStudentSelectItem.SchoolHeader(registerUnit))
@@ -156,7 +161,12 @@ class LoginStudentSelectPresenter @Inject constructor(
             registerUser.symbols
                 .filter { isEmptySymbolsExpanded && it.schools.isEmpty() }
                 .forEach { registerSymbol ->
-                    add(LoginStudentSelectItem.SymbolHeader(registerSymbol))
+                    add(
+                        LoginStudentSelectItem.SymbolHeader(
+                            symbol = registerSymbol,
+                            humanReadableName = view?.symbols?.get(registerSymbol.symbol),
+                        )
+                    )
                 }
         }
     }

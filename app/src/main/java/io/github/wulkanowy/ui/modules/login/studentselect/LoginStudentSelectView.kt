@@ -4,6 +4,8 @@ import io.github.wulkanowy.ui.base.BaseView
 
 interface LoginStudentSelectView : BaseView {
 
+    val symbols: Map<String, String>
+
     fun initView()
 
     fun updateData(data: List<LoginStudentSelectItem>)
