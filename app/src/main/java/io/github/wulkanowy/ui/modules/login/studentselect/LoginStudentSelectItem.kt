@@ -8,6 +8,11 @@ import io.github.wulkanowy.data.pojos.RegisterUnit
 
 sealed class LoginStudentSelectItem(val type: LoginStudentSelectItemType) {
 
+    data class EmptySymbolsHeader(
+        val isExpanded: Boolean,
+        val onClick: () -> Unit,
+    ) : LoginStudentSelectItem(LoginStudentSelectItemType.EMPTY_SYMBOLS_HEADER)
+
     data class SymbolHeader(
         val symbol: RegisterSymbol,
     ) : LoginStudentSelectItem(LoginStudentSelectItemType.SYMBOL_HEADER)
@@ -36,6 +41,7 @@ sealed class LoginStudentSelectItem(val type: LoginStudentSelectItemType) {
 }
 
 enum class LoginStudentSelectItemType {
+    EMPTY_SYMBOLS_HEADER,
     SYMBOL_HEADER,
     SCHOOL_HEADER,
     STUDENT,

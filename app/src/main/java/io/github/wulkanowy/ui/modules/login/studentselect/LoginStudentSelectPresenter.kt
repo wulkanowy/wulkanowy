@@ -32,6 +32,7 @@ class LoginStudentSelectPresenter @Inject constructor(
 
     private lateinit var registerUser: RegisterUser
     private lateinit var students: List<StudentWithSemesters>
+    private var isEmptySymbolsExpanded = false
 
     private val selectedSubjects = mutableListOf<LoginStudentSelectItem>()
 
@@ -55,7 +56,13 @@ class LoginStudentSelectPresenter @Inject constructor(
         registerStudents(selectedSubjects)
     }
 
-    fun onItemSelected(item: LoginStudentSelectItem) {
+    private fun onEmptySymbolsToggle() {
+        isEmptySymbolsExpanded = !isEmptySymbolsExpanded
+
+        view?.updateData(createItems(registerUser, students))
+    }
+
+    private fun onItemSelected(item: LoginStudentSelectItem) {
         when (item) {
             is LoginStudentSelectItem.Student -> if (!item.isEnabled) return
             is LoginStudentSelectItem.Teacher -> if (!item.isEnabled) return
@@ -95,7 +102,7 @@ class LoginStudentSelectPresenter @Inject constructor(
         registerUser: RegisterUser,
         students: List<StudentWithSemesters>,
     ): List<LoginStudentSelectItem> = buildList {
-        registerUser.symbols.forEach { registerSymbol ->
+        registerUser.symbols.filter { it.schools.isNotEmpty() }.forEach { registerSymbol ->
             add(LoginStudentSelectItem.SymbolHeader(registerSymbol))
 
             registerSymbol.schools.forEach { registerUnit ->
@@ -136,6 +143,21 @@ class LoginStudentSelectPresenter @Inject constructor(
                     }
                 }
             }
+        }
+
+        if (registerUser.symbols.any { it.schools.isNotEmpty() }) {
+            add(
+                LoginStudentSelectItem.EmptySymbolsHeader(
+                    isExpanded = isEmptySymbolsExpanded,
+                    onClick = ::onEmptySymbolsToggle,
+                )
+            )
+
+            registerUser.symbols
+                .filter { isEmptySymbolsExpanded && it.schools.isEmpty() }
+                .forEach { registerSymbol ->
+                    add(LoginStudentSelectItem.SymbolHeader(registerSymbol))
+                }
         }
     }
 

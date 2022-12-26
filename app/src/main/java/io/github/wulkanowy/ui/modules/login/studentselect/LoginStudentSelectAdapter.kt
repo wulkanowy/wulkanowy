@@ -8,10 +8,7 @@ import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
-import io.github.wulkanowy.databinding.ItemLoginStudentSelectHeaderSchoolBinding
-import io.github.wulkanowy.databinding.ItemLoginStudentSelectHeaderSymbolBinding
-import io.github.wulkanowy.databinding.ItemLoginStudentSelectStudentBinding
-import io.github.wulkanowy.databinding.ItemLoginStudentSelectTeacherBinding
+import io.github.wulkanowy.databinding.*
 import javax.inject.Inject
 
 @SuppressLint("SetTextI18n")
@@ -35,15 +32,31 @@ class LoginStudentSelectAdapter @Inject constructor() :
             LoginStudentSelectItemType.TEACHER -> TeacherViewHolder(
                 ItemLoginStudentSelectTeacherBinding.inflate(inflater, parent, false)
             )
+            LoginStudentSelectItemType.EMPTY_SYMBOLS_HEADER -> EmptySymbolsHeaderViewHolder(
+                ItemLoginStudentSelectEmptySymbolHeaderBinding.inflate(inflater, parent, false),
+            )
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
+            is EmptySymbolsHeaderViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.EmptySymbolsHeader)
             is SymbolsHeaderViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.SymbolHeader)
             is SchoolHeaderViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.SchoolHeader)
             is TeacherViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.Teacher)
             is StudentViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.Student)
+        }
+    }
+
+    private class EmptySymbolsHeaderViewHolder(
+        private val binding: ItemLoginStudentSelectEmptySymbolHeaderBinding,
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: LoginStudentSelectItem.EmptySymbolsHeader) {
+            with(binding) {
+                loginStudentSelectEmptySymbolChevron.rotation = if (item.isExpanded) 270f else 90f
+                root.setOnClickListener { item.onClick() }
+            }
         }
     }
 
@@ -68,16 +81,19 @@ class LoginStudentSelectAdapter @Inject constructor() :
 
         fun bind(item: LoginStudentSelectItem.SchoolHeader) {
             with(binding) {
-                loginStudentSelectHeaderSchoolName.text = item.unit.schoolName
+                loginStudentSelectHeaderSchoolName.text = buildString {
+                    append(item.unit.schoolName) // todo: add trim in sdk
+                    append(" (")
+                    append(item.unit.schoolShortName)
+                    append(")")
+                }
                 loginStudentSelectHeaderSchoolDetails.text = buildString {
-                    append("Uczniów: ")
-                    append(item.unit.studentIds.size)
-                    append(", ")
-                    append("Rodziców: ")
-                    append(item.unit.parentIds.size)
-                    append(", ")
-                    append("Pracowników: ")
-                    append(item.unit.employeeIds.size)
+                    if (item.unit.subjects.isEmpty()) {
+                        append("Brak uczniów możliwych do dodania")
+                    }
+                }
+                with(loginStudentSelectHeaderSchoolDetails) {
+                    isVisible = text.isNotBlank()
                 }
                 loginStudentSelectHeaderSchoolError.text = item.unit.error?.message
                 loginStudentSelectHeaderSchoolError.isVisible = item.unit.error != null
@@ -107,6 +123,7 @@ class LoginStudentSelectAdapter @Inject constructor() :
                     isChecked = item.isSelected
                 }
 
+                root.isEnabled = item.isEnabled
                 root.setOnClickListener {
                     item.onClick(item)
                 }
@@ -130,6 +147,7 @@ class LoginStudentSelectAdapter @Inject constructor() :
         override fun areItemsTheSame(
             oldItem: LoginStudentSelectItem, newItem: LoginStudentSelectItem
         ): Boolean = when {
+            oldItem is LoginStudentSelectItem.EmptySymbolsHeader && newItem is LoginStudentSelectItem.EmptySymbolsHeader -> true
             oldItem is LoginStudentSelectItem.Student && newItem is LoginStudentSelectItem.Student -> {
                 oldItem.student == newItem.student
             }

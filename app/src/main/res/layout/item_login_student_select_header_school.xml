@@ -30,9 +30,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:maxLines="2"
         android:textColor="?colorError"
         app:layout_constraintTop_toBottomOf="@id/login_student_select_header_school_details"
-        tools:text="Coś się zepsuło" />
+        tools:text="@tools:sample/lorem/random" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
