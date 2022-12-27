@@ -43,7 +43,7 @@ class LoginStudentSelectPresenter @Inject constructor(
         super.onAttachView(view)
         with(view) {
             initView()
-            showContact(false)
+            showContact(true)
             enableSignIn(false)
             loginErrorHandler.onStudentDuplicate = {
                 showMessage(it)
