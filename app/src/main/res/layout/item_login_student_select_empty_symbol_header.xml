@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="16dp"
-        android:text="Inne miejsca, w których aplikacja szukała"
+        android:text="@string/login_other_search_locations"
         android:textColor="?android:textColorPrimary"
         app:layout_constraintTop_toTopOf="parent" />
 

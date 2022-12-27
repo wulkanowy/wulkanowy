@@ -76,7 +76,18 @@ class LoginStudentSelectPresenter @Inject constructor(
         registerUser: RegisterUser,
         students: List<StudentWithSemesters>,
     ): List<LoginStudentSelectItem> = buildList {
-        registerUser.symbols.filter { it.schools.isNotEmpty() }.forEach { registerSymbol ->
+        val notEmptySymbols = registerUser.symbols.filter { it.schools.isNotEmpty() }
+        val emptySymbols = registerUser.symbols.filter { it.schools.isEmpty() }
+
+        addAll(createNotEmptySymbolItems(notEmptySymbols, students))
+        addAll(createEmptySymbolItems(emptySymbols, notEmptySymbols.isNotEmpty()))
+    }
+
+    private fun createNotEmptySymbolItems(
+        notEmptySymbols: List<RegisterSymbol>,
+        students: List<StudentWithSemesters>,
+    ) = buildList {
+        notEmptySymbols.forEach { registerSymbol ->
             val symbolHeader = LoginStudentSelectItem.SymbolHeader(
                 symbol = registerSymbol,
                 humanReadableName = view?.symbols?.get(registerSymbol.symbol),
@@ -94,46 +105,63 @@ class LoginStudentSelectPresenter @Inject constructor(
                 add(schoolHeader)
 
                 registerUnit.subjects.filterIsInstance<RegisterStudent>().forEach { subject ->
-                    val student = LoginStudentSelectItem.Student(
-                        symbol = registerSymbol,
-                        unit = registerUnit,
-                        student = subject,
-                        onClick = ::onItemSelected,
-                        isEnabled = students.none {
-                            it.student.email == registerUser.login
-                                && it.student.symbol == registerSymbol.symbol
-                                && it.student.studentId == subject.studentId
-                                && it.student.schoolSymbol == registerUnit.schoolId
-                                && it.student.classId == subject.classId
-                        },
-                        isSelected = subject in selectedSubjects.map { it.student },
-                    )
-                    add(student)
+                    add(createStudentItem(subject, registerSymbol, registerUnit, students))
+                }
+            }
+        }
+    }
+
+    private fun createStudentItem(
+        student: RegisterStudent,
+        symbol: RegisterSymbol,
+        school: RegisterUnit,
+        students: List<StudentWithSemesters>,
+    ) = LoginStudentSelectItem.Student(
+        symbol = symbol,
+        unit = school,
+        student = student,
+        onClick = ::onItemSelected,
+        isEnabled = students.none {
+            it.student.email == registerUser.login
+                && it.student.symbol == symbol.symbol
+                && it.student.studentId == student.studentId
+                && it.student.schoolSymbol == school.schoolId
+                && it.student.classId == student.classId
+        },
+        isSelected = student in selectedSubjects.map { it.student },
+    )
+
+    private fun createEmptySymbolItems(
+        emptySymbols: List<RegisterSymbol>,
+        isNotEmptySymbolsExist: Boolean,
+    ) = buildList {
+        if (emptySymbols.isNotEmpty() && isNotEmptySymbolsExist) {
+            val emptyHeader = LoginStudentSelectItem.EmptySymbolsHeader(
+                isExpanded = isEmptySymbolsExpanded,
+                onClick = ::onEmptySymbolsToggle,
+            )
+            add(emptyHeader)
+            if (isEmptySymbolsExpanded) {
+                emptySymbols.forEach {
+                    add(createEmptySymbolItem(it))
                 }
             }
         }
 
-        if (registerUser.symbols.any { it.schools.isEmpty() }) {
-            add(
-                LoginStudentSelectItem.EmptySymbolsHeader(
-                    isExpanded = isEmptySymbolsExpanded,
-                    onClick = ::onEmptySymbolsToggle,
-                )
-            )
-
-            registerUser.symbols
-                .filter { isEmptySymbolsExpanded && it.schools.isEmpty() }
-                .forEach { registerSymbol ->
-                    val header = LoginStudentSelectItem.SymbolHeader(
-                        symbol = registerSymbol,
-                        humanReadableName = view?.symbols?.get(registerSymbol.symbol),
-                        isErrorExpanded = expandedSymbolError == registerSymbol,
-                        onClick = ::onSymbolItemClick,
-                    )
-                    add(header)
-                }
+        if (emptySymbols.isNotEmpty() && !isNotEmptySymbolsExist) {
+            emptySymbols.forEach {
+                add(createEmptySymbolItem(it))
+            }
         }
     }
+
+    private fun createEmptySymbolItem(registerSymbol: RegisterSymbol) =
+        LoginStudentSelectItem.SymbolHeader(
+            symbol = registerSymbol,
+            humanReadableName = view?.symbols?.get(registerSymbol.symbol),
+            isErrorExpanded = expandedSymbolError == registerSymbol,
+            onClick = ::onSymbolItemClick,
+        )
 
     fun onSignIn() {
         registerStudents(selectedSubjects)

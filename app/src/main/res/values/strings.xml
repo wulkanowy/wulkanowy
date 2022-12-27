@@ -74,6 +74,7 @@
     <string name="login_recover">Recover</string>
     <string name="login_signed_in">Student is already signed in</string>
     <string name="login_host_standard">Standard</string>
+    <string name="login_other_search_locations">Other search locations</string>
     <string name="login_no_active_student">No active students found</string>
     <!--Notifications-->
     <string name="notifications_header_title">Enable notifications</string>
