@@ -6,6 +6,8 @@ import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.logResourceStatus
 import io.github.wulkanowy.data.mappers.mapToStudentWithSemesters
 import io.github.wulkanowy.data.pojos.RegisterStudent
+import io.github.wulkanowy.data.pojos.RegisterSymbol
+import io.github.wulkanowy.data.pojos.RegisterUnit
 import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.resourceFlow
@@ -32,6 +34,8 @@ class LoginStudentSelectPresenter @Inject constructor(
     private lateinit var registerUser: RegisterUser
     private lateinit var students: List<StudentWithSemesters>
     private var isEmptySymbolsExpanded = false
+    private var expandedSymbolError: RegisterSymbol? = null
+    private var expandedSchoolError: RegisterUnit? = null
 
     private val selectedSubjects = mutableListOf<LoginStudentSelectItem.Student>()
 
@@ -49,27 +53,6 @@ class LoginStudentSelectPresenter @Inject constructor(
 
         this.registerUser = registerUser
         loadData(registerUser)
-    }
-
-    fun onSignIn() {
-        registerStudents(selectedSubjects)
-    }
-
-    private fun onEmptySymbolsToggle() {
-        isEmptySymbolsExpanded = !isEmptySymbolsExpanded
-
-        view?.updateData(createItems(registerUser, students))
-    }
-
-    private fun onItemSelected(item: LoginStudentSelectItem.Student) {
-        if (!item.isEnabled) return
-
-        selectedSubjects
-            .removeAll { it.student == item.student }
-            .let { if (!it) selectedSubjects.add(item) }
-
-        view?.enableSignIn(selectedSubjects.isNotEmpty())
-        view?.updateData(createItems(registerUser, students))
     }
 
     private fun loadData(registerUser: RegisterUser) {
@@ -94,14 +77,21 @@ class LoginStudentSelectPresenter @Inject constructor(
         students: List<StudentWithSemesters>,
     ): List<LoginStudentSelectItem> = buildList {
         registerUser.symbols.filter { it.schools.isNotEmpty() }.forEach { registerSymbol ->
-            val header = LoginStudentSelectItem.SymbolHeader(
+            val symbolHeader = LoginStudentSelectItem.SymbolHeader(
                 symbol = registerSymbol,
                 humanReadableName = view?.symbols?.get(registerSymbol.symbol),
+                isErrorExpanded = expandedSymbolError == registerSymbol,
+                onClick = ::onSymbolItemClick,
             )
-            add(header)
+            add(symbolHeader)
 
             registerSymbol.schools.forEach { registerUnit ->
-                add(LoginStudentSelectItem.SchoolHeader(registerUnit))
+                val schoolHeader = LoginStudentSelectItem.SchoolHeader(
+                    unit = registerUnit,
+                    isErrorExpanded = expandedSchoolError == registerUnit,
+                    onClick = ::onUnitItemClick,
+                )
+                add(schoolHeader)
 
                 registerUnit.subjects.filterIsInstance<RegisterStudent>().forEach { subject ->
                     val student = LoginStudentSelectItem.Student(
@@ -134,14 +124,50 @@ class LoginStudentSelectPresenter @Inject constructor(
             registerUser.symbols
                 .filter { isEmptySymbolsExpanded && it.schools.isEmpty() }
                 .forEach { registerSymbol ->
-                    add(
-                        LoginStudentSelectItem.SymbolHeader(
-                            symbol = registerSymbol,
-                            humanReadableName = view?.symbols?.get(registerSymbol.symbol),
-                        )
+                    val header = LoginStudentSelectItem.SymbolHeader(
+                        symbol = registerSymbol,
+                        humanReadableName = view?.symbols?.get(registerSymbol.symbol),
+                        isErrorExpanded = expandedSymbolError == registerSymbol,
+                        onClick = ::onSymbolItemClick,
                     )
+                    add(header)
                 }
         }
+    }
+
+    fun onSignIn() {
+        registerStudents(selectedSubjects)
+    }
+
+    private fun onEmptySymbolsToggle() {
+        isEmptySymbolsExpanded = !isEmptySymbolsExpanded
+
+        view?.updateData(createItems(registerUser, students))
+    }
+
+    private fun onItemSelected(item: LoginStudentSelectItem.Student) {
+        if (!item.isEnabled) return
+
+        selectedSubjects
+            .removeAll { it.student == item.student }
+            .let { if (!it) selectedSubjects.add(item) }
+
+        view?.enableSignIn(selectedSubjects.isNotEmpty())
+        view?.updateData(createItems(registerUser, students))
+    }
+
+    private fun onSymbolItemClick(symbol: RegisterSymbol) {
+        expandedSymbolError = if (symbol != expandedSymbolError) {
+            symbol
+        } else null
+        view?.updateData(createItems(registerUser, students))
+    }
+
+    private fun onUnitItemClick(unit: RegisterUnit) {
+        expandedSchoolError = if (unit != expandedSchoolError) {
+            unit
+        } else null
+        view?.updateData(createItems(registerUser, students))
     }
 
     private fun resetSelectedState() {

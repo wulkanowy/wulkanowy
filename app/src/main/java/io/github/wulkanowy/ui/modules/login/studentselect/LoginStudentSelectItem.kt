@@ -15,10 +15,14 @@ sealed class LoginStudentSelectItem(val type: LoginStudentSelectItemType) {
     data class SymbolHeader(
         val symbol: RegisterSymbol,
         val humanReadableName: String?,
+        val isErrorExpanded: Boolean,
+        val onClick: (RegisterSymbol) -> Unit,
     ) : LoginStudentSelectItem(LoginStudentSelectItemType.SYMBOL_HEADER)
 
     data class SchoolHeader(
         val unit: RegisterUnit,
+        val isErrorExpanded: Boolean,
+        val onClick: (RegisterUnit) -> Unit,
     ) : LoginStudentSelectItem(LoginStudentSelectItemType.SCHOOL_HEADER)
 
     data class Student(

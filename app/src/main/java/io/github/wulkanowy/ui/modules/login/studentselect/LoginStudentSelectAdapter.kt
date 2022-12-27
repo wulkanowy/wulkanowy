@@ -68,6 +68,14 @@ class LoginStudentSelectAdapter @Inject constructor() :
                 loginStudentSelectHeaderSymbolUsername.isVisible = item.symbol.userName.isNotBlank()
                 loginStudentSelectHeaderSymbolError.text = item.symbol.error?.message
                 loginStudentSelectHeaderSymbolError.isVisible = item.symbol.error != null
+                loginStudentSelectHeaderSymbolError.maxLines = when {
+                    item.isErrorExpanded -> Int.MAX_VALUE
+                    else -> 2
+                }
+
+                if (item.symbol.error != null) {
+                    root.setOnClickListener { item.onClick(item.symbol) }
+                } else root.setOnClickListener(null)
             }
         }
     }
@@ -87,6 +95,14 @@ class LoginStudentSelectAdapter @Inject constructor() :
                 loginStudentSelectHeaderSchoolDetails.isVisible = item.unit.subjects.isEmpty()
                 loginStudentSelectHeaderSchoolError.text = item.unit.error?.message
                 loginStudentSelectHeaderSchoolError.isVisible = item.unit.error != null
+                loginStudentSelectHeaderSchoolError.maxLines = when {
+                    item.isErrorExpanded -> Int.MAX_VALUE
+                    else -> 2
+                }
+
+                if (item.unit.error != null) {
+                    root.setOnClickListener { item.onClick(item.unit) }
+                } else root.setOnClickListener(null)
             }
         }
     }
@@ -127,6 +143,9 @@ class LoginStudentSelectAdapter @Inject constructor() :
             oldItem: LoginStudentSelectItem, newItem: LoginStudentSelectItem
         ): Boolean = when {
             oldItem is LoginStudentSelectItem.EmptySymbolsHeader && newItem is LoginStudentSelectItem.EmptySymbolsHeader -> true
+            oldItem is LoginStudentSelectItem.SymbolHeader && newItem is LoginStudentSelectItem.SymbolHeader -> {
+                oldItem.symbol == newItem.symbol
+            }
             oldItem is LoginStudentSelectItem.Student && newItem is LoginStudentSelectItem.Student -> {
                 oldItem.student == newItem.student
             }
