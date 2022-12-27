@@ -88,16 +88,7 @@ class LoginStudentSelectAdapter @Inject constructor() :
                     append(item.unit.schoolShortName)
                     append(")")
                 }
-                loginStudentSelectHeaderSchoolDetails.text = buildString {
-                    if (item.unit.subjects.isEmpty()) {
-                        append("Nie znaleziono uczniów")
-                    } else {
-                        append("Znaleziono uczniów: ${item.unit.subjects.size}")
-                    }
-                }
-                with(loginStudentSelectHeaderSchoolDetails) {
-                    isVisible = text.isNotBlank()
-                }
+                loginStudentSelectHeaderSchoolDetails.isVisible = item.unit.subjects.isEmpty()
                 loginStudentSelectHeaderSchoolError.text = item.unit.error?.message
                 loginStudentSelectHeaderSchoolError.isVisible = item.unit.error != null
             }
@@ -121,8 +112,8 @@ class LoginStudentSelectAdapter @Inject constructor() :
                 } else diary?.diaryName
 
                 with(loginItemCheck) {
-                    isEnabled = item.isEnabled
                     keyListener = null
+                    isEnabled = item.isEnabled
                     isChecked = item.isSelected
                 }
 

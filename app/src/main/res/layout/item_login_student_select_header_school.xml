@@ -20,9 +20,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:textColor="?android:textColorSecondary"
-        app:layout_constraintTop_toBottomOf="@id/login_student_select_header_school_name"
-        tools:text="@tools:sample/lorem" />
+        android:text="@string/login_no_active_student"
+        android:textColor="?colorTimetableChange"
+        app:layout_constraintTop_toBottomOf="@id/login_student_select_header_school_name" />
 
     <TextView
         android:id="@+id/login_student_select_header_school_error"

@@ -74,6 +74,7 @@
     <string name="login_recover">Recover</string>
     <string name="login_signed_in">Student is already signed in</string>
     <string name="login_host_standard">Standard</string>
+    <string name="login_no_active_student">No active students found</string>
     <!--Notifications-->
     <string name="notifications_header_title">Enable notifications</string>
     <string name="notifications_header_description">Enable notifications so you don\'t miss message from teacher or new grade</string>
