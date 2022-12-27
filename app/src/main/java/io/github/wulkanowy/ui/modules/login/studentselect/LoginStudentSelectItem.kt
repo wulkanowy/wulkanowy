@@ -2,7 +2,6 @@ package io.github.wulkanowy.ui.modules.login.studentselect
 
 import io.github.wulkanowy.data.pojos.RegisterStudent
 import io.github.wulkanowy.data.pojos.RegisterSymbol
-import io.github.wulkanowy.data.pojos.RegisterTeacher
 import io.github.wulkanowy.data.pojos.RegisterUnit
 
 
@@ -30,15 +29,6 @@ sealed class LoginStudentSelectItem(val type: LoginStudentSelectItemType) {
         val isSelected: Boolean,
         val onClick: (Student) -> Unit,
     ) : LoginStudentSelectItem(LoginStudentSelectItemType.STUDENT)
-
-    data class Teacher(
-        val symbol: RegisterSymbol,
-        val unit: RegisterUnit,
-        val teacher: RegisterTeacher,
-        val isEnabled: Boolean,
-        val isSelected: Boolean,
-        val onClick: (Student) -> Unit,
-    ) : LoginStudentSelectItem(LoginStudentSelectItemType.TEACHER)
 }
 
 enum class LoginStudentSelectItemType {
@@ -46,5 +36,4 @@ enum class LoginStudentSelectItemType {
     SYMBOL_HEADER,
     SCHOOL_HEADER,
     STUDENT,
-    TEACHER,
 }

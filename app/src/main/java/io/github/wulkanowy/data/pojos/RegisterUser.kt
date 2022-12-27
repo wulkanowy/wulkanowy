@@ -33,11 +33,6 @@ data class RegisterUnit(
 
 interface RegisterSubject
 
-data class RegisterTeacher(
-    val employeeId: Int,
-    val employeeName: String,
-) : RegisterSubject, java.io.Serializable
-
 data class RegisterStudent(
     val studentId: Int,
     val studentName: String,

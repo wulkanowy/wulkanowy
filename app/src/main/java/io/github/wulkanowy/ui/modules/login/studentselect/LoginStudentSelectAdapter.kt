@@ -20,6 +20,9 @@ class LoginStudentSelectAdapter @Inject constructor() :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (LoginStudentSelectItemType.values()[viewType]) {
+            LoginStudentSelectItemType.EMPTY_SYMBOLS_HEADER -> EmptySymbolsHeaderViewHolder(
+                ItemLoginStudentSelectEmptySymbolHeaderBinding.inflate(inflater, parent, false),
+            )
             LoginStudentSelectItemType.SYMBOL_HEADER -> SymbolsHeaderViewHolder(
                 ItemLoginStudentSelectHeaderSymbolBinding.inflate(inflater, parent, false)
             )
@@ -29,12 +32,6 @@ class LoginStudentSelectAdapter @Inject constructor() :
             LoginStudentSelectItemType.STUDENT -> StudentViewHolder(
                 ItemLoginStudentSelectStudentBinding.inflate(inflater, parent, false)
             )
-            LoginStudentSelectItemType.TEACHER -> TeacherViewHolder(
-                ItemLoginStudentSelectTeacherBinding.inflate(inflater, parent, false)
-            )
-            LoginStudentSelectItemType.EMPTY_SYMBOLS_HEADER -> EmptySymbolsHeaderViewHolder(
-                ItemLoginStudentSelectEmptySymbolHeaderBinding.inflate(inflater, parent, false),
-            )
         }
     }
 
@@ -43,7 +40,6 @@ class LoginStudentSelectAdapter @Inject constructor() :
             is EmptySymbolsHeaderViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.EmptySymbolsHeader)
             is SymbolsHeaderViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.SymbolHeader)
             is SchoolHeaderViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.SchoolHeader)
-            is TeacherViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.Teacher)
             is StudentViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.Student)
         }
     }
@@ -121,17 +117,6 @@ class LoginStudentSelectAdapter @Inject constructor() :
                 root.setOnClickListener {
                     item.onClick(item)
                 }
-            }
-        }
-    }
-
-    private class TeacherViewHolder(
-        private val binding: ItemLoginStudentSelectTeacherBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: LoginStudentSelectItem.Teacher) {
-            with(binding) {
-                loginItemName.text = item.teacher.employeeName
             }
         }
     }

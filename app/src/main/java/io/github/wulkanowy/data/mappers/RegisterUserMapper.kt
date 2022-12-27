@@ -7,7 +7,6 @@ import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.mapper.mapSemesters
 import java.time.Instant
 import io.github.wulkanowy.sdk.scrapper.register.RegisterStudent as SdkRegisterStudent
-import io.github.wulkanowy.sdk.scrapper.register.RegisterEmployee as SdkRegisterEmployee
 import io.github.wulkanowy.sdk.scrapper.register.RegisterUser as SdkRegisterUser
 
 fun SdkRegisterUser.mapToPojo(password: String) = RegisterUser(
@@ -31,13 +30,10 @@ fun SdkRegisterUser.mapToPojo(password: String) = RegisterUser(
                     studentIds = it.studentIds,
                     employeeIds = it.employeeIds,
                     error = it.error,
-                    subjects = it.subjects.map { registerSubject ->
-                        when (registerSubject) {
-                            is SdkRegisterEmployee -> RegisterTeacher(
-                                employeeId = registerSubject.employeeId,
-                                employeeName = registerSubject.employeeName
-                            )
-                            is SdkRegisterStudent -> RegisterStudent(
+                    subjects = it.subjects
+                        .filterIsInstance<SdkRegisterStudent>()
+                        .map { registerSubject ->
+                            RegisterStudent(
                                 studentId = registerSubject.studentId,
                                 studentName = registerSubject.studentName,
                                 studentSecondName = registerSubject.studentSecondName,
@@ -49,8 +45,7 @@ fun SdkRegisterUser.mapToPojo(password: String) = RegisterUser(
                                     .mapSemesters()
                                     .mapToEntities(registerSubject.studentId),
                             )
-                        }
-                    },
+                        },
                 )
             }
         )

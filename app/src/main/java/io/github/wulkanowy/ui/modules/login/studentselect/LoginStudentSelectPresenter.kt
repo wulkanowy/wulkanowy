@@ -6,7 +6,6 @@ import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.logResourceStatus
 import io.github.wulkanowy.data.mappers.mapToStudentWithSemesters
 import io.github.wulkanowy.data.pojos.RegisterStudent
-import io.github.wulkanowy.data.pojos.RegisterTeacher
 import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.resourceFlow
@@ -34,7 +33,7 @@ class LoginStudentSelectPresenter @Inject constructor(
     private lateinit var students: List<StudentWithSemesters>
     private var isEmptySymbolsExpanded = false
 
-    private val selectedSubjects = mutableListOf<LoginStudentSelectItem>()
+    private val selectedSubjects = mutableListOf<LoginStudentSelectItem.Student>()
 
     fun onAttachView(view: LoginStudentSelectView, registerUser: RegisterUser) {
         super.onAttachView(view)
@@ -62,19 +61,11 @@ class LoginStudentSelectPresenter @Inject constructor(
         view?.updateData(createItems(registerUser, students))
     }
 
-    private fun onItemSelected(item: LoginStudentSelectItem) {
-        when (item) {
-            is LoginStudentSelectItem.Student -> if (!item.isEnabled) return
-            is LoginStudentSelectItem.Teacher -> if (!item.isEnabled) return
-            else -> return
-        }
+    private fun onItemSelected(item: LoginStudentSelectItem.Student) {
+        if (!item.isEnabled) return
 
         selectedSubjects
-            .removeAll {
-                if (it is LoginStudentSelectItem.Student && item is LoginStudentSelectItem.Student) {
-                    it.student == item.student
-                } else true
-            }
+            .removeAll { it.student == item.student }
             .let { if (!it) selectedSubjects.add(item) }
 
         view?.enableSignIn(selectedSubjects.isNotEmpty())
@@ -103,49 +94,31 @@ class LoginStudentSelectPresenter @Inject constructor(
         students: List<StudentWithSemesters>,
     ): List<LoginStudentSelectItem> = buildList {
         registerUser.symbols.filter { it.schools.isNotEmpty() }.forEach { registerSymbol ->
-            add(
-                LoginStudentSelectItem.SymbolHeader(
-                    symbol = registerSymbol,
-                    humanReadableName = view?.symbols?.get(registerSymbol.symbol),
-                )
+            val header = LoginStudentSelectItem.SymbolHeader(
+                symbol = registerSymbol,
+                humanReadableName = view?.symbols?.get(registerSymbol.symbol),
             )
+            add(header)
 
             registerSymbol.schools.forEach { registerUnit ->
                 add(LoginStudentSelectItem.SchoolHeader(registerUnit))
 
-                registerUnit.subjects.forEach { subject ->
-                    when (subject) {
-                        is RegisterStudent -> add(
-                            LoginStudentSelectItem.Student(
-                                symbol = registerSymbol,
-                                unit = registerUnit,
-                                student = subject,
-                                onClick = ::onItemSelected,
-                                isEnabled = students.none {
-                                    it.student.email == registerUser.login
-                                        && it.student.symbol == registerSymbol.symbol
-                                        && it.student.studentId == subject.studentId
-                                        && it.student.schoolSymbol == registerUnit.schoolId
-                                        && it.student.classId == subject.classId
-                                },
-                                isSelected = subject in selectedSubjects.mapNotNull {
-                                    if (it is LoginStudentSelectItem.Student) it.student else null // todo
-                                },
-                            )
-                        )
-                        is RegisterTeacher -> add(
-                            LoginStudentSelectItem.Teacher(
-                                symbol = registerSymbol,
-                                unit = registerUnit,
-                                teacher = subject,
-                                onClick = ::onItemSelected,
-                                isEnabled = true, // todo
-                                isSelected = subject in selectedSubjects.mapNotNull {
-                                    if (it is LoginStudentSelectItem.Teacher) it.teacher else null // todo
-                                },
-                            )
-                        )
-                    }
+                registerUnit.subjects.filterIsInstance<RegisterStudent>().forEach { subject ->
+                    val student = LoginStudentSelectItem.Student(
+                        symbol = registerSymbol,
+                        unit = registerUnit,
+                        student = subject,
+                        onClick = ::onItemSelected,
+                        isEnabled = students.none {
+                            it.student.email == registerUser.login
+                                && it.student.symbol == registerSymbol.symbol
+                                && it.student.studentId == subject.studentId
+                                && it.student.schoolSymbol == registerUnit.schoolId
+                                && it.student.classId == subject.classId
+                        },
+                        isSelected = subject in selectedSubjects.map { it.student },
+                    )
+                    add(student)
                 }
             }
         }
