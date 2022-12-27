@@ -83,7 +83,7 @@ class LoginStudentSelectAdapter @Inject constructor() :
         fun bind(item: LoginStudentSelectItem.SchoolHeader) {
             with(binding) {
                 loginStudentSelectHeaderSchoolName.text = buildString {
-                    append(item.unit.schoolName) // todo: add trim in sdk
+                    append(item.unit.schoolName.trim())
                     append(" (")
                     append(item.unit.schoolShortName)
                     append(")")

@@ -150,7 +150,7 @@ class LoginStudentSelectPresenter @Inject constructor(
             }
         }
 
-        if (registerUser.symbols.any { it.schools.isNotEmpty() }) {
+        if (registerUser.symbols.any { it.schools.isEmpty() }) {
             add(
                 LoginStudentSelectItem.EmptySymbolsHeader(
                     isExpanded = isEmptySymbolsExpanded,
