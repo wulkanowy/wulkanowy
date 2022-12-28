@@ -87,7 +87,6 @@ class LoginStudentSelectFragment :
     }
 
     override fun navigateToSymbol(loginData: LoginData) {
-        // todo: add popUpTo somehow to form
         (requireActivity() as LoginActivity).navigateToSymbolFragment(loginData)
     }
 
