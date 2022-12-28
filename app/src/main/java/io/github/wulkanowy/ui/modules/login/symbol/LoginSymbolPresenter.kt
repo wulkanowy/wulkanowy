@@ -1,7 +1,9 @@
 package io.github.wulkanowy.ui.modules.login.symbol
 
 import io.github.wulkanowy.data.Resource
+import io.github.wulkanowy.data.dataOrNull
 import io.github.wulkanowy.data.onResourceNotLoading
+import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.resourceFlow
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -22,6 +24,8 @@ class LoginSymbolPresenter @Inject constructor(
     private var lastError: Throwable? = null
 
     lateinit var loginData: LoginData
+
+    private var registerUser: RegisterUser? = null
 
     fun onAttachView(view: LoginSymbolView, loginData: LoginData) {
         super.onAttachView(view)
@@ -56,6 +60,7 @@ class LoginSymbolPresenter @Inject constructor(
                 symbol = symbol,
             )
         }.onEach {
+            registerUser = it.dataOrNull
             when (it) {
                 is Resource.Loading -> view?.run {
                     Timber.i("Login with symbol started")
@@ -113,6 +118,12 @@ class LoginSymbolPresenter @Inject constructor(
     }
 
     fun onEmailClick() {
-        view?.openEmail(loginData.baseUrl, lastError?.message.ifNullOrBlank { "empty" })
+        view?.openEmail(loginData.baseUrl, lastError?.message.ifNullOrBlank {
+            registerUser?.symbols?.flatMap { symbol ->
+                symbol.schools.map { it.error?.message } + symbol.error?.message
+            }?.filterNotNull()?.distinct()?.joinToString(";") {
+                it.take(46) + "..."
+            } ?: "blank"
+        })
     }
 }

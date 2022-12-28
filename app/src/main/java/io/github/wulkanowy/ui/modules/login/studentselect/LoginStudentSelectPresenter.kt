@@ -257,7 +257,13 @@ class LoginStudentSelectPresenter @Inject constructor(
     }
 
     fun onEmailClick() {
-        view?.openEmail(lastError?.message.ifNullOrBlank { "empty" })
+        view?.openEmail(lastError?.message.ifNullOrBlank {
+            registerUser.symbols.flatMap { symbol ->
+                symbol.schools.map { it.error?.message } + symbol.error?.message
+            }.filterNotNull().distinct().joinToString("; ") {
+                it.take(46) + "..."
+            }.ifEmpty { "blank" }
+        })
     }
 
     private fun logRegisterEvent(
