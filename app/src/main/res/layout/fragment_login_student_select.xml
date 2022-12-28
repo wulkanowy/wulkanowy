@@ -125,6 +125,16 @@
             tools:listitem="@layout/item_login_student_select_student" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/loginStudentSelectEnterSymbol"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:text="@string/login_symbol_enter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/loginStudentSelectSignIn" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/loginStudentSelectSignIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

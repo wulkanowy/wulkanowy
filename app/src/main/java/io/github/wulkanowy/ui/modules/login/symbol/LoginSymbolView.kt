@@ -1,8 +1,8 @@
 package io.github.wulkanowy.ui.modules.login.symbol
 
-import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.ui.base.BaseView
+import io.github.wulkanowy.ui.modules.login.LoginData
 
 interface LoginSymbolView : BaseView {
 
@@ -28,7 +28,7 @@ interface LoginSymbolView : BaseView {
 
     fun showContent(show: Boolean)
 
-    fun navigateToStudentSelect(registerUser: RegisterUser)
+    fun navigateToStudentSelect(loginData: LoginData, registerUser: RegisterUser)
 
     fun showContact(show: Boolean)
 

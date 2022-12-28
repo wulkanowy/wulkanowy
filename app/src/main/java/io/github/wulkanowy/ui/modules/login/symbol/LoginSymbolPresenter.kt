@@ -71,7 +71,7 @@ class LoginSymbolPresenter @Inject constructor(
                         }
                         else -> {
                             Timber.i("Login with symbol result: Success")
-                            view?.navigateToStudentSelect(requireNotNull(it.data))
+                            view?.navigateToStudentSelect(loginData, requireNotNull(it.data))
                         }
                     }
                     analytics.logEvent(

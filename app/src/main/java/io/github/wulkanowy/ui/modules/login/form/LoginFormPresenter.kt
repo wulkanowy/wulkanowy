@@ -109,9 +109,10 @@ class LoginFormPresenter @Inject constructor(
                 }
             }
             .onResourceSuccess {
+                val loginData = LoginData(email, password, host)
                 when (it.symbols.size) {
-                    0 -> view?.navigateToSymbol(LoginData(email, password, host))
-                    else -> view?.navigateToStudentSelect(it)
+                    0 -> view?.navigateToSymbol(loginData)
+                    else -> view?.navigateToStudentSelect(loginData, it)
                 }
                 analytics.logEvent(
                     "registration_form",

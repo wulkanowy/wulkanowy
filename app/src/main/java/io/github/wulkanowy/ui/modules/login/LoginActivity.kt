@@ -76,8 +76,8 @@ class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), Logi
         openFragment(LoginSymbolFragment.newInstance(loginData))
     }
 
-    fun navigateToStudentSelect(registerUser: RegisterUser) {
-        openFragment(LoginStudentSelectFragment.newInstance(registerUser))
+    fun navigateToStudentSelect(loginData: LoginData, registerUser: RegisterUser) {
+        openFragment(LoginStudentSelectFragment.newInstance(loginData, registerUser))
     }
 
     fun navigateToNotifications() {

@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.login.studentselect
 
 import io.github.wulkanowy.ui.base.BaseView
+import io.github.wulkanowy.ui.modules.login.LoginData
 
 interface LoginStudentSelectView : BaseView {
 
@@ -9,6 +10,8 @@ interface LoginStudentSelectView : BaseView {
     fun initView()
 
     fun updateData(data: List<LoginStudentSelectItem>)
+
+    fun navigateToSymbol(loginData: LoginData)
 
     fun navigateToNext()
 

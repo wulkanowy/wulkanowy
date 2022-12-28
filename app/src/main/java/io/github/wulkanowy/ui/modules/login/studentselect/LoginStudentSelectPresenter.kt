@@ -13,6 +13,7 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.resourceFlow
 import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.AppInfo
@@ -32,6 +33,8 @@ class LoginStudentSelectPresenter @Inject constructor(
     private var lastError: Throwable? = null
 
     private lateinit var registerUser: RegisterUser
+    private lateinit var loginData: LoginData
+
     private lateinit var students: List<StudentWithSemesters>
     private var isEmptySymbolsExpanded = false
     private var expandedSymbolError: RegisterSymbol? = null
@@ -39,7 +42,11 @@ class LoginStudentSelectPresenter @Inject constructor(
 
     private val selectedSubjects = mutableListOf<LoginStudentSelectItem.Student>()
 
-    fun onAttachView(view: LoginStudentSelectView, registerUser: RegisterUser) {
+    fun onAttachView(
+        view: LoginStudentSelectView,
+        loginData: LoginData,
+        registerUser: RegisterUser,
+    ) {
         super.onAttachView(view)
         with(view) {
             initView()
@@ -51,6 +58,7 @@ class LoginStudentSelectPresenter @Inject constructor(
             }
         }
 
+        this.loginData = loginData
         this.registerUser = registerUser
         loadData(registerUser)
     }
@@ -165,6 +173,10 @@ class LoginStudentSelectPresenter @Inject constructor(
 
     fun onSignIn() {
         registerStudents(selectedSubjects)
+    }
+
+    fun onEnterSymbol() {
+        view?.navigateToSymbol(loginData)
     }
 
     private fun onEmptySymbolsToggle() {

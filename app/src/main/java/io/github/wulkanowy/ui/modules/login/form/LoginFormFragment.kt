@@ -226,8 +226,8 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
         (activity as? LoginActivity)?.navigateToSymbolFragment(loginData)
     }
 
-    override fun navigateToStudentSelect(registerUser: RegisterUser) {
-        (activity as? LoginActivity)?.navigateToStudentSelect(registerUser)
+    override fun navigateToStudentSelect(loginData: LoginData, registerUser: RegisterUser) {
+        (activity as? LoginActivity)?.navigateToStudentSelect(loginData, registerUser)
     }
 
     override fun openAdvancedLogin() {

@@ -11,6 +11,7 @@ import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.databinding.FragmentLoginStudentSelectBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
+import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.openEmailClient
 import io.github.wulkanowy.utils.openInternetBrowser
@@ -42,11 +43,15 @@ class LoginStudentSelectFragment :
     }
 
     companion object {
+        const val ARG_LOGIN = "LOGIN"
         const val ARG_STUDENTS = "STUDENTS"
 
-        fun newInstance(registerUser: RegisterUser) =
+        fun newInstance(loginData: LoginData, registerUser: RegisterUser) =
             LoginStudentSelectFragment().apply {
-                arguments = bundleOf(ARG_STUDENTS to registerUser)
+                arguments = bundleOf(
+                    ARG_LOGIN to loginData,
+                    ARG_STUDENTS to registerUser,
+                )
             }
     }
 
@@ -60,6 +65,7 @@ class LoginStudentSelectFragment :
 
         presenter.onAttachView(
             view = this,
+            loginData = requireArguments().serializable(ARG_LOGIN),
             registerUser = requireArguments().serializable(ARG_STUDENTS),
         )
     }
@@ -68,6 +74,7 @@ class LoginStudentSelectFragment :
         (requireActivity() as LoginActivity).showActionBar(true)
 
         with(binding) {
+            loginStudentSelectEnterSymbol.setOnClickListener { presenter.onEnterSymbol() }
             loginStudentSelectSignIn.setOnClickListener { presenter.onSignIn() }
             loginStudentSelectContactDiscord.setOnClickListener { presenter.onDiscordClick() }
             loginStudentSelectContactEmail.setOnClickListener { presenter.onEmailClick() }
@@ -77,6 +84,10 @@ class LoginStudentSelectFragment :
 
     override fun updateData(data: List<LoginStudentSelectItem>) {
         loginAdapter.submitList(data)
+    }
+
+    override fun navigateToSymbol(loginData: LoginData) {
+        (requireActivity() as LoginActivity).navigateToSymbolFragment(loginData)
     }
 
     override fun navigateToNext() {

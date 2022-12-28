@@ -60,7 +60,7 @@ interface LoginFormView : BaseView {
 
     fun navigateToSymbol(loginData: LoginData)
 
-    fun navigateToStudentSelect(registerUser: RegisterUser)
+    fun navigateToStudentSelect(loginData: LoginData, registerUser: RegisterUser)
 
     fun openPrivacyPolicyPage()
 

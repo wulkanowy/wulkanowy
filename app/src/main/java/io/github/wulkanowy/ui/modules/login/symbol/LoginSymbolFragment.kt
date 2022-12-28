@@ -125,8 +125,8 @@ class LoginSymbolFragment :
         binding.loginSymbolContainer.visibility = if (show) VISIBLE else GONE
     }
 
-    override fun navigateToStudentSelect(registerUser: RegisterUser) {
-        (activity as? LoginActivity)?.navigateToStudentSelect(registerUser)
+    override fun navigateToStudentSelect(loginData: LoginData, registerUser: RegisterUser) {
+        (activity as? LoginActivity)?.navigateToStudentSelect(loginData, registerUser)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
