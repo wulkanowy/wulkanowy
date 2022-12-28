@@ -92,9 +92,13 @@ class LoginSymbolFragment :
     }
 
     override fun setErrorSymbolRequire() {
-        binding.loginSymbolNameLayout.apply {
+        setErrorSymbol(getString(R.string.error_field_required))
+    }
+
+    override fun setErrorSymbol(message: String) {
+        with(binding.loginSymbolNameLayout) {
             requestFocus()
-            error = getString(R.string.error_field_required)
+            error = message
         }
     }
 

@@ -26,6 +26,9 @@ class LoginSymbolPresenter @Inject constructor(
     fun onAttachView(view: LoginSymbolView, loginData: LoginData) {
         super.onAttachView(view)
         this.loginData = loginData
+        loginErrorHandler.onBadCredentials = {
+            view.setErrorSymbol(it.orEmpty())
+        }
         with(view) {
             initView()
             showContact(false)

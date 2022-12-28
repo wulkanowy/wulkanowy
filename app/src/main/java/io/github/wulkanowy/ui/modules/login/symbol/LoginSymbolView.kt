@@ -16,6 +16,8 @@ interface LoginSymbolView : BaseView {
 
     fun setErrorSymbolRequire()
 
+    fun setErrorSymbol(message: String)
+
     fun clearSymbolError()
 
     fun clearAndFocusSymbol()
