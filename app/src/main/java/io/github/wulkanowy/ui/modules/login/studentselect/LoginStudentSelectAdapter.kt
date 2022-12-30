@@ -66,8 +66,14 @@ class LoginStudentSelectAdapter @Inject constructor() :
 
         fun bind(item: LoginStudentSelectItem.SymbolHeader) {
             with(binding) {
-                loginStudentSelectHeaderSymbolValue.text =
-                    item.humanReadableName ?: item.symbol.symbol
+                loginStudentSelectHeaderSymbolValue.text = buildString {
+                    append(root.context.getString(R.string.mobile_device_symbol))
+                    append(": ")
+                    append(item.humanReadableName ?: item.symbol.symbol)
+                    if (!item.humanReadableName.isNullOrBlank()) {
+                        append(" (${item.symbol.symbol})")
+                    }
+                }
                 loginStudentSelectHeaderSymbolUsername.text = item.symbol.userName
                 loginStudentSelectHeaderSymbolUsername.isVisible = item.symbol.userName.isNotBlank()
                 loginStudentSelectHeaderSymbolError.text = item.symbol.error?.message

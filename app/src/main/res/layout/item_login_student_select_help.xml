@@ -8,6 +8,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/login_student_select_help_symbol"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
