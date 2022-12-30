@@ -33,6 +33,12 @@ sealed class LoginStudentSelectItem(val type: LoginStudentSelectItemType) {
         val isSelected: Boolean,
         val onClick: (Student) -> Unit,
     ) : LoginStudentSelectItem(LoginStudentSelectItemType.STUDENT)
+
+    data class Help(
+        val onEnterSymbolClick: () -> Unit,
+        val onContactUsClick: () -> Unit,
+        val onDiscordClick: () -> Unit,
+    ) : LoginStudentSelectItem(LoginStudentSelectItemType.HELP)
 }
 
 enum class LoginStudentSelectItemType {
@@ -40,4 +46,5 @@ enum class LoginStudentSelectItemType {
     SYMBOL_HEADER,
     SCHOOL_HEADER,
     STUDENT,
+    HELP,
 }

@@ -18,77 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/loginStudentSelectContact"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone">
-
-            <View
-                android:id="@+id/loginStudentSelectContactTopDivider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider" />
-
-            <TextView
-                android:id="@+id/loginStudentSelectContactHeader"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginLeft="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginBottom="16dp"
-                android:gravity="center_horizontal"
-                android:text="@string/login_contact_header"
-                android:textSize="14sp"
-                app:fontFamily="sans-serif-medium" />
-
-            <LinearLayout
-                android:id="@+id/loginStudentSelectContactButtons"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:orientation="horizontal">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/loginStudentSelectContactEmail"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_weight="1"
-                    android:text="@string/login_contact_email"
-                    app:icon="@drawable/ic_more_messages" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/loginStudentSelectContactDiscord"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_weight="1"
-                    android:text="@string/login_contact_discord"
-                    app:icon="@drawable/ic_about_discord" />
-            </LinearLayout>
-
-            <View
-                android:id="@+id/loginStudentSelectContactBottomDivider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:background="?android:attr/listDivider" />
-        </LinearLayout>
-
         <TextView
             android:id="@+id/loginStudentSelectHeader"
             android:layout_width="match_parent"
@@ -106,7 +35,7 @@
             app:layout_constraintBottom_toTopOf="@id/loginStudentSelectRecycler"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/loginStudentSelectContact"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -123,16 +52,6 @@
             app:layout_constraintTop_toBottomOf="@id/loginStudentSelectHeader"
             tools:itemCount="6"
             tools:listitem="@layout/item_login_student_select_student" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/loginStudentSelectEnterSymbol"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:text="@string/login_symbol_enter"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/loginStudentSelectSignIn" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/loginStudentSelectSignIn"

@@ -32,6 +32,9 @@ class LoginStudentSelectAdapter @Inject constructor() :
             LoginStudentSelectItemType.STUDENT -> StudentViewHolder(
                 ItemLoginStudentSelectStudentBinding.inflate(inflater, parent, false)
             )
+            LoginStudentSelectItemType.HELP -> HelpViewHolder(
+                ItemLoginStudentSelectHelpBinding.inflate(inflater, parent, false)
+            )
         }
     }
 
@@ -41,6 +44,7 @@ class LoginStudentSelectAdapter @Inject constructor() :
             is SymbolsHeaderViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.SymbolHeader)
             is SchoolHeaderViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.SchoolHeader)
             is StudentViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.Student)
+            is HelpViewHolder -> holder.bind(getItem(position) as LoginStudentSelectItem.Help)
         }
     }
 
@@ -133,6 +137,19 @@ class LoginStudentSelectAdapter @Inject constructor() :
                 root.setOnClickListener {
                     item.onClick(item)
                 }
+            }
+        }
+    }
+
+    private class HelpViewHolder(
+        private val binding: ItemLoginStudentSelectHelpBinding,
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: LoginStudentSelectItem.Help) {
+            with(binding) {
+                loginStudentSelectHelpSymbol.setOnClickListener { item.onEnterSymbolClick() }
+                loginStudentSelectHelpMail.setOnClickListener { item.onContactUsClick() }
+                loginStudentSelectHelpDiscord.setOnClickListener { item.onDiscordClick() }
             }
         }
     }

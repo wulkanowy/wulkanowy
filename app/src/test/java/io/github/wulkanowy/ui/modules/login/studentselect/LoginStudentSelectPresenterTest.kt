@@ -101,7 +101,6 @@ class LoginStudentSelectPresenterTest {
         every { loginStudentSelectView.initView() } just Runs
         every { loginStudentSelectView.symbols } returns emptyMap()
 
-        every { loginStudentSelectView.showContact(any()) } just Runs
         every { loginStudentSelectView.enableSignIn(any()) } just Runs
         every { loginStudentSelectView.showProgress(any()) } just Runs
         every { loginStudentSelectView.showContent(any()) } just Runs

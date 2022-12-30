@@ -51,7 +51,6 @@ class LoginStudentSelectPresenter @Inject constructor(
         super.onAttachView(view)
         with(view) {
             initView()
-            showContact(true)
             enableSignIn(false)
             loginErrorHandler.onStudentDuplicate = {
                 showMessage(it)
@@ -91,6 +90,13 @@ class LoginStudentSelectPresenter @Inject constructor(
 
         addAll(createNotEmptySymbolItems(notEmptySymbols, students))
         addAll(createEmptySymbolItems(emptySymbols, notEmptySymbols.isNotEmpty()))
+
+        val helpItem = LoginStudentSelectItem.Help(
+            onEnterSymbolClick = ::onEnterSymbol,
+            onContactUsClick = ::onEmailClick,
+            onDiscordClick = ::onDiscordClick,
+        )
+        add(helpItem)
     }
 
     private fun createNotEmptySymbolItems(
@@ -180,10 +186,6 @@ class LoginStudentSelectPresenter @Inject constructor(
         registerStudents(selectedSubjects)
     }
 
-    fun onEnterSymbol() {
-        view?.navigateToSymbol(loginData)
-    }
-
     private fun onEmptySymbolsToggle() {
         isEmptySymbolsExpanded = !isEmptySymbolsExpanded
 
@@ -247,7 +249,6 @@ class LoginStudentSelectPresenter @Inject constructor(
                         view?.apply {
                             showProgress(false)
                             showContent(true)
-                            showContact(true)
                         }
                         lastError = it.error
                         loginErrorHandler.dispatch(it.error)
@@ -257,11 +258,15 @@ class LoginStudentSelectPresenter @Inject constructor(
             }.launch("register")
     }
 
-    fun onDiscordClick() {
+    private fun onEnterSymbol() {
+        view?.navigateToSymbol(loginData)
+    }
+
+    private fun onDiscordClick() {
         view?.openDiscordInvite()
     }
 
-    fun onEmailClick() {
+    private fun onEmailClick() {
         view?.openEmail(lastError?.message.ifNullOrBlank {
             registerUser.symbols.flatMap { symbol ->
                 symbol.schools.map { it.error?.message } + symbol.error?.message

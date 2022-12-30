@@ -21,8 +21,6 @@ interface LoginStudentSelectView : BaseView {
 
     fun enableSignIn(enable: Boolean)
 
-    fun showContact(show: Boolean)
-
     fun openDiscordInvite()
 
     fun openEmail(lastError: String)

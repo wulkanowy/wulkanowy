@@ -74,10 +74,7 @@ class LoginStudentSelectFragment :
         (requireActivity() as LoginActivity).showActionBar(true)
 
         with(binding) {
-            loginStudentSelectEnterSymbol.setOnClickListener { presenter.onEnterSymbol() }
             loginStudentSelectSignIn.setOnClickListener { presenter.onSignIn() }
-            loginStudentSelectContactDiscord.setOnClickListener { presenter.onDiscordClick() }
-            loginStudentSelectContactEmail.setOnClickListener { presenter.onEmailClick() }
             loginStudentSelectRecycler.adapter = loginAdapter
         }
     }
@@ -104,10 +101,6 @@ class LoginStudentSelectFragment :
 
     override fun enableSignIn(enable: Boolean) {
         binding.loginStudentSelectSignIn.isEnabled = enable
-    }
-
-    override fun showContact(show: Boolean) {
-        binding.loginStudentSelectContact.isVisible = show
     }
 
     override fun openDiscordInvite() {
