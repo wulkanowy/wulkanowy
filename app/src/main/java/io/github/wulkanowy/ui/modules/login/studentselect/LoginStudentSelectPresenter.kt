@@ -60,30 +60,27 @@ class LoginStudentSelectPresenter @Inject constructor(
 
         this.loginData = loginData
         this.registerUser = registerUser
-        loadData(registerUser)
+        loadData()
     }
 
-    private fun loadData(registerUser: RegisterUser) {
+    private fun loadData() {
         resetSelectedState()
 
         resourceFlow { studentRepository.getSavedStudents(false) }.onEach {
             students = it.dataOrNull.orEmpty()
             when (it) {
                 is Resource.Loading -> Timber.d("Login student select students load started")
-                is Resource.Success -> view?.updateData(createItems(registerUser, it.data))
+                is Resource.Success -> refreshItems()
                 is Resource.Error -> {
                     errorHandler.dispatch(it.error)
                     lastError = it.error
-                    view?.updateData(createItems(registerUser, it.dataOrNull.orEmpty()))
+                    refreshItems()
                 }
             }
         }.launch()
     }
 
-    private fun createItems(
-        registerUser: RegisterUser,
-        students: List<StudentWithSemesters>,
-    ): List<LoginStudentSelectItem> = buildList {
+    private fun createItems(): List<LoginStudentSelectItem> = buildList {
         val notEmptySymbols = registerUser.symbols.filter { it.schools.isNotEmpty() }
         val emptySymbols = registerUser.symbols.filter { it.schools.isEmpty() }
 
@@ -182,7 +179,7 @@ class LoginStudentSelectPresenter @Inject constructor(
     private fun onEmptySymbolsToggle() {
         isEmptySymbolsExpanded = !isEmptySymbolsExpanded
 
-        view?.updateData(createItems(registerUser, students))
+        refreshItems()
     }
 
     private fun onItemSelected(item: LoginStudentSelectItem.Student) {
@@ -193,26 +190,26 @@ class LoginStudentSelectPresenter @Inject constructor(
             .let { if (!it) selectedSubjects.add(item) }
 
         view?.enableSignIn(selectedSubjects.isNotEmpty())
-        view?.updateData(createItems(registerUser, students))
+        refreshItems()
     }
 
     private fun onSymbolItemClick(symbol: RegisterSymbol) {
-        expandedSymbolError = if (symbol != expandedSymbolError) {
-            symbol
-        } else null
-        view?.updateData(createItems(registerUser, students))
+        expandedSymbolError = if (symbol != expandedSymbolError) symbol else null
+        refreshItems()
     }
 
     private fun onUnitItemClick(unit: RegisterUnit) {
-        expandedSchoolError = if (unit != expandedSchoolError) {
-            unit
-        } else null
-        view?.updateData(createItems(registerUser, students))
+        expandedSchoolError = if (unit != expandedSchoolError) unit else null
+        refreshItems()
     }
 
     private fun resetSelectedState() {
         selectedSubjects.clear()
         view?.enableSignIn(false)
+    }
+
+    private fun refreshItems() {
+        view?.updateData(createItems())
     }
 
     private fun registerStudents(subjects: List<LoginStudentSelectItem>) {

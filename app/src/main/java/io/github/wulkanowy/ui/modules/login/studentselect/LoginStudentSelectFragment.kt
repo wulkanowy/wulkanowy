@@ -43,8 +43,8 @@ class LoginStudentSelectFragment :
     }
 
     companion object {
-        const val ARG_LOGIN = "LOGIN"
-        const val ARG_STUDENTS = "STUDENTS"
+        private const val ARG_LOGIN = "LOGIN"
+        private const val ARG_STUDENTS = "STUDENTS"
 
         fun newInstance(loginData: LoginData, registerUser: RegisterUser) =
             LoginStudentSelectFragment().apply {
