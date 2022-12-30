@@ -153,6 +153,7 @@ class LoginStudentSelectAdapter @Inject constructor() :
 
         fun bind(item: LoginStudentSelectItem.Help) {
             with(binding) {
+                loginStudentSelectHelpSymbol.isVisible = item.isSymbolButtonVisible
                 loginStudentSelectHelpSymbol.setOnClickListener { item.onEnterSymbolClick() }
                 loginStudentSelectHelpMail.setOnClickListener { item.onContactUsClick() }
                 loginStudentSelectHelpDiscord.setOnClickListener { item.onDiscordClick() }

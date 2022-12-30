@@ -95,6 +95,7 @@ class LoginStudentSelectPresenter @Inject constructor(
             onEnterSymbolClick = ::onEnterSymbol,
             onContactUsClick = ::onEmailClick,
             onDiscordClick = ::onDiscordClick,
+            isSymbolButtonVisible = "login" !in loginData.baseUrl,
         )
         add(helpItem)
     }

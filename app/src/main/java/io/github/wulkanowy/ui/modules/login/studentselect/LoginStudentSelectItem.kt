@@ -38,6 +38,7 @@ sealed class LoginStudentSelectItem(val type: LoginStudentSelectItemType) {
         val onEnterSymbolClick: () -> Unit,
         val onContactUsClick: () -> Unit,
         val onDiscordClick: () -> Unit,
+        val isSymbolButtonVisible: Boolean,
     ) : LoginStudentSelectItem(LoginStudentSelectItemType.HELP)
 }
 
