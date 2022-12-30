@@ -123,9 +123,7 @@ class LoginStudentSelectPresenterTest {
     @Test
     fun onSelectedStudentTest() {
         val itemsSlot = slot<List<LoginStudentSelectItem>>()
-        every { loginStudentSelectView.updateData(capture(itemsSlot)) } answers {
-            println(it.invocation.args)
-        }
+        every { loginStudentSelectView.updateData(capture(itemsSlot)) } just Runs
         presenter.onAttachView(loginStudentSelectView, loginData, registerUser)
 
         coEvery { studentRepository.saveStudents(any()) } just Runs
@@ -145,9 +143,7 @@ class LoginStudentSelectPresenterTest {
     @Test
     fun onSelectedStudentErrorTest() {
         val itemsSlot = slot<List<LoginStudentSelectItem>>()
-        every { loginStudentSelectView.updateData(capture(itemsSlot)) } answers {
-            println(it.invocation.args)
-        }
+        every { loginStudentSelectView.updateData(capture(itemsSlot)) } just Runs
         presenter.onAttachView(loginStudentSelectView, loginData, registerUser)
 
         coEvery { studentRepository.saveStudents(any()) } throws testException
