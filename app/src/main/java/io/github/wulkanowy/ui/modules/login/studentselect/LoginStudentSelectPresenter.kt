@@ -153,7 +153,8 @@ class LoginStudentSelectPresenter @Inject constructor(
     ) = buildList {
         val filteredEmptySymbols = emptySymbols.filter {
             it.error !is AccountPermissionException
-        }
+        }.ifEmpty { emptySymbols.takeIf { !isNotEmptySymbolsExist }.orEmpty() }
+
         if (filteredEmptySymbols.isNotEmpty() && isNotEmptySymbolsExist) {
             val emptyHeader = LoginStudentSelectItem.EmptySymbolsHeader(
                 isExpanded = isEmptySymbolsExpanded,
