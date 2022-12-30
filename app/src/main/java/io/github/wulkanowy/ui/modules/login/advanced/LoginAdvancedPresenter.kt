@@ -12,6 +12,7 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.resourceFlow
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.scrapper.Scrapper
+import io.github.wulkanowy.sdk.scrapper.getNormalizedSymbol
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
@@ -154,7 +155,8 @@ class LoginAdvancedPresenter @Inject constructor(
                         val loginData = LoginData(
                             login = view?.formUsernameValue.orEmpty().trim(),
                             password = view?.formPassValue.orEmpty().trim(),
-                            baseUrl = view?.formHostValue.orEmpty().trim()
+                            baseUrl = view?.formHostValue.orEmpty().trim(),
+                            symbol = view?.formSymbolValue.orEmpty().trim().getNormalizedSymbol(),
                         )
                         when (it.data.size) {
                             0 -> view?.navigateToSymbol(loginData)

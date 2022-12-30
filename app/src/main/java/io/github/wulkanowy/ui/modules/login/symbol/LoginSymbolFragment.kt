@@ -42,6 +42,8 @@ class LoginSymbolFragment :
         }
     }
 
+    override val symbolValue: String? get() = binding.loginSymbolName.text?.toString()
+
     override val symbolNameError: CharSequence?
         get() = binding.loginSymbolNameLayout.error
 
@@ -58,7 +60,7 @@ class LoginSymbolFragment :
         (requireActivity() as LoginActivity).showActionBar(true)
 
         with(binding) {
-            loginSymbolSignIn.setOnClickListener { presenter.attemptLogin(loginSymbolName.text.toString()) }
+            loginSymbolSignIn.setOnClickListener { presenter.attemptLogin() }
             loginSymbolFaq.setOnClickListener { presenter.onFaqClick() }
             loginSymbolContactEmail.setOnClickListener { presenter.onEmailClick() }
 

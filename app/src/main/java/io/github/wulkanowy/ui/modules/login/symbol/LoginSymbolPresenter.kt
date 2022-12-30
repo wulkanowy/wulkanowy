@@ -6,6 +6,7 @@ import io.github.wulkanowy.data.onResourceNotLoading
 import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.resourceFlow
+import io.github.wulkanowy.sdk.scrapper.getNormalizedSymbol
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
@@ -46,18 +47,21 @@ class LoginSymbolPresenter @Inject constructor(
         view?.apply { if (symbolNameError != null) clearSymbolError() }
     }
 
-    fun attemptLogin(symbol: String) {
-        if (symbol.isBlank()) {
+    fun attemptLogin() {
+        if (view?.symbolValue.isNullOrBlank()) {
             view?.setErrorSymbolRequire()
             return
         }
 
+        loginData = loginData.copy(
+            symbol = view?.symbolValue?.getNormalizedSymbol(),
+        )
         resourceFlow {
             studentRepository.getUserSubjectsFromScrapper(
                 email = loginData.login,
                 password = loginData.password,
                 scrapperBaseUrl = loginData.baseUrl,
-                symbol = symbol,
+                symbol = view?.symbolValue.orEmpty(),
             )
         }.onEach {
             registerUser = it.dataOrNull
@@ -86,7 +90,7 @@ class LoginSymbolPresenter @Inject constructor(
                         "registration_symbol",
                         "success" to true,
                         "scrapperBaseUrl" to loginData.baseUrl,
-                        "symbol" to symbol,
+                        "symbol" to view?.symbolValue,
                         "error" to "No error"
                     )
                 }
@@ -97,7 +101,7 @@ class LoginSymbolPresenter @Inject constructor(
                         "success" to false,
                         "students" to -1,
                         "scrapperBaseUrl" to loginData.baseUrl,
-                        "symbol" to symbol,
+                        "symbol" to view?.symbolValue,
                         "error" to it.error.message.ifNullOrBlank { "No message" }
                     )
                     loginErrorHandler.dispatch(it.error)

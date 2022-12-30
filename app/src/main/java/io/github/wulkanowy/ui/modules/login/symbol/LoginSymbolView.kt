@@ -6,6 +6,8 @@ import io.github.wulkanowy.ui.modules.login.LoginData
 
 interface LoginSymbolView : BaseView {
 
+    val symbolValue: String?
+
     val symbolNameError: CharSequence?
 
     fun initView()

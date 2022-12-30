@@ -11,6 +11,7 @@ import io.github.wulkanowy.data.pojos.RegisterUnit
 import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.resourceFlow
+import io.github.wulkanowy.sdk.scrapper.login.AccountPermissionException
 import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginData
@@ -84,6 +85,10 @@ class LoginStudentSelectPresenter @Inject constructor(
         val notEmptySymbols = registerUser.symbols.filter { it.schools.isNotEmpty() }
         val emptySymbols = registerUser.symbols.filter { it.schools.isEmpty() }
 
+        if (emptySymbols.isNotEmpty() && notEmptySymbols.isNotEmpty() && emptySymbols.any { it.symbol == loginData.symbol }) {
+            add(createEmptySymbolItem(emptySymbols.first { it.symbol == loginData.symbol }))
+        }
+
         addAll(createNotEmptySymbolItems(notEmptySymbols, students))
         addAll(createEmptySymbolItems(emptySymbols, notEmptySymbols.isNotEmpty()))
     }
@@ -140,21 +145,24 @@ class LoginStudentSelectPresenter @Inject constructor(
         emptySymbols: List<RegisterSymbol>,
         isNotEmptySymbolsExist: Boolean,
     ) = buildList {
-        if (emptySymbols.isNotEmpty() && isNotEmptySymbolsExist) {
+        val filteredEmptySymbols = emptySymbols.filter {
+            it.error !is AccountPermissionException
+        }
+        if (filteredEmptySymbols.isNotEmpty() && isNotEmptySymbolsExist) {
             val emptyHeader = LoginStudentSelectItem.EmptySymbolsHeader(
                 isExpanded = isEmptySymbolsExpanded,
                 onClick = ::onEmptySymbolsToggle,
             )
             add(emptyHeader)
             if (isEmptySymbolsExpanded) {
-                emptySymbols.forEach {
+                filteredEmptySymbols.forEach {
                     add(createEmptySymbolItem(it))
                 }
             }
         }
 
-        if (emptySymbols.isNotEmpty() && !isNotEmptySymbolsExist) {
-            emptySymbols.forEach {
+        if (filteredEmptySymbols.isNotEmpty() && !isNotEmptySymbolsExist) {
+            filteredEmptySymbols.forEach {
                 add(createEmptySymbolItem(it))
             }
         }
