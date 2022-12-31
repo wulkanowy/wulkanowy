@@ -145,7 +145,11 @@ class LoginStudentSelectPresenter @Inject constructor(
                 && it.student.schoolSymbol == school.schoolId
                 && it.student.classId == student.classId
         },
-        isSelected = student in selectedSubjects.map { it.student },
+        isSelected = selectedSubjects
+            .filter { it.symbol.symbol == symbol.symbol }
+            .filter { it.unit.schoolId == school.schoolId }
+            .filter { it.student.studentId == student.studentId }
+            .size == 1,
     )
 
     private fun createEmptySymbolItems(
@@ -198,7 +202,11 @@ class LoginStudentSelectPresenter @Inject constructor(
         if (!item.isEnabled) return
 
         selectedSubjects
-            .removeAll { it.student == item.student }
+            .removeAll {
+                it.student.studentId == item.student.studentId &&
+                    it.unit.schoolId == item.unit.schoolId &&
+                    it.symbol.symbol == item.symbol.symbol
+            }
             .let { if (!it) selectedSubjects.add(item) }
 
         view?.enableSignIn(selectedSubjects.isNotEmpty())

@@ -3,15 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/loginStudentSelectProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminate="true"
-        android:visibility="gone" />
+    android:orientation="vertical"
+    tools:context=".ui.modules.login.studentselect.LoginStudentSelectFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/loginStudentSelectContent"
@@ -48,7 +41,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginStudentSelectHeader"
-            tools:itemCount="1"
+            tools:itemCount="33"
             tools:listitem="@layout/item_login_student_select_student" />
 
         <com.google.android.material.button.MaterialButton
@@ -64,4 +57,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginStudentSelectRecycler" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loginStudentSelectProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone" />
 </FrameLayout>
