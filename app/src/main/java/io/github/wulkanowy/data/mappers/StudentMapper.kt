@@ -8,7 +8,7 @@ import io.github.wulkanowy.sdk.pojo.Student as SdkStudent
 fun List<SdkStudent>.mapToEntities(password: String = "", colors: List<Long>) = map {
     StudentWithSemesters(
         student = Student(
-            email = it.userLogin,
+            email = it.email,
             password = password,
             isParent = it.isParent,
             symbol = it.symbol,

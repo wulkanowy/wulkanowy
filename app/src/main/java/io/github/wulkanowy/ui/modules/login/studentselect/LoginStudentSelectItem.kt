@@ -4,7 +4,6 @@ import io.github.wulkanowy.data.pojos.RegisterStudent
 import io.github.wulkanowy.data.pojos.RegisterSymbol
 import io.github.wulkanowy.data.pojos.RegisterUnit
 
-
 sealed class LoginStudentSelectItem(val type: LoginStudentSelectItemType) {
 
     data class EmptySymbolsHeader(
