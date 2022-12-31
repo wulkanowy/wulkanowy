@@ -136,7 +136,7 @@ class LoginStudentSelectAdapter @Inject constructor() :
                 with(loginItemCheck) {
                     keyListener = null
                     isEnabled = item.isEnabled
-                    isChecked = item.isSelected
+                    isChecked = item.isSelected || !item.isEnabled
                 }
 
                 root.isEnabled = item.isEnabled
