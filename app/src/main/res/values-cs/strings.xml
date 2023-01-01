@@ -55,7 +55,7 @@
     <string name="login_invalid_symbol">Neplatný symbol</string>
     <string name="login_incorrect_symbol">Žák nebyl nalezen. Zkontrolujte správnost symbolu a vybrané varianty deníku UONET+</string>
     <string name="login_duplicate_student">Vybraný žák je už přihlášen</string>
-    <string name="login_symbol_helper">Symbol najdete na stránce deníku v &#160;<b>Uczeń</b>→&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nUjistěte se, že jste na předchozí obrazovce nastavili správnou variantu deníku do pole <b>Variace deníku UONET+</b></string>
+    <string name="login_symbol_helper">The symbol can be found on the register page in&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Wygeneruj kod dostępu</b>.\n\nMake sure that you have set the appropriate register variant in the <b>UONET+ register variant</b> field on the first login screen</string>
     <string name="login_select_student">Vyberte žáky, kteří se mají do aplikace přihlásit</string>
     <string name="login_advanced">Jiné možnosti</string>
     <string name="login_advanced_warning_mobile_api">V tomto režimu nefungují následující: šťastné číslo, statistiky třídy, shrnutí frekvencí, ospravedlnění nepřítomnosti, dokončené lekce, informace o škole a prohlížení seznamu registrovaných zařízení</string>
@@ -72,6 +72,9 @@
     <string name="login_recover">Obnovit</string>
     <string name="login_signed_in">Žák je už přihlášen</string>
     <string name="login_host_standard">Standardní</string>
+    <string name="login_other_search_locations">Other search locations</string>
+    <string name="login_no_active_student">No active students found</string>
+    <string name="login_symbol_enter">Enter a different symbol</string>
     <!--Notifications-->
     <string name="notifications_header_title">Enable notifications</string>
     <string name="notifications_header_description">Enable notifications so you don\'t miss message from teacher or new grade</string>
