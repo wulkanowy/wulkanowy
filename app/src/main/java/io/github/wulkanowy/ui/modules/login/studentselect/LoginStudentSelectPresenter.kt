@@ -149,6 +149,7 @@ class LoginStudentSelectPresenter @Inject constructor(
             .filter { it.symbol.symbol == symbol.symbol }
             .filter { it.unit.schoolId == school.schoolId }
             .filter { it.student.studentId == student.studentId }
+            .filter { it.student.classId == student.classId }
             .size == 1,
     )
 
@@ -204,6 +205,7 @@ class LoginStudentSelectPresenter @Inject constructor(
         selectedStudents
             .removeAll {
                 it.student.studentId == item.student.studentId &&
+                    it.student.classId == item.student.classId &&
                     it.unit.schoolId == item.unit.schoolId &&
                     it.symbol.symbol == item.symbol.symbol
             }
