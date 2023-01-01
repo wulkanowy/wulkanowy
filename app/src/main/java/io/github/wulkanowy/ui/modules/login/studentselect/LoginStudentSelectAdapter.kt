@@ -102,7 +102,7 @@ class LoginStudentSelectAdapter @Inject constructor() :
                     append(item.unit.schoolShortName)
                     append(")")
                 }
-                loginStudentSelectHeaderSchoolDetails.isVisible = item.unit.subjects.isEmpty()
+                loginStudentSelectHeaderSchoolDetails.isVisible = item.unit.students.isEmpty()
                 loginStudentSelectHeaderSchoolError.text = item.unit.error?.message
                 loginStudentSelectHeaderSchoolError.isVisible = item.unit.error != null
                 loginStudentSelectHeaderSchoolError.maxLines = when {

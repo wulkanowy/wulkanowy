@@ -41,7 +41,7 @@ class LoginStudentSelectPresenter @Inject constructor(
     private var expandedSymbolError: RegisterSymbol? = null
     private var expandedSchoolError: RegisterUnit? = null
 
-    private val selectedSubjects = mutableListOf<LoginStudentSelectItem.Student>()
+    private val selectedStudents = mutableListOf<LoginStudentSelectItem.Student>()
 
     fun onAttachView(
         view: LoginStudentSelectView,
@@ -121,8 +121,8 @@ class LoginStudentSelectPresenter @Inject constructor(
                 )
                 add(schoolHeader)
 
-                registerUnit.subjects.filterIsInstance<RegisterStudent>().forEach { subject ->
-                    add(createStudentItem(subject, registerSymbol, registerUnit, students))
+                registerUnit.students.forEach {
+                    add(createStudentItem(it, registerSymbol, registerUnit, students))
                 }
             }
         }
@@ -145,7 +145,7 @@ class LoginStudentSelectPresenter @Inject constructor(
                 && it.student.schoolSymbol == school.schoolId
                 && it.student.classId == student.classId
         },
-        isSelected = selectedSubjects
+        isSelected = selectedStudents
             .filter { it.symbol.symbol == symbol.symbol }
             .filter { it.unit.schoolId == school.schoolId }
             .filter { it.student.studentId == student.studentId }
@@ -189,7 +189,7 @@ class LoginStudentSelectPresenter @Inject constructor(
         )
 
     fun onSignIn() {
-        registerStudents(selectedSubjects)
+        registerStudents(selectedStudents)
     }
 
     private fun onEmptySymbolsToggle() {
@@ -201,15 +201,15 @@ class LoginStudentSelectPresenter @Inject constructor(
     private fun onItemSelected(item: LoginStudentSelectItem.Student) {
         if (!item.isEnabled) return
 
-        selectedSubjects
+        selectedStudents
             .removeAll {
                 it.student.studentId == item.student.studentId &&
                     it.unit.schoolId == item.unit.schoolId &&
                     it.symbol.symbol == item.symbol.symbol
             }
-            .let { if (!it) selectedSubjects.add(item) }
+            .let { if (!it) selectedStudents.add(item) }
 
-        view?.enableSignIn(selectedSubjects.isNotEmpty())
+        view?.enableSignIn(selectedStudents.isNotEmpty())
         refreshItems()
     }
 
@@ -224,7 +224,7 @@ class LoginStudentSelectPresenter @Inject constructor(
     }
 
     private fun resetSelectedState() {
-        selectedSubjects.clear()
+        selectedStudents.clear()
         view?.enableSignIn(false)
     }
 
@@ -232,8 +232,8 @@ class LoginStudentSelectPresenter @Inject constructor(
         view?.updateData(createItems())
     }
 
-    private fun registerStudents(subjects: List<LoginStudentSelectItem>) {
-        val studentsWithSemesters = subjects
+    private fun registerStudents(students: List<LoginStudentSelectItem>) {
+        val studentsWithSemesters = students
             .filterIsInstance<LoginStudentSelectItem.Student>().map { item ->
                 item.student.mapToStudentWithSemesters(
                     user = registerUser,

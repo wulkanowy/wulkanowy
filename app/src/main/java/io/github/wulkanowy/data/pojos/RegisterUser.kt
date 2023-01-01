@@ -28,10 +28,8 @@ data class RegisterUnit(
     val studentIds: List<Int>,
     val employeeIds: List<Int>,
     val error: Throwable?,
-    val subjects: List<RegisterSubject>,
+    val students: List<RegisterStudent>,
 ) : java.io.Serializable
-
-interface RegisterSubject
 
 data class RegisterStudent(
     val studentId: Int,
@@ -42,4 +40,4 @@ data class RegisterStudent(
     val classId: Int,
     val isParent: Boolean,
     val semesters: List<Semester>,
-) : RegisterSubject, java.io.Serializable
+) : java.io.Serializable

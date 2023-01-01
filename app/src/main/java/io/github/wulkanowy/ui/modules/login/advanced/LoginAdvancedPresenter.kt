@@ -209,7 +209,7 @@ class LoginAdvancedPresenter @Inject constructor(
                         .map { (groupKey, students) ->
                             val (schoolId, loginId, schoolName) = groupKey
                             RegisterUnit(
-                                subjects = students.map {
+                                students = students.map {
                                     RegisterStudent(
                                         studentId = it.student.studentId,
                                         studentName = it.student.studentName,

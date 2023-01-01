@@ -69,7 +69,7 @@ class LoginStudentSelectPresenterTest {
         studentIds = listOf(),
         employeeIds = listOf(),
         error = null,
-        subjects = listOf(subject)
+        students = listOf(subject)
     )
 
     private val symbol = RegisterSymbol(
