@@ -13,6 +13,8 @@ class MenuOrderPresenter @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : BasePresenter<MenuOrderView>(errorHandler, studentRepository) {
 
+    private var updatedAppMenuItems = emptyList<AppMenuItem>()
+
     override fun onAttachView(view: MenuOrderView) {
         super.onAttachView(view)
         view.initView()
@@ -21,32 +23,24 @@ class MenuOrderPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        val defaultMenuItemList = setOf(
-            MenuItem.StartMenuItem(),
-            MenuItem.GradeMenuItem(),
-            MenuItem.TimetableMenuItem(),
-            MenuItem.AttendanceMenuItem(),
-            MenuItem.ExamsMenuItem(),
-            MenuItem.HomeworkMenuItem(),
-            MenuItem.NoteMenuItem(),
-            MenuItem.LuckyNumberMenuItem(),
-            MenuItem.SchoolAnnouncementsMenuItem(),
-            MenuItem.SchoolAndTeachersMenuItem(),
-            MenuItem.MobileDevicesMenuItem(),
-            MenuItem.ConferenceMenuItem(),
-            MenuItem.MessageMenuItem()
-        )
-
-        val savedMenuItemList = (preferencesRepository.menuItemOrder ?: defaultMenuItemList)
+        val savedMenuItemList = (preferencesRepository.appMenuItemOrder)
             .sortedBy { it.order }
 
         view?.updateData(savedMenuItemList)
     }
 
-    fun onDragAndDropEnd(list: List<MenuItem>) {
+    fun onDragAndDropEnd(list: List<AppMenuItem>) {
         val updatedList = list.mapIndexed { index, menuItem -> menuItem.apply { order = index } }
 
-        preferencesRepository.menuItemOrder = updatedList
+        updatedAppMenuItems = updatedList
         view?.updateData(updatedList)
+    }
+
+    fun onBackView() {
+        if (updatedAppMenuItems.isNotEmpty()) {
+            preferencesRepository.appMenuItemOrder = updatedAppMenuItems
+            view?.recreateApp()
+        }
+        view?.popView()
     }
 }

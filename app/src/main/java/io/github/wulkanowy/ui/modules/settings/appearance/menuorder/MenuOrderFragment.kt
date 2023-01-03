@@ -2,12 +2,14 @@ package io.github.wulkanowy.ui.modules.settings.appearance.menuorder
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.FragmentMenuOrderBinding
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import javax.inject.Inject
@@ -42,9 +44,21 @@ class MenuOrderFragment : BaseFragment<FragmentMenuOrderBinding>(R.layout.fragme
             adapter = menuOrderAdapter
             addItemDecoration(DividerItemDecoration(context))
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            presenter.onBackView()
+        }
     }
 
-    override fun updateData(data: List<MenuItem>) {
+    override fun updateData(data: List<AppMenuItem>) {
         menuOrderAdapter.submitList(data)
+    }
+
+    override fun popView() {
+        (activity as? MainActivity)?.popView()
+    }
+
+    override fun recreateApp() {
+        requireActivity().recreate()
     }
 }

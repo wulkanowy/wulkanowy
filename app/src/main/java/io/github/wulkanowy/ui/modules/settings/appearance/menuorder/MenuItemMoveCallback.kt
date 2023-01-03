@@ -6,7 +6,7 @@ import java.util.*
 
 class MenuItemMoveCallback(
     private val menuOrderAdapter: MenuOrderAdapter,
-    private var onUserInteractionEndListener: (List<MenuItem>) -> Unit = {}
+    private var onUserInteractionEndListener: (List<AppMenuItem>) -> Unit = {}
 ) : ItemTouchHelper.Callback() {
 
     override fun isLongPressDragEnabled() = true

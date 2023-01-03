@@ -10,9 +10,9 @@ import javax.inject.Inject
 class MenuOrderAdapter @Inject constructor() :
     RecyclerView.Adapter<MenuOrderAdapter.ViewHolder>() {
 
-    val items = mutableListOf<MenuItem>()
+    val items = mutableListOf<AppMenuItem>()
 
-    fun submitList(newItems: List<MenuItem>) {
+    fun submitList(newItems: List<AppMenuItem>) {
         val diffResult = DiffUtil.calculateDiff(DiffCallback(newItems, items.toMutableList()))
 
         with(items) {
@@ -41,8 +41,8 @@ class MenuOrderAdapter @Inject constructor() :
     class ViewHolder(val binding: ItemMenuOrderBinding) : RecyclerView.ViewHolder(binding.root)
 
     private class DiffCallback(
-        private val oldList: List<MenuItem>,
-        private val newList: List<MenuItem>
+        private val oldList: List<AppMenuItem>,
+        private val newList: List<AppMenuItem>
     ) : DiffUtil.Callback() {
 
         override fun getNewListSize() = newList.size
