@@ -20,14 +20,6 @@
             app:key="@string/pref_key_app_theme"
             app:title="@string/pref_view_app_theme"
             app:useSimpleSummaryProvider="true" />
-        <ListPreference
-            app:defaultValue="@string/pref_default_startup"
-            app:entries="@array/startup_tab_entries"
-            app:entryValues="@array/startup_tab_value"
-            app:iconSpaceReserved="false"
-            app:key="@string/pref_key_start_menu"
-            app:title="@string/pref_view_list"
-            app:useSimpleSummaryProvider="true" />
         <Preference
             app:fragment="io.github.wulkanowy.ui.modules.settings.appearance.menuorder.MenuOrderFragment"
             app:iconSpaceReserved="false"

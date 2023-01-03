@@ -42,7 +42,7 @@ sealed class Destination {
         CONFERENCE(Conference),
         SCHOOL_ANNOUNCEMENT(SchoolAnnouncement),
         SCHOOL(School),
-        LUCKY_NUMBER(More),
+        LUCKY_NUMBER(LuckyNumber),
         MORE(More),
         MESSAGE(Message),
         MOBILE_DEVICE(MobileDevice),

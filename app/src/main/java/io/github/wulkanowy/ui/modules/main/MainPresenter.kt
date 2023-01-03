@@ -51,7 +51,7 @@ class MainPresenter @Inject constructor(
 
     private val Destination?.startMenuIndex
         get() = when {
-            this == null -> preferencesRepository.startMenuIndex
+            this == null -> 0
             destinationType in rootDestinationTypeList -> {
                 rootDestinationTypeList.indexOf(destinationType)
             }

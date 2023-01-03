@@ -29,9 +29,6 @@ class PreferencesRepository @Inject constructor(
     private val json: Json,
 ) {
 
-    val startMenuIndex: Int
-        get() = getString(R.string.pref_key_start_menu, R.string.pref_default_startup).toInt()
-
     val isShowPresent: Boolean
         get() = getBoolean(
             R.string.pref_key_attendance_present,
