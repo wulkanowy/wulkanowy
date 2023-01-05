@@ -15,6 +15,9 @@ class MenuOrderDividerItemDecoration(private val context: Context) :
     DividerItemDecoration(context, VERTICAL) {
 
     private val dividerDrawable = ShapeDrawable()
+        .apply {
+            DrawableCompat.setTint(this, context.getThemeAttrColor(R.attr.colorDivider))
+        }
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         canvas.save()
@@ -25,8 +28,6 @@ class MenuOrderDividerItemDecoration(private val context: Context) :
         val params = child.layoutParams as RecyclerView.LayoutParams
         val dividerTop = child.bottom + params.bottomMargin
         val dividerBottom = dividerTop + dividerDrawable.intrinsicHeight
-
-        DrawableCompat.setTint(dividerDrawable, context.getThemeAttrColor(R.attr.colorDivider))
 
         dividerDrawable.setBounds(dividerLeft, dividerTop, dividerRight, dividerBottom + 30)
         dividerDrawable.draw(canvas)
