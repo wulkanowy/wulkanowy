@@ -171,8 +171,21 @@ class ExamPresenter @Inject constructor(
             showNextButton(!currentDate.plusDays(7).isHolidays)
             updateNavigationWeek(
                 "${currentDate.monday.toFormattedString("dd.MM")} - " +
-                        currentDate.sunday.toFormattedString("dd.MM")
+                    currentDate.sunday.toFormattedString("dd.MM")
             )
+        }
+    }
+
+    fun onViewReselected() {
+        Timber.i("Exam view is reselected")
+
+        baseDate = now().nextOrSameSchoolDay
+
+        if (currentDate != baseDate) {
+            reloadView(baseDate)
+            loadData()
+        } else if (view?.isViewEmpty == false) {
+            view?.resetView()
         }
     }
 }
