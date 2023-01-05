@@ -23,9 +23,9 @@
         <Preference
             app:fragment="io.github.wulkanowy.ui.modules.settings.appearance.menuorder.MenuOrderFragment"
             app:iconSpaceReserved="false"
-            app:key="appearance_menu_order"
-            app:summary="Ustaw kolejność funkcji w dolnym menu"
-            app:title="Kolejność menu" />
+            app:key="@string/pref_key_menu_order"
+            app:summary="@string/pref_view_menu_order_summary"
+            app:title="@string/pref_view_menu_order_title" />
     </PreferenceCategory>
     <PreferenceCategory
         app:iconSpaceReserved="false"

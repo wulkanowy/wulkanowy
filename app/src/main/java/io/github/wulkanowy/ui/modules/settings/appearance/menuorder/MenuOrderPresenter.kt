@@ -36,11 +36,20 @@ class MenuOrderPresenter @Inject constructor(
         view?.updateData(updatedList)
     }
 
-    fun onBackView() {
+    fun onBackSelected() {
         if (updatedAppMenuItems.isNotEmpty()) {
-            preferencesRepository.appMenuItemOrder = updatedAppMenuItems
-            view?.recreateApp()
+            view?.showRestartConfirmationDialog()
+        } else {
+            view?.popView()
         }
+    }
+
+    fun onConfirmRestart() {
+        preferencesRepository.appMenuItemOrder = updatedAppMenuItems
+        view?.restartApp()
+    }
+
+    fun onCancelRestart() {
         view?.popView()
     }
 }

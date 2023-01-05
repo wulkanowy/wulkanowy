@@ -8,7 +8,9 @@ interface MenuOrderView : BaseView {
 
     fun updateData(data: List<AppMenuItem>)
 
-    fun popView()
+    fun restartApp()
 
-    fun recreateApp()
+    fun showRestartConfirmationDialog()
+
+    fun popView()
 }

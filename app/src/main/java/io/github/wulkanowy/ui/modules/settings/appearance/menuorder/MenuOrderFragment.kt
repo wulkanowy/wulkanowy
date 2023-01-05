@@ -1,10 +1,15 @@
 package io.github.wulkanowy.ui.modules.settings.appearance.menuorder
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.addCallback
+import androidx.core.view.MenuProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.FragmentMenuOrderBinding
@@ -46,19 +51,47 @@ class MenuOrderFragment : BaseFragment<FragmentMenuOrderBinding>(R.layout.fragme
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            presenter.onBackView()
+            presenter.onBackSelected()
         }
+
+        initializeToolbar()
+    }
+
+    private fun initializeToolbar() {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                if (menuItem.itemId == android.R.id.home) {
+                    presenter.onBackSelected()
+                    return true
+                }
+                return false
+            }
+
+        }, viewLifecycleOwner)
     }
 
     override fun updateData(data: List<AppMenuItem>) {
         menuOrderAdapter.submitList(data)
     }
 
-    override fun popView() {
-        (activity as? MainActivity)?.popView()
+    override fun restartApp() {
+        startActivity(MainActivity.getStartIntent(requireContext()))
+        requireActivity().finishAffinity()
     }
 
-    override fun recreateApp() {
-        requireActivity().recreate()
+    override fun popView() {
+        (activity as? MainActivity?)?.popView()
+    }
+
+    override fun showRestartConfirmationDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.menu_order_confirm_title)
+            .setMessage(R.string.menu_order_confirm_content)
+            .setPositiveButton(R.string.menu_order_confirm_restart) { _, _ -> presenter.onConfirmRestart() }
+            .setNegativeButton(R.string.all_cancel) { _, _ -> presenter.onCancelRestart() }
+            .show()
     }
 }
