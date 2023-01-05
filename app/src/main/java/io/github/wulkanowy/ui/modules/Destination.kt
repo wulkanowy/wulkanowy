@@ -13,7 +13,7 @@ import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.mobiledevice.MobileDeviceFragment
 import io.github.wulkanowy.ui.modules.more.MoreFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
-import io.github.wulkanowy.ui.modules.schoolandteachers.school.SchoolFragment
+import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersFragment
 import io.github.wulkanowy.ui.modules.schoolannouncement.SchoolAnnouncementFragment
 import io.github.wulkanowy.ui.modules.settings.SettingsFragment
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
@@ -41,7 +41,7 @@ sealed class Destination {
         NOTE(Note),
         CONFERENCE(Conference),
         SCHOOL_ANNOUNCEMENT(SchoolAnnouncement),
-        SCHOOL(School),
+        SCHOOL_AND_TEACHERS(SchoolAndTeachers),
         LUCKY_NUMBER(LuckyNumber),
         MORE(More),
         MESSAGE(Message),
@@ -107,9 +107,9 @@ sealed class Destination {
     }
 
     @Serializable
-    object School : Destination() {
-        override val destinationType get() = Type.SCHOOL
-        override val destinationFragment get() = SchoolFragment.newInstance()
+    object SchoolAndTeachers : Destination() {
+        override val destinationType get() = Type.SCHOOL_AND_TEACHERS
+        override val destinationFragment get() = SchoolAndTeachersFragment.newInstance()
     }
 
     @Serializable

@@ -187,7 +187,7 @@ sealed class AppMenuItem {
         override val title = R.string.schoolandteachers_title
 
         @Transient
-        override val destinationType = Destination.Type.SCHOOL
+        override val destinationType = Destination.Type.SCHOOL_AND_TEACHERS
     }
 
     @kotlinx.serialization.Serializable
