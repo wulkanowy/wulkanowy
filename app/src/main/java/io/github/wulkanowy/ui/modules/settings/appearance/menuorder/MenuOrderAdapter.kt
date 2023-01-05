@@ -10,9 +10,9 @@ import javax.inject.Inject
 class MenuOrderAdapter @Inject constructor() :
     RecyclerView.Adapter<MenuOrderAdapter.ViewHolder>() {
 
-    val items = mutableListOf<AppMenuItem>()
+    val items = mutableListOf<MenuOrderItem>()
 
-    fun submitList(newItems: List<AppMenuItem>) {
+    fun submitList(newItems: List<MenuOrderItem>) {
         val diffResult = DiffUtil.calculateDiff(DiffCallback(newItems, items.toMutableList()))
 
         with(items) {
@@ -30,7 +30,7 @@ class MenuOrderAdapter @Inject constructor() :
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
+        val item = items[position].appMenuItem
 
         with(holder.binding) {
             menuOrderItemTitle.setText(item.title)
@@ -41,8 +41,8 @@ class MenuOrderAdapter @Inject constructor() :
     class ViewHolder(val binding: ItemMenuOrderBinding) : RecyclerView.ViewHolder(binding.root)
 
     private class DiffCallback(
-        private val oldList: List<AppMenuItem>,
-        private val newList: List<AppMenuItem>
+        private val oldList: List<MenuOrderItem>,
+        private val newList: List<MenuOrderItem>
     ) : DiffUtil.Callback() {
 
         override fun getNewListSize() = newList.size
@@ -53,6 +53,6 @@ class MenuOrderAdapter @Inject constructor() :
             oldList[oldItemPosition] == newList[newItemPosition]
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-            oldList[oldItemPosition].title == newList[newItemPosition].title
+            oldList[oldItemPosition].appMenuItem.destinationType == newList[newItemPosition].appMenuItem.destinationType
     }
 }

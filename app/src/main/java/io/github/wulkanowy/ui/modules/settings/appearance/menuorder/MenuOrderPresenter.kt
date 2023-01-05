@@ -13,7 +13,7 @@ class MenuOrderPresenter @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : BasePresenter<MenuOrderView>(errorHandler, studentRepository) {
 
-    private var updatedAppMenuItems = emptyList<AppMenuItem>()
+    private var updatedMenuOrderItems = emptyList<MenuOrderItem>()
 
     override fun onAttachView(view: MenuOrderView) {
         super.onAttachView(view)
@@ -25,19 +25,22 @@ class MenuOrderPresenter @Inject constructor(
     private fun loadData() {
         val savedMenuItemList = (preferencesRepository.appMenuItemOrder)
             .sortedBy { it.order }
+            .map { MenuOrderItem(it, it.order) }
 
         view?.updateData(savedMenuItemList)
     }
 
-    fun onDragAndDropEnd(list: List<AppMenuItem>) {
-        val updatedList = list.mapIndexed { index, menuItem -> menuItem.apply { order = index } }
+    fun onDragAndDropEnd(list: List<MenuOrderItem>) {
+        val updatedList = list.mapIndexed { index, menuOrderItem ->
+            menuOrderItem.copy(order = index)
+        }
 
-        updatedAppMenuItems = updatedList
+        updatedMenuOrderItems = updatedList
         view?.updateData(updatedList)
     }
 
     fun onBackSelected() {
-        if (updatedAppMenuItems.isNotEmpty()) {
+        if (updatedMenuOrderItems.isNotEmpty()) {
             view?.showRestartConfirmationDialog()
         } else {
             view?.popView()
@@ -45,7 +48,11 @@ class MenuOrderPresenter @Inject constructor(
     }
 
     fun onConfirmRestart() {
-        preferencesRepository.appMenuItemOrder = updatedAppMenuItems
+        val listToSave = updatedMenuOrderItems.map {
+            it.appMenuItem
+                .apply { order = it.order }
+        }
+        preferencesRepository.appMenuItemOrder = listToSave
         view?.restartApp()
     }
 

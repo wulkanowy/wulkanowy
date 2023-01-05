@@ -47,6 +47,7 @@ class MenuOrderFragment : BaseFragment<FragmentMenuOrderBinding>(R.layout.fragme
         with(binding.menuOrderRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = menuOrderAdapter
+            addItemDecoration(MenuOrderDividerItemDecoration(context))
             addItemDecoration(DividerItemDecoration(context))
         }
 
@@ -73,7 +74,7 @@ class MenuOrderFragment : BaseFragment<FragmentMenuOrderBinding>(R.layout.fragme
         }, viewLifecycleOwner)
     }
 
-    override fun updateData(data: List<AppMenuItem>) {
+    override fun updateData(data: List<MenuOrderItem>) {
         menuOrderAdapter.submitList(data)
     }
 

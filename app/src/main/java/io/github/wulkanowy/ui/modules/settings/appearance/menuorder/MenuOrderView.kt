@@ -6,7 +6,7 @@ interface MenuOrderView : BaseView {
 
     fun initView()
 
-    fun updateData(data: List<AppMenuItem>)
+    fun updateData(data: List<MenuOrderItem>)
 
     fun restartApp()
 
