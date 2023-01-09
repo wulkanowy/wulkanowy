@@ -9,6 +9,7 @@ import androidx.activity.addCallback
 import androidx.core.view.MenuProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -18,6 +19,7 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MenuOrderFragment : BaseFragment<FragmentMenuOrderBinding>(R.layout.fragment_menu_order),
@@ -49,6 +51,7 @@ class MenuOrderFragment : BaseFragment<FragmentMenuOrderBinding>(R.layout.fragme
             adapter = menuOrderAdapter
             addItemDecoration(MenuOrderDividerItemDecoration(context))
             addItemDecoration(DividerItemDecoration(context))
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {

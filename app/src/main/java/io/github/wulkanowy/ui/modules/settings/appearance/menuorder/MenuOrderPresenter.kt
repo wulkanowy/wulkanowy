@@ -48,11 +48,13 @@ class MenuOrderPresenter @Inject constructor(
     }
 
     fun onConfirmRestart() {
-        val listToSave = updatedMenuOrderItems.map {
-            it.appMenuItem
-                .apply { order = it.order }
+        updatedMenuOrderItems.forEach {
+            it.appMenuItem.apply {
+                order = it.order
+            }
         }
-        preferencesRepository.appMenuItemOrder = listToSave
+
+        preferencesRepository.appMenuItemOrder = updatedMenuOrderItems.map { it.appMenuItem }
         view?.restartApp()
     }
 

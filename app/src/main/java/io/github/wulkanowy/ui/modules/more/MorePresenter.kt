@@ -16,8 +16,8 @@ class MorePresenter @Inject constructor(
 ) : BasePresenter<MoreView>(errorHandler, studentRepository) {
 
     private val moreAppMenuItem = preferencesRepository.appMenuItemOrder
-        .drop(4)
         .sortedBy { it.order }
+        .drop(4)
 
     override fun onAttachView(view: MoreView) {
         super.onAttachView(view)

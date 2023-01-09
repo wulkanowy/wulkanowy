@@ -6,6 +6,7 @@ import android.graphics.Rect
 import android.graphics.drawable.ShapeDrawable
 import android.view.View
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.forEach
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
@@ -24,13 +25,16 @@ class MenuOrderDividerItemDecoration(private val context: Context) :
         val dividerLeft = parent.paddingLeft
         val dividerRight = parent.width - parent.paddingRight
 
-        val child = parent.getChildAt(3)
-        val params = child.layoutParams as RecyclerView.LayoutParams
-        val dividerTop = child.bottom + params.bottomMargin
-        val dividerBottom = dividerTop + dividerDrawable.intrinsicHeight
+        parent.forEach {
+            if (parent.getChildAdapterPosition(it) == 3) {
+                val params = it.layoutParams as RecyclerView.LayoutParams
+                val dividerTop = it.bottom + params.bottomMargin
+                val dividerBottom = dividerTop + dividerDrawable.intrinsicHeight
 
-        dividerDrawable.setBounds(dividerLeft, dividerTop, dividerRight, dividerBottom + 30)
-        dividerDrawable.draw(canvas)
+                dividerDrawable.setBounds(dividerLeft, dividerTop, dividerRight, dividerBottom + 30)
+                dividerDrawable.draw(canvas)
+            }
+        }
 
         canvas.restore()
     }

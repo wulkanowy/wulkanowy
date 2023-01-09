@@ -2,9 +2,10 @@ package io.github.wulkanowy.ui.modules.settings.appearance.menuorder
 
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.modules.Destination
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
-@kotlinx.serialization.Serializable
+@Serializable
 sealed class AppMenuItem {
 
     companion object {
@@ -34,7 +35,7 @@ sealed class AppMenuItem {
 
     abstract val destinationType: Destination.Type
 
-    @kotlinx.serialization.Serializable
+    @Serializable
     data class DashboardAppMenuItem(override var order: Int = 0) : AppMenuItem() {
 
         @Transient
@@ -47,7 +48,7 @@ sealed class AppMenuItem {
         override val destinationType = Destination.Type.DASHBOARD
     }
 
-    @kotlinx.serialization.Serializable
+    @Serializable
     data class GradeAppMenuItem(override var order: Int = 1) : AppMenuItem() {
 
         @Transient
@@ -60,7 +61,7 @@ sealed class AppMenuItem {
         override val destinationType = Destination.Type.GRADE
     }
 
-    @kotlinx.serialization.Serializable
+    @Serializable
     data class AttendanceAppMenuItem(override var order: Int = 2) : AppMenuItem() {
 
         @Transient
@@ -73,7 +74,7 @@ sealed class AppMenuItem {
         override val destinationType = Destination.Type.ATTENDANCE
     }
 
-    @kotlinx.serialization.Serializable
+    @Serializable
     data class TimetableAppMenuItem(override var order: Int = 3) : AppMenuItem() {
 
         @Transient
@@ -86,7 +87,7 @@ sealed class AppMenuItem {
         override val destinationType = Destination.Type.TIMETABLE
     }
 
-    @kotlinx.serialization.Serializable
+    @Serializable
     data class MessageAppMenuItem(override var order: Int = 4) : AppMenuItem() {
 
         @Transient
@@ -99,7 +100,7 @@ sealed class AppMenuItem {
         override val destinationType = Destination.Type.MESSAGE
     }
 
-    @kotlinx.serialization.Serializable
+    @Serializable
     data class ExamsAppMenuItem(override var order: Int = 5) : AppMenuItem() {
 
         @Transient
@@ -112,7 +113,7 @@ sealed class AppMenuItem {
         override val destinationType = Destination.Type.EXAM
     }
 
-    @kotlinx.serialization.Serializable
+    @Serializable
     data class HomeworkAppMenuItem(override var order: Int = 6) : AppMenuItem() {
 
         @Transient
@@ -125,7 +126,7 @@ sealed class AppMenuItem {
         override val destinationType = Destination.Type.HOMEWORK
     }
 
-    @kotlinx.serialization.Serializable
+    @Serializable
     data class NoteAppMenuItem(override var order: Int = 7) : AppMenuItem() {
 
         @Transient
@@ -138,7 +139,7 @@ sealed class AppMenuItem {
         override val destinationType = Destination.Type.NOTE
     }
 
-    @kotlinx.serialization.Serializable
+    @Serializable
     data class LuckyNumberAppMenuItem(override var order: Int = 8) : AppMenuItem() {
 
         @Transient
@@ -151,7 +152,7 @@ sealed class AppMenuItem {
         override val destinationType = Destination.Type.LUCKY_NUMBER
     }
 
-    @kotlinx.serialization.Serializable
+    @Serializable
     data class ConferenceAppMenuItem(override var order: Int = 9) : AppMenuItem() {
 
         @Transient
@@ -164,7 +165,7 @@ sealed class AppMenuItem {
         override val destinationType = Destination.Type.CONFERENCE
     }
 
-    @kotlinx.serialization.Serializable
+    @Serializable
     data class SchoolAnnouncementsAppMenuItem(override var order: Int = 10) : AppMenuItem() {
 
         @Transient
@@ -177,7 +178,7 @@ sealed class AppMenuItem {
         override val destinationType = Destination.Type.SCHOOL_ANNOUNCEMENT
     }
 
-    @kotlinx.serialization.Serializable
+    @Serializable
     data class SchoolAndTeachersAppMenuItem(override var order: Int = 11) : AppMenuItem() {
 
         @Transient
@@ -190,7 +191,7 @@ sealed class AppMenuItem {
         override val destinationType = Destination.Type.SCHOOL_AND_TEACHERS
     }
 
-    @kotlinx.serialization.Serializable
+    @Serializable
     data class MobileDevicesAppMenuItem(override var order: Int = 12) : AppMenuItem() {
 
         @Transient
