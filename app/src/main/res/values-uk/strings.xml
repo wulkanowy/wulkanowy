@@ -26,6 +26,7 @@
     <string name="student_info_title">Інформація про учня</string>
     <string name="dashboard_title">Головна</string>
     <string name="notifications_center_title">Центр сповіщень</string>
+    <string name="menu_order_title">Menu configuartion</string>
     <!--Subtitles-->
     <string name="grade_subtitle">%1$d семестр, %2$d/%3$d</string>
     <!--Login-->
@@ -678,6 +679,7 @@
     <string name="all_undo">Відмінити</string>
     <string name="all_change">Змінити</string>
     <string name="all_add_to_calendar">Додати у календар</string>
+    <string name="all_cancel">Cancel</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Немаэ уроків</string>
     <string name="widget_timetable_theme_title">Увібрати тему</string>
@@ -699,6 +701,8 @@
     <string name="pref_view_grade_color_scheme">Схема кольорів оцінок</string>
     <string name="pref_view_grade_sorting_mode">Сортування предметів</string>
     <string name="pref_view_app_language">Мова</string>
+    <string name="pref_view_menu_order_title">Menu configuration</string>
+    <string name="pref_view_menu_order_summary">Set the order of functions in the menu</string>
     <string name="pref_notify_header">Повідомлення</string>
     <string name="pref_notify_header_other">Інше</string>
     <string name="pref_notify_switch">Показувати повідомлення</string>
@@ -800,6 +804,10 @@
     <string name="update_download_success">Щойно завантажено оновлення.</string>
     <string name="update_download_success_button">Перезавантажити</string>
     <string name="update_failed">Помилка оновлення! Wulkanowy може не працювати належним чином. Подумайте про оновлення</string>
+    <!--Menu order-->
+    <string name="menu_order_confirm_title">Application restart</string>
+    <string name="menu_order_confirm_content">The application must restart for the changes to be saved</string>
+    <string name="menu_order_confirm_restart">Restart</string>
     <!--Errors-->
     <string name="error_no_internet">Немає з\'єднання з інтернетом</string>
     <string name="error_invalid_device_datetime">Сталася помилка. Перевірте годинник пристрою</string>
