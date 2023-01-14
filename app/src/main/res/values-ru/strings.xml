@@ -26,6 +26,7 @@
     <string name="student_info_title">Информация о ученике</string>
     <string name="dashboard_title">Главная</string>
     <string name="notifications_center_title">Центр уведомлений</string>
+    <string name="menu_order_title">Menu configuartion</string>
     <!--Subtitles-->
     <string name="grade_subtitle">%1$d семестр, %2$d/%3$d</string>
     <!--Login-->
@@ -678,6 +679,7 @@
     <string name="all_undo">Отменить</string>
     <string name="all_change">Изменить</string>
     <string name="all_add_to_calendar">Добавить в календарь</string>
+    <string name="all_cancel">Cancel</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Нет уроков</string>
     <string name="widget_timetable_theme_title">Выбрать тему</string>
@@ -699,6 +701,8 @@
     <string name="pref_view_grade_color_scheme">Цветовая схема оценок</string>
     <string name="pref_view_grade_sorting_mode">Сортировка уроков</string>
     <string name="pref_view_app_language">Язык</string>
+    <string name="pref_view_menu_order_title">Menu configuration</string>
+    <string name="pref_view_menu_order_summary">Set the order of functions in the menu</string>
     <string name="pref_notify_header">Уведомления</string>
     <string name="pref_notify_header_other">Прочее</string>
     <string name="pref_notify_switch">Показывать уведомления</string>
@@ -800,6 +804,10 @@
     <string name="update_download_success">Только что было скачано обновление.</string>
     <string name="update_download_success_button">Перезапустить</string>
     <string name="update_failed">Не удалось обновить! Wulkanowy может работать некорректно. Рассмотрите возможность обновления</string>
+    <!--Menu order-->
+    <string name="menu_order_confirm_title">Application restart</string>
+    <string name="menu_order_confirm_content">The application must restart for the changes to be saved</string>
+    <string name="menu_order_confirm_restart">Restart</string>
     <!--Errors-->
     <string name="error_no_internet">Интернет-соединение отсутствует</string>
     <string name="error_invalid_device_datetime">Произошла ошибка. Проверьте время на вашем устройстве</string>
