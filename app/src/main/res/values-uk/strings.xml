@@ -523,7 +523,7 @@
     <string name="account_confirm">Ви впевнені, що хочете вийти з цього облікового запису?</string>
     <string name="account_logout_student">Вийти з облікового запису учня</string>
     <string name="account_type_student">Обліковий запис учня</string>
-    <string name="account_type_parent">Обліковий запис батька</string>
+    <string name="account_type_parent">Parent account</string>
     <string name="account_details_edit">Змінити дані</string>
     <string name="account_quick_manager">Змінити облікові записи</string>
     <string name="account_select_student">Вибрати учня</string>
