@@ -41,9 +41,7 @@ internal class DataModule {
         Sdk().apply {
             androidVersion = android.os.Build.VERSION.RELEASE
             buildTag = android.os.Build.MODEL
-            remoteConfig.fetchAndActivate {
-                userAgentTemplate = it.userAgentTemplate
-            }
+            userAgentTemplate = remoteConfig.userAgentTemplate
             setSimpleHttpLogger { Timber.d(it) }
 
             // for debug only
