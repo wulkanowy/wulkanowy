@@ -7,12 +7,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.data.db.entities.Notification
 import io.github.wulkanowy.data.repositories.NotificationRepository
 import io.github.wulkanowy.services.sync.notifications.NotificationType
+import io.github.wulkanowy.ui.modules.Destination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.time.LocalDateTime
+import java.time.Instant
 import javax.inject.Inject
 
 @SuppressLint("MissingFirebaseInstanceTokenRefresh")
@@ -36,8 +37,9 @@ class AppMessagingService : FirebaseMessagingService() {
             title = title,
             content = content,
             data = customData,
-            date = LocalDateTime.now(),
+            date = Instant.now(),
             type = NotificationType.PUSH,
+            destination = Destination.Dashboard,
             studentId = -1
         )
 

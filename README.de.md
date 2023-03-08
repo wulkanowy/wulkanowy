@@ -1,14 +1,13 @@
-[Polska wersja README](README.md)
-
-[English version of README](README.en.md)
+[Česká verze](README.cs.md) / Deutsche Version / [English version](README.en.md) / [Polska wersja](README.md) / [Slovenská verzia](README.sk.md)
 
 # Wulkanowy
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wulkanowy/wulkanowy/Tests/develop?style=flat-square)](https://github.com/wulkanowy/wulkanowy/actions)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/wulkanowy/wulkanowy/test.yml?branch=develop&style=flat-square)](https://github.com/wulkanowy/wulkanowy/actions)
 [![Codecov](https://img.shields.io/codecov/c/github/wulkanowy/wulkanowy/master.svg?style=flat-square)](https://codecov.io/gh/wulkanowy/wulkanowy)
 [![Discord](https://img.shields.io/discord/390889354199040011.svg?style=flat-square)](https://discord.gg/vccAQBr)
 [![F-Droid](https://img.shields.io/f-droid/v/io.github.wulkanowy.svg?style=flat-square)](https://f-droid.org/packages/io.github.wulkanowy/)
 [![Last release](https://img.shields.io/github/release/wulkanowy/wulkanowy.svg?logo=github&style=flat-square)](https://github.com/wulkanowy/wulkanowy/releases)
+[![Crowdin](https://badges.crowdin.net/wulkanowy2/localized.svg)](https://translate.wulkanowy.net.pl)
 
 Inoffizieller Android VULCAN UONET+ Registrierungsclient für Schüler und ihre Eltern
 
@@ -22,7 +21,7 @@ Inoffizieller Android VULCAN UONET+ Registrierungsclient für Schüler und ihre 
     * Prozentsatz der Anwesenheit
     * Prüfungen
     * Stundenplan
-    * Unterricht abgeschlossen
+    * abgeschlossene Unterrichtsstunden
     * Nachrichten
     * Hausaufgaben
     * Anmerkungen
@@ -35,7 +34,7 @@ Inoffizieller Android VULCAN UONET+ Registrierungsclient für Schüler und ihre 
 * Unterstützung für mehrere Konten mit der Möglichkeit, den Namen des Schülers zu ändern
 * dunkles und schwarzes (AMOLED) Thema
 * Offline-Modus
-* keine Werbung
+* optionale Werbungen, die es uns ermöglichen das Projekt zu unterstützen
 
 ## Herunterladen
 
@@ -51,7 +50,7 @@ Die aktuelle Version können Sie von der Google Play, F-Droid oder Huawei AppGal
     alt="Explore it on AppGallery"
     height="80">](https://appgallery.cloud.huawei.com/ag/n/app/C101440411?channelId=Badge&id=1b3f7fbb700849a9be0dba6b520b2282&s=EB1D3BF9ED9D1564D869B7B94B18016D3CABFCA5AEFB8E29F675FA04E0DC131D&detailType=0&v=)
     
-Sie können auch ein [Entwicklungsversion herunterladen](https://wulkanowy.github.io/#download) das beinhaltet neue Funktionen, die für die nächste Version vorbereitet werden
+Sie können auch eine [Entwicklungsversion herunterladen](https://wulkanowy.github.io/#download) die beinhaltet neue Funktionen, die für die nächste Version vorbereitet werden
 
 ## Gebaut mit
 

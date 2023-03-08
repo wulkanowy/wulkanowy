@@ -1,19 +1,12 @@
 package io.github.wulkanowy.ui.modules.grade.statistics
 
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.*
 import io.github.wulkanowy.data.db.entities.Subject
 import io.github.wulkanowy.data.pojos.GradeStatisticsItem
-import io.github.wulkanowy.data.repositories.GradeStatisticsRepository
-import io.github.wulkanowy.data.repositories.PreferencesRepository
-import io.github.wulkanowy.data.repositories.SemesterRepository
-import io.github.wulkanowy.data.repositories.StudentRepository
-import io.github.wulkanowy.data.repositories.SubjectRepository
+import io.github.wulkanowy.data.repositories.*
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResourceIn
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -31,16 +24,22 @@ class GradeStatisticsPresenter @Inject constructor(
 
     private var currentSemesterId = 0
 
-    private var currentSubjectName: String = "Wszystkie"
+    var currentSubjectName: String = "Wszystkie"
+        private set
 
     private lateinit var lastError: Throwable
 
     var currentType: GradeStatisticsItem.DataType = GradeStatisticsItem.DataType.PARTIAL
         private set
 
-    fun onAttachView(view: GradeStatisticsView, type: GradeStatisticsItem.DataType?) {
+    fun onAttachView(
+        view: GradeStatisticsView,
+        type: GradeStatisticsItem.DataType?,
+        subjectName: String?
+    ) {
         super.onAttachView(view)
         currentType = type ?: GradeStatisticsItem.DataType.PARTIAL
+        currentSubjectName = subjectName ?: currentSubjectName
         view.initView()
         errorHandler.showErrorMessage = ::showErrorViewOnError
     }
@@ -119,28 +118,26 @@ class GradeStatisticsPresenter @Inject constructor(
     }
 
     private fun loadSubjects() {
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             subjectRepository.getSubjects(student, semester)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.i("Loading grade stats subjects started")
-                Status.SUCCESS -> {
-                    subjects = it.data!!
-
-                    Timber.i("Loading grade stats subjects result: Success")
-                    view?.run {
-                        view?.updateSubjects(ArrayList(it.data.map { subject -> subject.name }))
-                        showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
-                    }
-                }
-                Status.ERROR -> {
-                    Timber.i("Loading grade stats subjects result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
+        }
+            .logResourceStatus("load grade stats subjects")
+            .onResourceData {
+                subjects = it
+                view?.run {
+                    showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
+                    updateSubjects(
+                        data = it.map { subject -> subject.name },
+                        selectedIndex = it.indexOfFirst { subject ->
+                            subject.name == currentSubjectName
+                        },
+                    )
                 }
             }
-        }.launch("subjects")
+            .onResourceError(errorHandler::dispatch)
+            .launch("subjects")
     }
 
     private fun loadDataByType(
@@ -151,11 +148,13 @@ class GradeStatisticsPresenter @Inject constructor(
     ) {
         Timber.i("Loading grade stats data started")
 
-        currentSubjectName =
-            if (preferencesRepository.showAllSubjectsOnStatisticsList) "Wszystkie" else subjectName
         currentType = type
+        currentSubjectName = when {
+            preferencesRepository.showAllSubjectsOnStatisticsList -> "Wszystkie"
+            else -> subjectName
+        }
 
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semesters = semesterRepository.getSemesters(student)
             val semester = semesters.first { item -> item.semesterId == semesterId }
@@ -188,58 +187,43 @@ class GradeStatisticsPresenter @Inject constructor(
                     }
                 }
             }
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> {
-                    val isNoContent = it.data == null || checkIsNoContent(it.data, type)
-                    if (!isNoContent) {
-                        view?.run {
-                            showEmpty(isNoContent)
-                            showErrorView(false)
-                            enableSwipe(true)
-                            showRefresh(true)
-                            showProgress(false)
-                            updateData(
-                                if (isNoContent) emptyList() else it.data!!,
-                                preferencesRepository.gradeColorTheme,
-                                preferencesRepository.showAllSubjectsOnStatisticsList
-                            )
-                            showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
-                        }
-                    }
-                }
-                Status.SUCCESS -> {
-                    Timber.i("Loading grade stats result: Success")
-                    view?.run {
-                        val isNoContent = checkIsNoContent(it.data!!, type)
-                        showEmpty(isNoContent)
-                        showErrorView(false)
-                        updateData(
-                            if (isNoContent) emptyList() else it.data,
-                            preferencesRepository.gradeColorTheme,
-                            preferencesRepository.showAllSubjectsOnStatisticsList
-                        )
-                        showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
-                    }
-                    analytics.logEvent(
-                        "load_data",
-                        "type" to "grade_statistics",
-                        "items" to it.data!!.size
+        }
+            .logResourceStatus("load grade stats data")
+            .mapResourceData {
+                val isNoContent = checkIsNoContent(it, type)
+                if (isNoContent) emptyList() else it
+            }
+            .onResourceData {
+                view?.run {
+                    enableSwipe(true)
+                    showProgress(false)
+                    showErrorView(false)
+                    showEmpty(it.isEmpty())
+                    updateData(
+                        newItems = it,
+                        newTheme = preferencesRepository.gradeColorTheme,
+                        showAllSubjectsOnStatisticsList = preferencesRepository.showAllSubjectsOnStatisticsList
                     )
                 }
-                Status.ERROR -> {
-                    Timber.i("Loading grade stats result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
+            }
+            .onResourceIntermediate { view?.showRefresh(true) }
+            .onResourceSuccess {
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "grade_statistics",
+                    "items" to it.size
+                )
+            }
+            .onResourceNotLoading {
+                view?.run {
+                    enableSwipe(true)
+                    showRefresh(false)
+                    showProgress(false)
+                    notifyParentDataLoaded(semesterId)
                 }
             }
-        }.afterLoading {
-            view?.run {
-                showRefresh(false)
-                showProgress(false)
-                enableSwipe(true)
-                notifyParentDataLoaded(semesterId)
-            }
-        }.launch("load")
+            .onResourceError(errorHandler::dispatch)
+            .launch("load")
     }
 
     private fun checkIsNoContent(
@@ -254,7 +238,8 @@ class GradeStatisticsPresenter @Inject constructor(
                 items.firstOrNull()?.partial?.classAmounts.orEmpty().sum() == 0
             }
             GradeStatisticsItem.DataType.POINTS -> {
-                items.firstOrNull()?.points?.let { points -> points.student == .0 && points.others == .0 } ?: false
+                items.firstOrNull()?.points?.let { points -> points.student == .0 && points.others == .0 }
+                    ?: false
             }
         }
     }

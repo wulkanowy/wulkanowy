@@ -1,9 +1,12 @@
 package io.github.wulkanowy.ui.modules.main
 
-import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
+import io.github.wulkanowy.data.logResourceStatus
+import io.github.wulkanowy.data.onResourceError
+import io.github.wulkanowy.data.onResourceSuccess
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.data.resourceFlow
 import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.BaseView
@@ -15,54 +18,64 @@ import io.github.wulkanowy.ui.modules.grade.GradeView
 import io.github.wulkanowy.ui.modules.message.MessageView
 import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersView
 import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoView
+import io.github.wulkanowy.utils.AdsHelper
 import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.flowWithResource
-import kotlinx.coroutines.flow.onEach
+import io.github.wulkanowy.utils.AppInfo
+import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import timber.log.Timber
-import java.time.LocalDate
+import java.time.Duration
+import java.time.Instant
 import javax.inject.Inject
 
 class MainPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
-    private val prefRepository: PreferencesRepository,
+    private val preferencesRepository: PreferencesRepository,
     private val syncManager: SyncManager,
     private val analytics: AnalyticsHelper,
+    private val json: Json,
+    private val adsHelper: AdsHelper,
+    private val appInfo: AppInfo
 ) : BasePresenter<MainView>(errorHandler, studentRepository) {
 
     private var studentsWitSemesters: List<StudentWithSemesters>? = null
 
-    private val rootDestinationTypeList = listOf(
-        Destination.Type.DASHBOARD,
-        Destination.Type.GRADE,
-        Destination.Type.ATTENDANCE,
-        Destination.Type.TIMETABLE,
-        Destination.Type.MORE
-    )
+    private val rootAppMenuItems = preferencesRepository.appMenuItemOrder
+        .sortedBy { it.order }
+        .take(4)
+
+    private val rootDestinationTypeList = rootAppMenuItems.map { it.destinationType }
+        .plus(Destination.Type.MORE)
 
     private val Destination?.startMenuIndex
         get() = when {
-            this == null -> prefRepository.startMenuIndex
-            type in rootDestinationTypeList -> {
-                rootDestinationTypeList.indexOf(type)
+            this == null -> 0
+            destinationType in rootDestinationTypeList -> {
+                rootDestinationTypeList.indexOf(destinationType)
             }
             else -> 4
         }
 
-    fun onAttachView(view: MainView, initDestination: Destination?) {
+    fun onAttachView(view: MainView, initDestinationJson: String?) {
         super.onAttachView(view)
+
+        val initDestination: Destination? = initDestinationJson?.let { json.decodeFromString(it) }
 
         val startMenuIndex = initDestination.startMenuIndex
         val destinations = rootDestinationTypeList.map {
-            if (it == initDestination?.type) initDestination else it.defaultDestination
+            if (it == initDestination?.destinationType) initDestination else it.defaultDestination
         }
 
-        view.initView(startMenuIndex, destinations)
+        view.initView(startMenuIndex, rootAppMenuItems, destinations)
         if (initDestination != null && startMenuIndex == 4) {
             view.openMoreDestination(initDestination)
         }
 
         syncManager.startPeriodicSyncWorker()
+
+        checkAppSupport()
 
         analytics.logEvent("app_open", "destination" to initDestination.toString())
         Timber.i("Main view was initialized with $initDestination")
@@ -74,20 +87,14 @@ class MainPresenter @Inject constructor(
             return
         }
 
-        flowWithResource { studentRepository.getSavedStudents(false) }
-            .onEach { resource ->
-                when (resource.status) {
-                    Status.LOADING -> Timber.i("Loading student avatar data started")
-                    Status.SUCCESS -> {
-                        studentsWitSemesters = resource.data
-                        showCurrentStudentAvatar()
-                    }
-                    Status.ERROR -> {
-                        Timber.i("Loading student avatar result: An exception occurred")
-                        errorHandler.dispatch(resource.error!!)
-                    }
-                }
-            }.launch("avatar")
+        resourceFlow { studentRepository.getSavedStudents(false) }
+            .logResourceStatus("load student avatar")
+            .onResourceSuccess {
+                studentsWitSemesters = it
+                showCurrentStudentAvatar()
+            }
+            .onResourceError(errorHandler::dispatch)
+            .launch("avatar")
     }
 
     fun onViewChange(destinationView: BaseView) {
@@ -131,12 +138,9 @@ class MainPresenter @Inject constructor(
         return true
     }
 
-    fun onBackPressed(default: () -> Unit) {
+    fun onBackPressed() {
         Timber.i("Back pressed in main view")
-        view?.run {
-            if (isRootView) default()
-            else popView()
-        }
+        view?.popView()
     }
 
     fun onTabSelected(index: Int, wasSelected: Boolean): Boolean {
@@ -154,18 +158,52 @@ class MainPresenter @Inject constructor(
         } == true
     }
 
-    private fun checkInAppReview() {
-        prefRepository.inAppReviewCount++
+    fun onEnableAdsSelected() {
+        view?.showPrivacyPolicyDialog()
+    }
 
-        if (prefRepository.inAppReviewDate == null) {
-            prefRepository.inAppReviewDate = LocalDate.now()
+    fun onPrivacyAgree(isPersonalizedAds: Boolean) {
+        preferencesRepository.isAgreeToProcessData = true
+        preferencesRepository.isPersonalizedAdsEnabled = isPersonalizedAds
+
+        adsHelper.initialize()
+
+        preferencesRepository.isAdsEnabled = true
+    }
+
+    fun onPrivacySelected() {
+        view?.openPrivacyPolicy()
+    }
+
+    private fun checkInAppReview() {
+        preferencesRepository.inAppReviewCount++
+
+        if (preferencesRepository.inAppReviewDate == null) {
+            preferencesRepository.inAppReviewDate = Instant.now()
         }
 
-        if (!prefRepository.isAppReviewDone && prefRepository.inAppReviewCount >= 50 &&
-            LocalDate.now().minusDays(14).isAfter(prefRepository.inAppReviewDate)
+        if (!preferencesRepository.isAppReviewDone && preferencesRepository.inAppReviewCount >= 50 &&
+            Instant.now().minus(Duration.ofDays(14)).isAfter(preferencesRepository.inAppReviewDate)
         ) {
             view?.showInAppReview()
-            prefRepository.isAppReviewDone = true
+            preferencesRepository.isAppReviewDone = true
+        }
+    }
+
+    private fun checkAppSupport() {
+        if (!preferencesRepository.isAppSupportShown && !preferencesRepository.isAdsEnabled
+            && appInfo.buildFlavor == "play"
+        ) {
+            presenterScope.launch {
+                val student = runCatching { studentRepository.getCurrentStudent(false) }
+                    .onFailure { Timber.e(it) }
+                    .getOrElse { return@launch }
+
+                if (Instant.now().minus(Duration.ofDays(28)).isAfter(student.registrationDate)) {
+                    view?.showAppSupport()
+                    preferencesRepository.isAppSupportShown = true
+                }
+            }
         }
     }
 

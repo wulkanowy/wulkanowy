@@ -7,17 +7,14 @@ import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.sdk.Sdk
-import io.github.wulkanowy.utils.AutoRefreshHelper
-import io.github.wulkanowy.utils.getRefreshKey
-import io.github.wulkanowy.utils.init
-import io.github.wulkanowy.utils.networkBoundResource
-import io.github.wulkanowy.utils.uniqueSubtract
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
-import java.time.LocalDateTime
+import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -40,6 +37,10 @@ class GradeRepository @Inject constructor(
         notify: Boolean = false,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
+        isResultEmpty = {
+            //When details is empty and summary is not, app will not use summary cache - edge case
+            it.first.isEmpty()
+        },
         shouldFetch = { (details, summaries) ->
             val isExpired = refreshHelper.shouldBeRefreshed(getRefreshKey(cacheKey, semester))
             details.isEmpty() || summaries.isEmpty() || forceRefresh || isExpired
@@ -51,7 +52,7 @@ class GradeRepository @Inject constructor(
         },
         fetch = {
             val (details, summary) = sdk.init(student)
-                .switchDiary(semester.diaryId, semester.schoolYear)
+                .switchDiary(semester.diaryId, semester.kindergartenDiaryId, semester.schoolYear)
                 .getGrades(semester.semesterId)
 
             details.mapToEntities(semester) to summary.mapToEntities(semester)
@@ -70,8 +71,8 @@ class GradeRepository @Inject constructor(
         newDetails: List<Grade>,
         notify: Boolean
     ) {
-        val notifyBreakDate = oldGrades.maxByOrNull {it.date }
-            ?.date ?: student.registrationDate.toLocalDate()
+        val notifyBreakDate = oldGrades.maxByOrNull { it.date }?.date
+            ?: student.registrationDate.toLocalDate()
         gradeDb.deleteAll(oldGrades uniqueSubtract newDetails)
         gradeDb.insertAll((newDetails uniqueSubtract oldGrades).onEach {
             if (it.date >= notifyBreakDate) it.apply {
@@ -101,13 +102,13 @@ class GradeRepository @Inject constructor(
             }
 
             summary.predictedGradeLastChange = when {
-                oldSummary == null -> LocalDateTime.now()
-                summary.predictedGrade != oldSummary.predictedGrade -> LocalDateTime.now()
+                oldSummary == null -> Instant.now()
+                summary.predictedGrade != oldSummary.predictedGrade -> Instant.now()
                 else -> oldSummary.predictedGradeLastChange
             }
             summary.finalGradeLastChange = when {
-                oldSummary == null -> LocalDateTime.now()
-                summary.finalGrade != oldSummary.finalGrade -> LocalDateTime.now()
+                oldSummary == null -> Instant.now()
+                summary.finalGrade != oldSummary.finalGrade -> Instant.now()
                 else -> oldSummary.finalGradeLastChange
             }
         })

@@ -1,40 +1,45 @@
 package io.github.wulkanowy.data.mappers
 
-import io.github.wulkanowy.data.db.entities.Message
-import io.github.wulkanowy.data.db.entities.MessageAttachment
-import io.github.wulkanowy.data.db.entities.Recipient
-import io.github.wulkanowy.data.db.entities.Student
-import java.time.LocalDateTime
+import io.github.wulkanowy.data.db.entities.*
+import io.github.wulkanowy.sdk.pojo.MailboxType
+import timber.log.Timber
 import io.github.wulkanowy.sdk.pojo.Message as SdkMessage
 import io.github.wulkanowy.sdk.pojo.MessageAttachment as SdkMessageAttachment
 import io.github.wulkanowy.sdk.pojo.Recipient as SdkRecipient
 
-fun List<SdkMessage>.mapToEntities(student: Student) = map {
+fun List<SdkMessage>.mapToEntities(
+    student: Student,
+    mailbox: Mailbox?,
+    allMailboxes: List<Mailbox>
+): List<Message> = map {
     Message(
-        studentId = student.id,
-        realId = it.id ?: 0,
-        messageId = it.messageId ?: 0,
-        sender = it.sender?.name.orEmpty(),
-        senderId = it.sender?.loginId ?: 0,
-        recipient = it.recipients.singleOrNull()?.name ?: "Wielu adresatów",
+        messageGlobalKey = it.globalKey,
+        mailboxKey = mailbox?.globalKey ?: allMailboxes.find { box ->
+            box.fullName == it.mailbox
+        }?.globalKey.let { mailboxKey ->
+            if (mailboxKey == null) {
+                Timber.e("Can't find ${it.mailbox} in $allMailboxes")
+                "unknown"
+            } else mailboxKey
+        },
+        email = student.email,
+        messageId = it.id,
+        correspondents = it.correspondents,
         subject = it.subject.trim(),
-        date = it.date ?: LocalDateTime.now(),
+        date = it.dateZoned.toInstant(),
         folderId = it.folderId,
-        unread = it.unread ?: false,
-        removed = it.removed,
-        hasAttachments = it.hasAttachments
+        unread = it.unread,
+        unreadBy = it.unreadBy,
+        readBy = it.readBy,
+        hasAttachments = it.hasAttachments,
     ).apply {
         content = it.content.orEmpty()
-        unreadBy = it.unreadBy ?: 0
-        readBy = it.readBy ?: 0
     }
 }
 
-fun List<SdkMessageAttachment>.mapToEntities() = map {
+fun List<SdkMessageAttachment>.mapToEntities(messageGlobalKey: String) = map {
     MessageAttachment(
-        realId = it.id,
-        messageId = it.messageId,
-        oneDriveId = it.oneDriveId,
+        messageGlobalKey = messageGlobalKey,
         url = it.url,
         filename = it.filename
     )
@@ -42,12 +47,11 @@ fun List<SdkMessageAttachment>.mapToEntities() = map {
 
 fun List<Recipient>.mapFromEntities() = map {
     SdkRecipient(
-        id = it.realId,
-        name = it.realName,
-        loginId = it.loginId,
-        reportingUnitId = it.unitId,
-        role = it.role,
-        hash = it.hash,
-        shortName = it.name
+        fullName = it.fullName,
+        userName = it.userName,
+        studentName = it.userName,
+        mailboxGlobalKey = it.mailboxGlobalKey,
+        schoolNameShort = it.schoolShortName,
+        type = MailboxType.valueOf(it.type.name),
     )
 }

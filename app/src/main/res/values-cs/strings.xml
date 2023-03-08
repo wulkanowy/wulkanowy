@@ -12,7 +12,7 @@
     <string name="about_title">O aplikaci</string>
     <string name="logviewer_title">Prohlížeč protokolů</string>
     <string name="debug_title">Ladění</string>
-    <string name="notification_debug_title">Ladění upozornění</string>
+    <string name="notification_debug_title">Ladění oznámení</string>
     <string name="contributors_title">Tvůrci</string>
     <string name="license_title">Licence</string>
     <string name="message_title">Zprávy</string>
@@ -25,7 +25,8 @@
     <string name="account_details_title">Podrobnosti účtu</string>
     <string name="student_info_title">Informace o žáku</string>
     <string name="dashboard_title">Domů</string>
-    <string name="notifications_center_title">Centrum upozornění</string>
+    <string name="notifications_center_title">Centrum oznámení</string>
+    <string name="menu_order_title">Konfigurace menu</string>
     <!--Subtitles-->
     <string name="grade_subtitle">Semestr %1$d, %2$d/%3$d</string>
     <!--Login-->
@@ -55,7 +56,7 @@
     <string name="login_invalid_symbol">Neplatný symbol</string>
     <string name="login_incorrect_symbol">Žák nebyl nalezen. Zkontrolujte správnost symbolu a vybrané varianty deníku UONET+</string>
     <string name="login_duplicate_student">Vybraný žák je už přihlášen</string>
-    <string name="login_symbol_helper">Symbol najdete na stránce deníku v &#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nUjistěte se, že jste na předchozí obrazovce nastavili správnou variantu deníku do pole <b>Variace deníku UONET+</b>. Wulkanowy v tuto chvíli nezjistí předškolní żaków</string>
+    <string name="login_symbol_helper">Symbol najdete na stránce deníku v &#160;<b>Uczeń</b>→&#160;<b>Dostęp Mobilny</b> →&#160;<b>Wygeneruj kod dostępu</b>.\n\nUjistěte se, že jste nastavili správnou variantu deníku v poli <b>Variace deníku UONET+</b> na první přihlašovací obrazovce</string>
     <string name="login_select_student">Vyberte žáky, kteří se mají do aplikace přihlásit</string>
     <string name="login_advanced">Jiné možnosti</string>
     <string name="login_advanced_warning_mobile_api">V tomto režimu nefungují následující: šťastné číslo, statistiky třídy, shrnutí frekvencí, ospravedlnění nepřítomnosti, dokončené lekce, informace o škole a prohlížení seznamu registrovaných zařízení</string>
@@ -71,11 +72,23 @@
     <string name="login_recover_title">Obnovte svůj účet</string>
     <string name="login_recover">Obnovit</string>
     <string name="login_signed_in">Žák je už přihlášen</string>
+    <string name="login_host_standard">Standardní</string>
+    <string name="login_other_search_locations">Jiná místa vyhledávání</string>
+    <string name="login_no_active_student">Nebyli nalezeni žádní aktivní žáci</string>
+    <string name="login_symbol_enter">Zadejte jiný symbol</string>
+    <!--Notifications-->
+    <string name="notifications_header_title">Povolit oznámení</string>
+    <string name="notifications_header_description">Povolit upozornění, abyste nezmeškali zprávu od učitele nebo o nové známce</string>
+    <string name="notifications_skip">Přeskočit</string>
+    <string name="notifications_enable">Zapnout</string>
     <!--Main-->
     <string name="main_account_picker">Manažer účtů</string>
     <string name="main_log_in">Přihlásit se</string>
     <string name="main_session_expired">Relace vypršela</string>
     <string name="main_session_relogin">Relace vypršela. Přihlaste se prosím znovu</string>
+    <string name="main_support_title">Podpora aplikace</string>
+    <string name="main_support_description">Líbí se Vám tato aplikace? Podpořte její vývoj tím, že povolíte neinvazivní reklamy, které můžete kdykoliv vypnout</string>
+    <string name="main_support_positive">Zapnout reklamy</string>
     <!--Grade-->
     <string name="grade_header">Známka</string>
     <string name="grade_semester">Semestr %d</string>
@@ -93,9 +106,9 @@
     <string name="grade_summary_predicted_grade">Předpokládaná známka</string>
     <string name="grade_summary_calculated_average">Vypočítaný průměr</string>
     <string name="grade_summary_calculated_average_help_dialog_title">Jak funguje vypočítaný průměr?</string>
-    <string name="grade_summary_calculated_average_help_dialog_message">Vypočítaný průměr je aritmetický průměr vypočítaný z průměrů předmětů. Umožňuje vám to znát přibližný konečný průměr. Vypočítává se způsobem zvoleným uživatelem v nastavení aplikaci. Doporučuje se vybrat příslušnou možnost. Důvodem je rozdílný výpočet školních průměrů. Pokud vaše škola navíc uvádí průměr předmětů na stránce deníku Vulcan, aplikace si je stáhne a tyto průměry nepočítá. To lze změnit vynucením výpočtu průměru v nastavení aplikaci.\n\n<b>Průměr známek pouze z vybraného semestru</b>:\n1. Výpočet váženého průměru pro každý předmět v daném semestru\n2. Sčítání vypočítaných průměrů\n3. Výpočet aritmetického průměru součtených průměrů\n\n<b>Průměr průměrů z obou semestrů</b>:\n1. Výpočet váženého průměru pro každý předmět v semestru 1 a 2\n2. Výpočet aritmetického průměru vypočítaných průměrů za semestry 1 a 2 pro každý předmět.\n3. Sčítání vypočítaných průměrů\n4. Výpočet aritmetického průměru součtených průměrů\n\n<b>Průměr známek z celého roku:</b>\n1. Výpočet váženého průměru za rok pro každý předmět. Konečný průměr v 1. semestru je nepodstatný.\n3. Sčítání vypočítaných průměrů\n4. Výpočet aritmetického průměru součtených průměrů</string>
+    <string name="grade_summary_calculated_average_help_dialog_message">Vypočítaný průměr je aritmetický průměr vypočítaný z průměrů předmětů. Umožňuje vám to znát přibližný konečný průměr. Vypočítává se způsobem zvoleným uživatelem v nastavení aplikaci. Doporučuje se vybrat příslušnou možnost. Důvodem je rozdílný výpočet školních průměrů. Pokud vaše škola navíc uvádí průměr předmětů na stránce deníku Vulcan, aplikace si je stáhne a tyto průměry nepočítá. To lze změnit vynucením výpočtu průměru v nastavení aplikaci.\n\n<b>Průměr známek pouze z vybraného semestru</b>:\n1. Výpočet váženého průměru pro každý předmět v daném semestru\n2. Sčítání vypočítaných průměrů\n3. Výpočet aritmetického průměru součtených průměrů\n\n<b>Průměr průměrů z obou semestrů</b>:\n1. Výpočet váženého průměru pro každý předmět v semestru 1 a 2\n2. Výpočet aritmetického průměru vypočítaných průměrů za semestry 1 a 2 pro každý předmět.\n3. Sčítání vypočítaných průměrů\n4. Výpočet aritmetického průměru sečtených průměrů\n\n<b>Průměr známek z celého roku:</b>\n1. Výpočet váženého průměru za rok pro každý předmět. Konečný průměr v 1. semestru je nepodstatný.\n2. Sčítání vypočítaných průměrů\n3. Výpočet aritmetického průměru součtených průměrů</string>
     <string name="grade_summary_final_average_help_dialog_title">Jak funguje konečný průměr?</string>
-    <string name="grade_summary_final_average_help_dialog_message">Konečný průměr je aritmetický průměr vypočítaný ze všech aktuálně dostupných konečných známek v daném semestru.\n\nSchéma výpočtu se skládá z následujících kroků:\n1. Sčítání konečných známek zadaných učiteli\n2. Děleno počtem předmětů, pro které už byly vydány známky</string>
+    <string name="grade_summary_final_average_help_dialog_message">Konečný průměr je aritmetický průměr vypočítaný ze všech aktuálně dostupných konečných známek v daném semestru.\n\nSchéma výpočtu se skládá z následujících kroků:\n1. Sčítání konečných známek zadaných učiteli\n2. Děleno počtem předmětů, pro které už byly uděleny známky</string>
     <string name="grade_summary_final_average">Konečný průměr</string>
     <string name="grade_summary_from_subjects">z %1$d z %2$d předmětů</string>
     <string name="grade_menu_summary">Shrnutí</string>
@@ -105,7 +118,9 @@
     <string name="grade_statistics_semester">Semestr</string>
     <string name="grade_statistics_points">Body</string>
     <string name="grade_statistics_legend">Vysvětlivky</string>
-    <string name="grade_statistics_average">Průměr: %1$s</string>
+    <string name="grade_statistics_class_average">Průměr třídy: %1$s</string>
+    <string name="grade_statistics_student_average">Váš průměr: %1$s</string>
+    <string name="grade_statistics_student_grade">Vaše známka: %1$s</string>
     <string name="grade_statistics_average_class">Třída</string>
     <string name="grade_statistics_average_student">Žák</string>
     <plurals name="grade_number_item">
@@ -204,9 +219,20 @@
     <string name="additional_lessons_title">Další lekce</string>
     <string name="additional_lessons_button">Zobrazit další lekce</string>
     <string name="additional_lessons_no_items">Žádné informace o dalších lekcích</string>
+    <string name="additional_lessons_add">Nová lekce</string>
+    <string name="additional_lessons_add_title">Nová další lekce</string>
+    <string name="additional_lessons_add_success">Další lekce byla úspěšně přidána</string>
+    <string name="additional_lessons_delete_success">Další lekce byla úspěšně odstraněna</string>
+    <string name="additional_lessons_repeat">Opakovat každý týden</string>
+    <string name="additional_lessons_delete_title">Odstranit další lekci</string>
+    <string name="additional_lessons_delete_one">Pouze tato lekce</string>
+    <string name="additional_lessons_delete_series">Všechny v sérii</string>
+    <string name="additional_lessons_start">Čas zahájení</string>
+    <string name="additional_lessons_end">Čas ukončení</string>
+    <string name="additional_lessons_end_time_error">Čas ukončení musí být pozdější než čas zahájení</string>
     <!--Attendance-->
     <string name="attendance_summary_button">Shrnutí frekvencí</string>
-    <string name="attendance_absence_school">Neprítomnosť zo školských dôvodov</string>
+    <string name="attendance_absence_school">Nepřítomnost ze školních důvodů</string>
     <string name="attendance_absence_excused">Omluvená nepřítomnost</string>
     <string name="attendance_absence_unexcused">Neomluvená nepřítomnost</string>
     <string name="attendance_exemption">Osvobození</string>
@@ -253,10 +279,10 @@
         <item quantity="other">Nové zkoušky</item>
     </plurals>
     <plurals name="exam_notify_new_item_content">
-        <item quantity="one">Máte %d novou zkoušku</item>
-        <item quantity="few">Máte %d nové zkoušky</item>
-        <item quantity="many">Máte %d nových zkoušek</item>
-        <item quantity="other">Máte %d nových zkoušek</item>
+        <item quantity="one">%d nová zkouška</item>
+        <item quantity="few">%d nové zkoušky</item>
+        <item quantity="many">%d nových zkoušek</item>
+        <item quantity="other">%d nových zkoušek</item>
     </plurals>
     <plurals name="exam_number_item">
         <item quantity="one">%d zkouška</item>
@@ -272,13 +298,18 @@
     <string name="message_no_items">Žádné zprávy</string>
     <string name="message_from">Od:</string>
     <string name="message_to">Komu:</string>
-    <string name="message_date">Datum: %s</string>
+    <string name="message_date">Datum: %1$s</string>
     <string name="message_reply">Odpověď</string>
     <string name="message_forward">Poslat dále</string>
-    <string name="message_delete">Odstranit</string>
-    <string name="message_move_to_bin">Přesunout do koše</string>
+    <string name="message_select_all">Vybrat vše</string>
+    <string name="message_unselect_all">Odznačit vše</string>
+    <string name="message_move_to_trash">Přesunout do koše</string>
     <string name="message_delete_forever">Odstranit natrvalo</string>
     <string name="message_delete_success">Zpráva byla úspěšně odstraněna</string>
+    <string name="message_mailbox_type_student">žák</string>
+    <string name="message_mailbox_type_parent">rodič</string>
+    <string name="message_mailbox_type_guardian">opatrovník</string>
+    <string name="message_mailbox_type_employee">pracovník</string>
     <string name="message_share">Sdílet</string>
     <string name="message_print">Vytisknout</string>
     <string name="message_subject">Předmět</string>
@@ -287,15 +318,16 @@
     <string name="message_not_exists">Zpráva neexistuje</string>
     <string name="message_required_recipients">Musíte vybrat alespoň 1 příjemce</string>
     <string name="message_content_min_length">Obsah zprávy musí mít alespoň 3 znaky</string>
+    <string name="message_chip_all_mailboxes">Všechny poštovní schránky</string>
     <string name="message_chip_only_unread">Pouze nepřečtené</string>
     <string name="message_chip_only_with_attachments">Pouze s přílohami</string>
     <string name="message_read">Přečtena: %s</string>
     <string name="message_read_by">Přečtena přes: %1$d z %2$d osob</string>
     <plurals name="message_number_item">
-        <item quantity="one">%d zpráva</item>
-        <item quantity="few">%d zprávy</item>
-        <item quantity="many">%d zpráv</item>
-        <item quantity="other">%d zpráv</item>
+        <item quantity="one">%1$d zpráva</item>
+        <item quantity="few">%1$d zprávy</item>
+        <item quantity="many">%1$d zpráv</item>
+        <item quantity="other">%1$d zpráv</item>
     </plurals>
     <plurals name="message_new_items">
         <item quantity="one">Nová zpráva</item>
@@ -311,6 +343,14 @@
         <item quantity="many">Máte %1$d nových zpráv</item>
         <item quantity="other">Máte %1$d nových zpráv</item>
     </plurals>
+    <plurals name="message_selected_messages_count">
+        <item quantity="one">%1$d vybraná</item>
+        <item quantity="few">%1$d vybrané</item>
+        <item quantity="many">%1$d vybraných</item>
+        <item quantity="other">%1$d vybraných</item>
+    </plurals>
+    <string name="message_messages_deleted">Zprávy odstraněné</string>
+    <string name="message_mailbox_chooser_title">Vyberte poštovní schránku</string>
     <!--Note-->
     <string name="note_no_items">Žádné informace o poznámkách</string>
     <string name="note_points">Body</string>
@@ -372,8 +412,8 @@
     </plurals>
     <!--Homework-->
     <string name="homework_no_items">Žádné informace o domácích úkolech</string>
-    <string name="homework_mark_as_done">Označit jako hotové</string>
-    <string name="homework_mark_as_undone">Neudělané</string>
+    <string name="homework_mark_as_done">Vykonané</string>
+    <string name="homework_mark_as_undone">Nevykonané</string>
     <string name="homework_add">Přidat domácí úkol</string>
     <string name="homework_add_success">Domácí úkol byl úspěšně přidán</string>
     <string name="homework_delete_success">Domácí úkol byl úspěšně odstraněn</string>
@@ -454,6 +494,8 @@
     </plurals>
     <string name="conferences_present">Přítomnost na setkání</string>
     <string name="conference_agenda">Agenda</string>
+    <string name="conference_place">Místo</string>
+    <string name="conference_topic">Téma</string>
     <!--Director information-->
     <string name="school_announcement_title">Školní oznámení</string>
     <string name="school_announcement_no_items">Žádná školní oznámení</string>
@@ -553,18 +595,6 @@
     <string name="dashboard_timetable_first_lesson_title_soon">Brzy:</string>
     <string name="dashboard_timetable_first_lesson_title_first">První:</string>
     <string name="dashboard_timetable_first_lesson_title_now">Teď:</string>
-    <plurals name="dashboard_timetable_first_lesson_time_in_minutes">
-        <item quantity="one">za %1$d minutu</item>
-        <item quantity="few">za %1$d minuty</item>
-        <item quantity="many">za %1$d minut</item>
-        <item quantity="other">za %1$d minut</item>
-    </plurals>
-    <plurals name="dashboard_timetable_first_lesson_time_more_minutes">
-        <item quantity="one">ještě %1$d minutu</item>
-        <item quantity="few">ještě %1$d minuty</item>
-        <item quantity="many">ještě %1$d minut</item>
-        <item quantity="other">ještě %1$d minut</item>
-    </plurals>
     <string name="dashboard_timetable_second_lesson_value_end">Konec lekcí</string>
     <string name="dashboard_timetable_second_lessons_title">Další:</string>
     <string name="dashboard_timetable_third_title">Později:</string>
@@ -648,6 +678,8 @@
     <string name="all_copied">Zkopírováno</string>
     <string name="all_undo">Vrátit</string>
     <string name="all_change">Změnit</string>
+    <string name="all_add_to_calendar">Přidat do kalendáře</string>
+    <string name="all_cancel">Zrušit</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Žádné lekce</string>
     <string name="widget_timetable_theme_title">Vybrat motiv</string>
@@ -669,21 +701,25 @@
     <string name="pref_view_grade_color_scheme">Známky barevné schéma</string>
     <string name="pref_view_grade_sorting_mode">Třídění předmětů</string>
     <string name="pref_view_app_language">Jazyk</string>
-    <string name="pref_notify_header">Upozornění</string>
+    <string name="pref_view_menu_order_title">Konfigurace menu</string>
+    <string name="pref_view_menu_order_summary">Nastavit pořadí funkcí v menu</string>
+    <string name="pref_notify_header">Oznámení</string>
     <string name="pref_notify_header_other">Jiné</string>
-    <string name="pref_notify_switch">Zobrazit upozornění</string>
-    <string name="pref_notify_upcoming_lessons_switch">Zobrazit upozornění o nadcházející lekci</string>
-    <string name="pref_notify_upcoming_lessons_persistent_switch">Nastavit upozornění o nadcházející lekci jako trvalé</string>
-    <string name="pref_notify_upcoming_lessons_persistent_summary">Vypnout, když upozornění není ve vašem hodinkách/náramku viditelné</string>
-    <string name="pref_notify_open_system_settings">Otevřít systémová nastavení upozornění</string>
-    <string name="pref_notify_fix_sync_issues">Opravte problémy se synchronizací a upozorněním</string>
-    <string name="pref_notify_fix_sync_issues_message">Vaše zařízení může mít problémy se synchronizací dat as upozorněními.\n\nChcete-li je opravit, přidejte Wulkanového do funkce Autostart a vypněte optimalizaci/úsporu baterie v nastavení systému telefonu.</string>
-    <string name="pref_notify_debug_switch">Zobrazit upozornění o ladění</string>
+    <string name="pref_notify_switch">Zobrazit oznámení</string>
+    <string name="pref_notify_upcoming_lessons_switch">Zobrazit oznámení o nadcházející lekci</string>
+    <string name="pref_notify_upcoming_lessons_persistent_switch">Nastavit oznámení o nadcházející lekci jako trvalé</string>
+    <string name="pref_notify_upcoming_lessons_persistent_summary">Vypnout, když oznámení není ve vašem hodinkách/náramku viditelné</string>
+    <string name="pref_notify_open_system_settings">Otevřít systémová nastavení oznámení</string>
+    <string name="pref_notify_fix_sync_issues">Opravte problémy se synchronizací a oznámením</string>
+    <string name="pref_notify_fix_sync_issues_message">Vaše zařízení může mít problémy se synchronizací dat as oznámeními.\n\nChcete-li je opravit, přidejte Wulkanového do funkce Autostart a vypněte optimalizaci/úsporu baterie v nastavení systému telefonu.</string>
+    <string name="pref_notify_debug_switch">Zobrazit oznámení o ladění</string>
     <string name="pref_notify_disabled_summary">Synchronizace je vypnutá</string>
-    <string name="pref_notify_notifications_piggyback">Zachytit upozornění oficiální aplikací</string>
-    <string name="pref_notification_piggyback_popup_title">Zachytit upozornění</string>
-    <string name="pref_notification_piggyback_popup_description">S touto funkcí můžete získat náhradu push upozornění jako v oficiální aplikaci. Vše, co musíte udělat, je povolit Wulkanowému číst všechna vaše upozornění v nastaveních systému.\n\nJak to funguje?\nKdyž obdržíte oznámení v Deníčku VULCAN, Wulkanowy bude o tom informován (k tomu je to dodatečné povolení) a spustí synchronizaci, aby mohl zaslat vlastní upozornění.\n\nPOUZE PRO POKROČILÉ UŽIVATELE</string>
-    <string name="pref_notification_exact_alarm_popup_title">Upozornění o nadcházející lekci</string>
+    <string name="pref_notify_notifications_piggyback_header">Oznámení oficiální aplikace</string>
+    <string name="pref_notify_notifications_piggyback">Zachytit oznámení oficiální aplikací</string>
+    <string name="pref_notify_notifications_piggyback_cancel_original">Odstranit oznámení oficiální aplikace po zachycení</string>
+    <string name="pref_notification_piggyback_popup_title">Zachytit oznámení</string>
+    <string name="pref_notification_piggyback_popup_description">S touto funkcí můžete získat náhradu push oznámení jako v oficiální aplikaci. Vše, co musíte udělat, je povolit Wulkanowému číst všechna vaše oznámení v nastaveních systému.\n\nJak to funguje?\nKdyž obdržíte oznámení v Deníčku VULCAN, Wulkanowy bude o tom informován (k tomu je to dodatečné povolení) a spustí synchronizaci, aby mohl zaslat vlastní oznámení.\n\nPOUZE PRO POKROČILÉ UŽIVATELE</string>
+    <string name="pref_notification_exact_alarm_popup_title">Oznámení o nadcházející lekci</string>
     <string name="pref_notification_exact_alarm_popup_descriptions">Musíte povolit Wulkanovému nastavit budíky a připomenutí v nastavení vašeho systému pro použití této funkce.</string>
     <string name="pref_notification_go_to_settings">Přejít do nastavení</string>
     <string name="pref_services_header">Synchronizace</string>
@@ -701,6 +737,10 @@
     <string name="pref_other_fill_message_content">Odpovědět s historií zpráv</string>
     <string name="pref_other_optional_arithmetic_average">Vypočítat aritmetický průměr, pokud žádná známka nemá váhu</string>
     <string name="pref_ads_support_category_name">Podpora</string>
+    <string name="pref_ads_privacy_policy">Ochrana osobních údajů</string>
+    <string name="pref_ads_agreements">Souhlasy</string>
+    <string name="pref_ads_consent">Souhlas se zpracováním údajů souvisejících s reklamami</string>
+    <string name="pref_ads_show_in_app">Zobrazit reklamy v aplikaci</string>
     <string name="pref_ads_support">Podívejte se na jednu reklamu pro podporu projektu</string>
     <string name="pref_ads_privacy_title">Souhlas se zpracováním dat</string>
     <string name="pref_ads_privacy_description">Jestli chcete sledovat reklamu, musíte souhlasit s podmínkami zpracování údajů v našich Zásadách Ochrany Osobních Údajů</string>
@@ -708,9 +748,16 @@
     <string name="pref_ads_privacy_link">Ochrana osobních údajů</string>
     <string name="pref_ads_loading">Reklama se načítá</string>
     <string name="pref_ads_once_per_visit">Děkujeme za vaši podporu, vraťte se později pro více reklam</string>
+    <string name="pref_ads_consent_title">Můžeme použít Vaše data k zobrazení reklam?</string>
+    <string name="pref_ads_consent_description">Volbu můžete kdykoliv změnit v nastavení aplikace. Můžeme použít Vaše data k zobrazení reklam šitých pro vás nebo pomocí méně vašich dat zobrazovat nepřizpůsobené reklamy. Podrobnosti naleznete v našich Zásadách ochrany osobních údajů</string>
+    <string name="pref_ads_summary_personalized">Přizpůsobené reklamy</string>
+    <string name="pref_ads_summary_non_personalized">Nepřizpůsobené reklamy</string>
+    <string name="pref_ads_over_18_years_old">Je mi více než 18 let</string>
+    <string name="pref_ads_option_personalized">Ano, přizpůsobené reklamy</string>
+    <string name="pref_ads_option_non_personalized">Ano, nepřizpůsobené reklamy</string>
     <string name="pref_settings_advanced_title">Pokročilé</string>
     <string name="pref_settings_appearance_title">Vzhled a chování</string>
-    <string name="pref_settings_notifications_title">Upozornění</string>
+    <string name="pref_settings_notifications_title">Oznámení</string>
     <string name="pref_settings_sync_title">Synchronizace</string>
     <string name="pref_settings_ads_title">Reklamy</string>
     <string name="pref_grades_appearance_header">Známky</string>
@@ -723,8 +770,8 @@
     <string name="pref_messages_advanced_header">Zprávy</string>
     <string name="pref_appearance_category">Vzhled a chování</string>
     <string name="pref_appearance_category_summary">Jazyky, motivy, třídění předmětů</string>
-    <string name="pref_notifications_category_summary">Upozornění aplikace, oprava problémů</string>
-    <string name="pref_notifications_category">Upozornění</string>
+    <string name="pref_notifications_category_summary">Oznámení aplikací, oprava problémů</string>
+    <string name="pref_notifications_category">Oznámení</string>
     <string name="pref_sync_category">Synchronizace</string>
     <string name="pref_sync_category_summary">Automatická aktualizace, interval aktualizací</string>
     <string name="pref_advanced_category_summary">Hodnota plusu a mínusu, výpočet průměru</string>
@@ -740,7 +787,7 @@
     <string name="channel_new_message">Nové zprávy</string>
     <string name="channel_new_notes">Nové poznámky</string>
     <string name="channel_new_school_announcement">Nové školní oznámení</string>
-    <string name="channel_push">Push upozornění</string>
+    <string name="channel_push">Push oznámení</string>
     <string name="channel_upcoming_lessons">Nadcházející lekce</string>
     <string name="channel_debug">Ladění</string>
     <string name="channel_change_timetable">Změny plánu lekcí</string>
@@ -757,13 +804,18 @@
     <string name="update_download_success">Aktualizace byla stažena.</string>
     <string name="update_download_success_button">Restartovat</string>
     <string name="update_failed">Aktualizace selhala! Wulkanowy nemusí fungovat správně. Zvažte aktualizaci</string>
+    <!--Menu order-->
+    <string name="menu_order_confirm_title">Restartování aplikace</string>
+    <string name="menu_order_confirm_content">Pro uložení změn je nutné aplikaci restartovat</string>
+    <string name="menu_order_confirm_restart">Restartovat</string>
     <!--Errors-->
     <string name="error_no_internet">Žádné internetové připojení</string>
+    <string name="error_invalid_device_datetime">Vyskytla se chyba. Zkontrolujte hodiny svého zařízení</string>
     <string name="error_timeout">Nelze se připojit ke deníku. Servery mohou být přetíženy. Prosím zkuste to znovu později</string>
     <string name="error_login_failed">Načítání dat se nezdařilo. Prosím zkuste to znovu později</string>
     <string name="error_password_change_required">Je vyžadována změna hesla pro deník</string>
-    <string name="error_service_unavailable">Probíhá údržba UONET+ deník. Zkuste to později znovu</string>
-    <string name="error_unknown_uonet">Neznámá chyba denika UONET+. Prosím zkuste to znovu později</string>
+    <string name="error_service_unavailable">Probíhá údržba deníku UONET+. Zkuste to později znovu</string>
+    <string name="error_unknown_uonet">Neznámá chyba deniku UONET+. Prosím zkuste to znovu později</string>
     <string name="error_unknown_app">Neznámá chyba aplikace. Prosím zkuste to znovu později</string>
     <string name="error_unknown">Vyskytla se neočekávaná chyba</string>
     <string name="error_feature_disabled">Funkce je deaktivována přes vaší školou</string>

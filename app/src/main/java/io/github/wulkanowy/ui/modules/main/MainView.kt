@@ -4,6 +4,7 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.ui.base.BaseView
 import io.github.wulkanowy.ui.modules.Destination
+import io.github.wulkanowy.ui.modules.settings.appearance.menuorder.AppMenuItem
 
 interface MainView : BaseView {
 
@@ -15,7 +16,11 @@ interface MainView : BaseView {
 
     val currentStackSize: Int?
 
-    fun initView(startMenuIndex: Int, rootDestinations: List<Destination>)
+    fun initView(
+        startMenuIndex: Int,
+        rootAppMenuItems: List<AppMenuItem>,
+        rootUpdatedDestinations: List<Destination>
+    )
 
     fun switchMenuView(position: Int)
 
@@ -40,6 +45,12 @@ interface MainView : BaseView {
     fun showStudentAvatar(student: Student)
 
     fun showInAppReview()
+
+    fun showAppSupport()
+
+    fun showPrivacyPolicyDialog()
+
+    fun openPrivacyPolicy()
 
     fun openMoreDestination(destination: Destination)
 

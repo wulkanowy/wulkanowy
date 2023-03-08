@@ -1,7 +1,8 @@
 package io.github.wulkanowy.ui.modules.login.form
 
-import io.github.wulkanowy.data.db.entities.StudentWithSemesters
+import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.ui.base.BaseView
+import io.github.wulkanowy.ui.modules.login.LoginData
 
 interface LoginFormView : BaseView {
 
@@ -57,7 +58,9 @@ interface LoginFormView : BaseView {
 
     fun showVersion()
 
-    fun notifyParentAccountLogged(studentsWithSemesters: List<StudentWithSemesters>, loginData: Triple<String, String, String>)
+    fun navigateToSymbol(loginData: LoginData)
+
+    fun navigateToStudentSelect(loginData: LoginData, registerUser: RegisterUser)
 
     fun openPrivacyPolicyPage()
 

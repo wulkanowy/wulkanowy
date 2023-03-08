@@ -11,6 +11,8 @@ import io.github.wulkanowy.data.db.entities.StudentNickAndAvatar
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
 import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.data.mappers.mapToPojo
+import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.DispatchersProvider
@@ -52,6 +54,14 @@ class StudentRepository @Inject constructor(
         sdk.getStudentsFromScrapper(email, password, scrapperBaseUrl, symbol)
             .mapToEntities(password, appInfo.defaultColorsForAvatar)
 
+    suspend fun getUserSubjectsFromScrapper(
+        email: String,
+        password: String,
+        scrapperBaseUrl: String,
+        symbol: String
+    ): RegisterUser = sdk.getUserSubjectsFromScrapper(email, password, scrapperBaseUrl, symbol)
+        .mapToPojo(password)
+
     suspend fun getStudentsHybrid(
         email: String,
         password: String,
@@ -72,6 +82,15 @@ class StudentRepository @Inject constructor(
                     }
                 }
             }
+
+    suspend fun getSavedStudentById(id: Long, decryptPass: Boolean = true) =
+        studentDb.loadStudentWithSemestersById(id)?.apply {
+            if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API) {
+                student.password = withContext(dispatchers.io) {
+                    decrypt(student.password)
+                }
+            }
+        }
 
     suspend fun getStudentById(id: Long, decryptPass: Boolean = true): Student {
         val student = studentDb.loadById(id) ?: throw NoCurrentStudentException()
@@ -128,4 +147,7 @@ class StudentRepository @Inject constructor(
 
     suspend fun updateStudentNickAndAvatar(studentNickAndAvatar: StudentNickAndAvatar) =
         studentDb.update(studentNickAndAvatar)
+
+    suspend fun isOneUniqueStudent() = getSavedStudents(false)
+        .distinctBy { it.student.studentName }.size == 1
 }

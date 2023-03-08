@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules
 
 import androidx.fragment.app.Fragment
+import io.github.wulkanowy.data.serializers.LocalDateSerializer
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
 import io.github.wulkanowy.ui.modules.conference.ConferenceFragment
 import io.github.wulkanowy.ui.modules.dashboard.DashboardFragment
@@ -9,23 +10,26 @@ import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
 import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberFragment
 import io.github.wulkanowy.ui.modules.message.MessageFragment
+import io.github.wulkanowy.ui.modules.mobiledevice.MobileDeviceFragment
 import io.github.wulkanowy.ui.modules.more.MoreFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
-import io.github.wulkanowy.ui.modules.schoolandteachers.school.SchoolFragment
+import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersFragment
 import io.github.wulkanowy.ui.modules.schoolannouncement.SchoolAnnouncementFragment
+import io.github.wulkanowy.ui.modules.settings.SettingsFragment
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
-import java.io.Serializable
+import kotlinx.serialization.Serializable
 import java.time.LocalDate
 
-sealed interface Destination : Serializable {
+@Serializable
+sealed class Destination {
 
     /*
     Type in children classes have to be as getter to avoid null in enums
     https://stackoverflow.com/questions/68866453/kotlin-enum-val-is-returning-null-despite-being-set-at-compile-time
     */
-    val type: Type
+    abstract val destinationType: Type
 
-    val fragment: Fragment
+    abstract val destinationFragment: Fragment
 
     enum class Type(val defaultDestination: Destination) {
         DASHBOARD(Dashboard),
@@ -37,100 +41,104 @@ sealed interface Destination : Serializable {
         NOTE(Note),
         CONFERENCE(Conference),
         SCHOOL_ANNOUNCEMENT(SchoolAnnouncement),
-        SCHOOL(School),
-        LUCKY_NUMBER(More),
+        SCHOOL_AND_TEACHERS(SchoolAndTeachers),
+        LUCKY_NUMBER(LuckyNumber),
         MORE(More),
-        MESSAGE(Message);
+        MESSAGE(Message),
+        MOBILE_DEVICE(MobileDevice),
+        SETTINGS(Settings);
     }
 
-    object Dashboard : Destination {
-
-        override val type get() = Type.DASHBOARD
-
-        override val fragment get() = DashboardFragment.newInstance()
+    @Serializable
+    object Dashboard : Destination() {
+        override val destinationType get() = Type.DASHBOARD
+        override val destinationFragment get() = DashboardFragment.newInstance()
     }
 
-    object Grade : Destination {
-
-        override val type get() = Type.GRADE
-
-        override val fragment get() = GradeFragment.newInstance()
+    @Serializable
+    object Grade : Destination() {
+        override val destinationType get() = Type.GRADE
+        override val destinationFragment get() = GradeFragment.newInstance()
     }
 
-    object Attendance : Destination {
-
-        override val type get() = Type.ATTENDANCE
-
-        override val fragment get() = AttendanceFragment.newInstance()
+    @Serializable
+    object Attendance : Destination() {
+        override val destinationType get() = Type.ATTENDANCE
+        override val destinationFragment get() = AttendanceFragment.newInstance()
     }
 
-    object Exam : Destination {
-
-        override val type get() = Type.EXAM
-
-        override val fragment get() = ExamFragment.newInstance()
+    @Serializable
+    object Exam : Destination() {
+        override val destinationType get() = Type.EXAM
+        override val destinationFragment get() = ExamFragment.newInstance()
     }
 
-    data class Timetable(val date: LocalDate? = null) : Destination {
-
-        override val type get() = Type.TIMETABLE
-
-        override val fragment get() = TimetableFragment.newInstance(date)
+    @Serializable
+    data class Timetable(
+        @Serializable(with = LocalDateSerializer::class)
+        private val date: LocalDate? = null
+    ) : Destination() {
+        override val destinationType get() = Type.TIMETABLE
+        override val destinationFragment get() = TimetableFragment.newInstance(date)
     }
 
-    object Homework : Destination {
-
-        override val type get() = Type.HOMEWORK
-
-        override val fragment get() = HomeworkFragment.newInstance()
+    @Serializable
+    object Homework : Destination() {
+        override val destinationType get() = Type.HOMEWORK
+        override val destinationFragment get() = HomeworkFragment.newInstance()
     }
 
-    object Note : Destination {
-
-        override val type get() = Type.NOTE
-
-        override val fragment get() = NoteFragment.newInstance()
+    @Serializable
+    object Note : Destination() {
+        override val destinationType get() = Type.NOTE
+        override val destinationFragment get() = NoteFragment.newInstance()
     }
 
-    object Conference : Destination {
-
-        override val type get() = Type.CONFERENCE
-
-        override val fragment get() = ConferenceFragment.newInstance()
+    @Serializable
+    object Conference : Destination() {
+        override val destinationType get() = Type.CONFERENCE
+        override val destinationFragment get() = ConferenceFragment.newInstance()
     }
 
-    object SchoolAnnouncement : Destination {
-
-        override val type get() = Type.SCHOOL_ANNOUNCEMENT
-
-        override val fragment get() = SchoolAnnouncementFragment.newInstance()
+    @Serializable
+    object SchoolAnnouncement : Destination() {
+        override val destinationType get() = Type.SCHOOL_ANNOUNCEMENT
+        override val destinationFragment get() = SchoolAnnouncementFragment.newInstance()
     }
 
-    object School : Destination {
-
-        override val type get() = Type.SCHOOL
-
-        override val fragment get() = SchoolFragment.newInstance()
+    @Serializable
+    object SchoolAndTeachers : Destination() {
+        override val destinationType get() = Type.SCHOOL_AND_TEACHERS
+        override val destinationFragment get() = SchoolAndTeachersFragment.newInstance()
     }
 
-    object LuckyNumber : Destination {
-
-        override val type get() = Type.LUCKY_NUMBER
-
-        override val fragment get() = LuckyNumberFragment.newInstance()
+    @Serializable
+    object LuckyNumber : Destination() {
+        override val destinationType get() = Type.LUCKY_NUMBER
+        override val destinationFragment get() = LuckyNumberFragment.newInstance()
     }
 
-    object More : Destination {
-
-        override val type get() = Type.MORE
-
-        override val fragment get() = MoreFragment.newInstance()
+    @Serializable
+    object More : Destination() {
+        override val destinationType get() = Type.MORE
+        override val destinationFragment get() = MoreFragment.newInstance()
     }
 
-    object Message : Destination {
+    @Serializable
+    object Message : Destination() {
+        override val destinationType get() = Type.MESSAGE
+        override val destinationFragment get() = MessageFragment.newInstance()
+    }
 
-        override val type get() = Type.MESSAGE
+    @Serializable
+    object MobileDevice : Destination() {
+        override val destinationType get() = Type.MOBILE_DEVICE
+        override val destinationFragment get() = MobileDeviceFragment.newInstance()
+    }
 
-        override val fragment get() = MessageFragment.newInstance()
+    @Serializable
+    object Settings : Destination() {
+        override val destinationType get() = Type.SETTINGS
+        override val destinationFragment get() = SettingsFragment.newInstance()
     }
 }

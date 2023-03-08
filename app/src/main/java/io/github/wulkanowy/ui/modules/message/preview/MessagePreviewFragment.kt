@@ -13,6 +13,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.content.getSystemService
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -23,6 +24,7 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
+import io.github.wulkanowy.utils.serializable
 import io.github.wulkanowy.utils.shareText
 import javax.inject.Inject
 
@@ -57,7 +59,8 @@ class MessagePreviewFragment :
         get() = getString(R.string.message_no_subject)
 
     override val printHTML: String
-        get() = requireContext().assets.open("message-print-page.html").bufferedReader().use { it.readText() }
+        get() = requireContext().assets.open("message-print-page.html").bufferedReader()
+            .use { it.readText() }
 
     override val messageNotExists: String
         get() = getString(R.string.message_not_exists)
@@ -65,13 +68,12 @@ class MessagePreviewFragment :
     companion object {
         const val MESSAGE_ID_KEY = "message_id"
 
-        fun newInstance(message: Message): MessagePreviewFragment {
-            return MessagePreviewFragment().apply {
-                arguments = Bundle().apply { putSerializable(MESSAGE_ID_KEY, message) }
-            }
+        fun newInstance(message: Message) = MessagePreviewFragment().apply {
+            arguments = bundleOf(MESSAGE_ID_KEY to message)
         }
     }
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -81,7 +83,10 @@ class MessagePreviewFragment :
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMessagePreviewBinding.bind(view)
         messageContainer = binding.messagePreviewContainer
-        presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getSerializable(MESSAGE_ID_KEY) as? Message)
+        presenter.onAttachView(
+            view = this,
+            message = (savedInstanceState ?: arguments)?.serializable(MESSAGE_ID_KEY),
+        )
     }
 
     override fun initView() {
@@ -101,6 +106,8 @@ class MessagePreviewFragment :
         menuShareButton = menu.findItem(R.id.messagePreviewMenuShare)
         menuPrintButton = menu.findItem(R.id.messagePreviewMenuPrint)
         presenter.onCreateOptionsMenu()
+
+        menu.findItem(R.id.mainMenuAccount).isVisible = false
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -129,8 +136,8 @@ class MessagePreviewFragment :
         binding.messagePreviewRecycler.visibility = if (show) VISIBLE else GONE
     }
 
-    override fun showOptions(show: Boolean) {
-        menuReplyButton?.isVisible = show
+    override fun showOptions(show: Boolean, isReplayable: Boolean) {
+        menuReplyButton?.isVisible = isReplayable
         menuForwardButton?.isVisible = show
         menuDeleteButton?.isVisible = show
         menuShareButton?.isVisible = show
@@ -142,7 +149,7 @@ class MessagePreviewFragment :
     }
 
     override fun setNotDeletedOptionsLabels() {
-        menuDeleteButton?.setTitle(R.string.message_move_to_bin)
+        menuDeleteButton?.setTitle(R.string.message_move_to_trash)
     }
 
     override fun showErrorView(show: Boolean) {
@@ -173,7 +180,8 @@ class MessagePreviewFragment :
         val webView = WebView(requireContext())
         webView.webViewClient = object : WebViewClient() {
 
-            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest) = false
+            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest) =
+                false
 
             override fun onPageFinished(view: WebView, url: String) {
                 createWebPrintJob(view, jobName)

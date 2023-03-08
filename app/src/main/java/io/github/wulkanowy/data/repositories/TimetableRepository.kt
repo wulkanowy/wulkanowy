@@ -3,22 +3,13 @@ package io.github.wulkanowy.data.repositories
 import io.github.wulkanowy.data.db.dao.TimetableAdditionalDao
 import io.github.wulkanowy.data.db.dao.TimetableDao
 import io.github.wulkanowy.data.db.dao.TimetableHeaderDao
-import io.github.wulkanowy.data.db.entities.Semester
-import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.db.entities.Timetable
-import io.github.wulkanowy.data.db.entities.TimetableAdditional
-import io.github.wulkanowy.data.db.entities.TimetableHeader
+import io.github.wulkanowy.data.db.entities.*
 import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.data.pojos.TimetableFull
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.services.alarm.TimetableNotificationSchedulerHelper
-import io.github.wulkanowy.utils.AutoRefreshHelper
-import io.github.wulkanowy.utils.getRefreshKey
-import io.github.wulkanowy.utils.init
-import io.github.wulkanowy.utils.monday
-import io.github.wulkanowy.utils.networkBoundResource
-import io.github.wulkanowy.utils.sunday
-import io.github.wulkanowy.utils.uniqueSubtract
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.sync.Mutex
@@ -40,6 +31,10 @@ class TimetableRepository @Inject constructor(
 
     private val cacheKey = "timetable"
 
+    enum class TimetableType {
+        NORMAL, ADDITIONAL
+    }
+
     fun getTimetable(
         student: Student,
         semester: Semester,
@@ -47,9 +42,16 @@ class TimetableRepository @Inject constructor(
         end: LocalDate,
         forceRefresh: Boolean,
         refreshAdditional: Boolean = false,
-        notify: Boolean = false
+        notify: Boolean = false,
+        timetableType: TimetableType = TimetableType.NORMAL
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
+        isResultEmpty = {
+            when (timetableType) {
+                TimetableType.NORMAL -> it.lessons.isEmpty()
+                TimetableType.ADDITIONAL -> it.additional.isEmpty()
+            }
+        },
         shouldFetch = { (timetable, additional, headers) ->
             val refreshKey = getRefreshKey(cacheKey, semester, start, end)
             val isExpired = refreshHelper.shouldBeRefreshed(refreshKey)
@@ -62,7 +64,7 @@ class TimetableRepository @Inject constructor(
         query = { getFullTimetableFromDatabase(student, semester, start, end) },
         fetch = {
             val timetableFull = sdk.init(student)
-                .switchDiary(semester.diaryId, semester.schoolYear)
+                .switchDiary(semester.diaryId, semester.kindergartenDiaryId, semester.schoolYear)
                 .getTimetableFull(start.monday, end.sunday)
 
             timetableFull.mapToEntities(semester)
@@ -152,7 +154,8 @@ class TimetableRepository @Inject constructor(
         old: List<TimetableAdditional>,
         new: List<TimetableAdditional>
     ) {
-        timetableAdditionalDb.deleteAll(old uniqueSubtract new)
+        val oldFiltered = old.filter { !it.isAddedByUser }
+        timetableAdditionalDb.deleteAll(oldFiltered uniqueSubtract new)
         timetableAdditionalDb.insertAll(new uniqueSubtract old)
     }
 
@@ -160,4 +163,14 @@ class TimetableRepository @Inject constructor(
         timetableHeaderDb.deleteAll(old uniqueSubtract new)
         timetableHeaderDb.insertAll(new uniqueSubtract old)
     }
+
+    suspend fun saveAdditionalList(additionalList: List<TimetableAdditional>) =
+        timetableAdditionalDb.insertAll(additionalList)
+
+    suspend fun deleteAdditional(additional: TimetableAdditional, deleteSeries: Boolean) =
+        if (deleteSeries) {
+            timetableAdditionalDb.deleteAllByRepeatId(additional.repeatId!!)
+        } else {
+            timetableAdditionalDb.deleteAll(listOf(additional))
+        }
 }

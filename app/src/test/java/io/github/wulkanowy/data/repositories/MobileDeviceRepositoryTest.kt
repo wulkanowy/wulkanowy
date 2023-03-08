@@ -1,27 +1,25 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.data.dataOrNull
 import io.github.wulkanowy.data.db.dao.MobileDeviceDao
+import io.github.wulkanowy.data.errorOrNull
 import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.data.toFirstResult
 import io.github.wulkanowy.getSemesterEntity
 import io.github.wulkanowy.getStudentEntity
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.Device
 import io.github.wulkanowy.utils.AutoRefreshHelper
-import io.github.wulkanowy.utils.toFirstResult
-import io.mockk.MockKAnnotations
-import io.mockk.Runs
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.SpyK
-import io.mockk.just
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import java.time.LocalDateTime.of
+import java.time.ZoneId
 
 class MobileDeviceRepositoryTest {
 
@@ -58,8 +56,8 @@ class MobileDeviceRepositoryTest {
         // prepare
         coEvery { sdk.getRegisteredDevices() } returns remoteList
         coEvery { mobileDeviceDb.loadAll(student.studentId) } returnsMany listOf(
-            flowOf(remoteList.mapToEntities(semester)),
-            flowOf(remoteList.mapToEntities(semester))
+            flowOf(remoteList.mapToEntities(student)),
+            flowOf(remoteList.mapToEntities(student))
         )
         coEvery { mobileDeviceDb.insertAll(any()) } returns listOf(1, 2, 3)
         coEvery { mobileDeviceDb.deleteAll(any()) } just Runs
@@ -68,8 +66,8 @@ class MobileDeviceRepositoryTest {
         val res = runBlocking { mobileDeviceRepository.getDevices(student, semester, true).toFirstResult() }
 
         // verify
-        Assert.assertEquals(null, res.error)
-        Assert.assertEquals(2, res.data?.size)
+        Assert.assertEquals(null, res.errorOrNull)
+        Assert.assertEquals(2, res.dataOrNull?.size)
         coVerify { sdk.getRegisteredDevices() }
         coVerify { mobileDeviceDb.loadAll(1) }
         coVerify { mobileDeviceDb.insertAll(match { it.isEmpty() }) }
@@ -81,9 +79,9 @@ class MobileDeviceRepositoryTest {
         // prepare
         coEvery { sdk.getRegisteredDevices() } returns remoteList
         coEvery { mobileDeviceDb.loadAll(1) } returnsMany listOf(
-            flowOf(remoteList.dropLast(1).mapToEntities(semester)),
-            flowOf(remoteList.dropLast(1).mapToEntities(semester)), // after fetch end before save result
-            flowOf(remoteList.mapToEntities(semester))
+            flowOf(remoteList.dropLast(1).mapToEntities(student)),
+            flowOf(remoteList.dropLast(1).mapToEntities(student)), // after fetch end before save result
+            flowOf(remoteList.mapToEntities(student))
         )
         coEvery { mobileDeviceDb.insertAll(any()) } returns listOf(1, 2, 3)
         coEvery { mobileDeviceDb.deleteAll(any()) } just Runs
@@ -92,13 +90,13 @@ class MobileDeviceRepositoryTest {
         val res = runBlocking { mobileDeviceRepository.getDevices(student, semester, true).toFirstResult() }
 
         // verify
-        Assert.assertEquals(null, res.error)
-        Assert.assertEquals(2, res.data?.size)
+        Assert.assertEquals(null, res.errorOrNull)
+        Assert.assertEquals(2, res.dataOrNull?.size)
         coVerify { sdk.getRegisteredDevices() }
         coVerify { mobileDeviceDb.loadAll(1) }
         coVerify {
             mobileDeviceDb.insertAll(match {
-                it.size == 1 && it[0] == remoteList.mapToEntities(semester)[1]
+                it.size == 1 && it[0] == remoteList.mapToEntities(student)[1]
             })
         }
         coVerify { mobileDeviceDb.deleteAll(match { it.isEmpty() }) }
@@ -109,9 +107,9 @@ class MobileDeviceRepositoryTest {
         // prepare
         coEvery { sdk.getRegisteredDevices() } returns remoteList.dropLast(1)
         coEvery { mobileDeviceDb.loadAll(1) } returnsMany listOf(
-            flowOf(remoteList.mapToEntities(semester)),
-            flowOf(remoteList.mapToEntities(semester)), // after fetch end before save result
-            flowOf(remoteList.dropLast(1).mapToEntities(semester))
+            flowOf(remoteList.mapToEntities(student)),
+            flowOf(remoteList.mapToEntities(student)), // after fetch end before save result
+            flowOf(remoteList.dropLast(1).mapToEntities(student))
         )
         coEvery { mobileDeviceDb.insertAll(any()) } returns listOf(1, 2, 3)
         coEvery { mobileDeviceDb.deleteAll(any()) } just Runs
@@ -120,14 +118,14 @@ class MobileDeviceRepositoryTest {
         val res = runBlocking { mobileDeviceRepository.getDevices(student, semester, true).toFirstResult() }
 
         // verify
-        Assert.assertEquals(null, res.error)
-        Assert.assertEquals(1, res.data?.size)
+        Assert.assertEquals(null, res.errorOrNull)
+        Assert.assertEquals(1, res.dataOrNull?.size)
         coVerify { sdk.getRegisteredDevices() }
         coVerify { mobileDeviceDb.loadAll(1) }
         coVerify { mobileDeviceDb.insertAll(match { it.isEmpty() }) }
         coVerify {
             mobileDeviceDb.deleteAll(match {
-                it.size == 1 && it[0] == remoteList.mapToEntities(semester)[1]
+                it.size == 1 && it[0] == remoteList.mapToEntities(student)[1]
             })
         }
     }
@@ -137,6 +135,8 @@ class MobileDeviceRepositoryTest {
         name = "",
         deviceId = "",
         createDate = of(2019, 5, day, 0, 0, 0),
-        modificationDate = of(2019, 5, day, 0, 0, 0)
+        modificationDate = of(2019, 5, day, 0, 0, 0),
+        createDateZoned = of(2019, 5, day, 0, 0, 0).atZone(ZoneId.systemDefault()),
+        modificationDateZoned = of(2019, 5, day, 0, 0, 0).atZone(ZoneId.systemDefault())
     )
 }

@@ -18,6 +18,7 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.account.accountdetails.AccountDetailsFragment
 import io.github.wulkanowy.ui.modules.attendance.summary.AttendanceSummaryFragment
 import io.github.wulkanowy.ui.modules.conference.ConferenceFragment
+import io.github.wulkanowy.ui.modules.dashboard.adapters.DashboardAdapter
 import io.github.wulkanowy.ui.modules.exam.ExamFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
@@ -28,10 +29,7 @@ import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.notificationscenter.NotificationsCenterFragment
 import io.github.wulkanowy.ui.modules.schoolannouncement.SchoolAnnouncementFragment
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
-import io.github.wulkanowy.utils.capitalise
-import io.github.wulkanowy.utils.getThemeAttrColor
-import io.github.wulkanowy.utils.openInternetBrowser
-import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.*
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -50,11 +48,20 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
     override var subtitleString =
         LocalDate.now().toFormattedString("EEEE, d MMMM yyyy").capitalise()
 
+    override val tileWidth: Int
+        get() {
+            val recyclerWidth = binding.dashboardRecycler.width
+            val margin = requireContext().dpToPx(24f).toInt()
+
+            return ((recyclerWidth - margin) / resources.displayMetrics.density).toInt()
+        }
+
     companion object {
 
         fun newInstance() = DashboardFragment()
     }
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -178,8 +185,8 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
         binding.dashboardErrorContainer.isVisible = show
     }
 
-    override fun setErrorDetails(message: String) {
-        binding.dashboardErrorMessage.text = message
+    override fun setErrorDetails(error: Throwable) {
+        binding.dashboardErrorMessage.text = requireContext().resources.getErrorString(error)
     }
 
     override fun resetView() {

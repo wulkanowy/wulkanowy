@@ -4,12 +4,12 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
-import java.time.LocalDateTime
+import java.time.Instant
 
 @Entity(tableName = "MobileDevices")
 data class MobileDevice(
 
-    @ColumnInfo(name = "student_id")
+    @ColumnInfo(name = "user_login_id")
     val userLoginId: Int,
 
     @ColumnInfo(name = "device_id")
@@ -17,7 +17,7 @@ data class MobileDevice(
 
     val name: String,
 
-    val date: LocalDateTime
+    val date: Instant,
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)

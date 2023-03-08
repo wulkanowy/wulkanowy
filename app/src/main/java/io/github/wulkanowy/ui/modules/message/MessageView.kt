@@ -12,9 +12,17 @@ interface MessageView : BaseView {
 
     fun showProgress(show: Boolean)
 
+    fun showNewMessage(show: Boolean)
+
+    fun showTabLayout(show: Boolean)
+
     fun notifyChildLoadData(index: Int, forceRefresh: Boolean)
 
-    fun notifyChildMessageDeleted(tabId: Int)
+    fun notifyChildrenFinishActionMode()
+
+    fun notifyChildParentReselected(index: Int)
 
     fun openSendMessage()
+
+    fun popView()
 }

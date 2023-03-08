@@ -4,11 +4,11 @@ import io.github.wulkanowy.data.db.dao.SchoolAnnouncementDao
 import io.github.wulkanowy.data.db.entities.SchoolAnnouncement
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.AutoRefreshHelper
 import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
-import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex
@@ -28,15 +28,17 @@ class SchoolAnnouncementRepository @Inject constructor(
 
     fun getSchoolAnnouncements(
         student: Student,
-        forceRefresh: Boolean, notify: Boolean = false
+        forceRefresh: Boolean,
+        notify: Boolean = false
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
+        isResultEmpty = { it.isEmpty() },
         shouldFetch = {
             val isExpired = refreshHelper.shouldBeRefreshed(getRefreshKey(cacheKey, student))
             it.isEmpty() || forceRefresh || isExpired
         },
         query = {
-            schoolAnnouncementDb.loadAll(student.studentId)
+            schoolAnnouncementDb.loadAll(student.userLoginId)
         },
         fetch = {
             sdk.init(student)
@@ -55,7 +57,7 @@ class SchoolAnnouncementRepository @Inject constructor(
     )
 
     fun getSchoolAnnouncementFromDatabase(student: Student): Flow<List<SchoolAnnouncement>> {
-        return schoolAnnouncementDb.loadAll(student.studentId)
+        return schoolAnnouncementDb.loadAll(student.userLoginId)
     }
 
     suspend fun updateSchoolAnnouncement(schoolAnnouncement: List<SchoolAnnouncement>) =

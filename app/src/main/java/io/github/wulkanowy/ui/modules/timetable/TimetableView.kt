@@ -12,7 +12,7 @@ interface TimetableView : BaseView {
 
     fun initView()
 
-    fun updateData(data: List<Timetable>, showWholeClassPlanType: String, showGroupsInPlanType: Boolean, showTimetableTimers: Boolean)
+    fun updateData(data: List<TimetableItem>)
 
     fun updateNavigationDay(date: String)
 
@@ -42,7 +42,7 @@ interface TimetableView : BaseView {
 
     fun showTimetableDialog(lesson: Timetable)
 
-    fun showDatePickerDialog(currentDate: LocalDate)
+    fun showDatePickerDialog(selectedDate: LocalDate)
 
     fun popView()
 

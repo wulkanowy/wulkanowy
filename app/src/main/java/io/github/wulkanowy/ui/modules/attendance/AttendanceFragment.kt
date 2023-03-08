@@ -2,20 +2,12 @@ package io.github.wulkanowy.ui.modules.attendance
 
 import android.content.DialogInterface.BUTTON_POSITIVE
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.View.GONE
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
+import android.view.*
+import android.view.View.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ActionMode
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Attendance
@@ -27,12 +19,10 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
-import io.github.wulkanowy.utils.SchoolDaysValidator
 import io.github.wulkanowy.utils.dpToPx
+import io.github.wulkanowy.utils.firstSchoolDayInSchoolYear
 import io.github.wulkanowy.utils.getThemeAttrColor
-import io.github.wulkanowy.utils.schoolYearStart
-import io.github.wulkanowy.utils.toLocalDateTime
-import io.github.wulkanowy.utils.toTimestamp
+import io.github.wulkanowy.utils.openMaterialDatePicker
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -72,7 +62,7 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
     private val actionModeCallback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
             val inflater = mode.menuInflater
-            inflater.inflate(R.menu.context_menu_excuse, menu)
+            inflater.inflate(R.menu.context_menu_attendance, menu)
             return true
         }
 
@@ -94,6 +84,7 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
         }
     }
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -224,29 +215,15 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
         (activity as? MainActivity)?.showDialogFragment(AttendanceDialog.newInstance(lesson))
     }
 
-    override fun showDatePickerDialog(currentDate: LocalDate) {
-        val baseDate = currentDate.schoolYearStart
-        val rangeStart = baseDate.toTimestamp()
-        val rangeEnd = LocalDate.now().plusWeeks(1).toTimestamp()
-
-        val constraintsBuilder = CalendarConstraints.Builder().apply {
-            setValidator(SchoolDaysValidator(rangeStart, rangeEnd))
-            setStart(rangeStart)
-            setEnd(rangeEnd)
-        }
-        val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setCalendarConstraints(constraintsBuilder.build())
-            .setSelection(currentDate.toTimestamp())
-            .build()
-
-        datePicker.addOnPositiveButtonClickListener {
-            val date = it.toLocalDateTime()
-            presenter.onDateSet(date.year, date.monthValue, date.dayOfMonth)
-        }
-
-        if (!parentFragmentManager.isStateSaved) {
-            datePicker.show(parentFragmentManager, null)
-        }
+    override fun showDatePickerDialog(selectedDate: LocalDate) {
+        openMaterialDatePicker(
+            selected = selectedDate,
+            rangeStart = selectedDate.firstSchoolDayInSchoolYear,
+            rangeEnd = LocalDate.now().plusWeeks(1),
+            onDateSelected = {
+                presenter.onDateSet(it.year, it.monthValue, it.dayOfMonth)
+            }
+        )
     }
 
     override fun showExcuseDialog() {

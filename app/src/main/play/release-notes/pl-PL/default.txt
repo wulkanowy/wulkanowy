@@ -1,6 +1,7 @@
-Wersja 1.4.3
+Wersja 1.9.2
 
-Naprawiliśmy drobne problemy ze stabilnością oraz małą usterkę w wyszukiwarce wiadomości.
-Wszystko po to, aby jeszcze bardziej podnieść komfort z używania aplikacji!
+- naprawiliśmy oznaczanie wiadomości jako odczytanych (problem dotyczył głównie kont rodziców z wieloma dziećmi w tej samej szkole)
+- naprawiliśmy zapisywanie załączników do wiadomości w sytuacji, gdy ten sam załącznik był dodany do więcej niż jednej wiadomości
+- usprawniliśmy ekran z wyborem uczniów i wpisywaniem symbolu przy pierwszym logowaniu
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases

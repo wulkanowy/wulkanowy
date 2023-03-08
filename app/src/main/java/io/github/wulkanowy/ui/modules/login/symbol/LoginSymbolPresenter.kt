@@ -1,16 +1,20 @@
 package io.github.wulkanowy.ui.modules.login.symbol
 
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.Resource
+import io.github.wulkanowy.data.dataOrNull
+import io.github.wulkanowy.data.onResourceNotLoading
+import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.data.resourceFlow
+import io.github.wulkanowy.sdk.scrapper.getNormalizedSymbol
+import io.github.wulkanowy.sdk.scrapper.login.InvalidSymbolException
 import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
-import java.io.Serializable
 import javax.inject.Inject
 
 class LoginSymbolPresenter @Inject constructor(
@@ -21,25 +25,20 @@ class LoginSymbolPresenter @Inject constructor(
 
     private var lastError: Throwable? = null
 
-    var loginData: Triple<String, String, String>? = null
+    lateinit var loginData: LoginData
 
-    @Suppress("UNCHECKED_CAST")
-    fun onAttachView(view: LoginSymbolView, savedLoginData: Serializable?) {
+    private var registerUser: RegisterUser? = null
+
+    fun onAttachView(view: LoginSymbolView, loginData: LoginData) {
         super.onAttachView(view)
-        view.run {
+        this.loginData = loginData
+        loginErrorHandler.onBadCredentials = {
+            view.setErrorSymbol(it.orEmpty())
+        }
+        with(view) {
             initView()
             showContact(false)
-        }
-        if (savedLoginData is Triple<*, *, *>) {
-            loginData = savedLoginData as Triple<String, String, String>
-            view.setLoginToHeading(requireNotNull(loginData?.first))
-        }
-    }
-
-    fun onParentInitSymbolView(loginData: Triple<String, String, String>) {
-        this.loginData = loginData
-        view?.apply {
-            setLoginToHeading(loginData.first)
+            setLoginToHeading(loginData.login)
             clearAndFocusSymbol()
             showSoftKeyboard()
         }
@@ -49,68 +48,80 @@ class LoginSymbolPresenter @Inject constructor(
         view?.apply { if (symbolNameError != null) clearSymbolError() }
     }
 
-    fun attemptLogin(symbol: String) {
-        if (loginData == null) {
-            Timber.w("LoginSymbolPresenter - Login data is null")
-            return
-        }
-
-        if (symbol.isBlank()) {
+    fun attemptLogin() {
+        if (view?.symbolValue.isNullOrBlank()) {
             view?.setErrorSymbolRequire()
             return
         }
 
-        flowWithResource {
-            studentRepository.getStudentsScrapper(
-                email = loginData!!.first,
-                password = loginData!!.second,
-                scrapperBaseUrl = loginData!!.third,
-                symbol = symbol,
+        loginData = loginData.copy(
+            symbol = view?.symbolValue?.getNormalizedSymbol(),
+        )
+        resourceFlow {
+            studentRepository.getUserSubjectsFromScrapper(
+                email = loginData.login,
+                password = loginData.password,
+                scrapperBaseUrl = loginData.baseUrl,
+                symbol = loginData.symbol.orEmpty(),
             )
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> view?.run {
+        }.onEach { user ->
+            registerUser = user.dataOrNull
+            when (user) {
+                is Resource.Loading -> view?.run {
                     Timber.i("Login with symbol started")
                     hideSoftKeyboard()
                     showProgress(true)
                     showContent(false)
                 }
-                Status.SUCCESS -> {
-                    view?.run {
-                        if (it.data!!.isEmpty()) {
+                is Resource.Success -> {
+                    when (user.data.symbols.size) {
+                        0 -> {
                             Timber.i("Login with symbol result: Empty student list")
-                            setErrorSymbolIncorrect()
-                            view?.showContact(true)
-                        } else {
-                            Timber.i("Login with symbol result: Success")
-                            notifyParentAccountLogged(it.data)
+                            view?.run {
+                                setErrorSymbolIncorrect()
+                                showContact(true)
+                            }
+                        }
+                        else -> {
+                            val enteredSymbolDetails = user.data.symbols
+                                .firstOrNull()
+                                ?.takeIf { it.symbol == loginData.symbol }
+
+                            if (enteredSymbolDetails?.error is InvalidSymbolException) {
+                                view?.run {
+                                    setErrorSymbolInvalid()
+                                    showContact(true)
+                                }
+                            } else {
+                                Timber.i("Login with symbol result: Success")
+                                view?.navigateToStudentSelect(loginData, requireNotNull(user.data))
+                            }
                         }
                     }
                     analytics.logEvent(
                         "registration_symbol",
                         "success" to true,
-                        "students" to it.data!!.size,
-                        "scrapperBaseUrl" to loginData?.third,
-                        "symbol" to symbol,
+                        "scrapperBaseUrl" to loginData.baseUrl,
+                        "symbol" to view?.symbolValue,
                         "error" to "No error"
                     )
                 }
-                Status.ERROR -> {
+                is Resource.Error -> {
                     Timber.i("Login with symbol result: An exception occurred")
                     analytics.logEvent(
                         "registration_symbol",
                         "success" to false,
                         "students" to -1,
-                        "scrapperBaseUrl" to loginData?.third,
-                        "symbol" to symbol,
-                        "error" to it.error!!.message.ifNullOrBlank { "No message" }
+                        "scrapperBaseUrl" to loginData.baseUrl,
+                        "symbol" to view?.symbolValue,
+                        "error" to user.error.message.ifNullOrBlank { "No message" }
                     )
-                    loginErrorHandler.dispatch(it.error)
-                    lastError = it.error
+                    loginErrorHandler.dispatch(user.error)
+                    lastError = user.error
                     view?.showContact(true)
                 }
             }
-        }.afterLoading {
+        }.onResourceNotLoading {
             view?.apply {
                 showProgress(false)
                 showContent(true)
@@ -123,6 +134,12 @@ class LoginSymbolPresenter @Inject constructor(
     }
 
     fun onEmailClick() {
-        view?.openEmail(loginData?.third.orEmpty(), lastError?.message.ifNullOrBlank { "empty" })
+        view?.openEmail(loginData.baseUrl, lastError?.message.ifNullOrBlank {
+            registerUser?.symbols?.flatMap { symbol ->
+                symbol.schools.map { it.error?.message } + symbol.error?.message
+            }?.filterNotNull()?.distinct()?.joinToString(";") {
+                it.take(46) + "..."
+            } ?: "blank"
+        })
     }
 }

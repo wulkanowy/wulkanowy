@@ -4,9 +4,9 @@ import io.github.wulkanowy.data.db.dao.StudentInfoDao
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntity
+import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.init
-import io.github.wulkanowy.utils.networkBoundResource
 import kotlinx.coroutines.sync.Mutex
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -25,10 +25,12 @@ class StudentInfoRepository @Inject constructor(
         forceRefresh: Boolean,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
+        isResultEmpty = { it == null },
         shouldFetch = { it == null || forceRefresh },
         query = { studentInfoDao.loadStudentInfo(student.studentId) },
         fetch = {
-            sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
+            sdk.init(student)
+                .switchDiary(semester.diaryId, semester.kindergartenDiaryId, semester.schoolYear)
                 .getStudentInfo().mapToEntity(semester)
         },
         saveFetchResult = { old, new ->

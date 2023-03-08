@@ -4,6 +4,8 @@ import io.github.wulkanowy.ui.base.BaseView
 
 interface DashboardView : BaseView {
 
+    val tileWidth: Int
+
     fun initView()
 
     fun updateData(data: List<DashboardItem>)
@@ -18,7 +20,7 @@ interface DashboardView : BaseView {
 
     fun showErrorView(show: Boolean)
 
-    fun setErrorDetails(message: String)
+    fun setErrorDetails(error: Throwable)
 
     fun resetView()
 

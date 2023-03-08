@@ -7,19 +7,18 @@ import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.view.inputmethod.EditorInfo.IME_NULL
 import android.widget.ArrayAdapter
+import androidx.core.os.bundleOf
 import androidx.core.text.parseAsHtml
 import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.StudentWithSemesters
+import io.github.wulkanowy.data.pojos.RegisterUser
+import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.databinding.FragmentLoginSymbolBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
-import io.github.wulkanowy.utils.AppInfo
-import io.github.wulkanowy.utils.hideSoftInput
-import io.github.wulkanowy.utils.openEmailClient
-import io.github.wulkanowy.utils.openInternetBrowser
-import io.github.wulkanowy.utils.showSoftInput
+import io.github.wulkanowy.ui.modules.login.LoginData
+import io.github.wulkanowy.utils.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -32,11 +31,18 @@ class LoginSymbolFragment :
     @Inject
     lateinit var appInfo: AppInfo
 
+    @Inject
+    lateinit var preferencesRepository: PreferencesRepository
+
     companion object {
         private const val SAVED_LOGIN_DATA = "LOGIN_DATA"
 
-        fun newInstance() = LoginSymbolFragment()
+        fun newInstance(loginData: LoginData) = LoginSymbolFragment().apply {
+            arguments = bundleOf(SAVED_LOGIN_DATA to loginData)
+        }
     }
+
+    override val symbolValue: String? get() = binding.loginSymbolName.text?.toString()
 
     override val symbolNameError: CharSequence?
         get() = binding.loginSymbolNameLayout.error
@@ -44,12 +50,17 @@ class LoginSymbolFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLoginSymbolBinding.bind(view)
-        presenter.onAttachView(this, savedInstanceState?.getSerializable(SAVED_LOGIN_DATA))
+        presenter.onAttachView(
+            view = this,
+            loginData = requireArguments().serializable(SAVED_LOGIN_DATA),
+        )
     }
 
     override fun initView() {
+        (requireActivity() as LoginActivity).showActionBar(true)
+
         with(binding) {
-            loginSymbolSignIn.setOnClickListener { presenter.attemptLogin(loginSymbolName.text.toString()) }
+            loginSymbolSignIn.setOnClickListener { presenter.attemptLogin() }
             loginSymbolFaq.setOnClickListener { presenter.onFaqClick() }
             loginSymbolContactEmail.setOnClickListener { presenter.onEmailClick() }
 
@@ -70,12 +81,9 @@ class LoginSymbolFragment :
         }
     }
 
-    fun onParentInitSymbolFragment(loginData: Triple<String, String, String>) {
-        presenter.onParentInitSymbolView(loginData)
-    }
-
     override fun setLoginToHeading(login: String) {
-        binding.loginSymbolHeader.text = getString(R.string.login_header_symbol, login).parseAsHtml()
+        binding.loginSymbolHeader.text =
+            getString(R.string.login_header_symbol, login).parseAsHtml()
     }
 
     override fun setErrorSymbolIncorrect() {
@@ -85,10 +93,21 @@ class LoginSymbolFragment :
         }
     }
 
-    override fun setErrorSymbolRequire() {
-        binding.loginSymbolNameLayout.apply {
+    override fun setErrorSymbolInvalid() {
+        with(binding.loginSymbolNameLayout) {
             requestFocus()
-            error = getString(R.string.error_field_required)
+            error = getString(R.string.login_invalid_symbol)
+        }
+    }
+
+    override fun setErrorSymbolRequire() {
+        setErrorSymbol(getString(R.string.error_field_required))
+    }
+
+    override fun setErrorSymbol(message: String) {
+        with(binding.loginSymbolNameLayout) {
+            requestFocus()
+            error = message
         }
     }
 
@@ -119,8 +138,8 @@ class LoginSymbolFragment :
         binding.loginSymbolContainer.visibility = if (show) VISIBLE else GONE
     }
 
-    override fun notifyParentAccountLogged(studentsWithSemesters: List<StudentWithSemesters>) {
-        (activity as? LoginActivity)?.onSymbolFragmentAccountLogged(studentsWithSemesters)
+    override fun navigateToStudentSelect(loginData: LoginData, registerUser: RegisterUser) {
+        (activity as? LoginActivity)?.navigateToStudentSelect(loginData, registerUser)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -153,8 +172,9 @@ class LoginSymbolFragment :
                 R.string.login_email_text,
                 "${appInfo.systemManufacturer} ${appInfo.systemModel}",
                 appInfo.systemVersion.toString(),
-                appInfo.versionName,
+                "${appInfo.versionName}-${appInfo.buildFlavor}",
                 "$host/${binding.loginSymbolName.text}",
+                preferencesRepository.installationId,
                 lastError
             )
         )

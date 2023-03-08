@@ -5,17 +5,15 @@ import io.github.wulkanowy.data.db.entities.Conference
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.AutoRefreshHelper
 import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
-import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex
 import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneOffset
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,9 +33,10 @@ class ConferenceRepository @Inject constructor(
         semester: Semester,
         forceRefresh: Boolean,
         notify: Boolean = false,
-        startDate: LocalDateTime = LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC),
+        startDate: Instant = Instant.EPOCH,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
+        isResultEmpty = { it.isEmpty() },
         shouldFetch = {
             val isExpired = refreshHelper.shouldBeRefreshed(getRefreshKey(cacheKey, semester))
             it.isEmpty() || forceRefresh || isExpired
@@ -46,7 +45,8 @@ class ConferenceRepository @Inject constructor(
             conferenceDb.loadAll(semester.diaryId, student.studentId, startDate)
         },
         fetch = {
-            sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
+            sdk.init(student)
+                .switchDiary(semester.diaryId, semester.kindergartenDiaryId, semester.schoolYear)
                 .getConferences()
                 .mapToEntities(semester)
                 .filter { it.date >= startDate }
@@ -66,7 +66,7 @@ class ConferenceRepository @Inject constructor(
         conferenceDb.loadAll(
             diaryId = semester.diaryId,
             studentId = semester.studentId,
-            startDate = LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC)
+            startDate = Instant.EPOCH,
         )
 
     suspend fun updateConference(conference: List<Conference>) = conferenceDb.updateAll(conference)

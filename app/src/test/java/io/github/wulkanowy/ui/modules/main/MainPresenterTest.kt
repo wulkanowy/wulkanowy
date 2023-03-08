@@ -4,14 +4,12 @@ import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.ErrorHandler
+import io.github.wulkanowy.utils.AdsHelper
 import io.github.wulkanowy.utils.AnalyticsHelper
-import io.mockk.MockKAnnotations
-import io.mockk.Runs
-import io.mockk.clearMocks
-import io.mockk.every
+import io.github.wulkanowy.utils.AppInfo
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import io.mockk.just
-import io.mockk.verify
+import kotlinx.serialization.json.Json
 import org.junit.Before
 import org.junit.Test
 
@@ -35,6 +33,12 @@ class MainPresenterTest {
     @MockK(relaxed = true)
     lateinit var analytics: AnalyticsHelper
 
+    @MockK(relaxed = true)
+    lateinit var appInfo: AppInfo
+
+    @MockK(relaxed = true)
+    lateinit var adsHelper: AdsHelper
+
     private lateinit var presenter: MainPresenter
 
     @Before
@@ -42,9 +46,17 @@ class MainPresenterTest {
         MockKAnnotations.init(this)
         clearMocks(mainView)
 
-        every { mainView.initView(any(), any()) } just Runs
-        presenter =
-            MainPresenter(errorHandler, studentRepository, prefRepository, syncManager, analytics)
+        every { mainView.initView(any(), any(), any()) } just Runs
+        presenter = MainPresenter(
+            errorHandler = errorHandler,
+            studentRepository = studentRepository,
+            preferencesRepository = prefRepository,
+            syncManager = syncManager,
+            analytics = analytics,
+            json = Json,
+            appInfo = appInfo,
+            adsHelper = adsHelper
+        )
         presenter.onAttachView(mainView, null)
     }
 

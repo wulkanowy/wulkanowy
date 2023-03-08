@@ -2,19 +2,20 @@ package io.github.wulkanowy.ui.modules.login.studentselect
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.StudentWithSemesters
+import io.github.wulkanowy.data.pojos.RegisterUser
+import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.databinding.FragmentLoginStudentSelectBinding
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.modules.main.MainActivity
+import io.github.wulkanowy.ui.modules.login.LoginActivity
+import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.openEmailClient
 import io.github.wulkanowy.utils.openInternetBrowser
-import java.io.Serializable
+import io.github.wulkanowy.utils.serializable
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,73 +32,75 @@ class LoginStudentSelectFragment :
     @Inject
     lateinit var appInfo: AppInfo
 
-    companion object {
-        const val SAVED_STUDENTS = "STUDENTS"
+    @Inject
+    lateinit var preferencesRepository: PreferencesRepository
 
-        fun newInstance() = LoginStudentSelectFragment()
+    private lateinit var symbolsNames: Array<String>
+    private lateinit var symbolsValues: Array<String>
+
+    override val symbols: Map<String, String> by lazy {
+        symbolsValues.zip(symbolsNames).toMap()
     }
 
+    companion object {
+        private const val ARG_LOGIN = "LOGIN"
+        private const val ARG_STUDENTS = "STUDENTS"
+
+        fun newInstance(loginData: LoginData, registerUser: RegisterUser) =
+            LoginStudentSelectFragment().apply {
+                arguments = bundleOf(
+                    ARG_LOGIN to loginData,
+                    ARG_STUDENTS to registerUser,
+                )
+            }
+    }
+
+    @Suppress("UNCHECKED_CAST")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLoginStudentSelectBinding.bind(view)
-        presenter.onAttachView(this, savedInstanceState?.getSerializable(SAVED_STUDENTS))
+
+        symbolsNames = resources.getStringArray(R.array.symbols)
+        symbolsValues = resources.getStringArray(R.array.symbols_values)
+
+        presenter.onAttachView(
+            view = this,
+            loginData = requireArguments().serializable(ARG_LOGIN),
+            registerUser = requireArguments().serializable(ARG_STUDENTS),
+        )
     }
 
     override fun initView() {
-        loginAdapter.onClickListener = presenter::onItemSelected
+        (requireActivity() as LoginActivity).showActionBar(true)
 
         with(binding) {
             loginStudentSelectSignIn.setOnClickListener { presenter.onSignIn() }
-            loginStudentSelectContactDiscord.setOnClickListener { presenter.onDiscordClick() }
-            loginStudentSelectContactEmail.setOnClickListener { presenter.onEmailClick() }
-
-            with(loginStudentSelectRecycler) {
-                layoutManager = LinearLayoutManager(context)
-                adapter = loginAdapter
-            }
+            loginStudentSelectRecycler.adapter = loginAdapter
         }
     }
 
-    override fun updateData(data: List<Pair<StudentWithSemesters, Boolean>>) {
-        with(loginAdapter) {
-            items = data
-            notifyDataSetChanged()
-        }
+    override fun updateData(data: List<LoginStudentSelectItem>) {
+        loginAdapter.submitList(data)
     }
 
-    override fun openMainView() {
-        startActivity(MainActivity.getStartIntent(requireContext()))
-        requireActivity().finish()
+    override fun navigateToSymbol(loginData: LoginData) {
+        (requireActivity() as LoginActivity).navigateToSymbolFragment(loginData)
+    }
+
+    override fun navigateToNext() {
+        (requireActivity() as LoginActivity).navigateToNotifications()
     }
 
     override fun showProgress(show: Boolean) {
-        binding.loginStudentSelectProgress.visibility = if (show) VISIBLE else GONE
+        binding.loginStudentSelectProgress.isVisible = show
     }
 
     override fun showContent(show: Boolean) {
-        binding.loginStudentSelectContent.visibility = if (show) VISIBLE else GONE
+        binding.loginStudentSelectContent.isVisible = show
     }
 
     override fun enableSignIn(enable: Boolean) {
         binding.loginStudentSelectSignIn.isEnabled = enable
-    }
-
-    fun onParentInitStudentSelectFragment(studentsWithSemesters: List<StudentWithSemesters>) {
-        presenter.onParentInitStudentSelectView(studentsWithSemesters)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putSerializable(SAVED_STUDENTS, presenter.students as Serializable)
-    }
-
-    override fun showContact(show: Boolean) {
-        binding.loginStudentSelectContact.visibility = if (show) VISIBLE else GONE
-    }
-
-    override fun onDestroyView() {
-        presenter.onDetachView()
-        super.onDestroyView()
     }
 
     override fun openDiscordInvite() {
@@ -110,12 +113,19 @@ class LoginStudentSelectFragment :
             email = "wulkanowyinc@gmail.com",
             subject = requireContext().getString(R.string.login_email_subject),
             body = requireContext().getString(
-                R.string.login_email_text, appInfo.systemModel,
+                R.string.login_email_text,
+                "${appInfo.systemManufacturer} ${appInfo.systemModel}",
                 appInfo.systemVersion.toString(),
-                appInfo.versionName,
+                "${appInfo.versionName}-${appInfo.buildFlavor}",
                 "Select users to log in",
+                preferencesRepository.installationId,
                 lastError
             )
         )
+    }
+
+    override fun onDestroyView() {
+        presenter.onDetachView()
+        super.onDestroyView()
     }
 }

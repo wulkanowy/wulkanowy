@@ -15,6 +15,7 @@ import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeView
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.getThemeAttrColor
+import io.github.wulkanowy.utils.serializable
 import io.github.wulkanowy.utils.setOnItemSelectedListener
 import javax.inject.Inject
 
@@ -33,6 +34,7 @@ class GradeStatisticsFragment :
 
     companion object {
         private const val SAVED_CHART_TYPE = "CURRENT_TYPE"
+        private const val SAVED_SUBJECT_NAME = "SUBJECT_NAME"
 
         fun newInstance() = GradeStatisticsFragment()
     }
@@ -46,8 +48,9 @@ class GradeStatisticsFragment :
         binding = FragmentGradeStatisticsBinding.bind(view)
         messageContainer = binding.gradeStatisticsRecycler
         presenter.onAttachView(
-            this,
-            savedInstanceState?.getSerializable(SAVED_CHART_TYPE) as? GradeStatisticsItem.DataType
+            view = this,
+            type = savedInstanceState?.serializable(SAVED_CHART_TYPE),
+            subjectName = savedInstanceState?.serializable(SAVED_SUBJECT_NAME),
         )
     }
 
@@ -56,6 +59,7 @@ class GradeStatisticsFragment :
 
         with(binding.gradeStatisticsRecycler) {
             layoutManager = LinearLayoutManager(requireContext())
+            statisticsAdapter.currentDataType = presenter.currentType
             adapter = statisticsAdapter
         }
 
@@ -81,7 +85,8 @@ class GradeStatisticsFragment :
         }
     }
 
-    override fun updateSubjects(data: ArrayList<String>) {
+    override fun updateSubjects(data: List<String>, selectedIndex: Int) {
+        binding.gradeStatisticsSubjects.setSelection(selectedIndex)
         with(subjectsAdapter) {
             clear()
             addAll(data)
@@ -161,6 +166,7 @@ class GradeStatisticsFragment :
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putSerializable(SAVED_CHART_TYPE, presenter.currentType)
+        outState.putSerializable(SAVED_SUBJECT_NAME, presenter.currentSubjectName)
     }
 
     override fun onDestroyView() {

@@ -4,15 +4,18 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updateMargins
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.enums.MessageFolder.RECEIVED
-import io.github.wulkanowy.data.enums.MessageFolder.SENT
-import io.github.wulkanowy.data.enums.MessageFolder.TRASHED
+import io.github.wulkanowy.data.enums.MessageFolder.*
 import io.github.wulkanowy.databinding.FragmentMessageBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.base.BaseFragmentPagerAdapter
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
 import io.github.wulkanowy.ui.modules.message.tab.MessageTabFragment
@@ -22,7 +25,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MessageFragment : BaseFragment<FragmentMessageBinding>(R.layout.fragment_message),
-    MessageView, MainView.TitledView {
+    MessageView, MainView.TitledView, MainView.MainChildView {
 
     @Inject
     lateinit var presenter: MessagePresenter
@@ -78,7 +81,6 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>(R.layout.fragment_m
         }
 
         binding.messageTabLayout.elevation = requireContext().dpToPx(4f)
-
         binding.openSendMessageButton.setOnClickListener { presenter.onSendMessageButtonClicked() }
     }
 
@@ -93,12 +95,41 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>(R.layout.fragment_m
         binding.messageProgress.visibility = if (show) VISIBLE else INVISIBLE
     }
 
+    override fun showNewMessage(show: Boolean) {
+        binding.openSendMessageButton.run {
+            if (show) show() else hide()
+        }
+    }
+
+    override fun showTabLayout(show: Boolean) {
+        binding.messageTabLayout.isVisible = show
+
+        with(binding.messageViewPager) {
+            isUserInputEnabled = show
+            updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                updateMargins(top = if (show) requireContext().dpToPx(48f).toInt() else 0)
+            }
+        }
+    }
+
+    fun onChildFragmentShowActionMode(show: Boolean) {
+        presenter.onChildViewShowActionMode(show)
+    }
+
     fun onChildFragmentLoaded() {
         presenter.onChildViewLoaded()
     }
 
-    override fun notifyChildMessageDeleted(tabId: Int) {
-        (pagerAdapter.getFragmentInstance(tabId) as? MessageTabFragment)?.onParentDeleteMessage()
+    fun onChildFragmentShowNewMessage(show: Boolean) {
+        presenter.onChildViewShowNewMessage(show)
+    }
+
+    override fun onFragmentReselected() {
+        if (::presenter.isInitialized) presenter.onFragmentReselected()
+    }
+
+    override fun onFragmentChanged() {
+        if (::presenter.isInitialized) presenter.onFragmentChanged()
     }
 
     override fun notifyChildLoadData(index: Int, forceRefresh: Boolean) {
@@ -106,8 +137,24 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>(R.layout.fragment_m
             ?.onParentLoadData(forceRefresh)
     }
 
+    override fun notifyChildrenFinishActionMode() {
+        repeat(3) {
+            (pagerAdapter.getFragmentInstance(it) as? MessageTabFragment)
+                ?.onParentFinishActionMode()
+        }
+    }
+
+    override fun notifyChildParentReselected(index: Int) {
+        (pagerAdapter.getFragmentInstance(index) as? MessageTabFragment)
+            ?.onParentReselected()
+    }
+
     override fun openSendMessage() {
         context?.let { it.startActivity(SendMessageActivity.getStartIntent(it)) }
+    }
+
+    override fun popView() {
+        (activity as? MainActivity)?.popView()
     }
 
     override fun onDestroyView() {

@@ -5,16 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.enums.GradeColorTheme
 import io.github.wulkanowy.databinding.DialogGradeBinding
-import io.github.wulkanowy.utils.colorStringId
-import io.github.wulkanowy.utils.getBackgroundColor
-import io.github.wulkanowy.utils.getGradeColor
-import io.github.wulkanowy.utils.lifecycleAwareVariable
-import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.*
+
 
 class GradeDetailsDialog : DialogFragment() {
 
@@ -30,22 +28,19 @@ class GradeDetailsDialog : DialogFragment() {
 
         private const val COLOR_THEME_KEY = "Theme"
 
-        fun newInstance(grade: Grade, colorTheme: GradeColorTheme) =
-            GradeDetailsDialog().apply {
-                arguments = Bundle().apply {
-                    putSerializable(ARGUMENT_KEY, grade)
-                    putSerializable(COLOR_THEME_KEY, colorTheme)
-                }
-            }
+        fun newInstance(grade: Grade, colorTheme: GradeColorTheme) = GradeDetailsDialog().apply {
+            arguments = bundleOf(
+                ARGUMENT_KEY to grade,
+                COLOR_THEME_KEY to colorTheme
+            )
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, 0)
-        arguments?.run {
-            grade = getSerializable(ARGUMENT_KEY) as Grade
-            gradeColorTheme = getSerializable(COLOR_THEME_KEY) as GradeColorTheme
-        }
+        grade = requireArguments().serializable(ARGUMENT_KEY)
+        gradeColorTheme = requireArguments().serializable(COLOR_THEME_KEY)
     }
 
     override fun onCreateView(
@@ -80,9 +75,7 @@ class GradeDetailsDialog : DialogFragment() {
                 setBackgroundResource(grade.getBackgroundColor(gradeColorTheme))
             }
 
-            gradeDialogTeacherValue.text = if (grade.teacher.isBlank()) {
-                getString(R.string.all_no_data)
-            } else grade.teacher
+            gradeDialogTeacherValue.text = grade.teacher.ifBlank { getString(R.string.all_no_data) }
 
             gradeDialogDescriptionValue.text = grade.run {
                 when {
