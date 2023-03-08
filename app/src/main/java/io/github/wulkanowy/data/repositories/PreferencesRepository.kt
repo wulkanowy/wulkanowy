@@ -13,7 +13,6 @@ import io.github.wulkanowy.data.enums.*
 import io.github.wulkanowy.ui.modules.dashboard.DashboardItem
 import io.github.wulkanowy.ui.modules.grade.GradeAverageMode
 import io.github.wulkanowy.ui.modules.settings.appearance.menuorder.AppMenuItem
-import io.github.wulkanowy.utils.getObject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.decodeFromString
@@ -38,9 +37,6 @@ class PreferencesRepository @Inject constructor(
             R.bool.pref_default_attendance_present
         )
 
-    val gradeAverageModeFlow: Flow<GradeAverageMode>
-        get() = gradeAverageModePref.asFlow()
-
     private val gradeAverageModePref: Preference<GradeAverageMode>
         get() = getObjectFlow(
             R.string.pref_key_grade_average_mode,
@@ -48,14 +44,17 @@ class PreferencesRepository @Inject constructor(
             GradeAverageMode.Serializer
         )
 
-    val gradeAverageForceCalcFlow: Flow<Boolean>
-        get() = gradeAverageForceCalcPref.asFlow()
+    val gradeAverageModeFlow: Flow<GradeAverageMode>
+        get() = gradeAverageModePref.asFlow()
 
     private val gradeAverageForceCalcPref: Preference<Boolean>
         get() = flowSharedPref.getBoolean(
             context.getString(R.string.pref_key_grade_average_force_calc),
             context.resources.getBoolean(R.bool.pref_default_grade_average_force_calc)
         )
+
+    val gradeAverageForceCalcFlow: Flow<Boolean>
+        get() = gradeAverageForceCalcPref.asFlow()
 
     val gradeExpandMode: GradeExpandMode
         get() = GradeExpandMode.getByValue(
@@ -369,8 +368,13 @@ class PreferencesRepository @Inject constructor(
         @StringRes id: Int,
         @StringRes default: Int,
         serializer: Serializer<T>
-    ) =
-        flowSharedPref.getObject(context.getString(id), context.getString(default), serializer)
+    ): Preference<T> = flowSharedPref.getObject(
+        key = context.getString(id),
+        serializer = serializer,
+        defaultValue = serializer.deserialize(
+            flowSharedPref.getString(context.getString(default)).get()
+        )
+    )
 
     private fun getString(id: Int, default: Int) = getString(context.getString(id), default)
 
