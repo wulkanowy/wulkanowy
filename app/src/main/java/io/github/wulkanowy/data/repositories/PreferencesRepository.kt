@@ -41,7 +41,11 @@ class PreferencesRepository @Inject constructor(
         get() = getObjectFlow(
             R.string.pref_key_grade_average_mode,
             R.string.pref_default_grade_average_mode,
-            GradeAverageMode.Serializer
+            object : Serializer<GradeAverageMode> {
+                override fun serialize(value: GradeAverageMode) = value.value
+                override fun deserialize(serialized: String) =
+                    GradeAverageMode.getByValue(serialized)
+            },
         )
 
     val gradeAverageModeFlow: Flow<GradeAverageMode>
