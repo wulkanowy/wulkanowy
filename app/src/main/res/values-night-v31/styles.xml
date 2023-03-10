@@ -3,15 +3,15 @@
     <style name="WulkanowyTheme" parent="@style/Theme.Material3.DynamicColors.Dark">
         <item name="android:forceDarkAllowed" tools:targetApi="Q">false</item>
 
-        <item name="colorPrimary">@color/material_dynamic_primary80</item> <!--bottom bar, action bar, texts-->
-        <item name="colorOnPrimary">@color/material_dynamic_primary20</item> <!--some texts (like in buttons-->
-        <item name="colorPrimaryContainer">@color/material_dynamic_primary30</item> <!--switch tail-->
+        <item name="colorPrimary">@color/material_dynamic_primary80</item>
+        <item name="colorOnPrimary">@color/material_dynamic_primary20</item>
+        <item name="colorPrimaryContainer">@color/material_dynamic_primary30</item>
         <item name="colorOnPrimaryContainer">@color/material_dynamic_primary90</item>
 
-        <item name="colorSecondary">@color/material_dynamic_primary80</item> <!--headers-->
-        <item name="colorOnSecondary">@color/material_dynamic_primary20</item> <!--radio buttons-->
-        <item name="colorSecondaryContainer">@color/material_dynamic_secondary30</item> <!--bottom nav active button-->
-        <item name="colorOnSecondaryContainer">@color/material_dynamic_secondary80</item> <!--bottom nav active button inside-->
+        <item name="colorSecondary">@color/material_dynamic_primary80</item>
+        <item name="colorOnSecondary">@color/material_dynamic_primary20</item>
+        <item name="colorSecondaryContainer">@color/material_dynamic_secondary30</item>
+        <item name="colorOnSecondaryContainer">@color/material_dynamic_secondary80</item>
 
         <item name="colorTertiary">@color/material_dynamic_tertiary80</item>
         <item name="colorOnTertiary">@color/material_dynamic_tertiary20</item>
@@ -41,7 +41,7 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
-        <itdem name="android:windowLightStatusBar" tools:targetApi="m">false</itdem>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
         <item name="materialCardViewStyle">@style/Widget.Material3.CardView.Elevated</item>
         <item name="switchPreferenceCompatStyle">
             @style/Preference.Wulkanowy.SwitchPreferenceCompat
