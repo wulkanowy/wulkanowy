@@ -31,11 +31,11 @@
         <item name="android:statusBarColor">@color/colorStatusBarDark</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="materialCardViewStyle">@style/Widget.Material3.CardView.Elevated</item>
         <item name="switchPreferenceCompatStyle">
             @style/Preference.Wulkanowy.SwitchPreferenceCompat
         </item>
         <item name="alertDialogTheme">@style/WulkanowyTheme.PreferenceAlertDialog</item>
-        <item name="materialCardViewStyle">@style/Widget.Wulkanowy.CardView</item>
     </style>
 
     <style name="WulkanowyTheme.Black" parent="WulkanowyTheme.NoActionBar">
