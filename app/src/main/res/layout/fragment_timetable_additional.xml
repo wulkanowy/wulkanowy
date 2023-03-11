@@ -121,7 +121,6 @@
             android:clickable="true"
             android:focusable="true"
             android:text="@string/additional_lessons_add"
-            android:tint="?colorOnSecondary"
             app:icon="@drawable/ic_all_add" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

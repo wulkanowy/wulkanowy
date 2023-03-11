@@ -118,7 +118,6 @@
             android:clickable="true"
             android:focusable="true"
             android:text="@string/add_homework_title"
-            android:tint="?colorOnSecondary"
             app:icon="@drawable/ic_all_add" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

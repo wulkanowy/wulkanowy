@@ -37,7 +37,6 @@
         android:clickable="true"
         android:focusable="true"
         android:text="@string/send_message_title"
-        android:tint="?colorOnSecondary"
         app:icon="@drawable/ic_menu_message_write" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator

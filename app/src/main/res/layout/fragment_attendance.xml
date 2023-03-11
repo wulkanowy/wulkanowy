@@ -65,7 +65,6 @@
             android:clickable="true"
             android:focusable="true"
             android:text="@string/attendance_excuse_title"
-            android:tint="?colorOnSecondary"
             android:visibility="gone"
             app:icon="@drawable/ic_all_done_all"
             tools:visibility="visible" />
