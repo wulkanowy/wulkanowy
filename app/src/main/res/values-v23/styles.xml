@@ -5,4 +5,9 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@color/colorStatusBarLight</item>
     </style>
+
+    <style name="WulkanowyTheme.Login" parent="WulkanowyTheme.NoActionBar">
+        <item name="android:statusBarColor">?colorSurface</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
 </resources>

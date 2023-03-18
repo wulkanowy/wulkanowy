@@ -55,4 +55,6 @@
         <item name="colorOnPrimaryContainer">?attr/colorPrimary</item>
         <item name="backgroundColor">@color/material_dynamic_neutral99</item>
     </style>
+
+    <style name="WulkanowyTheme.Login" parent="WulkanowyTheme.NoActionBar" />
 </resources>
