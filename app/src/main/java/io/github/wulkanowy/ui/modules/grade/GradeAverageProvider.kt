@@ -15,7 +15,6 @@ import io.github.wulkanowy.utils.changeModifier
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
@@ -53,31 +52,31 @@ class GradeAverageProvider @Inject constructor(
             minusModifier = minusModifier,
         )
     }.flatMapLatest { params ->
-        val semesters = semesterRepository.getSemesters(student)
-        when (params.gradeAverageMode) {
-            ONE_SEMESTER -> getGradeSubjects(
-                student = student,
-                semester = semesters.single { it.semesterId == semesterId },
-                forceRefresh = forceRefresh,
-                params = params,
-            )
-            BOTH_SEMESTERS -> calculateCombinedAverage(
-                student = student,
-                semesters = semesters,
-                semesterId = semesterId,
-                forceRefresh = forceRefresh,
-                config = params,
-            )
-            ALL_YEAR -> calculateCombinedAverage(
-                student = student,
-                semesters = semesters,
-                semesterId = semesterId,
-                forceRefresh = forceRefresh,
-                config = params,
-            )
+        flatResourceFlow {
+            val semesters = semesterRepository.getSemesters(student)
+            when (params.gradeAverageMode) {
+                ONE_SEMESTER -> getGradeSubjects(
+                    student = student,
+                    semester = semesters.single { it.semesterId == semesterId },
+                    forceRefresh = forceRefresh,
+                    params = params,
+                )
+                BOTH_SEMESTERS -> calculateCombinedAverage(
+                    student = student,
+                    semesters = semesters,
+                    semesterId = semesterId,
+                    forceRefresh = forceRefresh,
+                    config = params,
+                )
+                ALL_YEAR -> calculateCombinedAverage(
+                    student = student,
+                    semesters = semesters,
+                    semesterId = semesterId,
+                    forceRefresh = forceRefresh,
+                    config = params,
+                )
+            }
         }
-    }.distinctUntilChanged { old, new ->
-        old::class == new::class // todo
     }
 
     private fun calculateCombinedAverage(
@@ -175,7 +174,9 @@ class GradeAverageProvider @Inject constructor(
 
             (secondSemesterAverage + firstSemesterAverage) / divider
         } else {
-            (secondSemesterSubject.average + (firstSemesterSubject?.average ?: secondSemesterSubject.average)) / divider
+            secondSemesterSubject.average.plus(
+                (firstSemesterSubject?.average ?: secondSemesterSubject.average)
+            ) / divider
         }
     }
 
