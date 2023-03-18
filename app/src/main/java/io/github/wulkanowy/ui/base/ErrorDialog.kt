@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
-import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -20,7 +19,7 @@ import io.github.wulkanowy.utils.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ErrorDialog : DialogFragment() {
+class ErrorDialog : BaseDialogFragment<DialogErrorBinding>() {
 
     @Inject
     lateinit var appInfo: AppInfo
@@ -112,9 +111,5 @@ class ErrorDialog : DialogFragment() {
                 )
             }
         )
-    }
-
-    private fun showMessage(text: String) {
-        Toast.makeText(requireContext(), text, LENGTH_LONG).show()
     }
 }

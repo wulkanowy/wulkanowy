@@ -6,11 +6,9 @@ import android.content.ClipboardManager
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.getSystemService
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -28,26 +26,18 @@ class MobileDeviceTokenDialog : BaseDialogFragment<DialogMobileDeviceBinding>(),
     @Inject
     lateinit var presenter: MobileDeviceTokenPresenter
 
-    private var dialogView: View? = null
-
     companion object {
 
         fun newInstance() = MobileDeviceTokenDialog()
     }
 
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        dialogView = DialogMobileDeviceBinding.inflate(layoutInflater).apply { _binding = this }.root
         return MaterialAlertDialogBuilder(requireContext(), theme)
-            .setView(dialogView)
+            .setView(
+                DialogMobileDeviceBinding.inflate(layoutInflater).apply { binding = this }.root
+            )
             .create()
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = dialogView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

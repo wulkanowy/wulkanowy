@@ -3,9 +3,7 @@ package io.github.wulkanowy.ui.modules.homework.details
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -23,8 +21,6 @@ class HomeworkDetailsDialog : BaseDialogFragment<DialogHomeworkBinding>(), Homew
 
     @Inject
     lateinit var presenter: HomeworkDetailsPresenter
-
-    private var dialogView: View? = null
 
     @Inject
     lateinit var detailsAdapter: HomeworkDetailsAdapter
@@ -49,17 +45,10 @@ class HomeworkDetailsDialog : BaseDialogFragment<DialogHomeworkBinding>(), Homew
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        dialogView = DialogHomeworkBinding.inflate(layoutInflater).apply { _binding = this }.root
         return MaterialAlertDialogBuilder(requireContext(), theme)
-            .setView(dialogView)
+            .setView(DialogHomeworkBinding.inflate(layoutInflater).apply { binding = this }.root)
             .create()
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = dialogView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

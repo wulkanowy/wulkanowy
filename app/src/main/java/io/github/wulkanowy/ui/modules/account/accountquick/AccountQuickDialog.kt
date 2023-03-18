@@ -2,9 +2,7 @@ package io.github.wulkanowy.ui.modules.account.accountquick
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -28,8 +26,6 @@ class AccountQuickDialog : BaseDialogFragment<DialogAccountQuickBinding>(), Acco
     @Inject
     lateinit var presenter: AccountQuickPresenter
 
-    private var dialogView: View? = null
-
     companion object {
 
         private const val STUDENTS_ARGUMENT_KEY = "students"
@@ -41,20 +37,16 @@ class AccountQuickDialog : BaseDialogFragment<DialogAccountQuickBinding>(), Acco
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        dialogView = DialogAccountQuickBinding.inflate(layoutInflater).apply { _binding = this }.root
         return MaterialAlertDialogBuilder(requireContext(), theme)
-            .setView(dialogView)
+            .setView(
+                DialogAccountQuickBinding.inflate(layoutInflater)
+                    .apply { binding = this }.root
+            )
             .create()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = dialogView
-
-    @Suppress("UNCHECKED_CAST")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val studentsWithSemesters = requireArguments()
             .serializable<Array<StudentWithSemesters>>(STUDENTS_ARGUMENT_KEY).toList()
 

@@ -2,9 +2,7 @@ package io.github.wulkanowy.ui.modules.message.mailboxchooser
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -20,8 +18,6 @@ class MailboxChooserDialog : BaseDialogFragment<DialogMailboxChooserBinding>(), 
 
     @Inject
     lateinit var presenter: MailboxChooserPresenter
-
-    private var dialogView: View? = null
 
     @Inject
     lateinit var mailboxAdapter: MailboxChooserAdapter
@@ -43,20 +39,17 @@ class MailboxChooserDialog : BaseDialogFragment<DialogMailboxChooserBinding>(), 
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        dialogView = DialogMailboxChooserBinding.inflate(layoutInflater).apply { _binding = this }.root
         return MaterialAlertDialogBuilder(requireContext(), theme)
-            .setView(dialogView)
+            .setView(
+                DialogMailboxChooserBinding.inflate(layoutInflater).apply { binding = this }.root
+            )
             .create()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = dialogView
 
     @Suppress("UNCHECKED_CAST")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         presenter.onAttachView(
             view = this,
             requireMailbox = requireArguments().getBoolean(REQUIRED_KEY, false),

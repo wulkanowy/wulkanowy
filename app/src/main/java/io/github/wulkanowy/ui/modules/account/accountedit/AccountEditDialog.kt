@@ -2,9 +2,7 @@ package io.github.wulkanowy.ui.modules.account.accountedit
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -21,8 +19,6 @@ class AccountEditDialog : BaseDialogFragment<DialogAccountEditBinding>(), Accoun
     @Inject
     lateinit var presenter: AccountEditPresenter
 
-    private var dialogView: View? = null
-
     @Inject
     lateinit var accountEditColorAdapter: AccountEditColorAdapter
 
@@ -37,17 +33,10 @@ class AccountEditDialog : BaseDialogFragment<DialogAccountEditBinding>(), Accoun
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        dialogView = DialogAccountEditBinding.inflate(layoutInflater).apply { _binding = this }.root
         return MaterialAlertDialogBuilder(requireContext(), theme)
-            .setView(dialogView)
+            .setView(DialogAccountEditBinding.inflate(layoutInflater).apply { binding = this }.root)
             .create()
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = dialogView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

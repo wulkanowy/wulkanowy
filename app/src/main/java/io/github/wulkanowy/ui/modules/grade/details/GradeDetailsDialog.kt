@@ -3,23 +3,21 @@ package io.github.wulkanowy.ui.modules.grade.details
 import android.app.Dialog
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.enums.GradeColorTheme
 import io.github.wulkanowy.databinding.DialogGradeBinding
+import io.github.wulkanowy.ui.base.BaseDialogFragment
 import io.github.wulkanowy.utils.*
 
-class GradeDetailsDialog : DialogFragment() {
-
-    private var binding: DialogGradeBinding by lifecycleAwareVariable()
+@AndroidEntryPoint
+class GradeDetailsDialog : BaseDialogFragment<DialogGradeBinding>() {
 
     private lateinit var grade: Grade
 
@@ -51,12 +49,6 @@ class GradeDetailsDialog : DialogFragment() {
             .create()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = binding.root
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -64,7 +56,8 @@ class GradeDetailsDialog : DialogFragment() {
             gradeDialogSubject.text = grade.subject
 
             gradeDialogWeightValue.text = grade.weight
-            gradeDialogWeightLayout.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), grade.getGradeColor()))
+            gradeDialogWeightLayout.backgroundTintList =
+                ColorStateList.valueOf(context.getCompatColor(grade.getGradeColor()))
 
             gradeDialogDateValue.text = grade.date.toFormattedString()
             gradeDialogColorValue.text = getString(grade.colorStringId)
@@ -78,7 +71,12 @@ class GradeDetailsDialog : DialogFragment() {
 
             gradeDialogValue.run {
                 text = grade.entry
-                backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), grade.getBackgroundColor(gradeColorTheme)))
+                backgroundTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        grade.getBackgroundColor(gradeColorTheme)
+                    )
+                )
             }
 
             gradeDialogTeacherValue.text = grade.teacher.ifBlank { getString(R.string.all_no_data) }

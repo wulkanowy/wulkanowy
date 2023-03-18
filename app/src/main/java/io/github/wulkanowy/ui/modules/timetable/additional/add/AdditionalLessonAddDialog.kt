@@ -2,9 +2,7 @@ package io.github.wulkanowy.ui.modules.timetable.additional.add
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -27,25 +25,18 @@ class AdditionalLessonAddDialog : BaseDialogFragment<DialogAdditionalAddBinding>
     @Inject
     lateinit var presenter: AdditionalLessonAddPresenter
 
-    private var dialogView: View? = null
-
     companion object {
         fun newInstance() = AdditionalLessonAddDialog()
     }
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        dialogView = DialogAdditionalAddBinding.inflate(layoutInflater).apply { _binding = this }.root
         return MaterialAlertDialogBuilder(requireContext(), theme)
-            .setView(dialogView)
+            .setView(
+                DialogAdditionalAddBinding.inflate(layoutInflater).apply { binding = this }.root
+            )
             .create()
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = dialogView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
