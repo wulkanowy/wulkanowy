@@ -1284,9 +1284,19 @@ class GradeAverageProviderTest {
             ) to listOf(getSummary(semesterId = 23, subject = "Fizyka", average = .0))
         }
 
-        val items = runBlocking { gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId, true).getResult() }
+        val items = runBlocking {
+            gradeAverageProvider.getGradesDetailsWithAverage(
+                student,
+                semesters[2].semesterId,
+                true
+            ).getResult()
+        }
 
-        assertEquals(5.5429, items.single { it.subject == "Fizyka" }.average, .0001) // (from details): 5.72727272 + 4,732 → .average()
+        assertEquals(
+            5.5429,
+            items.single { it.subject == "Fizyka" }.average,
+            .0001
+        ) // (from details): 5.72727272 + 4,732 → .average()
     }
 
     @Test
@@ -1321,9 +1331,19 @@ class GradeAverageProviderTest {
             ) to listOf(getSummary(semesterId = 23, subject = "Fizyka", average = .0))
         }
 
-        val items = runBlocking { gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId, true).getResult() }
+        val items = runBlocking {
+            gradeAverageProvider.getGradesDetailsWithAverage(
+                student,
+                semesters[2].semesterId,
+                true
+            ).getResult()
+        }
 
-        assertEquals(5.2636, items.single { it.subject == "Fizyka" }.average, .0001) // (from details): 5.72727272 + 4,8 → 5.26363636
+        assertEquals(
+            5.2636,
+            items.single { it.subject == "Fizyka" }.average,
+            .0001
+        ) // (from details): 5.72727272 + 4,8 → 5.26363636
     }
 
     @Test
@@ -1383,6 +1403,28 @@ class GradeAverageProviderTest {
             items.single { it.subject == "Fizyka" }.average,
             .0001
         ) // (from details): 5.72727272  + 4,8 → .average()
+    }
+
+    @Test
+    fun `calc both semesters average when both summary have same average from vulcan and second semester has no grades`() {
+        every { preferencesRepository.gradeAverageForceCalcFlow } returns flowOf(false)
+        every { preferencesRepository.gradeAverageModeFlow } returns flowOf(GradeAverageMode.BOTH_SEMESTERS)
+        every { preferencesRepository.isOptionalArithmeticAverageFlow } returns flowOf(false)
+
+        coEvery { gradeRepository.getGrades(student, semesters[1], true) } returns
+            resourceFlow { firstGrades to firstSummaries }
+        coEvery { gradeRepository.getGrades(student, semesters[2], true) } returns
+            resourceFlow { listOf<Grade>() to firstSummaries }
+
+        val items = runBlocking {
+            gradeAverageProvider.getGradesDetailsWithAverage(
+                student = student,
+                semesterId = semesters[2].semesterId,
+                forceRefresh = true,
+            ).getResult()
+        }
+
+        assertEquals(3.1, items.single { it.subject == "Fizyka" }.average, .0001)
     }
 
     private fun getGrade(

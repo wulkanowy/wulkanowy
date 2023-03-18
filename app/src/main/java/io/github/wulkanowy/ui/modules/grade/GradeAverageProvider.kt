@@ -161,19 +161,19 @@ class GradeAverageProvider @Inject constructor(
         firstSemesterSubject: GradeSubject?,
         config: AverageCalcParams,
     ): Double {
-        val divider = if (secondSemesterSubject.grades.any { it.weightValue > .0 }) 2 else 1
-
         return if (!isAnyVulcanAverage || config.forceAverageCalc) {
-            val secondSemesterAverage =
-                secondSemesterSubject.grades
-                    .updateModifiers(student, config)
-                    .calcAverage(config.isOptionalArithmeticAverage)
+            val divider = if (secondSemesterSubject.grades.any { it.weightValue > .0 }) 2 else 1
+            val secondSemesterAverage = secondSemesterSubject.grades
+                .updateModifiers(student, config)
+                .calcAverage(config.isOptionalArithmeticAverage)
             val firstSemesterAverage = firstSemesterSubject?.grades
                 ?.updateModifiers(student, config)
                 ?.calcAverage(config.isOptionalArithmeticAverage) ?: secondSemesterAverage
 
             (secondSemesterAverage + firstSemesterAverage) / divider
         } else {
+            val divider = if (secondSemesterSubject.average > 0) 2 else 1
+
             secondSemesterSubject.average.plus(
                 (firstSemesterSubject?.average ?: secondSemesterSubject.average)
             ) / divider
