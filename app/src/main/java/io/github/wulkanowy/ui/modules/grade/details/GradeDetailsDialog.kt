@@ -57,7 +57,7 @@ class GradeDetailsDialog : BaseDialogFragment<DialogGradeBinding>() {
 
             gradeDialogWeightValue.text = grade.weight
             gradeDialogWeightLayout.backgroundTintList =
-                ColorStateList.valueOf(context.getCompatColor(grade.getGradeColor()))
+                ColorStateList.valueOf(requireContext().getCompatColor(grade.getGradeColor()))
 
             gradeDialogDateValue.text = grade.date.toFormattedString()
             gradeDialogColorValue.text = getString(grade.colorStringId)
