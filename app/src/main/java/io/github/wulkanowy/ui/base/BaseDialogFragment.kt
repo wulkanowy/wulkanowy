@@ -14,6 +14,7 @@ abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment(), BaseView
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
+    @Suppress("PropertyName")
     protected var _binding: VB? = null
     protected val binding get() = _binding!!
 

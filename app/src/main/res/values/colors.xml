@@ -27,10 +27,6 @@
     <color name="colorOnSurfaceInverseDark">#201A1A</color>
     <color name="colorPrimaryInverseDark">#B91B21</color>
 
-    <color name="colorCards">#f5e5e6</color>
-    <color name="colorCardsDark">#312624</color>
-    <color name="colorCardsBlack">#150e0e</color>
-
     <color name="colorPrimaryDarker">#9a0007</color>
     <color name="colorError">#ff5722</color>
     <color name="colorErrorLight">#e84853</color>

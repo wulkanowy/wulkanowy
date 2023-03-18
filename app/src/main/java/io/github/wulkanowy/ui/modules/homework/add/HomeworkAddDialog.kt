@@ -25,7 +25,7 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkAddBinding>(), Homewo
 
     private var dialogView: View? = null
 
-    // todo: move it to presenter
+    //todo: move it to presenter
     private var date: LocalDate? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

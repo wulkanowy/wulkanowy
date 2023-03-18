@@ -249,10 +249,6 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         showDialogFragment(AccountQuickDialog.newInstance(studentWithSemesters))
     }
 
-    override fun showActionBarElevation(show: Boolean) {
-        //ViewCompat.setElevation(binding.mainToolbar, if (show) dpToPx(4f) else 0f)
-    }
-
     override fun showBottomNavigation(show: Boolean) {
         binding.mainBottomNav.isVisible = show
         binding.mainFragmentContainer.requestApplyInsets()
