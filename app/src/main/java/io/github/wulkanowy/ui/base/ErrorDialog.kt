@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AlertDialog
@@ -27,6 +28,8 @@ class ErrorDialog : BaseDialogFragment<DialogErrorBinding>() {
     @Inject
     lateinit var preferencesRepository: PreferencesRepository
 
+    private lateinit var error: Throwable
+
     companion object {
         private const val ARGUMENT_KEY = "error"
 
@@ -35,43 +38,36 @@ class ErrorDialog : BaseDialogFragment<DialogErrorBinding>() {
         }
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val error = requireArguments().serializable<Throwable>(ARGUMENT_KEY)
-
-        val binding = DialogErrorBinding.inflate(layoutInflater)
-        binding.bindErrorDetails(error)
-
-        return getAlertDialog(binding, error).apply {
-            enableReportButtonIfErrorIsReportable(error)
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        error = requireArguments().serializable(ARGUMENT_KEY)
     }
 
-    private fun getAlertDialog(binding: DialogErrorBinding, error: Throwable): AlertDialog {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialAlertDialogBuilder(requireContext()).apply {
             val errorStacktrace = error.stackTraceToString()
             setTitle(R.string.all_details)
-            setView(binding.root)
+            setView(DialogErrorBinding.inflate(layoutInflater).apply { binding = this }.root)
             setNeutralButton(R.string.about_feedback) { _, _ ->
                 openConfirmDialog { openEmailClient(errorStacktrace) }
             }
             setNegativeButton(android.R.string.cancel) { _, _ -> }
             setPositiveButton(android.R.string.copy) { _, _ -> copyErrorToClipboard(errorStacktrace) }
-        }.create()
+        }.create().apply {
+            setOnShowListener {
+                getButton(AlertDialog.BUTTON_NEUTRAL).isEnabled = error.isShouldBeReported()
+            }
+        }
     }
 
-    private fun DialogErrorBinding.bindErrorDetails(error: Throwable) {
-        return with(this) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        with(binding) {
             errorDialogHumanizedMessage.text = resources.getErrorString(error)
             errorDialogErrorMessage.text = error.localizedMessage
             errorDialogErrorMessage.isGone = error.localizedMessage.isNullOrBlank()
             errorDialogContent.text = error.stackTraceToString()
                 .replace(": ${error.localizedMessage}", "")
-        }
-    }
-
-    private fun AlertDialog.enableReportButtonIfErrorIsReportable(error: Throwable) {
-        setOnShowListener {
-            getButton(AlertDialog.BUTTON_NEUTRAL).isEnabled = error.isShouldBeReported()
         }
     }
 
