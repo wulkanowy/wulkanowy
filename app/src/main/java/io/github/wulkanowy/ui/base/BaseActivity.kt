@@ -30,6 +30,8 @@ abstract class BaseActivity<T : BasePresenter<out BaseView>, VB : ViewBinding> :
 
     protected var messageContainer: View? = null
 
+    protected var messageAnchor: View? = null
+
     abstract var presenter: T
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +50,7 @@ abstract class BaseActivity<T : BasePresenter<out BaseView>, VB : ViewBinding> :
         if (messageContainer != null) {
             Snackbar.make(messageContainer!!, text, LENGTH_LONG)
                 .setAction(R.string.all_details) { showErrorDetailsDialog(error) }
+                .apply { messageAnchor?.let { anchorView = it } }
                 .show()
         } else showMessage(text)
     }
@@ -57,8 +60,11 @@ abstract class BaseActivity<T : BasePresenter<out BaseView>, VB : ViewBinding> :
     }
 
     override fun showMessage(text: String) {
-        if (messageContainer != null) Snackbar.make(messageContainer!!, text, LENGTH_LONG).show()
-        else Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+        if (messageContainer != null) {
+            Snackbar.make(messageContainer!!, text, LENGTH_LONG)
+                .apply { messageAnchor?.let { anchorView = it } }
+                .show()
+        } else Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 
     override fun showExpiredDialog() {
@@ -74,6 +80,7 @@ abstract class BaseActivity<T : BasePresenter<out BaseView>, VB : ViewBinding> :
         messageContainer?.let {
             Snackbar.make(it, R.string.error_password_change_required, LENGTH_LONG)
                 .setAction(R.string.all_change) { openInternetBrowser(redirectUrl) }
+                .apply { messageAnchor?.let { anchorView = it } }
                 .show()
         }
     }

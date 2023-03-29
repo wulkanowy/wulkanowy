@@ -99,6 +99,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
         this.savedInstanceState = savedInstanceState
         messageContainer = binding.mainMessageContainer
+        messageAnchor = binding.mainMessageContainer
         updateHelper.messageContainer = binding.mainFragmentContainer
         onBackCallback = onBackPressedDispatcher.addCallback(this, enabled = false) {
             presenter.onBackPressed()
