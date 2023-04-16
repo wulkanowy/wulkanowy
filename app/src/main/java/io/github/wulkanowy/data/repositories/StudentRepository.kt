@@ -10,8 +10,8 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.StudentNickAndAvatar
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
-import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.data.mappers.mapToPojo
+import io.github.wulkanowy.data.mappers.mapToStudentWithSemester
 import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.AppInfo
@@ -42,8 +42,9 @@ class StudentRepository @Inject constructor(
         symbol: String,
         token: String
     ): List<StudentWithSemesters> =
-        sdk.getStudentsFromMobileApi(token, pin, symbol, "")
-            .mapToEntities(colors = appInfo.defaultColorsForAvatar)
+        sdk.getStudentsFromHebe(token, pin, symbol, "")
+            .mapToPojo(null)
+            .mapToStudentWithSemester(appInfo.defaultColorsForAvatar)
 
     suspend fun getStudentsScrapper(
         email: String,
@@ -51,15 +52,17 @@ class StudentRepository @Inject constructor(
         scrapperBaseUrl: String,
         symbol: String
     ): List<StudentWithSemesters> =
-        sdk.getStudentsFromScrapper(email, password, scrapperBaseUrl, symbol)
-            .mapToEntities(password, appInfo.defaultColorsForAvatar)
+        sdk.getUserSubjectsFromScrapper(email, password, scrapperBaseUrl, symbol)
+            .mapToPojo(password)
+            .mapToStudentWithSemester(appInfo.defaultColorsForAvatar)
 
     suspend fun getUserSubjectsFromScrapper(
         email: String,
         password: String,
         scrapperBaseUrl: String,
         symbol: String
-    ): RegisterUser = sdk.getUserSubjectsFromScrapper(email, password, scrapperBaseUrl, symbol)
+    ): RegisterUser = sdk
+        .getUserSubjectsFromScrapper(email, password, scrapperBaseUrl, symbol)
         .mapToPojo(password)
 
     suspend fun getStudentsHybrid(
@@ -67,15 +70,16 @@ class StudentRepository @Inject constructor(
         password: String,
         scrapperBaseUrl: String,
         symbol: String
-    ): List<StudentWithSemesters> =
-        sdk.getStudentsHybrid(email, password, scrapperBaseUrl, "", symbol)
-            .mapToEntities(password, appInfo.defaultColorsForAvatar)
+    ): List<StudentWithSemesters> = sdk
+        .getStudentsHybrid(email, password, scrapperBaseUrl, "", symbol)
+        .mapToPojo(password)
+        .mapToStudentWithSemester(appInfo.defaultColorsForAvatar)
 
     suspend fun getSavedStudents(decryptPass: Boolean = true) =
         studentDb.loadStudentsWithSemesters()
             .map {
                 it.apply {
-                    if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API) {
+                    if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HYBRID) {
                         student.password = withContext(dispatchers.io) {
                             decrypt(student.password)
                         }
@@ -85,7 +89,7 @@ class StudentRepository @Inject constructor(
 
     suspend fun getSavedStudentById(id: Long, decryptPass: Boolean = true) =
         studentDb.loadStudentWithSemestersById(id)?.apply {
-            if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API) {
+            if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HYBRID) {
                 student.password = withContext(dispatchers.io) {
                     decrypt(student.password)
                 }
@@ -95,7 +99,7 @@ class StudentRepository @Inject constructor(
     suspend fun getStudentById(id: Long, decryptPass: Boolean = true): Student {
         val student = studentDb.loadById(id) ?: throw NoCurrentStudentException()
 
-        if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API) {
+        if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HYBRID) {
             student.password = withContext(dispatchers.io) {
                 decrypt(student.password)
             }
@@ -106,7 +110,7 @@ class StudentRepository @Inject constructor(
     suspend fun getCurrentStudent(decryptPass: Boolean = true): Student {
         val student = studentDb.loadCurrent() ?: throw NoCurrentStudentException()
 
-        if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API) {
+        if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HYBRID) {
             student.password = withContext(dispatchers.io) {
                 decrypt(student.password)
             }
@@ -119,7 +123,7 @@ class StudentRepository @Inject constructor(
         val students = studentsWithSemesters.map { it.student }
             .map {
                 it.apply {
-                    if (Sdk.Mode.valueOf(it.loginMode) != Sdk.Mode.API) {
+                    if (Sdk.Mode.valueOf(it.loginMode) != Sdk.Mode.HYBRID) {
                         password = withContext(dispatchers.io) {
                             encrypt(password, context)
                         }

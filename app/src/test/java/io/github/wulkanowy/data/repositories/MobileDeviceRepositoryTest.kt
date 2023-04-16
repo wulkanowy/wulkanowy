@@ -136,7 +136,7 @@ class MobileDeviceRepositoryTest {
         deviceId = "",
         createDate = of(2019, 5, day, 0, 0, 0),
         modificationDate = of(2019, 5, day, 0, 0, 0),
-        createDateZoned = of(2019, 5, day, 0, 0, 0).atZone(ZoneId.systemDefault()),
-        modificationDateZoned = of(2019, 5, day, 0, 0, 0).atZone(ZoneId.systemDefault())
+        createdate = of(2019, 5, day, 0, 0, 0).atZone(ZoneId.systemDefault()),
+        modificationdate = of(2019, 5, day, 0, 0, 0).atZone(ZoneId.systemDefault())
     )
 }

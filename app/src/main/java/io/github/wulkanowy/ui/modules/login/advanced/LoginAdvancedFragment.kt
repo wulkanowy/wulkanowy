@@ -99,7 +99,7 @@ class LoginAdvancedFragment :
             loginTypeSwitch.setOnCheckedChangeListener { _, checkedId ->
                 presenter.onLoginModeSelected(
                     when (checkedId) {
-                        R.id.loginTypeApi -> Sdk.Mode.API
+                        R.id.loginTypeApi -> Sdk.Mode.HEBE
                         R.id.loginTypeScrapper -> Sdk.Mode.SCRAPPER
                         else -> Sdk.Mode.HYBRID
                     }

@@ -97,14 +97,16 @@ class LoginAdvancedPresenter @Inject constructor(
     fun onLoginModeSelected(type: Sdk.Mode) {
         view?.run {
             when (type) {
-                Sdk.Mode.API -> {
+                Sdk.Mode.HEBE -> {
                     showOnlyMobileApiModeInputs()
                     showMobileApiWarningMessage()
                 }
+
                 Sdk.Mode.SCRAPPER -> {
                     showOnlyScrapperModeInputs()
                     showScraperWarningMessage()
                 }
+
                 Sdk.Mode.HYBRID -> {
                     showOnlyHybridModeInputs()
                     showHybridWarningMessage()
@@ -145,6 +147,7 @@ class LoginAdvancedPresenter @Inject constructor(
                         showProgress(true)
                         showContent(false)
                     }
+
                     is Resource.Success -> {
                         analytics.logEvent(
                             "registration_form",
@@ -166,6 +169,7 @@ class LoginAdvancedPresenter @Inject constructor(
                             )
                         }
                     }
+
                     is Resource.Error -> {
                         analytics.logEvent(
                             "registration_form",
@@ -187,7 +191,8 @@ class LoginAdvancedPresenter @Inject constructor(
         email = loginData.login,
         password = loginData.password,
         login = loginData.login,
-        baseUrl = loginData.baseUrl,
+        loginMode = Sdk.Mode.valueOf(first().student.loginMode),
+        scrapperBaseUrl = loginData.baseUrl,
         loginType = firstOrNull()?.student?.loginType?.let(
             Scrapper.LoginType::valueOf
         ) ?: Scrapper.LoginType.AUTO,
@@ -198,6 +203,9 @@ class LoginAdvancedPresenter @Inject constructor(
                     symbol = symbol,
                     error = null,
                     userName = "",
+                    hebeBaseUrl = first().student.mobileBaseUrl,
+                    certificateKey = first().student.certificateKey,
+                    privateKey = first().student.privateKey,
                     schools = students
                         .groupBy { student ->
                             Triple(
@@ -245,10 +253,11 @@ class LoginAdvancedPresenter @Inject constructor(
         val token = view?.formTokenValue.orEmpty()
 
         return when (Sdk.Mode.valueOf(view?.formLoginType.orEmpty())) {
-            Sdk.Mode.API -> studentRepository.getStudentsApi(pin, symbol, token)
+            Sdk.Mode.HEBE -> studentRepository.getStudentsApi(pin, symbol, token)
             Sdk.Mode.SCRAPPER -> studentRepository.getStudentsScrapper(
                 email, password, endpoint, symbol
             )
+
             Sdk.Mode.HYBRID -> studentRepository.getStudentsHybrid(
                 email, password, endpoint, symbol
             )
@@ -268,7 +277,7 @@ class LoginAdvancedPresenter @Inject constructor(
         var isCorrect = true
 
         when (Sdk.Mode.valueOf(view?.formLoginType ?: "")) {
-            Sdk.Mode.API -> {
+            Sdk.Mode.HEBE -> {
                 if (pin.isEmpty()) {
                     view?.setErrorPinRequired()
                     isCorrect = false
@@ -284,6 +293,7 @@ class LoginAdvancedPresenter @Inject constructor(
                     isCorrect = false
                 }
             }
+
             Sdk.Mode.HYBRID, Sdk.Mode.SCRAPPER -> {
                 if (login.isEmpty()) {
                     view?.setErrorUsernameRequired()

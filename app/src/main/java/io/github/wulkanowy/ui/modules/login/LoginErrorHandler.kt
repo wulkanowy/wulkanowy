@@ -4,11 +4,11 @@ import android.content.Context
 import android.database.sqlite.SQLiteConstraintException
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
-import io.github.wulkanowy.sdk.mobile.exception.InvalidPinException
-import io.github.wulkanowy.sdk.mobile.exception.InvalidSymbolException
-import io.github.wulkanowy.sdk.mobile.exception.InvalidTokenException
-import io.github.wulkanowy.sdk.mobile.exception.TokenDeadException
+import io.github.wulkanowy.sdk.hebe.exception.InvalidPinException
+import io.github.wulkanowy.sdk.hebe.exception.InvalidTokenException
+import io.github.wulkanowy.sdk.hebe.exception.TokenDeadException
 import io.github.wulkanowy.sdk.scrapper.login.BadCredentialsException
+import io.github.wulkanowy.sdk.scrapper.login.InvalidSymbolException // todo: what about hebe?
 import io.github.wulkanowy.ui.base.ErrorHandler
 import javax.inject.Inject
 
