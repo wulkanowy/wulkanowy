@@ -18,8 +18,8 @@ data class RegisterSymbol(
     val symbol: String,
     val error: Throwable?,
     val hebeBaseUrl: String?,
-    val certificateKey: String?,
-    val privateKey: String?,
+    val keyId: String?,
+    val privatePem: String?,
     val userName: String,
     val schools: List<RegisterUnit>,
 ) : java.io.Serializable

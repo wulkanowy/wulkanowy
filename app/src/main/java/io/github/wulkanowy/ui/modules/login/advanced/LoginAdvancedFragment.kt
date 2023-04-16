@@ -34,9 +34,9 @@ class LoginAdvancedFragment :
 
     override val formLoginType: String
         get() = when (binding.loginTypeSwitch.checkedRadioButtonId) {
-            R.id.loginTypeApi -> "API"
-            R.id.loginTypeScrapper -> "SCRAPPER"
-            else -> "HYBRID"
+            R.id.loginTypeApi -> Sdk.Mode.HEBE.name
+            R.id.loginTypeScrapper -> Sdk.Mode.SCRAPPER.name
+            else -> Sdk.Mode.HYBRID.name
         }
 
     override val formUsernameValue: String

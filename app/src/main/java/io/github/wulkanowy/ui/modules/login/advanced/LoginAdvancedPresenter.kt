@@ -20,6 +20,7 @@ import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import java.net.URL
 import javax.inject.Inject
 
 class LoginAdvancedPresenter @Inject constructor(
@@ -187,6 +188,7 @@ class LoginAdvancedPresenter @Inject constructor(
             }.launch("login")
     }
 
+    // todo: rewrite without this!
     private fun List<StudentWithSemesters>.toRegisterUser(loginData: LoginData) = RegisterUser(
         email = loginData.login,
         password = loginData.password,
@@ -202,10 +204,10 @@ class LoginAdvancedPresenter @Inject constructor(
                 RegisterSymbol(
                     symbol = symbol,
                     error = null,
-                    userName = "",
+                    userName = first().student.userName,
                     hebeBaseUrl = first().student.mobileBaseUrl,
-                    certificateKey = first().student.certificateKey,
-                    privateKey = first().student.privateKey,
+                    keyId = first().student.certificateKey,
+                    privatePem = first().student.privateKey,
                     schools = students
                         .groupBy { student ->
                             Triple(
@@ -299,14 +301,21 @@ class LoginAdvancedPresenter @Inject constructor(
                     view?.setErrorUsernameRequired()
                     isCorrect = false
                 } else {
-                    if ("@" in login && "standard" !in host) {
+                    if ("@" in login && "login" in host) {
                         view?.setErrorLoginRequired()
                         isCorrect = false
                     }
-
-                    if ("@" !in login && "standard" in host) {
+                    if ("@" !in login && "email" in host) {
                         view?.setErrorEmailRequired()
                         isCorrect = false
+                    }
+                    if ("@" in login && "||" !in login && "login" !in host && "email" !in host) {
+                        val emailHost = login.substringAfter("@")
+                        val emailDomain = URL(host).host
+                        if (!emailHost.equals(emailDomain, true)) {
+                            view?.setErrorEmailRequired()//domain = emailDomain)
+                            isCorrect = false
+                        }
                     }
                 }
 

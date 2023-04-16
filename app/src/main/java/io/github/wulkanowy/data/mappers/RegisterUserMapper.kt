@@ -20,8 +20,8 @@ fun SdkRegisterUser.mapToPojo(password: String?) = RegisterUser(
             symbol = registerSymbol.symbol,
             error = registerSymbol.error,
             hebeBaseUrl = registerSymbol.hebeBaseUrl,
-            certificateKey = registerSymbol.certificateKey,
-            privateKey = registerSymbol.privateKey,
+            keyId = registerSymbol.keyId,
+            privatePem = registerSymbol.privatePem,
             userName = registerSymbol.userName,
             schools = registerSymbol.schools.map {
                 RegisterUnit(
@@ -93,8 +93,8 @@ fun RegisterStudent.mapToStudentWithSemesters(
         loginMode = Sdk.Mode.SCRAPPER.name,
         scrapperBaseUrl = user.scrapperBaseUrl.orEmpty(),
         mobileBaseUrl = symbol.hebeBaseUrl.orEmpty(),
-        certificateKey = symbol.certificateKey.orEmpty(),
-        privateKey = symbol.privateKey.orEmpty(),
+        certificateKey = symbol.keyId.orEmpty(),
+        privateKey = symbol.privatePem.orEmpty(),
         password = user.password.orEmpty(),
         isCurrent = false,
         registrationDate = Instant.now(),

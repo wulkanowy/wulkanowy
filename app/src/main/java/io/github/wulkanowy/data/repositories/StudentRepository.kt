@@ -41,10 +41,10 @@ class StudentRepository @Inject constructor(
         pin: String,
         symbol: String,
         token: String
-    ): List<StudentWithSemesters> =
-        sdk.getStudentsFromHebe(token, pin, symbol, "")
-            .mapToPojo(null)
-            .mapToStudentWithSemester(appInfo.defaultColorsForAvatar)
+    ): List<StudentWithSemesters> = sdk
+        .getStudentsFromHebe(token, pin, symbol, "")
+        .mapToPojo(null)
+        .mapToStudentWithSemester(appInfo.defaultColorsForAvatar)
 
     suspend fun getStudentsScrapper(
         email: String,
@@ -79,7 +79,7 @@ class StudentRepository @Inject constructor(
         studentDb.loadStudentsWithSemesters()
             .map {
                 it.apply {
-                    if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HYBRID) {
+                    if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HEBE) {
                         student.password = withContext(dispatchers.io) {
                             decrypt(student.password)
                         }
@@ -89,7 +89,7 @@ class StudentRepository @Inject constructor(
 
     suspend fun getSavedStudentById(id: Long, decryptPass: Boolean = true) =
         studentDb.loadStudentWithSemestersById(id)?.apply {
-            if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HYBRID) {
+            if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HEBE) {
                 student.password = withContext(dispatchers.io) {
                     decrypt(student.password)
                 }
@@ -99,7 +99,7 @@ class StudentRepository @Inject constructor(
     suspend fun getStudentById(id: Long, decryptPass: Boolean = true): Student {
         val student = studentDb.loadById(id) ?: throw NoCurrentStudentException()
 
-        if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HYBRID) {
+        if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HEBE) {
             student.password = withContext(dispatchers.io) {
                 decrypt(student.password)
             }
@@ -110,7 +110,7 @@ class StudentRepository @Inject constructor(
     suspend fun getCurrentStudent(decryptPass: Boolean = true): Student {
         val student = studentDb.loadCurrent() ?: throw NoCurrentStudentException()
 
-        if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HYBRID) {
+        if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HEBE) {
             student.password = withContext(dispatchers.io) {
                 decrypt(student.password)
             }
@@ -123,7 +123,7 @@ class StudentRepository @Inject constructor(
         val students = studentsWithSemesters.map { it.student }
             .map {
                 it.apply {
-                    if (Sdk.Mode.valueOf(it.loginMode) != Sdk.Mode.HYBRID) {
+                    if (Sdk.Mode.valueOf(it.loginMode) != Sdk.Mode.HEBE) {
                         password = withContext(dispatchers.io) {
                             encrypt(password, context)
                         }
