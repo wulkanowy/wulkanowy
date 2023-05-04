@@ -11,10 +11,8 @@ import io.github.wulkanowy.data.db.entities.StudentNickAndAvatar
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
 import io.github.wulkanowy.data.mappers.mapToPojo
-import io.github.wulkanowy.data.mappers.mapToStudentWithSemester
 import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.sdk.Sdk
-import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.DispatchersProvider
 import io.github.wulkanowy.utils.security.decrypt
 import io.github.wulkanowy.utils.security.encrypt
@@ -29,11 +27,8 @@ class StudentRepository @Inject constructor(
     private val studentDb: StudentDao,
     private val semesterDb: SemesterDao,
     private val sdk: Sdk,
-    private val appInfo: AppInfo,
     private val appDatabase: AppDatabase
 ) {
-
-    suspend fun isStudentSaved() = getSavedStudents(false).isNotEmpty()
 
     suspend fun isCurrentStudentSet() = studentDb.loadCurrent()?.isCurrent ?: false
 
@@ -41,20 +36,18 @@ class StudentRepository @Inject constructor(
         pin: String,
         symbol: String,
         token: String
-    ): List<StudentWithSemesters> = sdk
+    ): RegisterUser = sdk
         .getStudentsFromHebe(token, pin, symbol, "")
         .mapToPojo(null)
-        .mapToStudentWithSemester(appInfo.defaultColorsForAvatar)
 
     suspend fun getStudentsScrapper(
         email: String,
         password: String,
         scrapperBaseUrl: String,
         symbol: String
-    ): List<StudentWithSemesters> =
-        sdk.getUserSubjectsFromScrapper(email, password, scrapperBaseUrl, symbol)
-            .mapToPojo(password)
-            .mapToStudentWithSemester(appInfo.defaultColorsForAvatar)
+    ): RegisterUser = sdk
+        .getUserSubjectsFromScrapper(email, password, scrapperBaseUrl, symbol)
+        .mapToPojo(password)
 
     suspend fun getUserSubjectsFromScrapper(
         email: String,
@@ -70,10 +63,9 @@ class StudentRepository @Inject constructor(
         password: String,
         scrapperBaseUrl: String,
         symbol: String
-    ): List<StudentWithSemesters> = sdk
+    ): RegisterUser = sdk
         .getStudentsHybrid(email, password, scrapperBaseUrl, "", symbol)
         .mapToPojo(password)
-        .mapToStudentWithSemester(appInfo.defaultColorsForAvatar)
 
     suspend fun getSavedStudents(decryptPass: Boolean = true) =
         studentDb.loadStudentsWithSemesters()

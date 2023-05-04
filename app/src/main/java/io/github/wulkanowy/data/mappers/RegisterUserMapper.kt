@@ -3,7 +3,6 @@ package io.github.wulkanowy.data.mappers
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.pojos.*
-import io.github.wulkanowy.sdk.Sdk
 import java.time.Instant
 import io.github.wulkanowy.sdk.pojo.RegisterStudent as SdkRegisterStudent
 import io.github.wulkanowy.sdk.pojo.RegisterUser as SdkRegisterUser
@@ -54,21 +53,6 @@ fun SdkRegisterUser.mapToPojo(password: String?) = RegisterUser(
     },
 )
 
-fun RegisterUser.mapToStudentWithSemester(
-    defaultColorsForAvatar: List<Long>
-): List<StudentWithSemesters> = symbols.flatMap { symbol ->
-    symbol.schools.flatMap { school ->
-        school.students.map { student ->
-            student.mapToStudentWithSemesters(
-                user = this,
-                symbol = symbol,
-                unit = school,
-                colors = defaultColorsForAvatar,
-            )
-        }
-    }
-}
-
 fun RegisterStudent.mapToStudentWithSemesters(
     user: RegisterUser,
     symbol: RegisterSymbol,
@@ -90,7 +74,7 @@ fun RegisterStudent.mapToStudentWithSemesters(
         schoolShortName = unit.schoolShortName,
         schoolSymbol = unit.schoolId,
         studentName = "$studentName $studentSurname",
-        loginMode = Sdk.Mode.SCRAPPER.name,
+        loginMode = user.loginMode.name,
         scrapperBaseUrl = user.scrapperBaseUrl.orEmpty(),
         mobileBaseUrl = symbol.hebeBaseUrl.orEmpty(),
         certificateKey = symbol.keyId.orEmpty(),
