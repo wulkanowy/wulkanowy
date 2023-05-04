@@ -7,10 +7,12 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.sdk.hebe.exception.InvalidPinException
 import io.github.wulkanowy.sdk.hebe.exception.InvalidTokenException
 import io.github.wulkanowy.sdk.hebe.exception.TokenDeadException
+import io.github.wulkanowy.sdk.hebe.exception.UnknownTokenException
 import io.github.wulkanowy.sdk.scrapper.login.BadCredentialsException
-import io.github.wulkanowy.sdk.scrapper.login.InvalidSymbolException // todo: what about hebe?
 import io.github.wulkanowy.ui.base.ErrorHandler
 import javax.inject.Inject
+import io.github.wulkanowy.sdk.hebe.exception.InvalidSymbolException as InvalidHebeSymbolException
+import io.github.wulkanowy.sdk.scrapper.login.InvalidSymbolException as InvalidScrapperSymbolException
 
 class LoginErrorHandler @Inject constructor(
     @ApplicationContext context: Context,
@@ -32,9 +34,11 @@ class LoginErrorHandler @Inject constructor(
             is BadCredentialsException -> onBadCredentials(error.message)
             is SQLiteConstraintException -> onStudentDuplicate(resources.getString(R.string.login_duplicate_student))
             is TokenDeadException -> onInvalidToken(resources.getString(R.string.login_expired_token))
+            is UnknownTokenException,
             is InvalidTokenException -> onInvalidToken(resources.getString(R.string.login_invalid_token))
             is InvalidPinException -> onInvalidPin(resources.getString(R.string.login_invalid_pin))
-            is InvalidSymbolException -> onInvalidSymbol(resources.getString(R.string.login_invalid_symbol))
+            is InvalidScrapperSymbolException,
+            is InvalidHebeSymbolException -> onInvalidSymbol(resources.getString(R.string.login_invalid_symbol))
             else -> super.proceed(error)
         }
     }
