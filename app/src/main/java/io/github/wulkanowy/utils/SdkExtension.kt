@@ -18,14 +18,11 @@ fun Sdk.init(student: Student): Sdk {
         scrapperBaseUrl = student.scrapperBaseUrl
         loginType = Sdk.ScrapperLoginType.valueOf(student.loginType)
     }
-//    loginId = student.userLoginId // todo
 
     mode = Sdk.Mode.valueOf(student.loginMode)
     mobileBaseUrl = student.mobileBaseUrl
     keyId = student.certificateKey
     privatePem = student.privateKey
-
-    emptyCookieJarInterceptor = true
 
     Timber.d("Sdk in ${student.loginMode} mode reinitialized")
 
