@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.modules.login.form
 import io.github.wulkanowy.MainCoroutineRule
 import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.scrapper.Scrapper
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
@@ -36,7 +37,8 @@ class LoginFormPresenterTest {
         email = "",
         password = "",
         login = "",
-        baseUrl = "",
+        scrapperBaseUrl = "",
+        loginMode = Sdk.Mode.HEBE,
         loginType = Scrapper.LoginType.AUTO,
         symbols = listOf(),
     )
