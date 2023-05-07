@@ -7,8 +7,14 @@ import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.scrapper.Scrapper
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
-import io.mockk.*
+import io.github.wulkanowy.utils.AppInfo
+import io.mockk.MockKAnnotations
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.verify
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -30,6 +36,9 @@ class LoginFormPresenterTest {
 
     @MockK(relaxed = true)
     lateinit var analytics: AnalyticsHelper
+
+    @MockK
+    lateinit var appInfo: AppInfo
 
     private lateinit var presenter: LoginFormPresenter
 
@@ -56,8 +65,14 @@ class LoginFormPresenterTest {
         every { loginFormView.setErrorPassInvalid(any()) } just Runs
         every { loginFormView.setErrorPassRequired(any()) } just Runs
         every { loginFormView.setErrorUsernameRequired() } just Runs
+        every { appInfo.isDebug } returns false
 
-        presenter = LoginFormPresenter(repository, errorHandler, analytics)
+        presenter = LoginFormPresenter(
+            studentRepository = repository,
+            loginErrorHandler = errorHandler,
+            appInfo = appInfo,
+            analytics = analytics,
+        )
         presenter.onAttachView(loginFormView)
     }
 
