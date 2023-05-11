@@ -16,6 +16,8 @@ class AuthPresenter @Inject constructor(
     override fun onAttachView(view: AuthView) {
         super.onAttachView(view)
         view.enableAuthButton(pesel.length == 11)
+        view.showSuccess(false)
+        view.showProgress(false)
     }
 
     fun onPeselChange(newPesel: String?) {
@@ -23,7 +25,6 @@ class AuthPresenter @Inject constructor(
 
         view?.enableAuthButton(pesel.length == 11)
         view?.showPeselError(false)
-        view?.showSuccess(false)
     }
 
     fun authorize() {

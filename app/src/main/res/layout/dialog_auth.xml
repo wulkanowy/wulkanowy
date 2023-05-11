@@ -85,7 +85,7 @@
                 android:id="@+id/auth_success_icon"
                 android:layout_width="62dp"
                 android:layout_height="62dp"
-                android:layout_marginTop="120dp"
+                android:layout_marginTop="220dp"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ic_auth_success"
                 app:layout_constraintEnd_toEndOf="parent"
