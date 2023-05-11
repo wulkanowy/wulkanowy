@@ -93,7 +93,8 @@
                 android:src="@drawable/ic_auth_success"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="?colorOnBackground" />
 
             <TextView
                 android:id="@+id/auth_success_description"
