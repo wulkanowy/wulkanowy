@@ -55,7 +55,12 @@ class AuthPresenter @Inject constructor(
             runCatching {
                 val student = studentRepository.getCurrentStudent()
                 val semester = semesterRepository.getCurrentSemester(student)
-                studentRepository.authorizePermission(student, semester, pesel)
+
+                val isSuccess = studentRepository.authorizePermission(student, semester, pesel)
+                if (isSuccess) {
+                    studentRepository.refreshStudentName(student, semester)
+                }
+                isSuccess
             }
                 .onFailure { errorHandler.dispatch(it) }
                 .onSuccess {

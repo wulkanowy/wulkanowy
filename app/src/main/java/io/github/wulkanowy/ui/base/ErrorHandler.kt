@@ -3,7 +3,7 @@ package io.github.wulkanowy.ui.base
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
-import io.github.wulkanowy.sdk.scrapper.login.AccountPermissionException
+import io.github.wulkanowy.sdk.scrapper.exception.AuthorizationRequiredException
 import io.github.wulkanowy.sdk.scrapper.login.BadCredentialsException
 import io.github.wulkanowy.sdk.scrapper.login.PasswordChangeRequiredException
 import io.github.wulkanowy.utils.getErrorString
@@ -34,7 +34,7 @@ open class ErrorHandler @Inject constructor(@ApplicationContext protected val co
             is PasswordChangeRequiredException -> onPasswordChangeRequired(error.redirectUrl)
             is ScramblerException, is BadCredentialsException -> onSessionExpired()
             is NoCurrentStudentException -> onNoCurrentStudent()
-            is AccountPermissionException -> onAuthorizationRequired()
+            is AuthorizationRequiredException -> onAuthorizationRequired()
         }
     }
 

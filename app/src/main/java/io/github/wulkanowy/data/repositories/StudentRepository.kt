@@ -8,6 +8,7 @@ import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.db.entities.StudentName
 import io.github.wulkanowy.data.db.entities.StudentNickAndAvatar
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
@@ -153,4 +154,16 @@ class StudentRepository @Inject constructor(
         sdk.init(student)
             .switchDiary(semester.diaryId, semester.kindergartenDiaryId, semester.schoolYear)
             .authorizePermission(pesel)
+
+    suspend fun refreshStudentName(student: Student, semester: Semester) {
+        val newCurrentApiStudent = sdk.init(student)
+            .switchDiary(semester.diaryId, semester.kindergartenDiaryId, semester.schoolYear)
+            .getCurrentStudent() ?: return
+
+        val studentName = StudentName(
+            studentName = "${newCurrentApiStudent.studentName} ${newCurrentApiStudent.studentSurname}"
+        ).apply { id = student.id }
+
+        studentDb.update(studentName)
+    }
 }
