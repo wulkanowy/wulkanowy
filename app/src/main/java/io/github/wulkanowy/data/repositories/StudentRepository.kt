@@ -146,4 +146,6 @@ class StudentRepository @Inject constructor(
 
     suspend fun isOneUniqueStudent() = getSavedStudents(false)
         .distinctBy { it.student.studentName }.size == 1
+
+    suspend fun authorizePermission(pesel: String) = sdk.authorizePermission(pesel)
 }

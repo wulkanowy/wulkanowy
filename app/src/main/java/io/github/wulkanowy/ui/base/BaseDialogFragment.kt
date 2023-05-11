@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.CallSuper
 import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.elevation.SurfaceColors
@@ -44,13 +43,11 @@ abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment(), BaseView
         ErrorDialog.newInstance(error).show(childFragmentManager, error.toString())
     }
 
-    @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.setBackgroundColor(SurfaceColors.SURFACE_3.getColor(requireContext()))
     }
 
-    @CallSuper
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
