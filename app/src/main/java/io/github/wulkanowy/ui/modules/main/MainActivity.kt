@@ -27,7 +27,6 @@ import io.github.wulkanowy.databinding.DialogAdsConsentBinding
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.modules.Destination
 import io.github.wulkanowy.ui.modules.account.accountquick.AccountQuickDialog
-import io.github.wulkanowy.ui.modules.auth.AuthDialog
 import io.github.wulkanowy.ui.modules.settings.appearance.menuorder.AppMenuItem
 import io.github.wulkanowy.utils.*
 import kotlinx.serialization.encodeToString
@@ -111,8 +110,6 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
         presenter.onAttachView(this, destination)
         updateHelper.checkAndInstallUpdates(this)
-
-        navController.showDialogFragment(AuthDialog())
     }
 
     override fun onResume() {
