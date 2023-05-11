@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.parseAsHtml
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,6 +18,10 @@ class AuthDialog : BaseDialogFragment<DialogAuthBinding>(), AuthView {
 
     @Inject
     lateinit var presenter: AuthPresenter
+
+    companion object {
+        fun newInstance() = AuthDialog()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +44,11 @@ class AuthDialog : BaseDialogFragment<DialogAuthBinding>(), AuthView {
         }
 
         binding.authButton.setOnClickListener { presenter.authorize() }
-        binding.authSuccessButton.setOnClickListener { dismiss() }
+        binding.authSuccessButton.setOnClickListener {
+            activity?.recreate()
+            dismiss()
+        }
+        binding.authButtonSkip.setOnClickListener { dismiss() }
     }
 
     override fun enableAuthButton(isEnabled: Boolean) {
@@ -51,12 +60,22 @@ class AuthDialog : BaseDialogFragment<DialogAuthBinding>(), AuthView {
     }
 
     override fun showPeselError(show: Boolean) {
-        binding.authInput.error =
-            "Autoryzacja została odrzucona. Podano dane niezgodne z danymi w sekretariacie".takeIf { show }
+        binding.authInputLayout.error = getString(R.string.auth_api_error).takeIf { show }
+    }
+
+    override fun showInvalidPeselError(show: Boolean) {
+        binding.authInputLayout.error = getString(R.string.auth_invalid_error).takeIf { show }
     }
 
     override fun showSuccess(show: Boolean) {
-        binding.authForm.isVisible = !show
         binding.authSuccess.isVisible = show
+    }
+
+    override fun showContent(show: Boolean) {
+        binding.authForm.isVisible = show
+    }
+
+    override fun showDescriptionWithName(name: String) {
+        binding.authDescription.text = getString(R.string.auth_description, name).parseAsHtml()
     }
 }

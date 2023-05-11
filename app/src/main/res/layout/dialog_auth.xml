@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -10,8 +11,8 @@
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
             android:id="@+id/auth_form"
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <TextView
@@ -20,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="32dp"
-                android:text="Autoryzacja"
+                android:text="@string/auth_title"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -31,10 +32,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="8dp"
-                android:text="Do działania aplikacji potrzebujemy potwierdzić twoją tożsamość. Wprowadź PESEL w pole poniżej"
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/auth_title"
-                app:lineHeight="24sp" />
+                app:lineHeight="24sp"
+                tools:text="@string/auth_description" />
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -44,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="24dp"
-                android:hint="PESEL"
+                android:hint="@string/auth_pesel"
                 app:errorEnabled="true"
                 app:layout_constraintTop_toBottomOf="@id/auth_description">
 
@@ -60,25 +61,27 @@
                 android:id="@+id/auth_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="24dp"
-                android:text="AUTORYZUJ"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/auth_button"
+                app:layout_constraintBottom_toTopOf="@id/auth_button_skip"
                 app:layout_constraintTop_toBottomOf="@id/auth_input_layout"
                 app:layout_constraintVertical_bias="1" />
 
-            <ProgressBar
-                android:id="@+id/auth_progress"
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/auth_button_skip"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_margin="24dp"
+                android:text="@string/auth_button_skip"
+                app:layout_constraintBottom_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
             android:id="@+id/auth_success"
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
@@ -99,20 +102,26 @@
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="24dp"
                 android:gravity="center"
-                android:text="Autoryzacja zakończona pomyślnie"
+                android:text="@string/auth_success"
                 android:textSize="24sp"
                 app:layout_constraintTop_toBottomOf="@id/auth_success_icon"
                 app:lineHeight="32sp" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/auth_success_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/auth_success_button"
                 android:layout_margin="24dp"
                 android:text="@android:string/ok"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/auth_success_description"
                 app:layout_constraintVertical_bias="1" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ProgressBar
+            android:id="@+id/auth_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
     </FrameLayout>
 </ScrollView>

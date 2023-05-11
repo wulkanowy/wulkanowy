@@ -10,5 +10,11 @@ interface AuthView : BaseView {
 
     fun showPeselError(show: Boolean)
 
+    fun showInvalidPeselError(show: Boolean)
+
     fun showSuccess(show: Boolean)
+
+    fun showContent(show: Boolean)
+
+    fun showDescriptionWithName(name: String)
 }

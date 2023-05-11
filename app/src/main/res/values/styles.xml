@@ -79,7 +79,7 @@
         <item name="android:layout" tools:ignore="PrivateResource">@layout/m3_alert_dialog</item>
     </style>
 
-    <style name="FullScreenDialogStyle">
+    <style name="FullScreenDialogStyle" parent="WulkanowyTheme">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowIsFloating">false</item>
     </style>

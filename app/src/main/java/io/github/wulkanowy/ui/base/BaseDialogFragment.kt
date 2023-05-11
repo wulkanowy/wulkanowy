@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.elevation.SurfaceColors
+import io.github.wulkanowy.ui.modules.auth.AuthDialog
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.lifecycleAwareVariable
 import javax.inject.Inject
@@ -37,6 +38,10 @@ abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment(), BaseView
 
     override fun showChangePasswordSnackbar(redirectUrl: String) {
         (activity as? BaseActivity<*, *>)?.showChangePasswordSnackbar(redirectUrl)
+    }
+
+    override fun showAuthDialog() {
+        AuthDialog.newInstance().show(childFragmentManager, "auth_dialog")
     }
 
     override fun showErrorDetailsDialog(error: Throwable) {
