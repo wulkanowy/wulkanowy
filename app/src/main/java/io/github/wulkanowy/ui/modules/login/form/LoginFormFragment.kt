@@ -9,18 +9,13 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.StudentWithSemesters
+import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.databinding.FragmentLoginFormBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.ui.modules.login.LoginData
-import io.github.wulkanowy.utils.AppInfo
-import io.github.wulkanowy.utils.hideSoftInput
-import io.github.wulkanowy.utils.openEmailClient
-import io.github.wulkanowy.utils.openInternetBrowser
-import io.github.wulkanowy.utils.setOnEditorDoneSignIn
-import io.github.wulkanowy.utils.showSoftInput
+import io.github.wulkanowy.utils.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -149,12 +144,14 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
     override fun setErrorPassRequired(focus: Boolean) {
         with(binding.loginFormPassLayout) {
             error = getString(R.string.error_field_required)
+            setEndIconTintList(requireContext().getAttrColorStateList(R.attr.colorError))
         }
     }
 
     override fun setErrorPassInvalid(focus: Boolean) {
         with(binding.loginFormPassLayout) {
             error = getString(R.string.login_invalid_password)
+            setEndIconTintList(requireContext().getAttrColorStateList(R.attr.colorError))
         }
     }
 
@@ -162,6 +159,7 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
         with(binding) {
             loginFormUsernameLayout.error = " "
             loginFormPassLayout.error = " "
+            loginFormPassLayout.setEndIconTintList(requireContext().getAttrColorStateList(R.attr.colorError))
             loginFormHostLayout.error = " "
             loginFormErrorBox.text = message ?: getString(R.string.login_incorrect_password_default)
             loginFormErrorBox.isVisible = true
@@ -181,6 +179,7 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
 
     override fun clearPassError() {
         binding.loginFormPassLayout.error = null
+        binding.loginFormPassLayout.setEndIconTintList(null)
         binding.loginFormErrorBox.isVisible = false
     }
 
@@ -205,6 +204,10 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
         binding.loginFormContainer.visibility = if (show) VISIBLE else GONE
     }
 
+    override fun showOtherOptionsButton(show: Boolean) {
+        binding.loginFormAdvancedButton.isVisible = show
+    }
+
     @SuppressLint("SetTextI18n")
     override fun showVersion() {
         binding.loginFormVersion.text = "v${appInfo.versionName}"
@@ -226,8 +229,8 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
         (activity as? LoginActivity)?.navigateToSymbolFragment(loginData)
     }
 
-    override fun navigateToStudentSelect(studentsWithSemesters: List<StudentWithSemesters>) {
-        (activity as? LoginActivity)?.navigateToStudentSelect(studentsWithSemesters)
+    override fun navigateToStudentSelect(loginData: LoginData, registerUser: RegisterUser) {
+        (activity as? LoginActivity)?.navigateToStudentSelect(loginData, registerUser)
     }
 
     override fun openAdvancedLogin() {

@@ -40,6 +40,14 @@ class MessagePresenter @Inject constructor(
         view?.notifyChildrenFinishActionMode()
     }
 
+    fun onFragmentReselected() {
+        Timber.i("Message view is reselected")
+        view?.run {
+            popView()
+            notifyChildParentReselected(currentPageIndex)
+        }
+    }
+
     fun onChildViewLoaded() {
         view?.apply {
             showContent(true)

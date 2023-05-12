@@ -1,14 +1,8 @@
-[Polska wersja README](README.md)
-
-[Deutsche Version von README](README.de.md)
-
-[Česká verze README](README.cs.md)
-
-[Slovenská verzia README](README.sk.md)
+[Česká verze](README.cs.md) / [Deutsche Version](README.de.md) / English version / [Polska wersja](README.md) / [Slovenská verzia](README.sk.md)
 
 # Wulkanowy
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wulkanowy/wulkanowy/Tests/develop?style=flat-square)](https://github.com/wulkanowy/wulkanowy/actions)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/wulkanowy/wulkanowy/test.yml?branch=develop&style=flat-square)](https://github.com/wulkanowy/wulkanowy/actions)
 [![Codecov](https://img.shields.io/codecov/c/github/wulkanowy/wulkanowy/master.svg?style=flat-square)](https://codecov.io/gh/wulkanowy/wulkanowy)
 [![Discord](https://img.shields.io/discord/390889354199040011.svg?style=flat-square)](https://discord.gg/vccAQBr)
 [![F-Droid](https://img.shields.io/f-droid/v/io.github.wulkanowy.svg?style=flat-square)](https://f-droid.org/packages/io.github.wulkanowy/)
@@ -40,7 +34,7 @@ Unofficial android VULCAN UONET+ register client for both students and their par
 * support for multiple accounts with the ability to rename students 
 * dark and black (AMOLED) theme
 * offline mode
-* no ads
+* optional ads which allow to support the project
 
 ## Download
 

@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.tab
 
+import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.ui.base.BaseView
 
@@ -48,4 +49,6 @@ interface MessageTabView : BaseView {
     fun showActionMode(show: Boolean)
 
     fun showRecyclerBottomPadding(show: Boolean)
+
+    fun showMailboxChooser(mailboxes: List<Mailbox>)
 }

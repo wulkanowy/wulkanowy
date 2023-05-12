@@ -7,6 +7,7 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
+import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.ifNullOrBlank
 import timber.log.Timber
 import java.net.URL
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class LoginFormPresenter @Inject constructor(
     studentRepository: StudentRepository,
     private val loginErrorHandler: LoginErrorHandler,
+    private val appInfo: AppInfo,
     private val analytics: AnalyticsHelper
 ) : BasePresenter<LoginFormView>(loginErrorHandler, studentRepository) {
 
@@ -25,6 +27,7 @@ class LoginFormPresenter @Inject constructor(
         view.run {
             initView()
             showContact(false)
+            showOtherOptionsButton(appInfo.isDebug)
             showVersion()
 
             loginErrorHandler.onBadCredentials = {
@@ -93,7 +96,7 @@ class LoginFormPresenter @Inject constructor(
         if (!validateCredentials(email, password, host)) return
 
         resourceFlow {
-            studentRepository.getStudentsScrapper(
+            studentRepository.getUserSubjectsFromScrapper(
                 email = email,
                 password = password,
                 scrapperBaseUrl = host,
@@ -109,14 +112,14 @@ class LoginFormPresenter @Inject constructor(
                 }
             }
             .onResourceSuccess {
-                when (it.size) {
-                    0 -> view?.navigateToSymbol(LoginData(email, password, host))
-                    else -> view?.navigateToStudentSelect(it)
+                val loginData = LoginData(email, password, host, symbol)
+                when (it.symbols.size) {
+                    0 -> view?.navigateToSymbol(loginData)
+                    else -> view?.navigateToStudentSelect(loginData, it)
                 }
                 analytics.logEvent(
                     "registration_form",
                     "success" to true,
-                    "students" to it.size,
                     "scrapperBaseUrl" to host,
                     "error" to "No error"
                 )
@@ -134,7 +137,6 @@ class LoginFormPresenter @Inject constructor(
                 analytics.logEvent(
                     "registration_form",
                     "success" to false,
-                    "students" to -1,
                     "scrapperBaseUrl" to host,
                     "error" to it.message.ifNullOrBlank { "No message" }
                 )

@@ -26,6 +26,7 @@
     <string name="student_info_title">Informace o žáku</string>
     <string name="dashboard_title">Domů</string>
     <string name="notifications_center_title">Centrum oznámení</string>
+    <string name="menu_order_title">Konfigurace menu</string>
     <!--Subtitles-->
     <string name="grade_subtitle">Semestr %1$d, %2$d/%3$d</string>
     <!--Login-->
@@ -55,7 +56,7 @@
     <string name="login_invalid_symbol">Neplatný symbol</string>
     <string name="login_incorrect_symbol">Žák nebyl nalezen. Zkontrolujte správnost symbolu a vybrané varianty deníku UONET+</string>
     <string name="login_duplicate_student">Vybraný žák je už přihlášen</string>
-    <string name="login_symbol_helper">Symbol najdete na stránce deníku v &#160;<b>Uczeń</b>→&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nUjistěte se, že jste na předchozí obrazovce nastavili správnou variantu deníku do pole <b>Variace deníku UONET+</b></string>
+    <string name="login_symbol_helper">Symbol najdete na stránce deníku v &#160;<b>Uczeń</b>→&#160;<b>Dostęp Mobilny</b> →&#160;<b>Wygeneruj kod dostępu</b>.\n\nUjistěte se, že jste nastavili správnou variantu deníku v poli <b>Variace deníku UONET+</b> na první přihlašovací obrazovce</string>
     <string name="login_select_student">Vyberte žáky, kteří se mají do aplikace přihlásit</string>
     <string name="login_advanced">Jiné možnosti</string>
     <string name="login_advanced_warning_mobile_api">V tomto režimu nefungují následující: šťastné číslo, statistiky třídy, shrnutí frekvencí, ospravedlnění nepřítomnosti, dokončené lekce, informace o škole a prohlížení seznamu registrovaných zařízení</string>
@@ -72,6 +73,14 @@
     <string name="login_recover">Obnovit</string>
     <string name="login_signed_in">Žák je už přihlášen</string>
     <string name="login_host_standard">Standardní</string>
+    <string name="login_other_search_locations">Jiná místa vyhledávání</string>
+    <string name="login_no_active_student">Nebyli nalezeni žádní aktivní žáci</string>
+    <string name="login_symbol_enter">Zadejte jiný symbol</string>
+    <!--Notifications-->
+    <string name="notifications_header_title">Povolit oznámení</string>
+    <string name="notifications_header_description">Povolit upozornění, abyste nezmeškali zprávu od učitele nebo o nové známce</string>
+    <string name="notifications_skip">Přeskočit</string>
+    <string name="notifications_enable">Zapnout</string>
     <!--Main-->
     <string name="main_account_picker">Manažer účtů</string>
     <string name="main_log_in">Přihlásit se</string>
@@ -309,9 +318,11 @@
     <string name="message_not_exists">Zpráva neexistuje</string>
     <string name="message_required_recipients">Musíte vybrat alespoň 1 příjemce</string>
     <string name="message_content_min_length">Obsah zprávy musí mít alespoň 3 znaky</string>
+    <string name="message_chip_all_mailboxes">Všechny poštovní schránky</string>
     <string name="message_chip_only_unread">Pouze nepřečtené</string>
     <string name="message_chip_only_with_attachments">Pouze s přílohami</string>
     <string name="message_read">Přečtena: %s</string>
+    <string name="message_read_by">Přečtena přes: %1$d z %2$d osob</string>
     <plurals name="message_number_item">
         <item quantity="one">%1$d zpráva</item>
         <item quantity="few">%1$d zprávy</item>
@@ -339,6 +350,7 @@
         <item quantity="other">%1$d vybraných</item>
     </plurals>
     <string name="message_messages_deleted">Zprávy odstraněné</string>
+    <string name="message_mailbox_chooser_title">Vyberte poštovní schránku</string>
     <!--Note-->
     <string name="note_no_items">Žádné informace o poznámkách</string>
     <string name="note_points">Body</string>
@@ -482,6 +494,8 @@
     </plurals>
     <string name="conferences_present">Přítomnost na setkání</string>
     <string name="conference_agenda">Agenda</string>
+    <string name="conference_place">Místo</string>
+    <string name="conference_topic">Téma</string>
     <!--Director information-->
     <string name="school_announcement_title">Školní oznámení</string>
     <string name="school_announcement_no_items">Žádná školní oznámení</string>
@@ -665,8 +679,10 @@
     <string name="all_undo">Vrátit</string>
     <string name="all_change">Změnit</string>
     <string name="all_add_to_calendar">Přidat do kalendáře</string>
+    <string name="all_cancel">Zrušit</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Žádné lekce</string>
+    <string name="widget_timetable_last_synchronization">Synchronizováno %1$s v %2$s</string>
     <string name="widget_timetable_theme_title">Vybrat motiv</string>
     <string name="widget_timetable_theme_light">Světlý</string>
     <string name="widget_timetable_theme_dark">Tmavý</string>
@@ -686,6 +702,8 @@
     <string name="pref_view_grade_color_scheme">Známky barevné schéma</string>
     <string name="pref_view_grade_sorting_mode">Třídění předmětů</string>
     <string name="pref_view_app_language">Jazyk</string>
+    <string name="pref_view_menu_order_title">Konfigurace menu</string>
+    <string name="pref_view_menu_order_summary">Nastavit pořadí funkcí v menu</string>
     <string name="pref_notify_header">Oznámení</string>
     <string name="pref_notify_header_other">Jiné</string>
     <string name="pref_notify_switch">Zobrazit oznámení</string>
@@ -735,7 +753,7 @@
     <string name="pref_ads_consent_description">Volbu můžete kdykoliv změnit v nastavení aplikace. Můžeme použít Vaše data k zobrazení reklam šitých pro vás nebo pomocí méně vašich dat zobrazovat nepřizpůsobené reklamy. Podrobnosti naleznete v našich Zásadách ochrany osobních údajů</string>
     <string name="pref_ads_summary_personalized">Přizpůsobené reklamy</string>
     <string name="pref_ads_summary_non_personalized">Nepřizpůsobené reklamy</string>
-    <string name="pref_ads_over_18_years_old">Mám ukončené 18 let</string>
+    <string name="pref_ads_over_18_years_old">Je mi více než 18 let</string>
     <string name="pref_ads_option_personalized">Ano, přizpůsobené reklamy</string>
     <string name="pref_ads_option_non_personalized">Ano, nepřizpůsobené reklamy</string>
     <string name="pref_settings_advanced_title">Pokročilé</string>
@@ -787,6 +805,19 @@
     <string name="update_download_success">Aktualizace byla stažena.</string>
     <string name="update_download_success_button">Restartovat</string>
     <string name="update_failed">Aktualizace selhala! Wulkanowy nemusí fungovat správně. Zvažte aktualizaci</string>
+    <!--Menu order-->
+    <string name="menu_order_confirm_title">Restartování aplikace</string>
+    <string name="menu_order_confirm_content">Pro uložení změn je nutné aplikaci restartovat</string>
+    <string name="menu_order_confirm_restart">Restartovat</string>
+    <!--Auth-->
+    <string name="auth_api_error">Authorization has been rejected. The data provided does not match the records in the secretary\'s office.</string>
+    <string name="auth_invalid_error">Invalid PESEL</string>
+    <string name="auth_pesel">PESEL</string>
+    <string name="auth_button">Authorize</string>
+    <string name="auth_success">Authorization completed successfully</string>
+    <string name="auth_title">Authorization</string>
+    <string name="auth_description">To operate the application, we need to confirm your identity. Please enter the student\'s PESEL &lt;b&gt;%1$s&lt;/b&gt; in the field below</string>
+    <string name="auth_button_skip">Skip for now</string>
     <!--Errors-->
     <string name="error_no_internet">Žádné internetové připojení</string>
     <string name="error_invalid_device_datetime">Vyskytla se chyba. Zkontrolujte hodiny svého zařízení</string>
