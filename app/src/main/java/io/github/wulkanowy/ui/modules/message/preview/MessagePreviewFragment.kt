@@ -27,6 +27,7 @@ import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
 import io.github.wulkanowy.utils.serializable
 import io.github.wulkanowy.utils.shareText
 import javax.inject.Inject
+import com.google.android.material.snackbar.Snackbar
 
 @AndroidEntryPoint
 class MessagePreviewFragment :
@@ -83,6 +84,13 @@ class MessagePreviewFragment :
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMessagePreviewBinding.bind(view)
         messageContainer = binding.messagePreviewContainer
+        if (presenter.isIncognito) {
+            Snackbar.make(
+                binding.root,
+                getString(R.string.message_incognito_description),
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
         presenter.onAttachView(
             view = this,
             message = (savedInstanceState ?: arguments)?.serializable(MESSAGE_ID_KEY),

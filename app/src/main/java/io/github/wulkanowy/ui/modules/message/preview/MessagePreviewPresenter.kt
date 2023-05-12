@@ -29,6 +29,8 @@ class MessagePreviewPresenter @Inject constructor(
 
     var attachments: List<MessageAttachment>? = null
 
+    var isIncognito = preferencesRepository.isIncognitoMode
+
     private lateinit var lastError: Throwable
 
     private var retryCallback: () -> Unit = {}

@@ -13,6 +13,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.updatePadding
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Mailbox
@@ -59,7 +60,9 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
 
     override var isIncognito: Boolean
         get() = preferencesRepository.isIncognitoMode
-        set(value) {preferencesRepository.isIncognitoMode = value}
+        set(value) {
+            preferencesRepository.isIncognitoMode = value
+        }
 
     private var actionMode: ActionMode? = null
 
@@ -152,8 +155,21 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         else incognitoButton.setIcon(R.drawable.ic_messages_incognito_off)
         incognitoButton.setOnMenuItemClickListener {
             isIncognito = !isIncognito
-            if (isIncognito) it.setIcon(R.drawable.ic_messages_incognito_on)
-            else it.setIcon(R.drawable.ic_messages_incognito_off)
+            if (isIncognito) {
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.message_incognito_mode_on),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+                it.setIcon(R.drawable.ic_messages_incognito_on)
+            } else {
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.message_incognito_mode_off),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+                it.setIcon(R.drawable.ic_messages_incognito_off)
+            }
             true
         }
 
