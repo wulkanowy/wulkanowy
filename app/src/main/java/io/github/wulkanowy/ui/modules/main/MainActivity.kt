@@ -2,7 +2,7 @@ package io.github.wulkanowy.ui.modules.main
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build.VERSION_CODES.P
+import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -11,8 +11,10 @@ import android.text.style.ForegroundColorSpan
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.isVisible
+import android.view.ViewGroup.MarginLayoutParams
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
+import androidx.core.view.*
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.preference.Preference
@@ -30,6 +32,7 @@ import io.github.wulkanowy.databinding.DialogAdsConsentBinding
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.modules.Destination
 import io.github.wulkanowy.ui.modules.account.accountquick.AccountQuickDialog
+import io.github.wulkanowy.ui.modules.settings.appearance.menuorder.AppMenuItem
 import io.github.wulkanowy.utils.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -54,6 +57,8 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     @Inject
     lateinit var appInfo: AppInfo
+
+    private var onBackCallback: OnBackPressedCallback? = null
 
     private var accountMenu: MenuItem? = null
 
@@ -90,9 +95,20 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         super.onCreate(savedInstanceState)
         setContentView(ActivityMainBinding.inflate(layoutInflater).apply { binding = this }.root)
         setSupportActionBar(binding.mainToolbar)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+            binding.mainAppBar.isLifted = true
+        }
+        initializeFragmentContainer()
+
         this.savedInstanceState = savedInstanceState
         messageContainer = binding.mainMessageContainer
+        messageAnchor = binding.mainMessageContainer
         updateHelper.messageContainer = binding.mainFragmentContainer
+        onBackCallback = onBackPressedDispatcher.addCallback(this, enabled = false) {
+            presenter.onBackPressed()
+        }
 
         val destination = intent.getStringExtra(EXTRA_START_DESTINATION)
             ?.takeIf { savedInstanceState == null }
@@ -122,13 +138,20 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         return true
     }
 
-    override fun initView(startMenuIndex: Int, rootDestinations: List<Destination>) {
+    override fun initView(
+        startMenuIndex: Int,
+        rootAppMenuItems: List<AppMenuItem>,
+        rootUpdatedDestinations: List<Destination>
+    ) {
         initializeToolbar()
-        initializeBottomNavigation(startMenuIndex)
-        initializeNavController(startMenuIndex, rootDestinations)
+        initializeBottomNavigation(startMenuIndex, rootAppMenuItems)
+        initializeNavController(startMenuIndex, rootUpdatedDestinations)
     }
 
-    private fun initializeNavController(startMenuIndex: Int, rootDestinations: List<Destination>) {
+    private fun initializeNavController(
+        startMenuIndex: Int,
+        rootUpdatedDestinations: List<Destination>
+    ) {
         with(navController) {
             setOnViewChangeListener { destinationView ->
                 presenter.onViewChange(destinationView)
@@ -138,7 +161,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
                 )
             }
             fragmentHideStrategy = HIDE
-            rootFragments = rootDestinations.map { it.destinationFragment }
+            rootFragments = rootUpdatedDestinations.map { it.destinationFragment }
 
             initialize(startMenuIndex, savedInstanceState)
         }
@@ -154,17 +177,16 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         }
     }
 
-    private fun initializeBottomNavigation(startMenuIndex: Int) {
+    private fun initializeBottomNavigation(
+        startMenuIndex: Int,
+        rootAppMenuItems: List<AppMenuItem>
+    ) {
         with(binding.mainBottomNav) {
             with(menu) {
-                add(Menu.NONE, 0, Menu.NONE, R.string.dashboard_title)
-                    .setIcon(R.drawable.ic_main_dashboard)
-                add(Menu.NONE, 1, Menu.NONE, R.string.grade_title)
-                    .setIcon(R.drawable.ic_main_grade)
-                add(Menu.NONE, 2, Menu.NONE, R.string.attendance_title)
-                    .setIcon(R.drawable.ic_main_attendance)
-                add(Menu.NONE, 3, Menu.NONE, R.string.timetable_title)
-                    .setIcon(R.drawable.ic_main_timetable)
+                rootAppMenuItems.forEachIndexed { index, item ->
+                    add(Menu.NONE, index, Menu.NONE, item.title)
+                        .setIcon(item.icon)
+                }
                 add(Menu.NONE, 4, Menu.NONE, R.string.more_title)
                     .setIcon(R.drawable.ic_main_more)
             }
@@ -175,6 +197,17 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
             setOnItemReselectedListener {
                 this@MainActivity.presenter.onTabSelected(it.itemId, true)
             }
+        }
+    }
+
+    private fun initializeFragmentContainer() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.mainFragmentContainer) { view, insets ->
+            val bottomInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+
+            view.updateLayoutParams<MarginLayoutParams> {
+                bottomMargin = if (binding.mainBottomNav.isVisible) 0 else bottomInsets.bottom
+            }
+            WindowInsetsCompat.CONSUMED
         }
     }
 
@@ -247,20 +280,9 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         showDialogFragment(AccountQuickDialog.newInstance(studentWithSemesters))
     }
 
-    override fun showActionBarElevation(show: Boolean) {
-        ViewCompat.setElevation(binding.mainToolbar, if (show) dpToPx(4f) else 0f)
-    }
-
     override fun showBottomNavigation(show: Boolean) {
         binding.mainBottomNav.isVisible = show
-
-        if (appInfo.systemVersion >= P) {
-            window.navigationBarColor = if (show) {
-                getThemeAttrColor(android.R.attr.navigationBarColor)
-            } else {
-                getThemeAttrColor(R.attr.colorSurface)
-            }
-        }
+        binding.mainFragmentContainer.requestApplyInsets()
     }
 
     override fun openMoreDestination(destination: Destination) {
@@ -296,6 +318,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
         analytics.popCurrentScreen(navController.currentFrag!!::class.simpleName)
         navController.pushFragment(fragment)
+        onBackCallback?.isEnabled = !isRootView
     }
 
     override fun popView(depth: Int) {
@@ -303,10 +326,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
         analytics.popCurrentScreen(navController.currentFrag!!::class.simpleName)
         navController.safelyPopFragments(depth)
-    }
-
-    override fun onBackPressed() {
-        presenter.onBackPressed { super.onBackPressed() }
+        onBackCallback?.isEnabled = !isRootView
     }
 
     override fun showStudentAvatar(student: Student) {

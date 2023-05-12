@@ -27,7 +27,9 @@ fun getMailboxEntity() = Mailbox(
     globalKey = "v4",
     fullName = "",
     userName = "",
-    userLoginId = 0,
+    email = "test",
+    symbol = "powiatwulkanowy",
+    schoolId = "123456",
     studentName = "",
     schoolNameShort = "",
     type = MailboxType.UNKNOWN,
@@ -46,7 +48,7 @@ fun getSemesterPojo(diaryId: Int, semesterId: Int, start: LocalDate, end: LocalD
     end = end,
 )
 
-fun getStudentEntity(mode: Sdk.Mode = Sdk.Mode.API) = Student(
+fun getStudentEntity(mode: Sdk.Mode = Sdk.Mode.HEBE) = Student(
     scrapperBaseUrl = "http://fakelog.cf",
     email = "jan@fakelog.cf",
     certificateKey = "",

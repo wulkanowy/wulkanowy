@@ -26,6 +26,7 @@
     <string name="student_info_title">Informacje o uczniu</string>
     <string name="dashboard_title">Start</string>
     <string name="notifications_center_title">Centrum powiadomień</string>
+    <string name="menu_order_title">Konfiguracja menu</string>
     <!--Subtitles-->
     <string name="grade_subtitle">Semestr %1$d, %2$d/%3$d</string>
     <!--Login-->
@@ -55,7 +56,7 @@
     <string name="login_invalid_symbol">Nieprawidłowy symbol</string>
     <string name="login_incorrect_symbol">Nie znaleziono ucznia. Sprawdź poprawność symbolu i wybranej odmiany dziennika UONET+</string>
     <string name="login_duplicate_student">Wybrany uczeń jest już zalogowany</string>
-    <string name="login_symbol_helper">Symbol znajdziesz na stronie dziennika w&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nUpewnij się, że w polu <b>Dziennik UONET+</b> na poprzednim ekranie została ustawiona odpowiednia odmiana dziennika</string>
+    <string name="login_symbol_helper">Symbol można znaleźć na stronie dziennika w&#160;<b>Uczeń</b>→&#160;<b>Dostęp Mobilny</b> →&#160;<b>Wygeneruj kod dostępu</b>.\n\nUpewnij się, że ustawiłeś odpowiednią odmianę dziennika w polu  <b>Odmiana dziennika UONET+</b> na pierwszym ekranie logowania</string>
     <string name="login_select_student">Wybierz uczniów do zalogowania w aplikacji</string>
     <string name="login_advanced">Inne opcje</string>
     <string name="login_advanced_warning_mobile_api">W tym trybie nie działa szczęśliwy numerek, uczeń na tle klasy, podsumowanie frekwencji, usprawiedliwianie nieobecności, lekcje zrealizowane, informacje o szkole i podgląd listy zarejestrowanych urządzeń</string>
@@ -72,6 +73,14 @@
     <string name="login_recover">Przywróć</string>
     <string name="login_signed_in">Uczeń jest już zalogowany</string>
     <string name="login_host_standard">Standardowa</string>
+    <string name="login_other_search_locations">Inne lokalizacje wyszukiwania</string>
+    <string name="login_no_active_student">Nie znaleziono aktywnych uczniów</string>
+    <string name="login_symbol_enter">Wprowadź inny symbol</string>
+    <!--Notifications-->
+    <string name="notifications_header_title">Włącz powiadomienia</string>
+    <string name="notifications_header_description">Włącz powiadomienia, aby nie przegapić wiadomości od nauczyciela lub nowej oceny</string>
+    <string name="notifications_skip">Pomiń</string>
+    <string name="notifications_enable">Włącz</string>
     <!--Main-->
     <string name="main_account_picker">Menadżer kont</string>
     <string name="main_log_in">Zaloguj się</string>
@@ -309,9 +318,11 @@
     <string name="message_not_exists">Wiadomość nie istnieje</string>
     <string name="message_required_recipients">Musisz wybrać co najmniej 1 adresata</string>
     <string name="message_content_min_length">Treść wiadomości musi zawierać co najmniej 3 znaki</string>
+    <string name="message_chip_all_mailboxes">Wszystkie skrzynki</string>
     <string name="message_chip_only_unread">Tylko nieprzeczytane</string>
     <string name="message_chip_only_with_attachments">Tylko z załącznikami</string>
     <string name="message_read">Przeczytana: %s</string>
+    <string name="message_read_by">Przeczytana przez: %1$d z %2$d osób</string>
     <plurals name="message_number_item">
         <item quantity="one">%1$d wiadomość</item>
         <item quantity="few">%1$d wiadomości</item>
@@ -339,6 +350,7 @@
         <item quantity="other">%1$d wybranych</item>
     </plurals>
     <string name="message_messages_deleted">Wiadomości zostały usunięte</string>
+    <string name="message_mailbox_chooser_title">Wybierz skrzynkę</string>
     <!--Note-->
     <string name="note_no_items">Brak informacji o uwagach</string>
     <string name="note_points">Punkty</string>
@@ -482,6 +494,8 @@
     </plurals>
     <string name="conferences_present">Obecność na zebraniu</string>
     <string name="conference_agenda">Agenda</string>
+    <string name="conference_place">Miejsce</string>
+    <string name="conference_topic">Temat</string>
     <!--Director information-->
     <string name="school_announcement_title">Ogłoszenia szkolne</string>
     <string name="school_announcement_no_items">Brak ogłoszeń szkolnych</string>
@@ -665,8 +679,10 @@
     <string name="all_undo">Cofnij</string>
     <string name="all_change">Zmień</string>
     <string name="all_add_to_calendar">Dodaj do kalendarza</string>
+    <string name="all_cancel">Anuluj</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Brak lekcji</string>
+    <string name="widget_timetable_last_synchronization">Zsynchronizowano %1$s o %2$s</string>
     <string name="widget_timetable_theme_title">Wybierz motyw</string>
     <string name="widget_timetable_theme_light">Jasny</string>
     <string name="widget_timetable_theme_dark">Ciemny</string>
@@ -686,6 +702,8 @@
     <string name="pref_view_grade_color_scheme">Schemat kolorów ocen</string>
     <string name="pref_view_grade_sorting_mode">Sortowanie przedmiotów</string>
     <string name="pref_view_app_language">Język</string>
+    <string name="pref_view_menu_order_title">Konfiguracja menu</string>
+    <string name="pref_view_menu_order_summary">Ustaw kolejność funkcji w menu</string>
     <string name="pref_notify_header">Powiadomienia</string>
     <string name="pref_notify_header_other">Inne</string>
     <string name="pref_notify_switch">Pokazuj powiadomienia</string>
@@ -787,6 +805,19 @@
     <string name="update_download_success">Aktualizacja została pobrana.</string>
     <string name="update_download_success_button">Uruchom ponownie</string>
     <string name="update_failed">Aktualizacja nie powiodła się! Wulkanowy może nie działać prawidłowo. Rozważ aktualizację</string>
+    <!--Menu order-->
+    <string name="menu_order_confirm_title">Ponowne uruchomienie aplikacji</string>
+    <string name="menu_order_confirm_content">W celu zapisania zmian aplikacja musi zostać ponownie uruchomiona</string>
+    <string name="menu_order_confirm_restart">Uruchom ponownie</string>
+    <!--Auth-->
+    <string name="auth_api_error">Autoryzacja została odrzucona. Podano dane niezgodne z danymi w sekretariacie.</string>
+    <string name="auth_invalid_error">Nieprawidłowy PESEL</string>
+    <string name="auth_pesel">PESEL</string>
+    <string name="auth_button">Potwierdź</string>
+    <string name="auth_success">Autoryzacja zakończona pomyślnie</string>
+    <string name="auth_title">Autoryzacja</string>
+    <string name="auth_description">Rodzicu, musimy mieć pewność, że Twój adres e-mail został powiązany z prawidłowym kontem ucznia. W celu autoryzacji konta podaj numer PESEL ucznia &lt;b&gt;%1$s&lt;/b&gt; w polu poniżej</string>
+    <string name="auth_button_skip">Na razie pomiń</string>
     <!--Errors-->
     <string name="error_no_internet">Brak połączenia z internetem</string>
     <string name="error_invalid_device_datetime">Wystąpił błąd. Sprawdź poprawność daty w urządzeniu</string>

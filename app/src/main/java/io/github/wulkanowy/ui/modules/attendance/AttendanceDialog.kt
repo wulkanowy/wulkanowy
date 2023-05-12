@@ -1,19 +1,20 @@
 package io.github.wulkanowy.ui.modules.attendance
 
+import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
+import androidx.core.os.bundleOf
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.databinding.DialogAttendanceBinding
+import io.github.wulkanowy.ui.base.BaseDialogFragment
 import io.github.wulkanowy.utils.descriptionRes
-import io.github.wulkanowy.utils.lifecycleAwareVariable
+import io.github.wulkanowy.utils.serializable
 import io.github.wulkanowy.utils.toFormattedString
 
-class AttendanceDialog : DialogFragment() {
-
-    private var binding: DialogAttendanceBinding by lifecycleAwareVariable()
+@AndroidEntryPoint
+class AttendanceDialog : BaseDialogFragment<DialogAttendanceBinding>() {
 
     private lateinit var attendance: Attendance
 
@@ -22,23 +23,20 @@ class AttendanceDialog : DialogFragment() {
         private const val ARGUMENT_KEY = "Item"
 
         fun newInstance(exam: Attendance) = AttendanceDialog().apply {
-            arguments = Bundle().apply { putSerializable(ARGUMENT_KEY, exam) }
+            arguments = bundleOf(ARGUMENT_KEY to exam)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, 0)
-        arguments?.run {
-            attendance = getSerializable(ARGUMENT_KEY) as Attendance
-        }
+        attendance = requireArguments().serializable(ARGUMENT_KEY)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = DialogAttendanceBinding.inflate(inflater).apply { binding = this }.root
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return MaterialAlertDialogBuilder(requireContext(), theme)
+            .setView(DialogAttendanceBinding.inflate(layoutInflater).apply { binding = this }.root)
+            .create()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

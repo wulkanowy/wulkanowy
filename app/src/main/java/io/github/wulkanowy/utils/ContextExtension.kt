@@ -2,6 +2,7 @@ package io.github.wulkanowy.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.*
 import android.text.TextPaint
 import android.util.DisplayMetrics.DENSITY_DEFAULT
@@ -84,4 +85,8 @@ fun Context.createNameInitialsDrawable(
 
     return RoundedBitmapDrawableFactory.create(this.resources, bitmap)
         .apply { isCircular = true }
+}
+
+fun Context.getAttrColorStateList(@AttrRes color: Int): ColorStateList {
+    return ColorStateList.valueOf(getThemeAttrColor(color))
 }

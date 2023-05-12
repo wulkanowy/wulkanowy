@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.base.ErrorDialog
+import io.github.wulkanowy.ui.modules.auth.AuthDialog
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
 
@@ -75,7 +77,11 @@ class SyncFragment : PreferenceFragmentCompat(),
     }
 
     override fun showMessage(text: String) {
-        (activity as? BaseActivity<*, *>)?.showMessage(text)
+        Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG)
+            .apply {
+                anchorView = requireActivity().findViewById(R.id.main_bottom_nav)
+                show()
+            }
     }
 
     override fun showExpiredDialog() {
@@ -92,6 +98,10 @@ class SyncFragment : PreferenceFragmentCompat(),
 
     override fun showErrorDetailsDialog(error: Throwable) {
         ErrorDialog.newInstance(error).show(childFragmentManager, "error_details")
+    }
+
+    override fun showAuthDialog() {
+        AuthDialog.newInstance().show(childFragmentManager, "auth_dialog")
     }
 
     override fun onResume() {

@@ -15,8 +15,8 @@
     <string name="notification_debug_title">Отладка уведомлений</string>
     <string name="contributors_title">Разработчики</string>
     <string name="license_title">Лицензии</string>
-    <string name="message_title">Письма</string>
-    <string name="send_message_title">Написать</string>
+    <string name="message_title">Сообщения</string>
+    <string name="send_message_title">Новое сообщение</string>
     <string name="add_homework_title">Новое домашнее задание</string>
     <string name="note_title">Замечания и свершения</string>
     <string name="homework_title">Домашние задания</string>
@@ -26,6 +26,7 @@
     <string name="student_info_title">Информация о ученике</string>
     <string name="dashboard_title">Главная</string>
     <string name="notifications_center_title">Центр уведомлений</string>
+    <string name="menu_order_title">Настройка меню</string>
     <!--Subtitles-->
     <string name="grade_subtitle">%1$d семестр, %2$d/%3$d</string>
     <!--Login-->
@@ -55,7 +56,7 @@
     <string name="login_invalid_symbol">Неверный symbol</string>
     <string name="login_incorrect_symbol">Ученик не найден. Проверьте symbol и выбранный тип дненика UONET+</string>
     <string name="login_duplicate_student">Данный ученик уже авторизован</string>
-    <string name="login_symbol_helper">Symbol можно найти на странице регистрации в &#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nУбедитесь, что вы выбрали соответствующий тип дневника в поле <b>Тип дневника UONET+</b> на предыдущем экране</string>
+    <string name="login_symbol_helper">Symbol можно найти на странице регистрации в &#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Wygeneruj kod dostępu</b>.\n\nУбедитесь, что вы выбрали соответствующий тип дневника в поле <b>Тип дневника UONET+</b> на первом экране входа</string>
     <string name="login_select_student">Выберите учеников для авторизации в приложении</string>
     <string name="login_advanced">Другие варианты</string>
     <string name="login_advanced_warning_mobile_api">В этом режиме не работают: счастливый номер, статистика класса по оценкам, статистика посещаемости и уроков, информация о школе и список зарегистрированных устройств</string>
@@ -72,14 +73,22 @@
     <string name="login_recover">Восстановить</string>
     <string name="login_signed_in">Ученик уже авторизован</string>
     <string name="login_host_standard">Стандартный</string>
+    <string name="login_other_search_locations">Другие места поиска</string>
+    <string name="login_no_active_student">Не найдено активных учеников</string>
+    <string name="login_symbol_enter">Введите другой symbol</string>
+    <!--Notifications-->
+    <string name="notifications_header_title">Включить уведомления</string>
+    <string name="notifications_header_description">Включить уведомления, чтобы вы не пропустили сообщение от учителя или новую оценку</string>
+    <string name="notifications_skip">Пропустить</string>
+    <string name="notifications_enable">Включить</string>
     <!--Main-->
     <string name="main_account_picker">Менеджер аккаунтов</string>
     <string name="main_log_in">Войти</string>
     <string name="main_session_expired">Сеанс истёк</string>
     <string name="main_session_relogin">Сеанс истёк, авторизуйтесь снова</string>
-    <string name="main_support_title">Application support</string>
-    <string name="main_support_description">Do you like this app? Support its development by enabling non-invasive ads that you can disable at any time</string>
-    <string name="main_support_positive">Enable ads</string>
+    <string name="main_support_title">Поддержка приложения</string>
+    <string name="main_support_description">Вам нравится это приложение? Поддержите его разработку, включив неинвазивную рекламу, которую можно отключить в любое время</string>
+    <string name="main_support_positive">Включить рекламу</string>
     <!--Grade-->
     <string name="grade_header">Оценка</string>
     <string name="grade_semester">%d семестр</string>
@@ -97,7 +106,7 @@
     <string name="grade_summary_predicted_grade">Ожидаемая оценка</string>
     <string name="grade_summary_calculated_average">Рассчитанная средняя оценка</string>
     <string name="grade_summary_calculated_average_help_dialog_title">Как работает \"Рассчитанная средняя оценка\"?</string>
-    <string name="grade_summary_calculated_average_help_dialog_message">The Calculated Average is the arithmetic average calculated from the subjects averages. It allows you to know the approximate final average. It is calculated in a way selected by the user in the application settings. It is recommended that you choose the appropriate option. This is because the calculation of school averages differs. Additionally, if your school reports the average of the subjects on the Vulcan page, the application downloads them and does not calculate these averages. This can be changed by forcing the calculation of the average in the application settings.\n\n<b>Average of grades only from selected semester</b>:\n1. Calculating the weighted average for each subject in a given semester\n2.Adding calculated averages\n3. Calculation of the arithmetic average of the summed averages\n\n<b>Average of averages from both semesters</b>:\n1.Calculating the weighted average for each subject in semester 1 and 2\n2. Calculating the arithmetic average of the calculated averages for semesters 1 and 2 for each subject.\n3. Adding calculated averages\n4. Calculation of the arithmetic average of the summed averages\n\n<b>Average of grades from the whole year:</b>\n1. Calculating weighted average over the year for each subject. The final average in the 1st semester is irrelevant.\n2. Adding calculated averages\n3. Calculating the arithmetic average of summed averages</string>
+    <string name="grade_summary_calculated_average_help_dialog_message">Рассчитанная средняя оценка - это среднее арифметическое, рассчитанное на основе средних оценок по предметам. Это позволяет узнать приблизительную итоговую среднюю оценку. Она рассчитывается способом, выбранным пользователем в настройках приложения. Рекомендуется выбрать подходящий вариант, так как каждая школа по разному считает среднюю оценку. Кроме того, если ваша школа выставляет средние оценки по предметам на странице Vulcan, приложение просто загрузит их. Это можно изменить, заставив приложение считать среднюю оценку в настройках.\n\n<b>Средняя из оценок выбранного семестра</b>:\n1. Вычисление средневзвешенного значения по каждому предмету за семестр\n2.Суммирование вычисленных значений\n3. Вычисление среднего арифметического суммированных значений\n\n<b>Средняя из средних оценок семестров</b>:\n1.Расчет средневзвешенного значения для каждого предмета в семестрах. \n2. Вычисление среднего арифметического из средневзвешенных значений для каждого предмета в семестрах.\n3. Суммирование средних арифметических\n4. Вычисление среднего арифматического из суммированных значений\n\n<b>Средняя из оценок со всего года:</b>\n1. Расчет средневзвешенного значения по каждому предмету за год. Итоговое среднее значение за 1 семестр не имеет значения.\n2. Суммирование вычисленных средних\n3. Расчет среднего арифметического суммированных чисел</string>
     <string name="grade_summary_final_average_help_dialog_title">Как работает \"Итоговая средняя оценка\"?</string>
     <string name="grade_summary_final_average_help_dialog_message">Итоговая средняя оценка - это среднее арифметическое, рассчитанное из всех имеющихся на данный момент итоговых оценок в семестре.\n\nРассчет происходит следующим образом:\n1. Суммирование итоговых оценок, выставленных преподавателями\n2. Полученная сумма делится на число предметов, по которым выставлены оценки</string>
     <string name="grade_summary_final_average">Итоговая средняя оценка</string>
@@ -286,7 +295,7 @@
     <string name="message_sent">Отправленные</string>
     <string name="message_trash">Корзина</string>
     <string name="message_no_subject">(нет темы)</string>
-    <string name="message_no_items">Нет писем</string>
+    <string name="message_no_items">Нет сообщений</string>
     <string name="message_from">От:</string>
     <string name="message_to">Кому:</string>
     <string name="message_date">Дата: %1$s</string>
@@ -296,22 +305,24 @@
     <string name="message_unselect_all">Отменить выбор</string>
     <string name="message_move_to_trash">Перенести в корзину</string>
     <string name="message_delete_forever">Удалить навсегда</string>
-    <string name="message_delete_success">Письмо успешно удалено</string>
-    <string name="message_mailbox_type_student">student</string>
-    <string name="message_mailbox_type_parent">parent</string>
-    <string name="message_mailbox_type_guardian">guardian</string>
-    <string name="message_mailbox_type_employee">employee</string>
+    <string name="message_delete_success">Сообщение успешно удалено</string>
+    <string name="message_mailbox_type_student">ученик</string>
+    <string name="message_mailbox_type_parent">родитель</string>
+    <string name="message_mailbox_type_guardian">опекун</string>
+    <string name="message_mailbox_type_employee">работник</string>
     <string name="message_share">Поделиться</string>
     <string name="message_print">Печать</string>
     <string name="message_subject">Тема</string>
     <string name="message_content">Содержание</string>
-    <string name="message_send_successful">Письмо успешно отправлено</string>
-    <string name="message_not_exists">Письма не существует</string>
+    <string name="message_send_successful">Сообщение успешно отправлено</string>
+    <string name="message_not_exists">Сообщения не существует</string>
     <string name="message_required_recipients">Вы должны выбрать как минимум одного получателя</string>
     <string name="message_content_min_length">Текст сообщения должен содержать как минимум 3 знака</string>
+    <string name="message_chip_all_mailboxes">Все почтовые ящики</string>
     <string name="message_chip_only_unread">Только непрочитанные</string>
     <string name="message_chip_only_with_attachments">Только с вложениями</string>
     <string name="message_read">Прочитано: %s</string>
+    <string name="message_read_by">Прочитано: %1$d из %2$d человек</string>
     <plurals name="message_number_item">
         <item quantity="one">%1$d сообщение</item>
         <item quantity="few">%1$d сообщения</item>
@@ -324,8 +335,8 @@
         <item quantity="many">Новые сообщения</item>
         <item quantity="other">Новые сообщения</item>
     </plurals>
-    <string name="message_restore_dialog">Вы хотите восстановить черновик письма?</string>
-    <string name="message_restore_dialog_with_recipients">Вы хотите восстановить черновик письма с получателями: %s?</string>
+    <string name="message_restore_dialog">Вы хотите восстановить черновик сообщения?</string>
+    <string name="message_restore_dialog_with_recipients">Вы хотите восстановить черновик сообщения с получателями: %s?</string>
     <plurals name="message_notify_new_items">
         <item quantity="one">Вы получили %1$d новое сообщение</item>
         <item quantity="few">Вы получили %1$d новых сообщения</item>
@@ -339,6 +350,7 @@
         <item quantity="other">%1$d выбрано</item>
     </plurals>
     <string name="message_messages_deleted">Сообщение удалено</string>
+    <string name="message_mailbox_chooser_title">Выбрать почтовый ящик</string>
     <!--Note-->
     <string name="note_no_items">Нет записей о замечаниях и свершениях</string>
     <string name="note_points">Баллы</string>
@@ -482,6 +494,8 @@
     </plurals>
     <string name="conferences_present">Присутствует на встрече</string>
     <string name="conference_agenda">Повестка дня</string>
+    <string name="conference_place">Место</string>
+    <string name="conference_topic">Тема</string>
     <!--Director information-->
     <string name="school_announcement_title">Объявления школы</string>
     <string name="school_announcement_no_items">Нет школьных объявлений</string>
@@ -665,8 +679,10 @@
     <string name="all_undo">Отменить</string>
     <string name="all_change">Изменить</string>
     <string name="all_add_to_calendar">Добавить в календарь</string>
+    <string name="all_cancel">Отменить</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Нет уроков</string>
+    <string name="widget_timetable_last_synchronization">Synchronized on %1$s at %2$s</string>
     <string name="widget_timetable_theme_title">Выбрать тему</string>
     <string name="widget_timetable_theme_light">Светлая</string>
     <string name="widget_timetable_theme_dark">Тёмная</string>
@@ -686,6 +702,8 @@
     <string name="pref_view_grade_color_scheme">Цветовая схема оценок</string>
     <string name="pref_view_grade_sorting_mode">Сортировка уроков</string>
     <string name="pref_view_app_language">Язык</string>
+    <string name="pref_view_menu_order_title">Настройка меню</string>
+    <string name="pref_view_menu_order_summary">Установить порядок функций в меню</string>
     <string name="pref_notify_header">Уведомления</string>
     <string name="pref_notify_header_other">Прочее</string>
     <string name="pref_notify_switch">Показывать уведомления</string>
@@ -720,10 +738,10 @@
     <string name="pref_other_fill_message_content">Отвечать с историей сообщений</string>
     <string name="pref_other_optional_arithmetic_average">Показывать среднее арифметическое при отсутствии стоимости</string>
     <string name="pref_ads_support_category_name">Поддержка</string>
-    <string name="pref_ads_privacy_policy">Privacy Policy</string>
-    <string name="pref_ads_agreements">Agreements</string>
-    <string name="pref_ads_consent">Consent to processing of data related to ads</string>
-    <string name="pref_ads_show_in_app">Show ads in app</string>
+    <string name="pref_ads_privacy_policy">Политика приватности</string>
+    <string name="pref_ads_agreements">Соглашения</string>
+    <string name="pref_ads_consent">Согласие на обработку данных, связанных с объявлениями</string>
+    <string name="pref_ads_show_in_app">Показать рекламу в приложении</string>
     <string name="pref_ads_support">Посмотреть рекламу для поддержки проекта</string>
     <string name="pref_ads_privacy_title">Согласие на обработку данных</string>
     <string name="pref_ads_privacy_description">Для просмотра рекламы вы должны согласиться с условиями обработки данных нашей Политики конфиденциальности</string>
@@ -731,13 +749,13 @@
     <string name="pref_ads_privacy_link">Политика конфиденциальности</string>
     <string name="pref_ads_loading">Реклама загружается</string>
     <string name="pref_ads_once_per_visit">Спасибо за вашу поддержку, возвращайтесь позже для дополнительной рекламы</string>
-    <string name="pref_ads_consent_title">Can we use your data to display ads?</string>
-    <string name="pref_ads_consent_description">You can change your choice anytime in the app settings. We may use your data to display ads tailored to you or, using less of your data, display non-personalized ads. Please see our Privacy Policy for details</string>
-    <string name="pref_ads_summary_personalized">Personalized ads</string>
-    <string name="pref_ads_summary_non_personalized">Non-personalized ads</string>
-    <string name="pref_ads_over_18_years_old">I am over 18 years old</string>
-    <string name="pref_ads_option_personalized">Yes, personalized ads</string>
-    <string name="pref_ads_option_non_personalized">Yes, non-personalized ads</string>
+    <string name="pref_ads_consent_title">Можем ли мы использовать ваши данные для показа рекламы?</string>
+    <string name="pref_ads_consent_description">Вы можете изменить свой выбор в любое время в настройках приложения. Мы можем использовать ваши данные для показа объявлений в соответствии с вашими пожеланиями или, используя меньше данных, отображать неперсональную рекламу. Пожалуйста, ознакомьтесь с нашей политикой конфиденциальности для подробностей</string>
+    <string name="pref_ads_summary_personalized">Персонализированная реклама</string>
+    <string name="pref_ads_summary_non_personalized">Неперсонализированная реклама</string>
+    <string name="pref_ads_over_18_years_old">Я старше 18 лет</string>
+    <string name="pref_ads_option_personalized">Да, персонализировать рекламу</string>
+    <string name="pref_ads_option_non_personalized">Да, не персонализировать рекламу</string>
     <string name="pref_settings_advanced_title">Расширенные</string>
     <string name="pref_settings_appearance_title">Внешний вид и поведение</string>
     <string name="pref_settings_notifications_title">Уведомления</string>
@@ -760,14 +778,14 @@
     <string name="pref_advanced_category_summary">Значения плюса и минуса, расчёт средней оценки</string>
     <string name="pref_advanced_category">Расширенные</string>
     <string name="pref_about_category_summary">Версия приложения, разработчики, соц. сети</string>
-    <string name="pref_ads_category_summary">Посмотреть рекламу, чтобы поддержать преокт</string>
+    <string name="pref_ads_category_summary">Displaying advertisements, project support</string>
     <!--Notification Channels-->
     <string name="channel_new_grades">Новые оценки</string>
     <string name="channel_new_homework">Новое домашнее задание</string>
     <string name="channel_new_conference">Новые встречи</string>
     <string name="channel_new_exam">Новые тесты</string>
     <string name="channel_lucky_number">Счастливый номер</string>
-    <string name="channel_new_message">Новые письма</string>
+    <string name="channel_new_message">Новые сообщения</string>
     <string name="channel_new_notes">Новые замечания</string>
     <string name="channel_new_school_announcement">Новые школьные объявления</string>
     <string name="channel_push">Push-уведомления</string>
@@ -787,6 +805,19 @@
     <string name="update_download_success">Только что было скачано обновление.</string>
     <string name="update_download_success_button">Перезапустить</string>
     <string name="update_failed">Не удалось обновить! Wulkanowy может работать некорректно. Рассмотрите возможность обновления</string>
+    <!--Menu order-->
+    <string name="menu_order_confirm_title">Перезапуск приложение</string>
+    <string name="menu_order_confirm_content">Для сохранения изменений необходимо перезапустить приложение</string>
+    <string name="menu_order_confirm_restart">Перезапустить</string>
+    <!--Auth-->
+    <string name="auth_api_error">Authorization has been rejected. The data provided does not match the records in the secretary\'s office.</string>
+    <string name="auth_invalid_error">Invalid PESEL</string>
+    <string name="auth_pesel">PESEL</string>
+    <string name="auth_button">Authorize</string>
+    <string name="auth_success">Authorization completed successfully</string>
+    <string name="auth_title">Authorization</string>
+    <string name="auth_description">To operate the application, we need to confirm your identity. Please enter the student\'s PESEL &lt;b&gt;%1$s&lt;/b&gt; in the field below</string>
+    <string name="auth_button_skip">Skip for now</string>
     <!--Errors-->
     <string name="error_no_internet">Интернет-соединение отсутствует</string>
     <string name="error_invalid_device_datetime">Произошла ошибка. Проверьте время на вашем устройстве</string>

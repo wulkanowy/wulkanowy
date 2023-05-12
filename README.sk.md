@@ -1,18 +1,13 @@
-[English version of README](README.en.md)
-
-[Deutsche Version von README](README.de.md)
-
-[Polska wersja README](README.md)
-
-[Česká verze README](README.cs.md)
+[Česká verze](README.cs.md) / [Deutsche Version](README.de.md) / [English version](README.en.md) / [Polska wersja](README.md) / Slovenská verzia
 
 # Wulkanowy
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wulkanowy/wulkanowy/Tests/develop?style=flat-square)](https://github.com/wulkanowy/wulkanowy/actions)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/wulkanowy/wulkanowy/test.yml?branch=develop&style=flat-square)](https://github.com/wulkanowy/wulkanowy/actions)
 [![Codecov](https://img.shields.io/codecov/c/github/wulkanowy/wulkanowy/master.svg?style=flat-square)](https://codecov.io/gh/wulkanowy/wulkanowy)
 [![Discord](https://img.shields.io/discord/390889354199040011.svg?style=flat-square)](https://discord.gg/vccAQBr)
 [![F-Droid](https://img.shields.io/f-droid/v/io.github.wulkanowy.svg?style=flat-square)](https://f-droid.org/packages/io.github.wulkanowy/)
 [![Last release](https://img.shields.io/github/release/wulkanowy/wulkanowy.svg?logo=github&style=flat-square)](https://github.com/wulkanowy/wulkanowy/releases)
+[![Crowdin](https://badges.crowdin.net/wulkanowy2/localized.svg)](https://translate.wulkanowy.net.pl)
 
 Neoficiálny klient denníka VULCAN UONET+ pre žiaka a rodičov
 
@@ -39,7 +34,7 @@ Neoficiálny klient denníka VULCAN UONET+ pre žiaka a rodičov
 * podpora viacerých účtov s možnosťou premenovania žiakov
 * tmavý a čierny (AMOLED) motív
 * offline režim
-* žiadne reklamy
+* voliteľné reklamy na podporu projektu
 
 ## Stiahnuť
 
@@ -57,7 +52,7 @@ Aktuálnu verziu si môžete stiahnuť z Google Play, F-Droid alebo Huawei AppGa
 
 Môžete si tiež stiahnuť [vývojovú verziu](https://wulkanowy.github.io/#download), ktorá zahrňuje nové funkcie pripravované pre budúce vydanie
 
-## Postavené s
+## Postavené s pomocou
 
 
 * [Wulkanowy SDK](https://github.com/wulkanowy/sdk)

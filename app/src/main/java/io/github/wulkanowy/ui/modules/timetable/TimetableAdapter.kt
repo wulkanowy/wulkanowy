@@ -160,7 +160,7 @@ class TimetableAdapter @Inject constructor() :
 
                 timetableSmallItemDescription.setTextColor(
                     root.context.getThemeAttrColor(
-                        if (lesson.canceled) R.attr.colorPrimary
+                        if (lesson.canceled) R.attr.colorTimetableCanceled
                         else R.attr.colorTimetableChange
                     )
                 )
@@ -185,13 +185,13 @@ class TimetableAdapter @Inject constructor() :
 
                 timetableItemDescription.setTextColor(
                     root.context.getThemeAttrColor(
-                        if (lesson.canceled) R.attr.colorPrimary
+                        if (lesson.canceled) R.attr.colorTimetableCanceled
                         else R.attr.colorTimetableChange
                     )
                 )
             } else {
                 timetableItemDescription.visibility = GONE
-                timetableItemRoom.visibility = VISIBLE
+                timetableItemRoom.isVisible = lesson.room.isNotBlank() || lesson.roomOld.isNotBlank()
                 timetableItemGroup.isVisible = item.showGroupsInPlan && lesson.group.isNotBlank()
                 timetableItemTeacher.visibility = VISIBLE
             }
@@ -228,8 +228,8 @@ class TimetableAdapter @Inject constructor() :
     }
 
     private fun updateNumberAndSubjectCanceledColor(numberView: TextView, subjectView: TextView) {
-        numberView.setTextColor(numberView.context.getThemeAttrColor(R.attr.colorPrimary))
-        subjectView.setTextColor(subjectView.context.getThemeAttrColor(R.attr.colorPrimary))
+        numberView.setTextColor(numberView.context.getThemeAttrColor(R.attr.colorTimetableCanceled))
+        subjectView.setTextColor(subjectView.context.getThemeAttrColor(R.attr.colorTimetableCanceled))
     }
 
     private fun updateNumberColor(numberView: TextView, lesson: Timetable) {

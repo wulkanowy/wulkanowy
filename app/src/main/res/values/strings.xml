@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!--Activity/Fragment title-->
     <string name="login_title">Login</string>
     <string name="main_title">Wulkanowy</string>
@@ -26,6 +27,7 @@
     <string name="student_info_title">Student info</string>
     <string name="dashboard_title">Dashboard</string>
     <string name="notifications_center_title">Notifications center</string>
+    <string name="menu_order_title">Menu configuartion</string>
 
 
     <!--Subtitles-->
@@ -34,7 +36,7 @@
 
     <!--Login-->
     <string name="login_header_default">Sign in with the student or parent account</string>
-    <string name="login_header_symbol">Enter the symbol from the register page for account: &lt;b>%1$s&lt;/b></string>
+    <string name="login_header_symbol">Enter the symbol from the register page for account: &lt;b&gt;%1$s&lt;/b&gt;</string>
     <string name="login_nickname_hint">Username</string>
     <string name="login_email_hint">Email</string>
     <string name="login_login_pesel_email_hint">Login, PESEL or e-mail</string>
@@ -59,7 +61,7 @@
     <string name="login_invalid_symbol">Invalid symbol</string>
     <string name="login_incorrect_symbol">Student not found. Validate the symbol and the chosen variation of the UONET+ register</string>
     <string name="login_duplicate_student">Selected student is already logged in</string>
-    <string name="login_symbol_helper">The symbol can be found on the register page in&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nMake sure that you have set the appropriate register variant in the <b>UONET+ register variant</b> field on the previous screen</string>
+    <string name="login_symbol_helper">The symbol can be found on the register page in&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Wygeneruj kod dostępu</b>.\n\nMake sure that you have set the appropriate register variant in the <b>UONET+ register variant</b> field on the first login screen</string>
     <string name="login_select_student">Select students to log in to the application</string>
     <string name="login_advanced">Other options</string>
     <string name="login_advanced_warning_mobile_api">In this mode, a lucky number does not work, a class grade stats, summary of attendance, excuse for absence, completed lessons, school information and preview of the list of registered devices</string>
@@ -71,13 +73,23 @@
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Send email</string>
     <string name="login_email_subject" translatable="false">Zgłoszenie: Problemy z logowaniem</string>
-    <string name="login_email_text" translatable="false">Informacje o aplikacji:\n\nUrządzenie: %1$s\nWersja SDK: %2$s\nWersja aplikacji: %3$s\nDodatkowe informacje: %4$s\nOstatni błąd: %5$s\n\nNazwa szkoły i miejscowość: </string>
+    <string name="login_email_text" translatable="false">Informacje o aplikacji:\n\nUrządzenie: %1$s\nWersja SDK: %2$s\nWersja aplikacji: %3$s\nDodatkowe informacje: %4$s\nIdentyfikator instalacji: %5$s\nOstatni błąd: %6$s\n\nNazwa szkoły i miejscowość: </string>
     <string name="login_recover_warning">Make sure you select the correct UONET+ register variation!</string>
     <string name="login_recover_button">I forgot my password</string>
     <string name="login_recover_title">Recover your account</string>
     <string name="login_recover">Recover</string>
     <string name="login_signed_in">Student is already signed in</string>
     <string name="login_host_standard">Standard</string>
+    <string name="login_other_search_locations">Other search locations</string>
+    <string name="login_no_active_student">No active students found</string>
+    <string name="login_symbol_enter">Enter a different symbol</string>
+
+
+    <!--Notifications-->
+    <string name="notifications_header_title">Enable notifications</string>
+    <string name="notifications_header_description">Enable notifications so you don\'t miss message from teacher or new grade</string>
+    <string name="notifications_skip">Skip</string>
+    <string name="notifications_enable">Enable</string>
 
 
     <!--Main-->
@@ -301,9 +313,11 @@
     <string name="message_not_exists">Message does not exist</string>
     <string name="message_required_recipients">You need to choose at least 1 recipient</string>
     <string name="message_content_min_length">The message content must be at least 3 characters</string>
+    <string name="message_chip_all_mailboxes">All mailboxes</string>
     <string name="message_chip_only_unread">Only unread</string>
     <string name="message_chip_only_with_attachments">Only with attachments</string>
     <string name="message_read">Read: %s</string>
+    <string name="message_read_by">Read by: %1$d of %2$d people</string>
     <plurals name="message_number_item">
         <item quantity="one">%1$d message</item>
         <item quantity="other">%1$d messages</item>
@@ -323,6 +337,7 @@
         <item quantity="other">%1$d selected</item>
     </plurals>
     <string name="message_messages_deleted">Messages deleted</string>
+    <string name="message_mailbox_chooser_title">Choose mailbox</string>
 
 
     <!--Note-->
@@ -341,6 +356,7 @@
         <item quantity="other">You received %1$d notes</item>
     </plurals>
 
+
     <!--Praise-->
     <plurals name="praise_number_item">
         <item quantity="one">%d praise</item>
@@ -354,6 +370,7 @@
         <item quantity="one">You received %1$d praise</item>
         <item quantity="other">You received %1$d praises</item>
     </plurals>
+
 
     <!--Neutral notes-->
     <plurals name="neutral_note_number_item">
@@ -456,6 +473,9 @@
     </plurals>
     <string name="conferences_present">Present at conference</string>
     <string name="conference_agenda">Agenda</string>
+    <string name="conference_place">Place</string>
+    <string name="conference_topic">Topic</string>
+
 
     <!--Director information-->
     <string name="school_announcement_title">School announcements</string>
@@ -513,7 +533,7 @@
     <string name="about_homepage_summary">Visit the website and help develop the application</string>
     <string name="about_licenses">Licenses</string>
     <string name="about_licenses_summary">Licenses of libraries used in the application</string>
-    <string name="about_feedback_template" translatable="false">Informacje o aplikacji:\n\nUrządzenie: %1$s\nWersja SDK: %2$s\nWersja aplikacji: %3$s\n\nTreść zgłoszenia:</string>
+    <string name="about_feedback_template" translatable="false">Informacje o aplikacji:\n\nUrządzenie: %1$s\nWersja SDK: %2$s\nWersja aplikacji: %3$s\nIdentyfikator instalacji: %4$s\nTreść zgłoszenia:</string>
 
 
     <!--Licenses-->
@@ -578,7 +598,6 @@
     <string name="dashboard_timetable_third_time">until %1$s</string>
     <string name="dashboard_timetable_no_lessons">No upcoming lessons</string>
     <string name="dashboard_timetable_error">An error occurred while loading the lessons</string>
-
     <string name="dashboard_homework_title">Homework</string>
     <string name="dashboard_homework_no_homework">No homework to do</string>
     <string name="dashboard_homework_error">An error occurred while loading the homework</string>
@@ -587,11 +606,9 @@
         <item quantity="other">%1$d more homework</item>
     </plurals>
     <string name="dashboard_homework_time">due %1$s</string>
-
     <string name="dashboard_grade_title">Last grades</string>
     <string name="dashboard_grade_no_grade">No new grades</string>
     <string name="dashboard_grade_error">An error occurred while loading the grades</string>
-
     <string name="dashboard_announcements_title">School announcements</string>
     <string name="dashboard_announcements_no_announcements">No current announcements</string>
     <string name="dashboard_announcements_error">An error occurred while loading the announcements</string>
@@ -599,7 +616,6 @@
         <item quantity="one">%1$d more announcement</item>
         <item quantity="other">%1$d more announcements</item>
     </plurals>
-
     <string name="dashboard_exams_title">Exams</string>
     <string name="dashboard_exams_no_exams">No upcoming exams</string>
     <string name="dashboard_exams_error">An error occurred while loading the exams</string>
@@ -607,7 +623,6 @@
         <item quantity="one">%1$d more exam</item>
         <item quantity="other">%1$d more exams</item>
     </plurals>
-
     <string name="dashboard_conferences_title">Conferences</string>
     <string name="dashboard_conferences_no_conferences">No upcoming conferences</string>
     <string name="dashboard_conferences_error">An error occurred while loading the conferences</string>
@@ -615,7 +630,6 @@
         <item quantity="one">%1$d more conference</item>
         <item quantity="other">%1$d more conferences</item>
     </plurals>
-
     <string name="dashboard_horizontal_group_error">An error occurred while loading data</string>
     <string name="dashboard_horizontal_group_no_data">None</string>
 
@@ -652,10 +666,12 @@
     <string name="all_undo">Undo</string>
     <string name="all_change">Change</string>
     <string name="all_add_to_calendar">Add to calendar</string>
+    <string name="all_cancel">Cancel</string>
 
 
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">No lessons</string>
+    <string name="widget_timetable_last_synchronization">Synchronized on %1$s at %2$s</string>
     <string name="widget_timetable_theme_title">Choose theme</string>
     <string name="widget_timetable_theme_light">Light</string>
     <string name="widget_timetable_theme_dark">Dark</string>
@@ -677,7 +693,8 @@
     <string name="pref_view_grade_color_scheme">Grades color scheme</string>
     <string name="pref_view_grade_sorting_mode">Subjects sorting</string>
     <string name="pref_view_app_language">Language</string>
-
+    <string name="pref_view_menu_order_title">Menu configuration</string>
+    <string name="pref_view_menu_order_summary">Set the order of functions in the menu</string>
     <string name="pref_notify_header">Notifications</string>
     <string name="pref_notify_header_other">Other</string>
     <string name="pref_notify_switch">Show notifications</string>
@@ -697,7 +714,6 @@
     <string name="pref_notification_exact_alarm_popup_title">Upcoming lesson notifications</string>
     <string name="pref_notification_exact_alarm_popup_descriptions">You must allow the Wulkanowy app to set alarms and reminders in your system settings to use this feature.</string>
     <string name="pref_notification_go_to_settings">Go to settings</string>
-
     <string name="pref_services_header">Synchronization</string>
     <string name="pref_services_switch">Automatic update</string>
     <string name="pref_services_suspended">Suspended on holidays</string>
@@ -708,12 +724,10 @@
     <string name="pref_services_message_sync_failed">Sync failed</string>
     <string name="pref_services_sync_in_progress">Sync in progress</string>
     <string name="pref_services_last_full_sync_date">Last full sync: %s</string>
-
     <string name="pref_other_grade_modifier_plus">Value of the plus</string>
     <string name="pref_other_grade_modifier_minus">Value of the minus</string>
     <string name="pref_other_fill_message_content">Reply with message history</string>
     <string name="pref_other_optional_arithmetic_average">Show arithmetic average when no weights provided</string>
-
     <string name="pref_ads_support_category_name">Support</string>
     <string name="pref_ads_privacy_policy">Privacy Policy</string>
     <string name="pref_ads_agreements">Agreements</string>
@@ -733,13 +747,11 @@
     <string name="pref_ads_over_18_years_old">I am over 18 years old</string>
     <string name="pref_ads_option_personalized">Yes, personalized ads</string>
     <string name="pref_ads_option_non_personalized">Yes, non-personalized ads</string>
-
     <string name="pref_settings_advanced_title">Advanced</string>
     <string name="pref_settings_appearance_title">Appearance &amp; Behavior</string>
     <string name="pref_settings_notifications_title">Notifications</string>
     <string name="pref_settings_sync_title">Synchronization</string>
     <string name="pref_settings_ads_title">Advertisements</string>
-
     <string name="pref_grades_appearance_header">Grades</string>
     <string name="pref_dashboard_appearance_header">Dashboard</string>
     <string name="pref_dashboard_appearance_tiles_title">Tiles visibility</string>
@@ -748,7 +760,6 @@
     <string name="pref_grades_advanced_header">Grades</string>
     <string name="pref_counted_average_advanced_header">Calculated average</string>
     <string name="pref_messages_advanced_header">Messages</string>
-
     <string name="pref_appearance_category">Appearance &amp; Behavior</string>
     <string name="pref_appearance_category_summary">Languages, themes, subjects sorting</string>
     <string name="pref_notifications_category_summary">App notifications, fix problems</string>
@@ -791,6 +802,22 @@
     <string name="update_download_success">An update has just been downloaded.</string>
     <string name="update_download_success_button">Restart</string>
     <string name="update_failed">Update failed! Wulkanowy may not function properly. Consider updating</string>
+
+    <!--Menu order-->
+    <string name="menu_order_confirm_title">Application restart</string>
+    <string name="menu_order_confirm_content">The application must restart for the changes to be saved</string>
+    <string name="menu_order_confirm_restart">Restart</string>
+
+
+    <!--Auth-->
+    <string name="auth_api_error">Authorization has been rejected. The data provided does not match the records in the secretary\'s office.</string>
+    <string name="auth_invalid_error">Invalid PESEL</string>
+    <string name="auth_pesel">PESEL</string>
+    <string name="auth_button">Authorize</string>
+    <string name="auth_success">Authorization completed successfully</string>
+    <string name="auth_title">Authorization</string>
+    <string name="auth_description">To operate the application, we need to confirm your identity. Please enter the student\'s PESEL &lt;b>%1$s&lt;/b> in the field below</string>
+    <string name="auth_button_skip">Skip for now</string>
 
 
     <!--Errors-->
