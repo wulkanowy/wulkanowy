@@ -12,6 +12,7 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
+import io.github.wulkanowy.utils.DOMAIN_SUFFIX
 import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -193,8 +194,8 @@ class LoginAdvancedPresenter @Inject constructor(
 
         return when (Sdk.Mode.valueOf(view?.formLoginType.orEmpty())) {
             Sdk.Mode.HEBE -> studentRepository.getStudentsApi(pin, symbol, token)
-            Sdk.Mode.SCRAPPER -> studentRepository.getStudentsScrapper(
-                email, password, endpoint, symbol
+            Sdk.Mode.SCRAPPER -> studentRepository.getUserSubjectsFromScrapper(
+                email, password, endpoint, DOMAIN_SUFFIX, symbol // todo
             )
 
             Sdk.Mode.HYBRID -> studentRepository.getStudentsHybrid(

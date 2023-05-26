@@ -8,6 +8,7 @@ import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.AppInfo
+import io.github.wulkanowy.utils.DOMAIN_SUFFIX
 import io.github.wulkanowy.utils.ifNullOrBlank
 import timber.log.Timber
 import java.net.URL
@@ -100,6 +101,7 @@ class LoginFormPresenter @Inject constructor(
                 email = email,
                 password = password,
                 scrapperBaseUrl = host,
+                domainSuffix = DOMAIN_SUFFIX, // todo
                 symbol = symbol
             )
         }
