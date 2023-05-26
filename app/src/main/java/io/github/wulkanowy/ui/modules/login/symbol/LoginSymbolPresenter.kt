@@ -12,7 +12,6 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.DOMAIN_SUFFIX
 import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -63,7 +62,7 @@ class LoginSymbolPresenter @Inject constructor(
                 email = loginData.login,
                 password = loginData.password,
                 scrapperBaseUrl = loginData.baseUrl,
-                domainSuffix = DOMAIN_SUFFIX, // todo
+                domainSuffix = loginData.domainSuffix,
                 symbol = loginData.symbol.orEmpty(),
             )
         }.onEach { user ->

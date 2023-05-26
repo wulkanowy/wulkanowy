@@ -12,7 +12,6 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.DOMAIN_SUFFIX
 import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -155,6 +154,7 @@ class LoginAdvancedPresenter @Inject constructor(
                             login = view?.formUsernameValue.orEmpty().trim(),
                             password = view?.formPassValue.orEmpty().trim(),
                             baseUrl = view?.formHostValue.orEmpty().trim(),
+                            domainSuffix = "", // todo
                             symbol = view?.formSymbolValue.orEmpty().trim().getNormalizedSymbol(),
                         )
                         when (it.data.symbols.size) {
@@ -195,7 +195,7 @@ class LoginAdvancedPresenter @Inject constructor(
         return when (Sdk.Mode.valueOf(view?.formLoginType.orEmpty())) {
             Sdk.Mode.HEBE -> studentRepository.getStudentsApi(pin, symbol, token)
             Sdk.Mode.SCRAPPER -> studentRepository.getUserSubjectsFromScrapper(
-                email, password, endpoint, DOMAIN_SUFFIX, symbol // todo
+                email, password, endpoint, "", symbol // todo: add domainSuffix
             )
 
             Sdk.Mode.HYBRID -> studentRepository.getStudentsHybrid(

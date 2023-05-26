@@ -16,7 +16,7 @@ fun Sdk.init(student: Student): Sdk {
         mobileBaseUrl = student.mobileBaseUrl
     } else {
         scrapperBaseUrl = student.scrapperBaseUrl
-        domainSuffix = DOMAIN_SUFFIX // todo
+        domainSuffix = student.scrapperDomainSuffix
         loginType = Sdk.ScrapperLoginType.valueOf(student.loginType)
     }
 
@@ -29,5 +29,3 @@ fun Sdk.init(student: Student): Sdk {
 
     return this
 }
-
-const val DOMAIN_SUFFIX = "rc"
