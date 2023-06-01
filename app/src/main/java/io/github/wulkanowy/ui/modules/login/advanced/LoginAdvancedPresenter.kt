@@ -154,7 +154,7 @@ class LoginAdvancedPresenter @Inject constructor(
                             login = view?.formUsernameValue.orEmpty().trim(),
                             password = view?.formPassValue.orEmpty().trim(),
                             baseUrl = view?.formHostValue.orEmpty().trim(),
-                            domainSuffix = "", // todo
+                            domainSuffix = view?.formDomainSuffix.orEmpty().trim(),
                             symbol = view?.formSymbolValue.orEmpty().trim().getNormalizedSymbol(),
                         )
                         when (it.data.symbols.size) {
@@ -187,6 +187,7 @@ class LoginAdvancedPresenter @Inject constructor(
         val email = view?.formUsernameValue.orEmpty()
         val password = view?.formPassValue.orEmpty()
         val endpoint = view?.formHostValue.orEmpty()
+        val domainSuffix = view?.formDomainSuffix.orEmpty()
 
         val pin = view?.formPinValue.orEmpty()
         val symbol = view?.formSymbolValue.orEmpty()
@@ -195,7 +196,7 @@ class LoginAdvancedPresenter @Inject constructor(
         return when (Sdk.Mode.valueOf(view?.formLoginType.orEmpty())) {
             Sdk.Mode.HEBE -> studentRepository.getStudentsApi(pin, symbol, token)
             Sdk.Mode.SCRAPPER -> studentRepository.getUserSubjectsFromScrapper(
-                email, password, endpoint, "", symbol // todo: add domainSuffix
+                email, password, endpoint, domainSuffix, symbol
             )
 
             Sdk.Mode.HYBRID -> studentRepository.getStudentsHybrid(
