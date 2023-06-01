@@ -263,6 +263,7 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
     override fun onResume() {
         super.onResume()
         presenter.updateUsernameLabel()
+        presenter.updateCustomDomainSuffixVisibility()
     }
 
     override fun openEmail(lastError: String) {

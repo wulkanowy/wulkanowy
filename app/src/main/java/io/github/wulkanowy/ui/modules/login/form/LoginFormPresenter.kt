@@ -66,7 +66,7 @@ class LoginFormPresenter @Inject constructor(
         }
     }
 
-    private fun updateCustomDomainSuffixVisibility() {
+    fun updateCustomDomainSuffixVisibility() {
         view?.run {
             showDomainSuffixInput("customSuffix" in formHostValue)
         }
