@@ -246,7 +246,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
                 BackgroundColorSpan(
                     ContextCompat.getColor(
                         applicationContext,
-                        R.color.colorPrimaryLight
+                        R.color.colorIcon
                     )
                 ),
                 0,
