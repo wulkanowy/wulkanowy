@@ -145,7 +145,10 @@ android {
         configPath = "app/src/main/res/raw"
     }
 }
-
+hilt {
+    // https://github.com/google/dagger/issues/2040#issuecomment-1453693150
+    enableAggregatingTask = true
+}
 kapt {
     correctErrorTypes true
 }
