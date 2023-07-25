@@ -11,7 +11,7 @@
     <item
         android:id="@+id/action_incognito"
         android:icon="@drawable/ic_messages_incognito_off"
-        android:title="Incognito"
+        android:title="@string/pref_other_incognito_mode"
         app:iconTint="@color/material_on_surface_emphasis_medium"
         app:showAsAction="collapseActionView|ifRoom" />
 </menu>
