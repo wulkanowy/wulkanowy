@@ -84,13 +84,6 @@ class MessagePreviewFragment :
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMessagePreviewBinding.bind(view)
         messageContainer = binding.messagePreviewContainer
-        if (presenter.isIncognito) {
-            Snackbar.make(
-                binding.root,
-                getString(R.string.message_incognito_description),
-                Snackbar.LENGTH_LONG
-            ).show()
-        }
         presenter.onAttachView(
             view = this,
             message = (savedInstanceState ?: arguments)?.serializable(MESSAGE_ID_KEY),

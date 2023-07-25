@@ -104,7 +104,7 @@ class MessageRepository @Inject constructor(
         shouldFetch = {
             checkNotNull(it) { "This message no longer exist!" }
             Timber.d("Message content in db empty: ${it.message.content.isBlank()}")
-            it.message.unread || it.message.content.isBlank()
+            (it.message.unread && markAsRead) || it.message.content.isBlank()
         },
         query = {
             messagesDb.loadMessageWithAttachment(message.messageGlobalKey)
@@ -133,7 +133,7 @@ class MessageRepository @Inject constructor(
                 items = new.attachments.mapToEntities(message.messageGlobalKey),
             )
 
-            Timber.d("Message ${message.messageId} with blank content: ${old.message.content.isBlank()}, marked as read")
+            Timber.d("Message ${message.messageId} with blank content: ${old.message.content.isBlank()}, marked as read: $markAsRead")
         }
     )
 
