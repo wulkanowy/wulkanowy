@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.message.preview
 
 import android.annotation.SuppressLint
 import androidx.core.text.parseAsHtml
+import io.github.wulkanowy.R
 import io.github.wulkanowy.data.*
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageAttachment
@@ -28,8 +29,6 @@ class MessagePreviewPresenter @Inject constructor(
     var message: Message? = null
 
     var attachments: List<MessageAttachment>? = null
-
-    var isIncognito = preferencesRepository.isIncognitoMode
 
     private lateinit var lastError: Throwable
 
@@ -73,6 +72,10 @@ class MessagePreviewPresenter @Inject constructor(
                         setMessageWithAttachment(it)
                         showContent(true)
                         initOptions()
+
+                        if (preferencesRepository.isIncognitoMode && it.message.unread) {
+                            showMessage(R.string.message_incognito_description)
+                        }
                     }
                 } else {
                     view?.run {

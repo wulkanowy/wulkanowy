@@ -185,9 +185,6 @@ class MessageTabPresenter @Inject constructor(
         if (!isActionMode) {
             view?.run {
                 showActionMode(false)
-                if (preferencesRepository.isIncognitoMode && messageItem.message.unread) {
-                    showMessage(R.string.message_incognito_description)
-                }
                 openMessage(messageItem.message)
             }
         } else {
