@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search"
@@ -12,6 +13,8 @@
         android:id="@+id/action_incognito"
         android:icon="@drawable/ic_messages_incognito_off"
         android:title="@string/pref_other_incognito_mode"
+        android:visible="false"
         app:iconTint="@color/material_on_surface_emphasis_medium"
-        app:showAsAction="collapseActionView|ifRoom" />
+        app:showAsAction="collapseActionView|ifRoom"
+        tools:visible="true" />
 </menu>

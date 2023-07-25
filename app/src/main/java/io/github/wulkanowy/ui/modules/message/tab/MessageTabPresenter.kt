@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.tab
 
+import io.github.wulkanowy.R
 import io.github.wulkanowy.data.*
 import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
@@ -27,7 +28,8 @@ class MessageTabPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
     private val messageRepository: MessageRepository,
-    private val analytics: AnalyticsHelper
+    private val analytics: AnalyticsHelper,
+    private val preferencesRepository: PreferencesRepository,
 ) : BasePresenter<MessageTabView>(errorHandler, studentRepository) {
 
     lateinit var folder: MessageFolder
@@ -57,6 +59,14 @@ class MessageTabPresenter @Inject constructor(
         initializeSearchStream()
         errorHandler.showErrorMessage = ::showErrorViewOnError
         this.folder = folder
+    }
+
+    fun onCreateActionMenu() {
+        view?.updateIncognitoModeMenu(preferencesRepository.isIncognitoMode)
+
+        if (preferencesRepository.isIncognitoMode) {
+            view?.showMessage(R.string.message_incognito_mode_on)
+        }
     }
 
     fun onSwipeRefresh() {
@@ -136,7 +146,7 @@ class MessageTabPresenter @Inject constructor(
                 messageRepository.deleteMessages(student, selectedMailbox, messageList)
             }
                 .onFailure(errorHandler::dispatch)
-                .onSuccess { view?.showMessagesDeleted() }
+                .onSuccess { view?.showMessage(R.string.message_messages_deleted) }
         }
     }
 
@@ -291,6 +301,19 @@ class MessageTabPresenter @Inject constructor(
     fun onSearchQueryTextChange(query: String) {
         presenterScope.launch {
             searchChannel.send(query)
+        }
+    }
+
+    fun onIncognitoModeToggle() {
+        preferencesRepository.isIncognitoMode = !preferencesRepository.isIncognitoMode
+
+        val messageId = if (preferencesRepository.isIncognitoMode) {
+            R.string.message_incognito_mode_on
+        } else R.string.message_incognito_mode_off
+
+        view?.run {
+            showMessage(messageId)
+            updateIncognitoModeMenu(preferencesRepository.isIncognitoMode)
         }
     }
 

@@ -7,19 +7,18 @@ import android.view.MenuItem
 import android.view.View
 import android.view.View.*
 import android.widget.CompoundButton
+import androidx.annotation.StringRes
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.core.view.updatePadding
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.enums.MessageFolder
-import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.databinding.FragmentMessageTabBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
@@ -43,9 +42,6 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
     @Inject
     lateinit var messageTabAdapter: MessageTabAdapter
 
-    @Inject
-    lateinit var preferencesRepository: PreferencesRepository
-
     companion object {
 
         const val MESSAGE_TAB_FOLDER_ID = "message_tab_folder_id"
@@ -58,13 +54,9 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
     override val isViewEmpty
         get() = messageTabAdapter.itemCount == 0
 
-    override var isIncognito: Boolean
-        get() = preferencesRepository.isIncognitoMode
-        set(value) {
-            preferencesRepository.isIncognitoMode = value
-        }
-
     private var actionMode: ActionMode? = null
+
+    private var messageTabMenu: Menu? = null
 
     private val actionModeCallback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
@@ -145,37 +137,25 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         }
     }
 
+    @Deprecated("Deprecated in Java")
     @Suppress("DEPRECATION")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.action_menu_message_tab, menu)
 
-        val incognitoButton = menu.findItem(R.id.action_incognito)
-        if (isIncognito) incognitoButton.setIcon(R.drawable.ic_messages_incognito_on)
-        else incognitoButton.setIcon(R.drawable.ic_messages_incognito_off)
-        incognitoButton.setOnMenuItemClickListener {
-            isIncognito = !isIncognito
-            if (isIncognito) {
-                Snackbar.make(
-                    binding.root,
-                    getString(R.string.message_incognito_mode_on),
-                    Snackbar.LENGTH_SHORT
-                ).show()
-                it.setIcon(R.drawable.ic_messages_incognito_on)
-            } else {
-                Snackbar.make(
-                    binding.root,
-                    getString(R.string.message_incognito_mode_off),
-                    Snackbar.LENGTH_SHORT
-                ).show()
-                it.setIcon(R.drawable.ic_messages_incognito_off)
-            }
-            true
-        }
+        messageTabMenu = menu
 
-        val searchView = menu.findItem(R.id.action_search).actionView as SearchView
-        searchView.queryHint = getString(R.string.all_search_hint)
-        searchView.maxWidth = Int.MAX_VALUE
+        initializeIncognitoModeButton(menu)
+        initializeSearchView(menu)
+
+        presenter.onCreateActionMenu()
+    }
+
+    private fun initializeSearchView(menu: Menu) {
+        val searchView = (menu.findItem(R.id.action_search).actionView as SearchView).apply {
+            queryHint = getString(R.string.all_search_hint)
+            maxWidth = Int.MAX_VALUE
+        }
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String) = false
             override fun onQueryTextChange(query: String): Boolean {
@@ -183,6 +163,26 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
                 return true
             }
         })
+    }
+
+    private fun initializeIncognitoModeButton(menu: Menu) {
+        val incognitoButton = menu.findItem(R.id.action_incognito)
+
+        incognitoButton.setOnMenuItemClickListener {
+            presenter.onIncognitoModeToggle()
+            true
+        }
+    }
+
+    override fun updateIncognitoModeMenu(isEnabled: Boolean) {
+        val incognitoButton = messageTabMenu?.findItem(R.id.action_incognito) ?: return
+        incognitoButton.isVisible = true
+
+        if (isEnabled) {
+            incognitoButton.setIcon(R.drawable.ic_messages_incognito_on)
+        } else {
+            incognitoButton.setIcon(R.drawable.ic_messages_incognito_off)
+        }
     }
 
     override fun updateData(data: List<MessageTabDataItem>) {
@@ -241,8 +241,8 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         binding.messageTabSwipe.isRefreshing = show
     }
 
-    override fun showMessagesDeleted() {
-        showMessage(getString(R.string.message_messages_deleted))
+    override fun showMessage(@StringRes messageId: Int) {
+        showMessage(getString(messageId))
     }
 
     override fun notifyParentShowNewMessage(show: Boolean) {

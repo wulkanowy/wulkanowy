@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.tab
 
+import androidx.annotation.StringRes
 import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.ui.base.BaseView
@@ -8,11 +9,11 @@ interface MessageTabView : BaseView {
 
     val isViewEmpty: Boolean
 
-    var isIncognito: Boolean
-
     fun initView()
 
     fun resetListPosition()
+
+    fun updateIncognitoModeMenu(isEnabled: Boolean)
 
     fun updateData(data: List<MessageTabDataItem>)
 
@@ -28,7 +29,7 @@ interface MessageTabView : BaseView {
 
     fun showEmpty(show: Boolean)
 
-    fun showMessagesDeleted()
+    fun showMessage(@StringRes messageId: Int)
 
     fun showErrorView(show: Boolean)
 
