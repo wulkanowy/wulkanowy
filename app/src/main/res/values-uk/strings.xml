@@ -814,7 +814,7 @@
     <string name="auth_api_error">Авторизацію відхилено. Надані дані не збігаються із записами в кабінеті секретаря.</string>
     <string name="auth_invalid_error">Неправильний PESEL</string>
     <string name="auth_pesel">Число PESEL</string>
-    <string name="auth_button">Авторизуватись</string>
+    <string name="auth_button">Авторизовать</string>
     <string name="auth_success">Авторизація пройшла успішно</string>
     <string name="auth_title">Авторизувати</string>
     <string name="auth_description">Для роботи програми нам потрібно підтвердити вашу особу. Будь ласка, введіть число PESEL &lt;b&gt;%1$s&lt;/b&gt; студента в поле нижче</string>
