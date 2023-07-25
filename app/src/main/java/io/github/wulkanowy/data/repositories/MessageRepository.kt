@@ -3,18 +3,26 @@ package io.github.wulkanowy.data.repositories
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.*
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.MailboxDao
 import io.github.wulkanowy.data.db.dao.MessageAttachmentDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
-import io.github.wulkanowy.data.db.entities.*
+import io.github.wulkanowy.data.db.entities.Mailbox
+import io.github.wulkanowy.data.db.entities.Message
+import io.github.wulkanowy.data.db.entities.MessageWithAttachment
+import io.github.wulkanowy.data.db.entities.Recipient
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.data.enums.MessageFolder.RECEIVED
 import io.github.wulkanowy.data.enums.MessageFolder.TRASHED
 import io.github.wulkanowy.data.mappers.mapFromEntities
 import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.data.networkBoundResource
+import io.github.wulkanowy.data.onResourceError
+import io.github.wulkanowy.data.onResourceSuccess
 import io.github.wulkanowy.data.pojos.MessageDraft
+import io.github.wulkanowy.data.waitForResult
 import io.github.wulkanowy.domain.messages.GetMailboxByStudentUseCase
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.Folder
@@ -25,7 +33,6 @@ import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import timber.log.Timber
@@ -91,7 +98,7 @@ class MessageRepository @Inject constructor(
     fun getMessage(
         student: Student,
         message: Message,
-        markAsRead: Boolean = false,
+        markAsRead: Boolean,
     ): Flow<Resource<MessageWithAttachment?>> = networkBoundResource(
         isResultEmpty = { it?.message?.content.isNullOrBlank() },
         shouldFetch = {
@@ -113,7 +120,10 @@ class MessageRepository @Inject constructor(
             messagesDb.updateAll(
                 listOf(old.message.apply {
                     id = message.id
-                    unread = !markAsRead
+                    unread = when {
+                        markAsRead -> false
+                        else -> unread
+                    }
                     sender = new.sender
                     recipients = new.recipients.singleOrNull() ?: "Wielu adresatów"
                     content = content.ifBlank { new.content }

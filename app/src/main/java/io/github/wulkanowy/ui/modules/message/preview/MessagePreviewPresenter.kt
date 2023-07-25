@@ -58,7 +58,11 @@ class MessagePreviewPresenter @Inject constructor(
     private fun loadData(messageToLoad: Message) {
         flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
-            messageRepository.getMessage(student, messageToLoad, !preferencesRepository.isIncognitoMode)
+            messageRepository.getMessage(
+                student = student,
+                message = messageToLoad,
+                markAsRead = !preferencesRepository.isIncognitoMode,
+            )
         }
             .logResourceStatus("message ${messageToLoad.messageId} preview")
             .onResourceData {
