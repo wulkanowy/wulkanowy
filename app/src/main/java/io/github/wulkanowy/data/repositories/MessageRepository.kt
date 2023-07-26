@@ -98,7 +98,7 @@ class MessageRepository @Inject constructor(
     fun getMessage(
         student: Student,
         message: Message,
-        markAsRead: Boolean,
+        markAsRead: Boolean = false,
     ): Flow<Resource<MessageWithAttachment?>> = networkBoundResource(
         isResultEmpty = { it?.message?.content.isNullOrBlank() },
         shouldFetch = {
