@@ -340,7 +340,6 @@
     <string name="message_messages_deleted">Messages deleted</string>
     <string name="message_mailbox_chooser_title">Choose mailbox</string>
     <string name="message_incognito_mode_on">Incognito mode is on</string>
-    <string name="message_incognito_mode_off">Incognito mode is off</string>
     <string name="message_incognito_description">Thanks to incognito mode sender is not notified when you read the message</string>
 
 
