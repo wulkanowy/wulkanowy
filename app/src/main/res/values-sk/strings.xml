@@ -352,6 +352,8 @@
     </plurals>
     <string name="message_messages_deleted">Správy odstránené</string>
     <string name="message_mailbox_chooser_title">Vyberte poštovú schránku</string>
+    <string name="message_incognito_mode_on">Incognito mode is on</string>
+    <string name="message_incognito_description">Thanks to incognito mode sender is not notified when you read the message</string>
     <!--Note-->
     <string name="note_no_items">Žiadne informácie o poznámkach</string>
     <string name="note_points">Body</string>
@@ -738,6 +740,8 @@
     <string name="pref_other_grade_modifier_minus">Hodnota mínusu</string>
     <string name="pref_other_fill_message_content">Odpovedať s históriou správ</string>
     <string name="pref_other_optional_arithmetic_average">Vypočítať aritmetický priemer, ak žiadna známka nemá váhu</string>
+    <string name="pref_other_incognito_mode">Incognito mode</string>
+    <string name="pref_other_incognito_mode_summary">Do not inform about reading the message</string>
     <string name="pref_ads_support_category_name">Podpora</string>
     <string name="pref_ads_privacy_policy">Ochrana osobných údajov</string>
     <string name="pref_ads_agreements">Súhlasy</string>
