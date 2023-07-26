@@ -61,14 +61,6 @@ class MessageTabPresenter @Inject constructor(
         this.folder = folder
     }
 
-    fun onCreateActionMenu() {
-        view?.updateIncognitoModeMenu(preferencesRepository.isIncognitoMode)
-
-        if (preferencesRepository.isIncognitoMode) {
-            view?.showMessage(R.string.message_incognito_mode_on)
-        }
-    }
-
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the $folder message")
         view?.run { loadData(true) }
@@ -301,19 +293,6 @@ class MessageTabPresenter @Inject constructor(
     fun onSearchQueryTextChange(query: String) {
         presenterScope.launch {
             searchChannel.send(query)
-        }
-    }
-
-    fun onIncognitoModeToggle() {
-        preferencesRepository.isIncognitoMode = !preferencesRepository.isIncognitoMode
-
-        val messageId = if (preferencesRepository.isIncognitoMode) {
-            R.string.message_incognito_mode_on
-        } else R.string.message_incognito_mode_off
-
-        view?.run {
-            showMessage(messageId)
-            updateIncognitoModeMenu(preferencesRepository.isIncognitoMode)
         }
     }
 

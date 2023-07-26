@@ -13,8 +13,6 @@ interface MessageTabView : BaseView {
 
     fun resetListPosition()
 
-    fun updateIncognitoModeMenu(isEnabled: Boolean)
-
     fun updateData(data: List<MessageTabDataItem>)
 
     fun updateActionModeTitle(selectedMessagesSize: Int)

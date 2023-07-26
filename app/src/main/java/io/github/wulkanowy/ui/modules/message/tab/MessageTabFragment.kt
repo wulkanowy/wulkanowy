@@ -56,8 +56,6 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
 
     private var actionMode: ActionMode? = null
 
-    private var messageTabMenu: Menu? = null
-
     private val actionModeCallback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
             val inflater = mode.menuInflater
@@ -143,12 +141,7 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.action_menu_message_tab, menu)
 
-        messageTabMenu = menu
-
-        initializeIncognitoModeButton(menu)
         initializeSearchView(menu)
-
-        presenter.onCreateActionMenu()
     }
 
     private fun initializeSearchView(menu: Menu) {
@@ -163,26 +156,6 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
                 return true
             }
         })
-    }
-
-    private fun initializeIncognitoModeButton(menu: Menu) {
-        val incognitoButton = menu.findItem(R.id.action_incognito)
-
-        incognitoButton.setOnMenuItemClickListener {
-            presenter.onIncognitoModeToggle()
-            true
-        }
-    }
-
-    override fun updateIncognitoModeMenu(isEnabled: Boolean) {
-        val incognitoButton = messageTabMenu?.findItem(R.id.action_incognito) ?: return
-        incognitoButton.isVisible = true
-
-        if (isEnabled) {
-            incognitoButton.setIcon(R.drawable.ic_messages_incognito_on)
-        } else {
-            incognitoButton.setIcon(R.drawable.ic_messages_incognito_off)
-        }
     }
 
     override fun updateData(data: List<MessageTabDataItem>) {
