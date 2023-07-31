@@ -120,12 +120,6 @@ android {
         }
     }
 
-    testOptions.unitTests {
-        includeAndroidResources = true
-        // workaround HMS test errors https://github.com/robolectric/robolectric/issues/2750
-        all { jvmArgs '-noverify' }
-    }
-
     compileOptions {
         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_17
@@ -147,6 +141,11 @@ android {
     aboutLibraries {
         configPath = "app/src/main/res/raw"
     }
+}
+
+tasks.withType(Test).configureEach {
+    // workaround HMS test errors https://github.com/robolectric/robolectric/issues/2750
+    jvmArgs += "-noverify"
 }
 
 kapt {
