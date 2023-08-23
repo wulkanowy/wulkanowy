@@ -52,9 +52,9 @@
         <item>Średnia wszystkich ocen z całego roku</item>
     </string-array>
     <string-array name="timetable_show_gaps_entries">
-        <item>Don\'t show</item>
-        <item>Only between lessons</item>
-        <item>Before and between lessons</item>
+        <item>Nie pokauj</item>
+        <item>Tylko między lekcjami</item>
+        <item>Przed i między lekcjami</item>
     </string-array>
     <string-array name="dashboard_tile_entries">
         <item>Szczęśliwy numerek</item>
