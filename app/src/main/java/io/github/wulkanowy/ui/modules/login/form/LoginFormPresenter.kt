@@ -137,7 +137,9 @@ class LoginFormPresenter @Inject constructor(
         val email = view?.formUsernameValue.orEmpty().trim()
         val password = view?.formPassValue.orEmpty().trim()
         val host = view?.formHostValue.orEmpty().trim()
-        val domainSuffix = view?.formDomainSuffix.orEmpty().trim()
+        val domainSuffix = view?.formDomainSuffix.orEmpty().trim().takeIf {
+            "customSuffix" in host
+        }.orEmpty()
         val symbol = view?.formHostSymbol.orEmpty().trim()
 
         if (!validateCredentials(email, password, host)) return
