@@ -6,6 +6,7 @@ import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.data.repositories.*
+import io.github.wulkanowy.domain.adminmessage.GetAppropriateAdminMessageUseCase
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AdsHelper
@@ -32,7 +33,7 @@ class DashboardPresenter @Inject constructor(
     private val conferenceRepository: ConferenceRepository,
     private val preferencesRepository: PreferencesRepository,
     private val schoolAnnouncementRepository: SchoolAnnouncementRepository,
-    private val adminMessageRepository: AdminMessageRepository,
+    private val getAppropriateAdminMessageUseCase: GetAppropriateAdminMessageUseCase,
     private val adsHelper: AdsHelper
 ) : BasePresenter<DashboardView>(errorHandler, studentRepository) {
 
@@ -584,7 +585,7 @@ class DashboardPresenter @Inject constructor(
     }
 
     private fun loadAdminMessage(student: Student, forceRefresh: Boolean) {
-        flatResourceFlow { adminMessageRepository.getAdminMessages(student) }
+        flatResourceFlow { getAppropriateAdminMessageUseCase(student) }
             .filter {
                 val data = it.dataOrNull ?: return@filter true
                 val isDismissed = data.id in preferencesRepository.dismissedAdminMessageIds
