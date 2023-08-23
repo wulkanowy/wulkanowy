@@ -5,6 +5,7 @@ import io.github.wulkanowy.data.db.entities.AdminMessage
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.enums.MessageFolder
+import io.github.wulkanowy.data.enums.MessageType
 import io.github.wulkanowy.data.repositories.*
 import io.github.wulkanowy.domain.adminmessage.GetAppropriateAdminMessageUseCase
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -160,19 +161,23 @@ class DashboardPresenter @Inject constructor(
                     DashboardItem.Type.ACCOUNT -> {
                         updateData(DashboardItem.Account(student), forceRefresh)
                     }
+
                     DashboardItem.Type.HORIZONTAL_GROUP -> {
                         loadHorizontalGroup(student, forceRefresh)
                     }
+
                     DashboardItem.Type.LESSONS -> loadLessons(student, forceRefresh)
                     DashboardItem.Type.GRADES -> loadGrades(student, forceRefresh)
                     DashboardItem.Type.HOMEWORK -> loadHomework(student, forceRefresh)
                     DashboardItem.Type.ANNOUNCEMENTS -> {
                         loadSchoolAnnouncements(student, forceRefresh)
                     }
+
                     DashboardItem.Type.EXAMS -> loadExams(student, forceRefresh)
                     DashboardItem.Type.CONFERENCES -> {
                         loadConferences(student, forceRefresh)
                     }
+
                     DashboardItem.Type.ADS -> loadAds(forceRefresh)
                     DashboardItem.Type.ADMIN_MESSAGE -> loadAdminMessage(student, forceRefresh)
                 }
@@ -356,6 +361,7 @@ class DashboardPresenter @Inject constructor(
                             firstLoadedItemList += DashboardItem.Type.GRADES
                         }
                     }
+
                     is Resource.Success -> {
                         Timber.i("Loading dashboard grades result: Success")
                         updateData(
@@ -366,6 +372,7 @@ class DashboardPresenter @Inject constructor(
                             forceRefresh
                         )
                     }
+
                     is Resource.Error -> {
                         Timber.i("Loading dashboard grades result: An exception occurred")
                         errorHandler.dispatch(it.error)
@@ -403,12 +410,14 @@ class DashboardPresenter @Inject constructor(
                             firstLoadedItemList += DashboardItem.Type.LESSONS
                         }
                     }
+
                     is Resource.Success -> {
                         Timber.i("Loading dashboard lessons result: Success")
                         updateData(
                             DashboardItem.Lessons(it.data), forceRefresh
                         )
                     }
+
                     is Resource.Error -> {
                         Timber.i("Loading dashboard lessons result: An exception occurred")
                         errorHandler.dispatch(it.error)
@@ -458,10 +467,12 @@ class DashboardPresenter @Inject constructor(
                             firstLoadedItemList += DashboardItem.Type.HOMEWORK
                         }
                     }
+
                     is Resource.Success -> {
                         Timber.i("Loading dashboard homework result: Success")
                         updateData(DashboardItem.Homework(it.data), forceRefresh)
                     }
+
                     is Resource.Error -> {
                         Timber.i("Loading dashboard homework result: An exception occurred")
                         errorHandler.dispatch(it.error)
@@ -490,10 +501,12 @@ class DashboardPresenter @Inject constructor(
                             firstLoadedItemList += DashboardItem.Type.ANNOUNCEMENTS
                         }
                     }
+
                     is Resource.Success -> {
                         Timber.i("Loading dashboard announcements result: Success")
                         updateData(DashboardItem.Announcements(it.data), forceRefresh)
                     }
+
                     is Resource.Error -> {
                         Timber.i("Loading dashboard announcements result: An exception occurred")
                         errorHandler.dispatch(it.error)
@@ -531,10 +544,12 @@ class DashboardPresenter @Inject constructor(
                             firstLoadedItemList += DashboardItem.Type.EXAMS
                         }
                     }
+
                     is Resource.Success -> {
                         Timber.i("Loading dashboard exams result: Success")
                         updateData(DashboardItem.Exams(it.data), forceRefresh)
                     }
+
                     is Resource.Error -> {
                         Timber.i("Loading dashboard exams result: An exception occurred")
                         errorHandler.dispatch(it.error)
@@ -570,10 +585,12 @@ class DashboardPresenter @Inject constructor(
                             firstLoadedItemList += DashboardItem.Type.CONFERENCES
                         }
                     }
+
                     is Resource.Success -> {
                         Timber.i("Loading dashboard conferences result: Success")
                         updateData(DashboardItem.Conferences(it.data), forceRefresh)
                     }
+
                     is Resource.Error -> {
                         Timber.i("Loading dashboard conferences result: An exception occurred")
                         errorHandler.dispatch(it.error)
@@ -585,7 +602,12 @@ class DashboardPresenter @Inject constructor(
     }
 
     private fun loadAdminMessage(student: Student, forceRefresh: Boolean) {
-        flatResourceFlow { getAppropriateAdminMessageUseCase(student) }
+        flatResourceFlow {
+            getAppropriateAdminMessageUseCase(
+                student = student,
+                type = MessageType.DASHBOARD_MESSAGE,
+            )
+        }
             .filter {
                 val data = it.dataOrNull ?: return@filter true
                 val isDismissed = data.id in preferencesRepository.dismissedAdminMessageIds
@@ -598,6 +620,7 @@ class DashboardPresenter @Inject constructor(
                         if (forceRefresh) return@onEach
                         updateData(DashboardItem.AdminMessages(), forceRefresh)
                     }
+
                     is Resource.Success -> {
                         Timber.i("Loading dashboard admin message result: Success")
                         updateData(
@@ -605,6 +628,7 @@ class DashboardPresenter @Inject constructor(
                             forceRefresh = forceRefresh
                         )
                     }
+
                     is Resource.Error -> {
                         Timber.i("Loading dashboard admin message result: An exception occurred")
                         Timber.e(it.error)

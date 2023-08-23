@@ -3,6 +3,7 @@ package io.github.wulkanowy.domain.adminmessage
 import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.AdminMessage
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.enums.MessageType
 import io.github.wulkanowy.data.mapResourceData
 import io.github.wulkanowy.data.repositories.AdminMessageRepository
 import io.github.wulkanowy.utils.AppInfo
@@ -14,22 +15,39 @@ class GetAppropriateAdminMessageUseCase @Inject constructor(
     private val appInfo: AppInfo
 ) {
 
-    operator fun invoke(student: Student): Flow<Resource<AdminMessage?>> {
+    operator fun invoke(student: Student, type: MessageType): Flow<Resource<AdminMessage?>> {
         return adminMessageRepository.getAdminMessages().mapResourceData { adminMessages ->
             adminMessages
-                .filter { it.isAppropriate(student) }
+                .filter { it.isVersionMatch() }
+                .filter { it.isRegisterHostMatch(student) }
+                .filter { it.isFlavorMatch() }
+                .filter { it.isTypeMatch(type) }
                 .maxByOrNull { it.id }
         }
     }
 
-    private fun AdminMessage.isAppropriate(student: Student): Boolean {
-        val isCorrectRegister = targetRegisterHost?.let {
+    private fun AdminMessage.isRegisterHostMatch(student: Student): Boolean {
+        return targetRegisterHost?.let {
             student.scrapperBaseUrl.contains(it, true)
         } ?: true
-        val isCorrectFlavor = targetFlavor?.equals(appInfo.buildFlavor, true) ?: true
+    }
+
+    private fun AdminMessage.isFlavorMatch(): Boolean {
+        return targetFlavor?.equals(appInfo.buildFlavor, true) ?: true
+    }
+
+    private fun AdminMessage.isVersionMatch(): Boolean {
         val isCorrectMaxVersion = versionMax?.let { it >= appInfo.versionCode } ?: true
         val isCorrectMinVersion = versionMin?.let { it <= appInfo.versionCode } ?: true
 
-        return isCorrectRegister && isCorrectFlavor && isCorrectMaxVersion && isCorrectMinVersion
+        return isCorrectMaxVersion && isCorrectMinVersion
+    }
+
+    private fun AdminMessage.isTypeMatch(messageType: MessageType): Boolean {
+        if (messageType == type) return true
+        if (messageType in types) return true
+        if (MessageType.GENERAL_MESSAGE in types) return true
+
+        return false
     }
 }
