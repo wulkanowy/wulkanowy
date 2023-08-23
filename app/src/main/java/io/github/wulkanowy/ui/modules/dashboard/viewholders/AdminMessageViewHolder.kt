@@ -16,8 +16,9 @@ class AdminMessageViewHolder(
     private val onAdminMessageClickListener: (String?) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(message: DashboardItem.AdminMessages) {
-        val item = message.adminMessage ?: return
+    fun bind(item: AdminMessage?) {
+        item ?: return
+
         val context = binding.root.context
         val (backgroundColor, textColor) = when (item.priority) {
             "HIGH" -> {

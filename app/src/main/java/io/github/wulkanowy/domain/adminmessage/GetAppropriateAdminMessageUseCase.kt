@@ -6,29 +6,41 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.enums.MessageType
 import io.github.wulkanowy.data.mapResourceData
 import io.github.wulkanowy.data.repositories.AdminMessageRepository
+import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.utils.AppInfo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetAppropriateAdminMessageUseCase @Inject constructor(
     private val adminMessageRepository: AdminMessageRepository,
+    private val preferencesRepository: PreferencesRepository,
     private val appInfo: AppInfo
 ) {
 
     operator fun invoke(student: Student, type: MessageType): Flow<Resource<AdminMessage?>> {
+        return invoke(student.scrapperBaseUrl, type)
+    }
+
+    operator fun invoke(scrapperBaseUrl: String, type: MessageType): Flow<Resource<AdminMessage?>> {
         return adminMessageRepository.getAdminMessages().mapResourceData { adminMessages ->
             adminMessages
+                .asSequence()
+                .filter { it.isNotDismissed() }
                 .filter { it.isVersionMatch() }
-                .filter { it.isRegisterHostMatch(student) }
+                .filter { it.isRegisterHostMatch(scrapperBaseUrl) }
                 .filter { it.isFlavorMatch() }
                 .filter { it.isTypeMatch(type) }
                 .maxByOrNull { it.id }
         }
     }
 
-    private fun AdminMessage.isRegisterHostMatch(student: Student): Boolean {
+    private fun AdminMessage.isNotDismissed(): Boolean {
+        return id !in preferencesRepository.dismissedAdminMessageIds
+    }
+
+    private fun AdminMessage.isRegisterHostMatch(scrapperBaseUrl: String): Boolean {
         return targetRegisterHost?.let {
-            student.scrapperBaseUrl.contains(it, true)
+            scrapperBaseUrl.contains(it, true)
         } ?: true
     }
 

@@ -129,7 +129,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             is AnnouncementsViewHolder -> bindAnnouncementsViewHolder(holder, position)
             is ExamsViewHolder -> bindExamsViewHolder(holder, position)
             is ConferencesViewHolder -> bindConferencesViewHolder(holder, position)
-            is AdminMessageViewHolder -> holder.bind((items[position] as DashboardItem.AdminMessages))
+            is AdminMessageViewHolder -> holder.bind((items[position] as DashboardItem.AdminMessages).adminMessage)
             is AdsViewHolder -> bindAdsViewHolder(holder, position)
         }
     }

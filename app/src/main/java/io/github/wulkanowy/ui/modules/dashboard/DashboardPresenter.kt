@@ -608,11 +608,6 @@ class DashboardPresenter @Inject constructor(
                 type = MessageType.DASHBOARD_MESSAGE,
             )
         }
-            .filter {
-                val data = it.dataOrNull ?: return@filter true
-                val isDismissed = data.id in preferencesRepository.dismissedAdminMessageIds
-                !isDismissed
-            }
             .onEach {
                 when (it) {
                     is Resource.Loading -> {
