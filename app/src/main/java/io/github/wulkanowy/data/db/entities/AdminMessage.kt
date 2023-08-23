@@ -34,8 +34,6 @@ data class AdminMessage(
 
     val priority: String,
 
-    val type: MessageType,
-
     @ColumnInfo(name = "types", defaultValue = "[]")
     val types: List<MessageType> = emptyList(),
 

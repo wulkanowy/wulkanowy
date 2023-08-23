@@ -56,7 +56,6 @@ class GetAppropriateAdminMessageUseCase @Inject constructor(
     }
 
     private fun AdminMessage.isTypeMatch(messageType: MessageType): Boolean {
-        if (messageType == type) return true
         if (messageType in types) return true
         if (MessageType.GENERAL_MESSAGE in types) return true
 

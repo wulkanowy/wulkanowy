@@ -50,7 +50,7 @@ import javax.inject.Singleton
         AutoMigration(from = 51, to = 52),
         AutoMigration(from = 54, to = 55, spec = Migration55::class),
         AutoMigration(from = 55, to = 56),
-        AutoMigration(from = 56, to = 57),
+        AutoMigration(from = 56, to = 57, spec = Migration57::class),
     ],
     version = AppDatabase.VERSION_SCHEMA,
     exportSchema = true
