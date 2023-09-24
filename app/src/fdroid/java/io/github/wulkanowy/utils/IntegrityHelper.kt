@@ -6,5 +6,6 @@ import javax.inject.Singleton
 @Singleton
 class IntegrityHelper @Inject constructor() {
 
-    fun getIntegrityToken(): String? = null
+    @Suppress("UNUSED_PARAMETER")
+    fun getIntegrityToken(requestId: String): String? = null
 }
