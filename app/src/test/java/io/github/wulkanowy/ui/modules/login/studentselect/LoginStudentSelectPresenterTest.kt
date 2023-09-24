@@ -114,7 +114,7 @@ class LoginStudentSelectPresenterTest {
         clearMocks(studentRepository, loginStudentSelectView)
 
         coEvery { studentRepository.getSavedStudents(false) } returns emptyList()
-        coEvery { schoolsRepository.logSchoolLogin(any()) } just Runs
+        coEvery { schoolsRepository.logSchoolLogin(any(), any(), any()) } just Runs
 
         every { loginStudentSelectView.initView() } just Runs
         every { loginStudentSelectView.symbols } returns emptyMap()

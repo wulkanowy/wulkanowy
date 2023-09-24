@@ -9,17 +9,22 @@ import javax.inject.Singleton
 interface SchoolsService {
 
     @POST("/performCommand")
-    suspend fun performCommand(@Body body: ServerCommand): CommandResult
+    suspend fun performCommand(@Body request: IntegrityRequest<LoginEvent>)
 }
 
 @Serializable
-data class ServerCommand(
-    val commandString: String,
-    val tokenString: String
+data class LoginEvent(
+    val uuid: String,
+    val schoolName: String,
+    val schoolAddress: String,
+    val scraperBaseUrl: String,
+    val symbol: String,
+    val schoolId: String,
+    val loginType: String,
 )
 
 @Serializable
-data class CommandResult(
-    val commandSuccess: Boolean,
-    val diagnosticMessage: String,
+data class IntegrityRequest<T>(
+    val tokenString: String,
+    val data: T,
 )

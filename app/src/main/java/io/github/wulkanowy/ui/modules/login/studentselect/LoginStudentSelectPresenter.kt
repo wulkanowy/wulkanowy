@@ -22,7 +22,6 @@ import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -251,7 +250,7 @@ class LoginStudentSelectPresenter @Inject constructor(
         }
         resourceFlow {
             studentRepository.saveStudents(studentsWithSemesters)
-            schoolsRepository.logSchoolLogin(filteredStudents)
+            schoolsRepository.logSchoolLogin(loginData, registerUser, filteredStudents)
         }
             .logResourceStatus("registration")
             .onEach {
