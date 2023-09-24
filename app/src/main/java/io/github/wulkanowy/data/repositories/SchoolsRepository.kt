@@ -1,16 +1,15 @@
 package io.github.wulkanowy.data.repositories
 
-import io.github.wulkanowy.data.api.IntegrityRequest
-import io.github.wulkanowy.data.api.LoginEvent
 import io.github.wulkanowy.data.api.SchoolsService
-import io.github.wulkanowy.data.mappers.mapToStudentWithSemesters
-import io.github.wulkanowy.data.pojos.RegisterSymbol
-import io.github.wulkanowy.data.pojos.RegisterUnit
-import io.github.wulkanowy.data.pojos.RegisterUser
+import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.db.entities.StudentWithSemesters
+import io.github.wulkanowy.data.pojos.IntegrityRequest
+import io.github.wulkanowy.data.pojos.LoginEvent
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.ui.modules.login.LoginData
-import io.github.wulkanowy.ui.modules.login.studentselect.LoginStudentSelectItem
 import io.github.wulkanowy.utils.IntegrityHelper
+import io.github.wulkanowy.utils.getCurrentOrLast
 import io.github.wulkanowy.utils.init
 import kotlinx.coroutines.withTimeout
 import timber.log.Timber
@@ -26,44 +25,42 @@ class SchoolsRepository @Inject constructor(
     private val sdk: Sdk,
 ) {
 
-    suspend fun logSchoolLogin(
-        loginData: LoginData,
-        registerUser: RegisterUser,
-        filteredStudents: List<LoginStudentSelectItem.Student>
-    ) {
-        filteredStudents
-            .map { it.symbol to it.unit }
-            .forEach { (symbol, unit) ->
-                runCatching { logLogin(loginData, registerUser, symbol, unit) }
-                    .onFailure { Timber.e(it) }
+    suspend fun logSchoolLogin(loginData: LoginData, students: List<StudentWithSemesters>) {
+        students.forEach {
+            runCatching {
+                withTimeout(10.seconds) {
+                    logLogin(loginData, it.student, it.semesters.getCurrentOrLast())
+                }
             }
+                .onFailure { Timber.e(it) }
+        }
     }
 
-    private suspend fun logLogin(
-        loginData: LoginData,
-        registerUser: RegisterUser,
-        symbol: RegisterSymbol,
-        unit: RegisterUnit,
-    ) = withTimeout(10.seconds) {
-        schoolsService.performCommand(
+    private suspend fun logLogin(loginData: LoginData, student: Student, semester: Semester) {
+        val requestId = UUID.randomUUID().toString()
+        val token = integrityHelper.getIntegrityToken(requestId) ?: return
+
+        val schoolInfo = sdk
+            .init(student.copy(password = loginData.password))
+            .switchDiary(
+                diaryId = semester.diaryId,
+                kindergartenDiaryId = semester.kindergartenDiaryId,
+                schoolYear = semester.schoolYear
+            )
+            .getSchool()
+
+        schoolsService.logLoginEvent(
             IntegrityRequest(
-                tokenString = integrityHelper.getIntegrityToken() ?: return@withTimeout,
+                tokenString = token,
                 data = LoginEvent(
-                    uuid = UUID.randomUUID().toString(),
-                    schoolAddress = sdk.init(
-                        unit.students.first().mapToStudentWithSemesters(
-                            user = registerUser,
-                            scrapperDomainSuffix = loginData.domainSuffix,
-                            symbol = symbol,
-                            unit = unit,
-                            colors = emptyList(),
-                        ).student
-                    ).getSchool().address,
-                    scraperBaseUrl = registerUser.scrapperBaseUrl.orEmpty(),
-                    symbol = symbol.symbol,
-                    schoolName = unit.schoolName,
-                    schoolId = unit.schoolId,
-                    loginType = registerUser.loginType?.name.orEmpty(),
+                    uuid = requestId,
+                    schoolAddress = schoolInfo.address,
+                    schoolName = schoolInfo.name,
+                    schoolShort = student.schoolShortName,
+                    scraperBaseUrl = student.scrapperBaseUrl,
+                    loginType = student.loginType,
+                    symbol = student.symbol,
+                    schoolId = student.schoolSymbol,
                 )
             )
         )

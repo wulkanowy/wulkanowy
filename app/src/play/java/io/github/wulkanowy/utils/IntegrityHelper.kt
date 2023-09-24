@@ -14,12 +14,12 @@ class IntegrityHelper @Inject constructor(
     @ApplicationContext private val context: Context,
 ) {
 
-    suspend fun getIntegrityToken(): String? {
+    suspend fun getIntegrityToken(nonce: String): String? {
         val integrityManager = IntegrityManagerFactory.create(context)
 
         val integrityTokenResponse = integrityManager.requestIntegrityToken(
             IntegrityTokenRequest.builder()
-                .setNonce(UUID.randomUUID().toString())
+                .setNonce(nonce)
                 .build()
         )
         return integrityTokenResponse.await().token()

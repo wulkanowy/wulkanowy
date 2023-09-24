@@ -99,7 +99,7 @@ internal class DataModule {
     fun provideSchoolsService(
         okHttpClient: OkHttpClient,
         json: Json,
-        appInfo: AppInfo
+        appInfo: AppInfo,
     ): SchoolsService = Retrofit.Builder()
         .baseUrl(appInfo.schoolsBaseUrl)
         .client(okHttpClient)

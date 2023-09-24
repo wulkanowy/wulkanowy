@@ -250,7 +250,7 @@ class LoginStudentSelectPresenter @Inject constructor(
         }
         resourceFlow {
             studentRepository.saveStudents(studentsWithSemesters)
-            schoolsRepository.logSchoolLogin(loginData, registerUser, filteredStudents)
+            schoolsRepository.logSchoolLogin(loginData, studentsWithSemesters)
         }
             .logResourceStatus("registration")
             .onEach {
