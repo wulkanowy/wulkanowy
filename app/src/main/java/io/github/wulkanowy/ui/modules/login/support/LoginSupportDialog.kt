@@ -1,9 +1,10 @@
 package io.github.wulkanowy.ui.modules.login.support
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
+import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.widget.doOnTextChanged
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -47,14 +48,27 @@ class LoginSupportDialog : BaseDialogFragment<DialogLoginSupportBinding>() {
                 DialogLoginSupportBinding.inflate(layoutInflater).apply { binding = this }.root
             )
             .create()
-            .apply {
-                setButton(
-                    DialogInterface.BUTTON_POSITIVE,
-                    getString(R.string.login_support_submit)
-                ) { _, _ ->
-                    onSubmitClick()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        with(binding) {
+            dialogLoginSupportSchoolInput.doOnTextChanged { _, _, _, _ ->
+                with(dialogLoginSupportSchoolLayout) {
+                    isErrorEnabled = false
+                    error = null
                 }
             }
+            dialogLoginSupportSubmit.setOnClickListener {
+                if (dialogLoginSupportSchoolInput.text.isNullOrBlank()) {
+                    with(dialogLoginSupportSchoolLayout) {
+                        isErrorEnabled = true
+                        error = getString(R.string.error_field_required)
+                    }
+                } else onSubmitClick()
+            }
+        }
+    }
 
     private fun onSubmitClick() {
         with(binding) {

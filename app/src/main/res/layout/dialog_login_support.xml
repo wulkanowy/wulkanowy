@@ -12,6 +12,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dialog_login_support_school_layout"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,11 +23,10 @@
                 android:id="@+id/dialog_login_support_school_input"
                 style="@style/Widget.Material3.TextInputEditText.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 android:gravity="top"
                 android:hint="@string/login_support_school_hint"
-                android:inputType="textMultiLine"
-                android:minHeight="100dp" />
+                android:lines="2" />
 
             <requestFocus />
         </com.google.android.material.textfield.TextInputLayout>
@@ -44,13 +44,26 @@
                 android:id="@+id/dialog_login_support_additional_input"
                 style="@style/Widget.Material3.TextInputEditText.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:gravity="top"
                 android:hint="@string/login_support_additional_hint"
-                android:inputType="textMultiLine" />
+                android:lines="3" />
 
             <requestFocus />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dialog_login_support_submit"
+            style="@style/Widget.Material3.Button.TextButton.Dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="12dp"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/login_support_submit" />
     </LinearLayout>
 
 </ScrollView>
