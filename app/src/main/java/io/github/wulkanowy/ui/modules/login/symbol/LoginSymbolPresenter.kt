@@ -11,6 +11,7 @@ import io.github.wulkanowy.sdk.scrapper.login.InvalidSymbolException
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
+import io.github.wulkanowy.ui.modules.login.support.LoginSupportInfo
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.flow.onEach
@@ -74,6 +75,7 @@ class LoginSymbolPresenter @Inject constructor(
                     showProgress(true)
                     showContent(false)
                 }
+
                 is Resource.Success -> {
                     when (user.data.symbols.size) {
                         0 -> {
@@ -83,6 +85,7 @@ class LoginSymbolPresenter @Inject constructor(
                                 showContact(true)
                             }
                         }
+
                         else -> {
                             val enteredSymbolDetails = user.data.symbols
                                 .firstOrNull()
@@ -107,6 +110,7 @@ class LoginSymbolPresenter @Inject constructor(
                         "error" to "No error"
                     )
                 }
+
                 is Resource.Error -> {
                     Timber.i("Login with symbol result: An exception occurred")
                     analytics.logEvent(
@@ -135,12 +139,13 @@ class LoginSymbolPresenter @Inject constructor(
     }
 
     fun onEmailClick() {
-        view?.openEmail(loginData.baseUrl, lastError?.message.ifNullOrBlank {
-            registerUser?.symbols?.flatMap { symbol ->
-                symbol.schools.map { it.error?.message } + symbol.error?.message
-            }?.filterNotNull()?.distinct()?.joinToString(";") {
-                it.take(46) + "..."
-            } ?: "blank"
-        })
+        view?.openSupportDialog(
+            LoginSupportInfo(
+                loginData = loginData,
+                registerUser = registerUser,
+                lastErrorMessage = lastError?.message,
+                enteredSymbol = view?.symbolValue,
+            )
+        )
     }
 }
