@@ -49,6 +49,7 @@
     <string name="login_token_hint">Token</string>
     <string name="login_pin_hint">PIN</string>
     <string name="login_symbol_hint">Symbol</string>
+    <string name="login_symbol_placeholder">E.g. \"lodz\" or \"powiatjaroslawski\"</string>
     <string name="login_sign_in">Sign in</string>
     <string name="login_invalid_password">Password too short</string>
     <string name="login_incorrect_password_default">Login details are incorrect</string>
