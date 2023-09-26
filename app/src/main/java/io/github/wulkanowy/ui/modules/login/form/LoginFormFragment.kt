@@ -186,7 +186,9 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
 
     override fun clearPassError() {
         binding.loginFormPassLayout.error = null
-        binding.loginFormPassLayout.setEndIconTintList(null)
+        binding.loginFormPassLayout.setEndIconTintList(
+            requireContext().getAttrColorStateList(R.attr.colorOnSurface)
+        )
         binding.loginFormErrorBox.isVisible = false
     }
 
@@ -238,8 +240,7 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
     }
 
     override fun showContact(show: Boolean) {
-        binding.loginFormContact.visibility = if (show) VISIBLE else GONE
-        binding.loginFormRecoverLink.visibility = if (show) GONE else VISIBLE
+        binding.loginFormContact.isVisible = show
     }
 
     override fun openPrivacyPolicyPage() {
