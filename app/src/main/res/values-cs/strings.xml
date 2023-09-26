@@ -69,7 +69,7 @@
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Poslat e-mail</string>
     <string name="login_recover_warning">Ujistěte se, že jste vybrali správnou variantu deníku UONET+!</string>
-    <string name="login_recover_button">Zapomněl jsem své heslo</string>
+    <string name="login_recover_button">Reset password</string>
     <string name="login_recover_title">Obnovte svůj účet</string>
     <string name="login_recover">Obnovit</string>
     <string name="login_signed_in">Žák je už přihlášen</string>
