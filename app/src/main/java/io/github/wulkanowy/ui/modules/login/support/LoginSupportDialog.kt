@@ -1,11 +1,11 @@
 package io.github.wulkanowy.ui.modules.login.support
 
-import android.app.Dialog
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.repositories.PreferencesRepository
@@ -30,7 +30,7 @@ class LoginSupportDialog : BaseDialogFragment<DialogLoginSupportBinding>() {
     private lateinit var supportInfo: LoginSupportInfo
 
     companion object {
-        private const val ARGUMENT_KEY = "item"
+        private const val ARGUMENT_KEY = "info"
 
         fun newInstance(info: LoginSupportInfo) = LoginSupportDialog().apply {
             arguments = bundleOf(ARGUMENT_KEY to info)
@@ -39,15 +39,20 @@ class LoginSupportDialog : BaseDialogFragment<DialogLoginSupportBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_FRAME, R.style.WulkanowyTheme_NoActionBar)
         supportInfo = requireArguments().serializable(ARGUMENT_KEY)
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
-        MaterialAlertDialogBuilder(requireContext(), theme)
-            .setView(
-                DialogLoginSupportBinding.inflate(layoutInflater).apply { binding = this }.root
-            )
-            .create()
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val binding = DialogLoginSupportBinding.inflate(inflater)
+            .apply { binding = this }
+        binding.dialogLoginSupportToolbar.setNavigationOnClickListener { dismiss() }
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,7 +70,10 @@ class LoginSupportDialog : BaseDialogFragment<DialogLoginSupportBinding>() {
                         isErrorEnabled = true
                         error = getString(R.string.error_field_required)
                     }
-                } else onSubmitClick()
+                } else {
+                    onSubmitClick()
+                    dismiss()
+                }
             }
         }
     }

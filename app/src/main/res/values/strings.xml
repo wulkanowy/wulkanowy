@@ -84,6 +84,7 @@
     <string name="login_other_search_locations">Other search locations</string>
     <string name="login_no_active_student">No active students found</string>
     <string name="login_symbol_enter">Enter a different symbol</string>
+    <string name="login_support_title">Support</string>
     <string name="login_support_school_hint">Full school name (required)</string>
     <string name="login_support_school_placeholder">Np. ZSTiO Jarosław lub SP nr 99 w Łodzi</string>
     <string name="login_support_additional_hint">Additional information in Polish (optional)</string>
