@@ -11,6 +11,11 @@
         android:padding="20dp"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login_support_school_hint" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/dialog_login_support_school_layout"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -25,17 +30,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:gravity="top"
-                android:hint="@string/login_support_school_hint"
                 android:lines="2" />
 
             <requestFocus />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/login_support_additional_hint" />
+
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:gravity="top"
             app:placeholderText="@string/login_support_additional_placeholder"
             app:placeholderTextColor="?colorTertiary">
@@ -46,7 +55,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="top"
-                android:hint="@string/login_support_additional_hint"
                 android:lines="3" />
 
             <requestFocus />
