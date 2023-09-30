@@ -12,8 +12,8 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoView
 import io.github.wulkanowy.utils.getCurrentOrLast
+import io.github.wulkanowy.utils.isCurrent
 import io.github.wulkanowy.utils.isHolidays
-import io.github.wulkanowy.utils.isNow
 import io.github.wulkanowy.utils.willBe
 import timber.log.Timber
 import java.time.LocalDate
@@ -60,7 +60,7 @@ class AccountDetailsPresenter @Inject constructor(
     }
 
     fun onSemesterSwitch(): Boolean {
-        if (!studentWithSemesters!!.semesters.isNullOrEmpty()) {
+        if (!studentWithSemesters?.semesters.isNullOrEmpty()) {
             view?.showSemesterDialog(selectedIndex - 1, studentWithSemesters!!.semesters)
         }
         return true
@@ -74,8 +74,8 @@ class AccountDetailsPresenter @Inject constructor(
                 studentWithSemesters!!.semesters[selectedIndex - 1]
             )
             if (
-                (!semestersToChange[0].isNow && semestersToChange[0].willBe && LocalDate.now().isHolidays) ||
-                (semestersToChange[0].isNow && !semestersToChange[0].willBe && !LocalDate.now().isHolidays)
+                (!semestersToChange[0].isCurrent() && semestersToChange[0].willBe && LocalDate.now().isHolidays) ||
+                (semestersToChange[0].isCurrent() && !semestersToChange[0].willBe && !LocalDate.now().isHolidays)
             ) {
                 preferencesRepository.previewText = ""
             } else {

@@ -1,9 +1,5 @@
-Wersja 2.0.3
+Wersja 2.2.0
 
-— zaktualizowaliśmy wygląd aplikacji na (częściowo) zgodny z wytycznymi Material 3
-— dodaliśmy możliwość zmiany kolejności pozycji w menu dolnym
-— poprawiliśmy sposób wyświetlania błędu o nieprawidłowym haśle na ekranie logowania
-— od teraz zmiana ustawień liczenia średniej automatycznie odświeży listę ocen
-— dodaliśmy okienko na wpisanie numeru PESEL, gdy dziennik wymaga dodatkowej autoryzacji dostępu
+Dokonaliśmy drobnych usprawnień w obszarze logowania, które powinny pomóc Wam i nam
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases

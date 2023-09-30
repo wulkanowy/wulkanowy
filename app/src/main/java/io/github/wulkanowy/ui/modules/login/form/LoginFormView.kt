@@ -1,8 +1,10 @@
 package io.github.wulkanowy.ui.modules.login.form
 
+import io.github.wulkanowy.data.db.entities.AdminMessage
 import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.ui.base.BaseView
 import io.github.wulkanowy.ui.modules.login.LoginData
+import io.github.wulkanowy.ui.modules.login.support.LoginSupportInfo
 
 interface LoginFormView : BaseView {
 
@@ -13,6 +15,8 @@ interface LoginFormView : BaseView {
     val formPassValue: String
 
     val formHostValue: String
+
+    val formDomainSuffix: String
 
     val formHostSymbol: String
 
@@ -56,6 +60,12 @@ interface LoginFormView : BaseView {
 
     fun showContent(show: Boolean)
 
+    fun showAdminMessage(message: AdminMessage?)
+
+    fun openInternetBrowser(url: String)
+
+    fun showDomainSuffixInput(show: Boolean)
+
     fun showOtherOptionsButton(show: Boolean)
 
     fun showVersion()
@@ -70,7 +80,7 @@ interface LoginFormView : BaseView {
 
     fun openFaqPage()
 
-    fun openEmail(lastError: String)
+    fun openEmail(supportInfo: LoginSupportInfo)
 
     fun openAdvancedLogin()
 

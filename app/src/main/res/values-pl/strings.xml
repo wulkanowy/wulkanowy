@@ -37,12 +37,14 @@
     <string name="login_login_pesel_email_hint">Login, PESEL lub adres e-mail</string>
     <string name="login_password_hint">Hasło</string>
     <string name="login_host_hint">Odmiana dziennika UONET+</string>
+    <string name="login_domain_suffix_hint">Niestandardowy sufiks domeny</string>
     <string name="login_type_api">Mobilne API</string>
     <string name="login_type_scrapper">Scraper</string>
     <string name="login_type_hybrid">Hybrydowe</string>
     <string name="login_token_hint">Token</string>
     <string name="login_pin_hint">PIN</string>
     <string name="login_symbol_hint">Symbol</string>
+    <string name="login_symbol_placeholder">Np. \"lodz\" czy \"powiatjaroslawski\"</string>
     <string name="login_sign_in">Zaloguj</string>
     <string name="login_invalid_password">To hasło jest za krótkie</string>
     <string name="login_incorrect_password_default">Dane logowania są niepoprawne</string>
@@ -53,7 +55,8 @@
     <string name="login_invalid_email">Nieprawidłowy adres e-mail</string>
     <string name="login_invalid_login">Użyj loginu zamiast adresu e-mail</string>
     <string name="login_invalid_custom_email">Użyj loginu lub adresu e-mail w @%1$s</string>
-    <string name="login_invalid_symbol">Nieprawidłowy symbol</string>
+    <string name="login_invalid_symbol">Nieprawidłowy symbol. Jeśli nie możesz go znaleźć, skontaktuj się ze szkołą</string>
+    <string name="login_invalid_symbol_definitely">Nie zmyślaj! Jeśli nie możesz znaleźć symbolu, skontaktuj się ze szkołą</string>
     <string name="login_incorrect_symbol">Nie znaleziono ucznia. Sprawdź poprawność symbolu i wybranej odmiany dziennika UONET+</string>
     <string name="login_duplicate_student">Wybrany uczeń jest już zalogowany</string>
     <string name="login_symbol_helper">Symbol można znaleźć na stronie dziennika w&#160;<b>Uczeń</b>→&#160;<b>Dostęp Mobilny</b> →&#160;<b>Wygeneruj kod dostępu</b>.\n\nUpewnij się, że ustawiłeś odpowiednią odmianę dziennika w polu  <b>Odmiana dziennika UONET+</b> na pierwszym ekranie logowania</string>
@@ -68,7 +71,7 @@
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Wyślij wiadomość e-mail</string>
     <string name="login_recover_warning">Upewnij się, że została wybrana odpowiednia odmiana dziennika UONET+!</string>
-    <string name="login_recover_button">Nie pamiętam hasła</string>
+    <string name="login_recover_button">Zresetuj hasło</string>
     <string name="login_recover_title">Przywróć swoje konto</string>
     <string name="login_recover">Przywróć</string>
     <string name="login_signed_in">Uczeń jest już zalogowany</string>
@@ -76,6 +79,12 @@
     <string name="login_other_search_locations">Inne lokalizacje wyszukiwania</string>
     <string name="login_no_active_student">Nie znaleziono aktywnych uczniów</string>
     <string name="login_symbol_enter">Wprowadź inny symbol</string>
+    <string name="login_support_title">Uzyskaj pomoc</string>
+    <string name="login_support_school_hint">Pełna nazwa szkoły (wymagana)</string>
+    <string name="login_support_school_placeholder">Np. ZSTiO Jarosław lub SP nr 99 w Łodzi</string>
+    <string name="login_support_additional_hint">Dodatkowe informacje (po polsku) (nieobowiązkowo)</string>
+    <string name="login_support_additional_placeholder">Np. \"Ostatnio zmieniłem szkołę i…\" albo \"Jestem rodzicem i nie widzę drugiego dziecka…\"</string>
+    <string name="login_support_submit">Wyślij</string>
     <!--Notifications-->
     <string name="notifications_header_title">Włącz powiadomienia</string>
     <string name="notifications_header_description">Włącz powiadomienia, aby nie przegapić wiadomości od nauczyciela lub nowej oceny</string>
@@ -184,6 +193,12 @@
     <string name="timetable_notify_change_room">Zmiana sali z %1$s na %2$s</string>
     <string name="timetable_notify_change_teacher">Zmiana nauczyciela z %1$s na %2$s</string>
     <string name="timetable_notify_change_subject">Zmiana przedmiotu z %1$s na %2$s</string>
+    <plurals name="timetable_no_lesson">
+        <item quantity="one">Brak lekcji</item>
+        <item quantity="few">Brak lekcji</item>
+        <item quantity="many">Brak lekcji</item>
+        <item quantity="other">Brak lekcji</item>
+    </plurals>
     <plurals name="timetable_notify_new_items_title">
         <item quantity="one">Zmiana planu lekcji</item>
         <item quantity="few">Zmiany planu lekcji</item>
@@ -351,6 +366,8 @@
     </plurals>
     <string name="message_messages_deleted">Wiadomości zostały usunięte</string>
     <string name="message_mailbox_chooser_title">Wybierz skrzynkę</string>
+    <string name="message_incognito_mode_on">Tryb incognito jest włączony</string>
+    <string name="message_incognito_description">Dzięki trybowi incognito nadawca nie zobaczy, że przeczytałeś tę wiadomość</string>
     <!--Note-->
     <string name="note_no_items">Brak informacji o uwagach</string>
     <string name="note_points">Punkty</string>
@@ -697,6 +714,7 @@
     <string name="pref_view_expand_grade">Rozwijanie ocen</string>
     <string name="pref_view_timetable_show_timers">Oznaczaj bieżącą lekcję</string>
     <string name="pref_view_timetable_show_groups">Pokazuj grupę obok przedmiotu</string>
+    <string name="pref_view_timetable_show_gaps">Pokazuj puste kafelki gdzie nie ma lekcji</string>
     <string name="pref_view_grade_statistics_list">Pokazuj listę wykresów w ocenach klasy</string>
     <string name="pref_view_subjects_without_grades">Pokazuj przedmioty bez ocen</string>
     <string name="pref_view_grade_color_scheme">Schemat kolorów ocen</string>
@@ -737,6 +755,8 @@
     <string name="pref_other_grade_modifier_minus">Wartość minusa</string>
     <string name="pref_other_fill_message_content">Odpowiadaj z historią wiadomości</string>
     <string name="pref_other_optional_arithmetic_average">Licz średnią arytmetyczną, gdy żadna ocena nie ma wagi</string>
+    <string name="pref_other_incognito_mode">Tryb incognito</string>
+    <string name="pref_other_incognito_mode_summary">Nie informuj o przeczytaniu wiadomości</string>
     <string name="pref_ads_support_category_name">Wsparcie</string>
     <string name="pref_ads_privacy_policy">Polityka prywatności</string>
     <string name="pref_ads_agreements">Zgody</string>

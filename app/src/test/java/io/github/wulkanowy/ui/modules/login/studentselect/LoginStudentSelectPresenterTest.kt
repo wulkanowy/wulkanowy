@@ -5,6 +5,7 @@ import io.github.wulkanowy.data.pojos.RegisterStudent
 import io.github.wulkanowy.data.pojos.RegisterSymbol
 import io.github.wulkanowy.data.pojos.RegisterUnit
 import io.github.wulkanowy.data.pojos.RegisterUser
+import io.github.wulkanowy.data.repositories.SchoolsRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.scrapper.Scrapper
@@ -40,6 +41,9 @@ class LoginStudentSelectPresenterTest {
     @MockK
     lateinit var studentRepository: StudentRepository
 
+    @MockK
+    lateinit var schoolsRepository: SchoolsRepository
+
     @MockK(relaxed = true)
     lateinit var analytics: AnalyticsHelper
 
@@ -55,6 +59,7 @@ class LoginStudentSelectPresenterTest {
         password = "",
         baseUrl = "",
         symbol = null,
+        domainSuffix = "",
     )
 
     private val subject = RegisterStudent(
@@ -109,6 +114,7 @@ class LoginStudentSelectPresenterTest {
         clearMocks(studentRepository, loginStudentSelectView)
 
         coEvery { studentRepository.getSavedStudents(false) } returns emptyList()
+        coEvery { schoolsRepository.logSchoolLogin(any(), any()) } just Runs
 
         every { loginStudentSelectView.initView() } just Runs
         every { loginStudentSelectView.symbols } returns emptyMap()
@@ -119,6 +125,7 @@ class LoginStudentSelectPresenterTest {
 
         presenter = LoginStudentSelectPresenter(
             studentRepository = studentRepository,
+            schoolsRepository = schoolsRepository,
             loginErrorHandler = errorHandler,
             syncManager = syncManager,
             analytics = analytics,

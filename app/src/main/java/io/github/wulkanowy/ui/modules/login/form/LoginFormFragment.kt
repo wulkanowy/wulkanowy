@@ -9,12 +9,16 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.AdminMessage
 import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.databinding.FragmentLoginFormBinding
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.modules.dashboard.viewholders.AdminMessageViewHolder
 import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.ui.modules.login.LoginData
+import io.github.wulkanowy.ui.modules.login.support.LoginSupportDialog
+import io.github.wulkanowy.ui.modules.login.support.LoginSupportInfo
 import io.github.wulkanowy.utils.*
 import javax.inject.Inject
 
@@ -44,6 +48,9 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
     override val formHostValue: String
         get() = hostValues.getOrNull(hostKeys.indexOf(binding.loginFormHost.text.toString()))
             .orEmpty()
+
+    override val formDomainSuffix: String
+        get() = binding.loginFormDomainSuffix.text.toString()
 
     override val formHostSymbol: String
         get() = hostSymbols.getOrNull(hostKeys.indexOf(binding.loginFormHost.text.toString()))
@@ -179,7 +186,9 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
 
     override fun clearPassError() {
         binding.loginFormPassLayout.error = null
-        binding.loginFormPassLayout.setEndIconTintList(null)
+        binding.loginFormPassLayout.setEndIconTintList(
+            requireContext().getAttrColorStateList(R.attr.colorOnSurface)
+        )
         binding.loginFormErrorBox.isVisible = false
     }
 
@@ -204,6 +213,23 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
         binding.loginFormContainer.visibility = if (show) VISIBLE else GONE
     }
 
+    override fun showAdminMessage(message: AdminMessage?) {
+        AdminMessageViewHolder(
+            binding = binding.loginFormMessage,
+            onAdminMessageDismissClickListener = presenter::onAdminMessageDismissed,
+            onAdminMessageClickListener = presenter::onAdminMessageSelected,
+        ).bind(message)
+        binding.loginFormMessage.root.isVisible = message != null
+    }
+
+    override fun openInternetBrowser(url: String) {
+        requireContext().openInternetBrowser(url)
+    }
+
+    override fun showDomainSuffixInput(show: Boolean) {
+        binding.loginFormDomainSuffixLayout.isVisible = show
+    }
+
     override fun showOtherOptionsButton(show: Boolean) {
         binding.loginFormAdvancedButton.isVisible = show
     }
@@ -214,8 +240,7 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
     }
 
     override fun showContact(show: Boolean) {
-        binding.loginFormContact.visibility = if (show) VISIBLE else GONE
-        binding.loginFormRecoverLink.visibility = if (show) GONE else VISIBLE
+        binding.loginFormContact.isVisible = show
     }
 
     override fun openPrivacyPolicyPage() {
@@ -256,22 +281,10 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
     override fun onResume() {
         super.onResume()
         presenter.updateUsernameLabel()
+        presenter.updateCustomDomainSuffixVisibility()
     }
 
-    override fun openEmail(lastError: String) {
-        context?.openEmailClient(
-            chooserTitle = requireContext().getString(R.string.login_email_intent_title),
-            email = "wulkanowyinc@gmail.com",
-            subject = requireContext().getString(R.string.login_email_subject),
-            body = requireContext().getString(
-                R.string.login_email_text,
-                "${appInfo.systemManufacturer} ${appInfo.systemModel}",
-                appInfo.systemVersion.toString(),
-                "${appInfo.versionName}-${appInfo.buildFlavor}",
-                "$formHostValue/$formHostSymbol",
-                preferencesRepository.installationId,
-                lastError
-            )
-        )
+    override fun openEmail(supportInfo: LoginSupportInfo) {
+        LoginSupportDialog.newInstance(supportInfo).show(childFragmentManager, "support_dialog")
     }
 }
