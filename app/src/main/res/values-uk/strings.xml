@@ -26,6 +26,7 @@
     <string name="student_info_title">Інформація про учня</string>
     <string name="dashboard_title">Головна</string>
     <string name="notifications_center_title">Центр сповіщень</string>
+    <string name="menu_order_title">Конфігурація меню</string>
     <!--Subtitles-->
     <string name="grade_subtitle">%1$d семестр, %2$d/%3$d</string>
     <!--Login-->
@@ -36,12 +37,14 @@
     <string name="login_login_pesel_email_hint">Логін, PESEL або e-mail</string>
     <string name="login_password_hint">Пароль</string>
     <string name="login_host_hint">Тип щоденника UONET+</string>
+    <string name="login_domain_suffix_hint">Користувацький суфікс домену</string>
     <string name="login_type_api">Мobile API</string>
     <string name="login_type_scrapper">Scraper</string>
     <string name="login_type_hybrid">Hybrid</string>
     <string name="login_token_hint">Token</string>
     <string name="login_pin_hint">PIN</string>
     <string name="login_symbol_hint">Symbol</string>
+    <string name="login_symbol_placeholder">E.g. \"lodz\" or \"powiatjaroslawski\"</string>
     <string name="login_sign_in">Увійти</string>
     <string name="login_invalid_password">Занадто короткий пароль</string>
     <string name="login_incorrect_password_default">Вказані невірні дані</string>
@@ -52,10 +55,11 @@
     <string name="login_invalid_email">Недійсна адреса e-mail</string>
     <string name="login_invalid_login">Використовуйте призначений логін замість адреси e-mail</string>
     <string name="login_invalid_custom_email">Використовуйте призначений логін або адресу e-mail в @%1$s</string>
-    <string name="login_invalid_symbol">Неправильний symbol</string>
-    <string name="login_incorrect_symbol">Студента не знайдено. Перевірте symbol та обранний тип щоденника UONET+</string>
+    <string name="login_invalid_symbol">Invalid symbol. If you cannot find it, please contact the school</string>
+    <string name="login_invalid_symbol_definitely">Don\'t make this up! If you cannot find it, please contact the school</string>
+    <string name="login_incorrect_symbol">Студента не знайдено. Перевірте symbol та обраний тип щоденника UONET+</string>
     <string name="login_duplicate_student">Цього учня вже авторизовано</string>
-    <string name="login_symbol_helper">Symbol можна знайти на сторінці реєстрації в &#160;<b>Uczeń</b>→&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nПереконайтесь, що ви встановили відповідний тип щоденника в полі <b>Тип щоденника UONET+</b> на попередньому екрані</string>
+    <string name="login_symbol_helper">Symbol можно знайти на сторінці щоденника у&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Wygeneruj kod dostępu</b>.\n\nПереконайтеся, що ви вказали відповідний щоденник у полі <b>Тип щоденника UONET+</b> на першому екрані логування</string>
     <string name="login_select_student">Виберіть учнів для авторизації в додатку</string>
     <string name="login_advanced">Інші варіанти</string>
     <string name="login_advanced_warning_mobile_api">У цьому режимі не працюють: щасливий номер, статистика класу по оцінкам, статистика відвідуваності та уроків, інформація про школу та список зареєстрованих пристроїв</string>
@@ -67,11 +71,25 @@
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Надіслати електронний лист</string>
     <string name="login_recover_warning">Переконайтеся, що ви вибрали правильний тип щоденника UONET+!</string>
-    <string name="login_recover_button">Забули пароль?</string>
+    <string name="login_recover_button">Reset password</string>
     <string name="login_recover_title">Відновіть свій обліковий запис</string>
     <string name="login_recover">Відновити</string>
     <string name="login_signed_in">Учня вже авторизовано</string>
     <string name="login_host_standard">Стандартний</string>
+    <string name="login_other_search_locations">Інші розташування пошуку</string>
+    <string name="login_no_active_student">Активних учнів не знайдено</string>
+    <string name="login_symbol_enter">Введіть інший symbol</string>
+    <string name="login_support_title">Get help</string>
+    <string name="login_support_school_hint">Full school name (required)</string>
+    <string name="login_support_school_placeholder">Np. ZSTiO Jarosław lub SP nr 99 w Łodzi</string>
+    <string name="login_support_additional_hint">Additional information in Polish (optional)</string>
+    <string name="login_support_additional_placeholder">Np. \"Ostatnio zmieniłem szkołę i…\" albo \"Jestem rodzicem i nie widzę drugiego dziecka…\"</string>
+    <string name="login_support_submit">Submit</string>
+    <!--Notifications-->
+    <string name="notifications_header_title">Увімкнути сповіщення</string>
+    <string name="notifications_header_description">Увімкнути сповіщення, щоб не пропустити лист від вчителя або нову оцінку</string>
+    <string name="notifications_skip">Пропустити</string>
+    <string name="notifications_enable">Увімкнути</string>
     <!--Main-->
     <string name="main_account_picker">Змінити облікові записи</string>
     <string name="main_log_in">Увійти</string>
@@ -175,6 +193,12 @@
     <string name="timetable_notify_change_room">Зміна аудіторії з %1$s на %2$s</string>
     <string name="timetable_notify_change_teacher">Зміна вчителя з %1$s на %2$s</string>
     <string name="timetable_notify_change_subject">Зміна теми з %1$s на %2$s</string>
+    <plurals name="timetable_no_lesson">
+        <item quantity="one">Немає уроку</item>
+        <item quantity="few">Немає уроків</item>
+        <item quantity="many">Немає уроків</item>
+        <item quantity="other">Немає уроків</item>
+    </plurals>
     <plurals name="timetable_notify_new_items_title">
         <item quantity="one">Зміна у розкладі</item>
         <item quantity="few">Зміни у розкладі</item>
@@ -342,6 +366,8 @@
     </plurals>
     <string name="message_messages_deleted">Листи видалено</string>
     <string name="message_mailbox_chooser_title">Вибрати поштову скриньку</string>
+    <string name="message_incognito_mode_on">Режим анонімності включено</string>
+    <string name="message_incognito_description">Завдяки режиму анонімності, відправник не буде сповіщений коли ви прочитаєте повідомлення</string>
     <!--Note-->
     <string name="note_no_items">Немає інформації о зауваженнях</string>
     <string name="note_points">Бали</string>
@@ -485,6 +511,8 @@
     </plurals>
     <string name="conferences_present">Присутність на зустрічі</string>
     <string name="conference_agenda">Порядок денний</string>
+    <string name="conference_place">Місце</string>
+    <string name="conference_topic">Тема</string>
     <!--Director information-->
     <string name="school_announcement_title">Оголошення школи</string>
     <string name="school_announcement_no_items">Немає шкільних оголошень</string>
@@ -512,7 +540,7 @@
     <string name="account_confirm">Ви впевнені, що хочете вийти з цього облікового запису?</string>
     <string name="account_logout_student">Вийти з облікового запису учня</string>
     <string name="account_type_student">Обліковий запис учня</string>
-    <string name="account_type_parent">Обліковий запис батька</string>
+    <string name="account_type_parent">Обліковий запис родителя</string>
     <string name="account_details_edit">Змінити дані</string>
     <string name="account_quick_manager">Змінити облікові записи</string>
     <string name="account_select_student">Вибрати учня</string>
@@ -668,8 +696,10 @@
     <string name="all_undo">Відмінити</string>
     <string name="all_change">Змінити</string>
     <string name="all_add_to_calendar">Додати у календар</string>
+    <string name="all_cancel">Скасувати</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Немаэ уроків</string>
+    <string name="widget_timetable_last_synchronization">Синхронізовано %1$s в %2$s</string>
     <string name="widget_timetable_theme_title">Увібрати тему</string>
     <string name="widget_timetable_theme_light">Яскрава</string>
     <string name="widget_timetable_theme_dark">Темна</string>
@@ -684,11 +714,14 @@
     <string name="pref_view_expand_grade">Розгортання оцінок</string>
     <string name="pref_view_timetable_show_timers">Позначити поточний урок</string>
     <string name="pref_view_timetable_show_groups">Показувати групи поруч з темами</string>
+    <string name="pref_view_timetable_show_gaps">Показувати порожні плитки там, де немає уроків</string>
     <string name="pref_view_grade_statistics_list">Показувати діаграми в оцінках класу</string>
     <string name="pref_view_subjects_without_grades">Показати предмети без оцінок</string>
     <string name="pref_view_grade_color_scheme">Схема кольорів оцінок</string>
     <string name="pref_view_grade_sorting_mode">Сортування предметів</string>
     <string name="pref_view_app_language">Мова</string>
+    <string name="pref_view_menu_order_title">Конфігурація меню</string>
+    <string name="pref_view_menu_order_summary">Встановити порядок функцій в меню</string>
     <string name="pref_notify_header">Повідомлення</string>
     <string name="pref_notify_header_other">Інше</string>
     <string name="pref_notify_switch">Показувати повідомлення</string>
@@ -722,6 +755,8 @@
     <string name="pref_other_grade_modifier_minus">Вартість мінуса</string>
     <string name="pref_other_fill_message_content">Відповісти з історією повідомлень</string>
     <string name="pref_other_optional_arithmetic_average">Вилічити середню аритметичну, якщо оцінка немає вартості</string>
+    <string name="pref_other_incognito_mode">Анонімний режим</string>
+    <string name="pref_other_incognito_mode_summary">Не повідомляти про прочитання повідомлення</string>
     <string name="pref_ads_support_category_name">Підтримка</string>
     <string name="pref_ads_privacy_policy">Політика конфіденційності</string>
     <string name="pref_ads_agreements">Угоди</string>
@@ -790,6 +825,19 @@
     <string name="update_download_success">Щойно завантажено оновлення.</string>
     <string name="update_download_success_button">Перезавантажити</string>
     <string name="update_failed">Помилка оновлення! Wulkanowy може не працювати належним чином. Подумайте про оновлення</string>
+    <!--Menu order-->
+    <string name="menu_order_confirm_title">Перезавантаження додатку</string>
+    <string name="menu_order_confirm_content">Додаток потрібно перезавантажити для збереження змін</string>
+    <string name="menu_order_confirm_restart">Перезавантажити</string>
+    <!--Auth-->
+    <string name="auth_api_error">Авторизацію відхилено. Надані дані не збігаються із записами в кабінеті секретаря.</string>
+    <string name="auth_invalid_error">Неправильний PESEL</string>
+    <string name="auth_pesel">Число PESEL</string>
+    <string name="auth_button">Авторизовать</string>
+    <string name="auth_success">Авторизація пройшла успішно</string>
+    <string name="auth_title">Авторизувати</string>
+    <string name="auth_description">Для роботи програми нам потрібно підтвердити вашу особу. Будь ласка, введіть число PESEL &lt;b&gt;%1$s&lt;/b&gt; студента в поле нижче</string>
+    <string name="auth_button_skip">Поки що пропустити</string>
     <!--Errors-->
     <string name="error_no_internet">Немає з\'єднання з інтернетом</string>
     <string name="error_invalid_device_datetime">Сталася помилка. Перевірте годинник пристрою</string>

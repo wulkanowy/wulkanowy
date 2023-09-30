@@ -1,9 +1,5 @@
-Wersja 1.8.1
+Wersja 2.2.0
 
-- naprawiliśmy liczenie średniej ucznia w ocenach klasy dla wykresu "Wszystkie"
-- zmieniliśmy kolejność przycisków akcji w podglądzie wiadomości
-- ulepszyliśmy oznaczenie nieodczytanych wiadomości
-- naprawiliśmy pokazywanie informacji o odczytanej wiadomości w wysłanych
-- dodaliśmy opcję ręcznego wybierania skrzynki pocztowej
+Dokonaliśmy drobnych usprawnień w obszarze logowania, które powinny pomóc Wam i nam
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases

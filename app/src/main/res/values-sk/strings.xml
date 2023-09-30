@@ -26,6 +26,7 @@
     <string name="student_info_title">Informácie o žiakovi</string>
     <string name="dashboard_title">Domov</string>
     <string name="notifications_center_title">Centrum oznámení</string>
+    <string name="menu_order_title">Konfigurácia menu</string>
     <!--Subtitles-->
     <string name="grade_subtitle">Semester %1$d, %2$d/%3$d</string>
     <!--Login-->
@@ -35,13 +36,15 @@
     <string name="login_email_hint">Email</string>
     <string name="login_login_pesel_email_hint">Prihlásenie, číslo PESEL alebo e-mail</string>
     <string name="login_password_hint">Heslo</string>
-    <string name="login_host_hint">Variácie denníka UONET+</string>
+    <string name="login_host_hint">Variácia denníka UONET+</string>
+    <string name="login_domain_suffix_hint">Vlastná prípona domény</string>
     <string name="login_type_api">Mobile API</string>
     <string name="login_type_scrapper">Scraper</string>
     <string name="login_type_hybrid">Hybridné</string>
     <string name="login_token_hint">Token</string>
     <string name="login_pin_hint">PIN</string>
     <string name="login_symbol_hint">Symbol</string>
+    <string name="login_symbol_placeholder">E.g. \"lodz\" or \"powiatjaroslawski\"</string>
     <string name="login_sign_in">Prihlásiť</string>
     <string name="login_invalid_password">Toto heslo je príliš krátke</string>
     <string name="login_incorrect_password_default">Prihlasovacie údaje sú nesprávne</string>
@@ -52,10 +55,11 @@
     <string name="login_invalid_email">Neplatný e-mail</string>
     <string name="login_invalid_login">Namiesto e-mailu použite priradené prihlasovacie údaje</string>
     <string name="login_invalid_custom_email">Použite priradené prihlasovacie alebo e-mail v @%1$s</string>
-    <string name="login_invalid_symbol">Neplatný symbol</string>
+    <string name="login_invalid_symbol">Invalid symbol. If you cannot find it, please contact the school</string>
+    <string name="login_invalid_symbol_definitely">Don\'t make this up! If you cannot find it, please contact the school</string>
     <string name="login_incorrect_symbol">Žiak nebol nájdený. Skontrolujte správnosť symbolu a vybrané varianty denníka UONET+</string>
     <string name="login_duplicate_student">Vybraný žiak už je prihlásený</string>
-    <string name="login_symbol_helper">Symbol nájdete na stránke denníka v &#160;<b>Uczeń</b>→&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nUistite sa, že ste na predchádzajúcu obrazovke nastaviť správny variant denníka do poľa <b>Variácie denníka UONET+</b></string>
+    <string name="login_symbol_helper">Symbol nájdete na stránke denníka v &#160;<b>Uczeń</b>→&#160;<b>Dostęp Mobilny</b> →&#160;<b>Wygeneruj kod dostępu</b>.\n\nUistite sa, že ste nastavili správny variant denníka v poli <b>Variácia denníka UONET+</b> na prvej prihlasovacej obrazovke</string>
     <string name="login_select_student">Vyberte žiakov, ktorí sa majú do aplikácie prihlásiť</string>
     <string name="login_advanced">Iné možnosti</string>
     <string name="login_advanced_warning_mobile_api">V tomto režime nefungujú nasledovné: šťastné číslo, štatistiky triedy, zhrnutie frekvencií, ospravedlnenie neprítomnosti, dokončené lekcie, informácie o škole a prezeranie zoznamu registrovaných zariadení</string>
@@ -67,11 +71,25 @@
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Poslať e-mail</string>
     <string name="login_recover_warning">Uistite sa, že ste vybrali správny variant denníka UONET+!</string>
-    <string name="login_recover_button">Zabudol som heslo</string>
+    <string name="login_recover_button">Reset password</string>
     <string name="login_recover_title">Obnovte svoj účet</string>
     <string name="login_recover">Obnoviť</string>
     <string name="login_signed_in">Žiak je už prihlásený</string>
     <string name="login_host_standard">Štandardná</string>
+    <string name="login_other_search_locations">Iné miesta vyhľadávania</string>
+    <string name="login_no_active_student">Neboli nájdení žiadni aktívni žiaci</string>
+    <string name="login_symbol_enter">Zadajte iný symbol</string>
+    <string name="login_support_title">Get help</string>
+    <string name="login_support_school_hint">Full school name (required)</string>
+    <string name="login_support_school_placeholder">Np. ZSTiO Jarosław lub SP nr 99 w Łodzi</string>
+    <string name="login_support_additional_hint">Additional information in Polish (optional)</string>
+    <string name="login_support_additional_placeholder">Np. \"Ostatnio zmieniłem szkołę i…\" albo \"Jestem rodzicem i nie widzę drugiego dziecka…\"</string>
+    <string name="login_support_submit">Submit</string>
+    <!--Notifications-->
+    <string name="notifications_header_title">Povoliť oznámenia</string>
+    <string name="notifications_header_description">Povoliť oznámenia, aby ste nezmeškali správu od učiteľa alebo o novej známke</string>
+    <string name="notifications_skip">Preskočiť</string>
+    <string name="notifications_enable">Zapnúť</string>
     <!--Main-->
     <string name="main_account_picker">Manažér účtov</string>
     <string name="main_log_in">Prihlásiť sa</string>
@@ -175,6 +193,12 @@
     <string name="timetable_notify_change_room">Zmena učebne z %1$s na %2$s</string>
     <string name="timetable_notify_change_teacher">Zmena učiteľa z %1$s na %2$s</string>
     <string name="timetable_notify_change_subject">Zmena predmetu z %1$s na %2$s</string>
+    <plurals name="timetable_no_lesson">
+        <item quantity="one">Žiadne lekcie</item>
+        <item quantity="few">Žiadne lekcie</item>
+        <item quantity="many">Žiadne lekcie</item>
+        <item quantity="other">Žiadne lekcie</item>
+    </plurals>
     <plurals name="timetable_notify_new_items_title">
         <item quantity="one">Zmena plánu lekcií</item>
         <item quantity="few">Zmeny plánu lekcií</item>
@@ -342,6 +366,8 @@
     </plurals>
     <string name="message_messages_deleted">Správy odstránené</string>
     <string name="message_mailbox_chooser_title">Vyberte poštovú schránku</string>
+    <string name="message_incognito_mode_on">Režim inkognito je zapnutý</string>
+    <string name="message_incognito_description">Vďaka inkognito režimu nie je odosielateľ upozornený, keď si správu prečítate</string>
     <!--Note-->
     <string name="note_no_items">Žiadne informácie o poznámkach</string>
     <string name="note_points">Body</string>
@@ -485,6 +511,8 @@
     </plurals>
     <string name="conferences_present">Prítomnosť na stretnutí</string>
     <string name="conference_agenda">Agenda</string>
+    <string name="conference_place">Miesto</string>
+    <string name="conference_topic">Téma</string>
     <!--Director information-->
     <string name="school_announcement_title">Školské oznámenia</string>
     <string name="school_announcement_no_items">Žiadne školské oznámenia</string>
@@ -668,8 +696,10 @@
     <string name="all_undo">Vrátiť</string>
     <string name="all_change">Zmeniť</string>
     <string name="all_add_to_calendar">Pridať do kalendára</string>
+    <string name="all_cancel">Zrušiť</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Žiadne lekcie</string>
+    <string name="widget_timetable_last_synchronization">Synchronizované %1$s v %2$s</string>
     <string name="widget_timetable_theme_title">Vybrať motív</string>
     <string name="widget_timetable_theme_light">Svetlý</string>
     <string name="widget_timetable_theme_dark">Tmavý</string>
@@ -684,11 +714,14 @@
     <string name="pref_view_expand_grade">Rozvijanie známok</string>
     <string name="pref_view_timetable_show_timers">Označiť aktuálne lekciu</string>
     <string name="pref_view_timetable_show_groups">Zobraziť skupiny vedľa predmetov</string>
+    <string name="pref_view_timetable_show_gaps">Zobraziť prázdne dlaždice, kde nie je žiadne lekcie</string>
     <string name="pref_view_grade_statistics_list">Zobraziť zoznam grafov v známkach triedy</string>
     <string name="pref_view_subjects_without_grades">Zobraziť predmety bez známok</string>
     <string name="pref_view_grade_color_scheme">Známky farebnú schému</string>
     <string name="pref_view_grade_sorting_mode">Triedenie predmetov</string>
     <string name="pref_view_app_language">Jazyk</string>
+    <string name="pref_view_menu_order_title">Konfigurácia menu</string>
+    <string name="pref_view_menu_order_summary">Nastaviť poradie funkcií v menu</string>
     <string name="pref_notify_header">Oznámenia</string>
     <string name="pref_notify_header_other">Iné</string>
     <string name="pref_notify_switch">Zobraziť oznámenia</string>
@@ -722,6 +755,8 @@
     <string name="pref_other_grade_modifier_minus">Hodnota mínusu</string>
     <string name="pref_other_fill_message_content">Odpovedať s históriou správ</string>
     <string name="pref_other_optional_arithmetic_average">Vypočítať aritmetický priemer, ak žiadna známka nemá váhu</string>
+    <string name="pref_other_incognito_mode">Režim inkognito</string>
+    <string name="pref_other_incognito_mode_summary">Neinformovať o prečítaní správy</string>
     <string name="pref_ads_support_category_name">Podpora</string>
     <string name="pref_ads_privacy_policy">Ochrana osobných údajov</string>
     <string name="pref_ads_agreements">Súhlasy</string>
@@ -790,6 +825,19 @@
     <string name="update_download_success">Aktualizácia bola stiahnutá.</string>
     <string name="update_download_success_button">Reštartovať</string>
     <string name="update_failed">Aktualizácia zlyhala! Wulkanowy nemusí fungovať správne. Zvážte aktualizáciu</string>
+    <!--Menu order-->
+    <string name="menu_order_confirm_title">Reštartovanie aplikácie</string>
+    <string name="menu_order_confirm_content">Pre uloženie zmien je nutné aplikáciu reštartovať</string>
+    <string name="menu_order_confirm_restart">Reštartovať</string>
+    <!--Auth-->
+    <string name="auth_api_error">Autorizácia bola zamietnutá. Uvedené údaje sa nezhodujú so záznamami v kancelárii tajomníka.</string>
+    <string name="auth_invalid_error">Neplatný PESEL</string>
+    <string name="auth_pesel">PESEL</string>
+    <string name="auth_button">Autorizovať</string>
+    <string name="auth_success">Autorizácia bola úspešne dokončená</string>
+    <string name="auth_title">Autorizácia</string>
+    <string name="auth_description">Na prevádzku aplikácie potrebujeme potvrdiť vašu identitu. Zadajte PESEL žiaka &lt;b&gt;%1$s&lt;/b&gt; v nižšie uvedenom poli</string>
+    <string name="auth_button_skip">Zatiaľ preskočiť</string>
     <!--Errors-->
     <string name="error_no_internet">Žiadne internetové pripojenie</string>
     <string name="error_invalid_device_datetime">Vyskytla sa chyba. Skontrolujte hodiny svojho zariadenia</string>

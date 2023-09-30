@@ -26,7 +26,8 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:paddingTop="6dp"
-            android:paddingBottom="6dp" />
+            android:paddingBottom="6dp"
+            tools:listitem="@layout/item_dashboard_grades" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
@@ -65,7 +66,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/dashboard_error_details"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"

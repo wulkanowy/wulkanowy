@@ -25,13 +25,21 @@ class TimetableWidgetService : RemoteViewsService() {
     lateinit var semesterRepo: SemesterRepository
 
     @Inject
-    lateinit var prefRepository: PreferencesRepository
+    lateinit var sharedPref: SharedPrefProvider
 
     @Inject
-    lateinit var sharedPref: SharedPrefProvider
+    lateinit var prefRepository: PreferencesRepository
 
     override fun onGetViewFactory(intent: Intent?): RemoteViewsFactory {
         Timber.d("TimetableWidgetFactory created")
-        return TimetableWidgetFactory(timetableRepo, studentRepo, semesterRepo, prefRepository, sharedPref, applicationContext, intent)
+        return TimetableWidgetFactory(
+            timetableRepository = timetableRepo,
+            studentRepository = studentRepo,
+            semesterRepository = semesterRepo,
+            sharedPref = sharedPref,
+            prefRepository = prefRepository,
+            context = applicationContext,
+            intent = intent,
+        )
     }
 }

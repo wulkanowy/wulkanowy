@@ -6,14 +6,17 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
+import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.db.entities.StudentName
 import io.github.wulkanowy.data.db.entities.StudentNickAndAvatar
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
-import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.data.mappers.mapToPojo
+import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.sdk.Sdk
-import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.DispatchersProvider
+import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.security.decrypt
 import io.github.wulkanowy.utils.security.encrypt
 import kotlinx.coroutines.withContext
@@ -27,11 +30,8 @@ class StudentRepository @Inject constructor(
     private val studentDb: StudentDao,
     private val semesterDb: SemesterDao,
     private val sdk: Sdk,
-    private val appInfo: AppInfo,
     private val appDatabase: AppDatabase
 ) {
-
-    suspend fun isStudentSaved() = getSavedStudents(false).isNotEmpty()
 
     suspend fun isCurrentStudentSet() = studentDb.loadCurrent()?.isCurrent ?: false
 
@@ -39,33 +39,34 @@ class StudentRepository @Inject constructor(
         pin: String,
         symbol: String,
         token: String
-    ): List<StudentWithSemesters> =
-        sdk.getStudentsFromMobileApi(token, pin, symbol, "")
-            .mapToEntities(colors = appInfo.defaultColorsForAvatar)
+    ): RegisterUser = sdk
+        .getStudentsFromHebe(token, pin, symbol, "")
+        .mapToPojo(null)
 
-    suspend fun getStudentsScrapper(
+    suspend fun getUserSubjectsFromScrapper(
         email: String,
         password: String,
         scrapperBaseUrl: String,
+        domainSuffix: String,
         symbol: String
-    ): List<StudentWithSemesters> =
-        sdk.getStudentsFromScrapper(email, password, scrapperBaseUrl, symbol)
-            .mapToEntities(password, appInfo.defaultColorsForAvatar)
+    ): RegisterUser = sdk
+        .getUserSubjectsFromScrapper(email, password, scrapperBaseUrl, domainSuffix, symbol)
+        .mapToPojo(password)
 
     suspend fun getStudentsHybrid(
         email: String,
         password: String,
         scrapperBaseUrl: String,
         symbol: String
-    ): List<StudentWithSemesters> =
-        sdk.getStudentsHybrid(email, password, scrapperBaseUrl, "", symbol)
-            .mapToEntities(password, appInfo.defaultColorsForAvatar)
+    ): RegisterUser = sdk
+        .getStudentsHybrid(email, password, scrapperBaseUrl, "", symbol)
+        .mapToPojo(password)
 
     suspend fun getSavedStudents(decryptPass: Boolean = true) =
         studentDb.loadStudentsWithSemesters()
             .map {
                 it.apply {
-                    if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API) {
+                    if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HEBE) {
                         student.password = withContext(dispatchers.io) {
                             decrypt(student.password)
                         }
@@ -75,7 +76,7 @@ class StudentRepository @Inject constructor(
 
     suspend fun getSavedStudentById(id: Long, decryptPass: Boolean = true) =
         studentDb.loadStudentWithSemestersById(id)?.apply {
-            if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API) {
+            if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HEBE) {
                 student.password = withContext(dispatchers.io) {
                     decrypt(student.password)
                 }
@@ -85,7 +86,7 @@ class StudentRepository @Inject constructor(
     suspend fun getStudentById(id: Long, decryptPass: Boolean = true): Student {
         val student = studentDb.loadById(id) ?: throw NoCurrentStudentException()
 
-        if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API) {
+        if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HEBE) {
             student.password = withContext(dispatchers.io) {
                 decrypt(student.password)
             }
@@ -96,7 +97,7 @@ class StudentRepository @Inject constructor(
     suspend fun getCurrentStudent(decryptPass: Boolean = true): Student {
         val student = studentDb.loadCurrent() ?: throw NoCurrentStudentException()
 
-        if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API) {
+        if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HEBE) {
             student.password = withContext(dispatchers.io) {
                 decrypt(student.password)
             }
@@ -109,7 +110,7 @@ class StudentRepository @Inject constructor(
         val students = studentsWithSemesters.map { it.student }
             .map {
                 it.apply {
-                    if (Sdk.Mode.valueOf(it.loginMode) != Sdk.Mode.API) {
+                    if (Sdk.Mode.valueOf(it.loginMode) != Sdk.Mode.HEBE) {
                         password = withContext(dispatchers.io) {
                             encrypt(password, context)
                         }
@@ -140,4 +141,21 @@ class StudentRepository @Inject constructor(
 
     suspend fun isOneUniqueStudent() = getSavedStudents(false)
         .distinctBy { it.student.studentName }.size == 1
+
+    suspend fun authorizePermission(student: Student, semester: Semester, pesel: String) =
+        sdk.init(student)
+            .switchDiary(semester.diaryId, semester.kindergartenDiaryId, semester.schoolYear)
+            .authorizePermission(pesel)
+
+    suspend fun refreshStudentName(student: Student, semester: Semester) {
+        val newCurrentApiStudent = sdk.init(student)
+            .switchDiary(semester.diaryId, semester.kindergartenDiaryId, semester.schoolYear)
+            .getCurrentStudent() ?: return
+
+        val studentName = StudentName(
+            studentName = "${newCurrentApiStudent.studentName} ${newCurrentApiStudent.studentSurname}"
+        ).apply { id = student.id }
+
+        studentDb.update(studentName)
+    }
 }

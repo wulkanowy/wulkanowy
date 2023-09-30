@@ -22,18 +22,18 @@ class Migration12Test : AbstractMigrationTest() {
     fun twoNotRelatedStudents() {
         helper.createDatabase(dbName, 11).apply {
             // user 1
-            createStudent(this, 1, true)
+            createStudent(this, 1)
             createSemester(this, 1, false, 5, 1)
             createSemester(this, 1, true, 5, 2)
 
             // user 2
-            createStudent(this, 2, true)
+            createStudent(this, 2)
             createSemester(this, 2, false, 6, 1)
             createSemester(this, 2, true, 6, 2)
             close()
         }
 
-        helper.runMigrationsAndValidate(dbName, 12, true, Migration12())
+        runMigrationsAndValidate(Migration12())
 
         val db = getMigratedRoomDatabase()
         val students = runBlocking { db.studentDao.loadAll() }
@@ -49,20 +49,21 @@ class Migration12Test : AbstractMigrationTest() {
             assertEquals(2, studentId)
             assertEquals(6, classId)
         }
+        db.close()
     }
 
     @Test
     fun removeStudentsWithoutClassId() {
         helper.createDatabase(dbName, 11).apply {
             // user 1
-            createStudent(this, 1, true)
+            createStudent(this, 1)
             createSemester(this, 1, false, 0, 2)
-            createStudent(this, 2, true)
+            createStudent(this, 2)
             createSemester(this, 2, true, 1, 2)
             close()
         }
 
-        helper.runMigrationsAndValidate(dbName, 12, true, Migration12())
+        runMigrationsAndValidate(Migration12())
 
         val db = getMigratedRoomDatabase()
         val students = runBlocking { db.studentDao.loadAll() }
@@ -73,22 +74,23 @@ class Migration12Test : AbstractMigrationTest() {
             assertEquals(2, studentId)
             assertEquals(1, classId)
         }
+        db.close()
     }
 
     @Test
     fun ensureThereIsOnlyOneCurrentStudent() {
         helper.createDatabase(dbName, 11).apply {
             // user 1
-            createStudent(this, 1, true)
+            createStudent(this, 1)
             createSemester(this, 1, true, 5, 2)
-            createStudent(this, 2, true)
+            createStudent(this, 2)
             createSemester(this, 2, true, 6, 2)
-            createStudent(this, 3, true)
+            createStudent(this, 3)
             createSemester(this, 3, false, 7, 2)
             close()
         }
 
-        helper.runMigrationsAndValidate(dbName, 12, true, Migration12())
+        runMigrationsAndValidate(Migration12())
 
         val db = getMigratedRoomDatabase()
         val students = runBlocking { db.studentDao.loadAll() }
@@ -107,9 +109,10 @@ class Migration12Test : AbstractMigrationTest() {
             assertEquals(studentId, 3)
             assertEquals(true, isCurrent)
         }
+        db.close()
     }
 
-    private fun createStudent(db: SupportSQLiteDatabase, studentId: Int, isCurrent: Boolean) {
+    private fun createStudent(db: SupportSQLiteDatabase, studentId: Int) {
         db.insert("Students", CONFLICT_FAIL, ContentValues().apply {
             put("endpoint", "https://fakelog.cf")
             put("loginType", "STANDARD")
@@ -120,7 +123,7 @@ class Migration12Test : AbstractMigrationTest() {
             put("student_name", "Jan Kowalski")
             put("school_id", "000123")
             put("school_name", "")
-            put("is_current", isCurrent)
+            put("is_current", true)
             put("registration_date", "0")
         })
     }

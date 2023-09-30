@@ -7,30 +7,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/sendMessageToolbar"
-        style="@style/Widget.MaterialComponents.Toolbar.Surface"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/send_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="4dp"
-        app:layout_constraintBottom_toTopOf="@id/sendMessageScroll"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:fitsSystemWindows="true"
+        app:layout_constraintBaseline_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/sendMessageToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <io.github.wulkanowy.materialchipsinput.ConsumedNestedScrollView
         android:id="@+id/sendMessageScroll"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sendMessageToolbar">
+        app:layout_constraintTop_toBottomOf="@id/send_app_bar">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/sendMessageContent"
@@ -185,7 +185,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sendMessageToolbar"
+        app:layout_constraintTop_toBottomOf="@id/send_app_bar"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
@@ -214,5 +214,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sendMessageToolbar" />
+        app:layout_constraintTop_toBottomOf="@id/send_app_bar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

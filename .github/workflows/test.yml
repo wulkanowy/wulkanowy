@@ -2,10 +2,12 @@ name: Tests
 
 on:
   push:
-    branches: [ master, develop ]
+    branches:
+      - master
+      - develop
+      - 'hotfix/**'
     tags: [ '*' ]
   pull_request:
-    branches: [ master, develop ]
 
 jobs:
 
@@ -20,7 +22,7 @@ jobs:
         - uses: actions/setup-java@v2
           with:
             distribution: 'zulu'
-            java-version: 11
+            java-version: 17
         - uses: actions/cache@v3
           with:
             path: |
@@ -46,7 +48,7 @@ jobs:
         - uses: actions/setup-java@v2
           with:
             distribution: 'zulu'
-            java-version: 11
+            java-version: 17
         - uses: actions/cache@v3
           with:
             path: |
@@ -72,7 +74,7 @@ jobs:
         - uses: actions/setup-java@v2
           with:
             distribution: 'zulu'
-            java-version: 11
+            java-version: 17
         - uses: actions/cache@v3
           with:
             path: |

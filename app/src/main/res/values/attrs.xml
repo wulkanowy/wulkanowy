@@ -2,6 +2,9 @@
 <resources>
     <attr name="colorDivider" format="color" />
     <attr name="colorSwipeRefresh" format="color" />
+    <attr name="colorTimetableCanceled" format="color" />
     <attr name="colorTimetableChange" format="color" />
     <attr name="colorMessageMedium" format="color" />
+    <attr name="colorMessageHigh" format="color" />
+    <attr name="colorOnMessageHigh" format="color" />
 </resources>

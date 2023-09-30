@@ -26,6 +26,7 @@
     <string name="student_info_title">Informace o žáku</string>
     <string name="dashboard_title">Domů</string>
     <string name="notifications_center_title">Centrum oznámení</string>
+    <string name="menu_order_title">Konfigurace menu</string>
     <!--Subtitles-->
     <string name="grade_subtitle">Semestr %1$d, %2$d/%3$d</string>
     <!--Login-->
@@ -36,12 +37,14 @@
     <string name="login_login_pesel_email_hint">Přihlášení, číslo PESEL nebo e-mail</string>
     <string name="login_password_hint">Heslo</string>
     <string name="login_host_hint">Variace deníku UONET+</string>
+    <string name="login_domain_suffix_hint">Vlastní přípona domény</string>
     <string name="login_type_api">Mobile API</string>
     <string name="login_type_scrapper">Scraper</string>
     <string name="login_type_hybrid">Hybridní</string>
     <string name="login_token_hint">Token</string>
     <string name="login_pin_hint">PIN</string>
     <string name="login_symbol_hint">Symbol</string>
+    <string name="login_symbol_placeholder">E.g. \"lodz\" or \"powiatjaroslawski\"</string>
     <string name="login_sign_in">Přihlásit</string>
     <string name="login_invalid_password">Toto heslo je příliš krátké</string>
     <string name="login_incorrect_password_default">Přihlašovací údaje jsou nesprávné</string>
@@ -52,10 +55,11 @@
     <string name="login_invalid_email">Neplatný e-mail</string>
     <string name="login_invalid_login">Místo e-mailu použijte přiřazené přihlašovací údaje</string>
     <string name="login_invalid_custom_email">Použijte přiřazené přihlašovací nebo e-mail v @%1$s</string>
-    <string name="login_invalid_symbol">Neplatný symbol</string>
+    <string name="login_invalid_symbol">Invalid symbol. If you cannot find it, please contact the school</string>
+    <string name="login_invalid_symbol_definitely">Don\'t make this up! If you cannot find it, please contact the school</string>
     <string name="login_incorrect_symbol">Žák nebyl nalezen. Zkontrolujte správnost symbolu a vybrané varianty deníku UONET+</string>
     <string name="login_duplicate_student">Vybraný žák je už přihlášen</string>
-    <string name="login_symbol_helper">Symbol najdete na stránce deníku v &#160;<b>Uczeń</b>→&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nUjistěte se, že jste na předchozí obrazovce nastavili správnou variantu deníku do pole <b>Variace deníku UONET+</b></string>
+    <string name="login_symbol_helper">Symbol najdete na stránce deníku v &#160;<b>Uczeń</b>→&#160;<b>Dostęp Mobilny</b> →&#160;<b>Wygeneruj kod dostępu</b>.\n\nUjistěte se, že jste nastavili správnou variantu deníku v poli <b>Variace deníku UONET+</b> na první přihlašovací obrazovce</string>
     <string name="login_select_student">Vyberte žáky, kteří se mají do aplikace přihlásit</string>
     <string name="login_advanced">Jiné možnosti</string>
     <string name="login_advanced_warning_mobile_api">V tomto režimu nefungují následující: šťastné číslo, statistiky třídy, shrnutí frekvencí, ospravedlnění nepřítomnosti, dokončené lekce, informace o škole a prohlížení seznamu registrovaných zařízení</string>
@@ -67,11 +71,25 @@
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Poslat e-mail</string>
     <string name="login_recover_warning">Ujistěte se, že jste vybrali správnou variantu deníku UONET+!</string>
-    <string name="login_recover_button">Zapomněl jsem své heslo</string>
+    <string name="login_recover_button">Reset password</string>
     <string name="login_recover_title">Obnovte svůj účet</string>
     <string name="login_recover">Obnovit</string>
     <string name="login_signed_in">Žák je už přihlášen</string>
     <string name="login_host_standard">Standardní</string>
+    <string name="login_other_search_locations">Jiná místa vyhledávání</string>
+    <string name="login_no_active_student">Nebyli nalezeni žádní aktivní žáci</string>
+    <string name="login_symbol_enter">Zadejte jiný symbol</string>
+    <string name="login_support_title">Get help</string>
+    <string name="login_support_school_hint">Full school name (required)</string>
+    <string name="login_support_school_placeholder">Np. ZSTiO Jarosław lub SP nr 99 w Łodzi</string>
+    <string name="login_support_additional_hint">Additional information in Polish (optional)</string>
+    <string name="login_support_additional_placeholder">Np. \"Ostatnio zmieniłem szkołę i…\" albo \"Jestem rodzicem i nie widzę drugiego dziecka…\"</string>
+    <string name="login_support_submit">Submit</string>
+    <!--Notifications-->
+    <string name="notifications_header_title">Povolit oznámení</string>
+    <string name="notifications_header_description">Povolit upozornění, abyste nezmeškali zprávu od učitele nebo o nové známce</string>
+    <string name="notifications_skip">Přeskočit</string>
+    <string name="notifications_enable">Zapnout</string>
     <!--Main-->
     <string name="main_account_picker">Manažer účtů</string>
     <string name="main_log_in">Přihlásit se</string>
@@ -175,6 +193,12 @@
     <string name="timetable_notify_change_room">Změna učebny z %1$s na %2$s</string>
     <string name="timetable_notify_change_teacher">Změna učitele z %1$s na %2$s</string>
     <string name="timetable_notify_change_subject">Změna předmětu z %1$s na %2$s</string>
+    <plurals name="timetable_no_lesson">
+        <item quantity="one">Žádné lekce</item>
+        <item quantity="few">Žádné lekce</item>
+        <item quantity="many">Žádné lekce</item>
+        <item quantity="other">Žádné lekce</item>
+    </plurals>
     <plurals name="timetable_notify_new_items_title">
         <item quantity="one">Změna plánu lekcí</item>
         <item quantity="few">Změny plánu lekcí</item>
@@ -342,6 +366,8 @@
     </plurals>
     <string name="message_messages_deleted">Zprávy odstraněné</string>
     <string name="message_mailbox_chooser_title">Vyberte poštovní schránku</string>
+    <string name="message_incognito_mode_on">Anonymní režim je zapnutý</string>
+    <string name="message_incognito_description">Díky anonymnímu režimu není odesílatel upozorněn, když si zprávu přečtete</string>
     <!--Note-->
     <string name="note_no_items">Žádné informace o poznámkách</string>
     <string name="note_points">Body</string>
@@ -485,6 +511,8 @@
     </plurals>
     <string name="conferences_present">Přítomnost na setkání</string>
     <string name="conference_agenda">Agenda</string>
+    <string name="conference_place">Místo</string>
+    <string name="conference_topic">Téma</string>
     <!--Director information-->
     <string name="school_announcement_title">Školní oznámení</string>
     <string name="school_announcement_no_items">Žádná školní oznámení</string>
@@ -668,8 +696,10 @@
     <string name="all_undo">Vrátit</string>
     <string name="all_change">Změnit</string>
     <string name="all_add_to_calendar">Přidat do kalendáře</string>
+    <string name="all_cancel">Zrušit</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Žádné lekce</string>
+    <string name="widget_timetable_last_synchronization">Synchronizováno %1$s v %2$s</string>
     <string name="widget_timetable_theme_title">Vybrat motiv</string>
     <string name="widget_timetable_theme_light">Světlý</string>
     <string name="widget_timetable_theme_dark">Tmavý</string>
@@ -684,11 +714,14 @@
     <string name="pref_view_expand_grade">Rozvíjení známek</string>
     <string name="pref_view_timetable_show_timers">Označit aktuální lekci</string>
     <string name="pref_view_timetable_show_groups">Zobrazit skupiny vedle předmětů</string>
+    <string name="pref_view_timetable_show_gaps">Zobrazit prázdné dlaždice, kde není žádná lekce</string>
     <string name="pref_view_grade_statistics_list">Zobrazit seznam grafů v známkách třídy</string>
     <string name="pref_view_subjects_without_grades">Zobrazit předměty bez známek</string>
     <string name="pref_view_grade_color_scheme">Známky barevné schéma</string>
     <string name="pref_view_grade_sorting_mode">Třídění předmětů</string>
     <string name="pref_view_app_language">Jazyk</string>
+    <string name="pref_view_menu_order_title">Konfigurace menu</string>
+    <string name="pref_view_menu_order_summary">Nastavit pořadí funkcí v menu</string>
     <string name="pref_notify_header">Oznámení</string>
     <string name="pref_notify_header_other">Jiné</string>
     <string name="pref_notify_switch">Zobrazit oznámení</string>
@@ -722,6 +755,8 @@
     <string name="pref_other_grade_modifier_minus">Hodnota mínusu</string>
     <string name="pref_other_fill_message_content">Odpovědět s historií zpráv</string>
     <string name="pref_other_optional_arithmetic_average">Vypočítat aritmetický průměr, pokud žádná známka nemá váhu</string>
+    <string name="pref_other_incognito_mode">Anonymní režim</string>
+    <string name="pref_other_incognito_mode_summary">Neinformovat o přečtení zprávy</string>
     <string name="pref_ads_support_category_name">Podpora</string>
     <string name="pref_ads_privacy_policy">Ochrana osobních údajů</string>
     <string name="pref_ads_agreements">Souhlasy</string>
@@ -790,6 +825,19 @@
     <string name="update_download_success">Aktualizace byla stažena.</string>
     <string name="update_download_success_button">Restartovat</string>
     <string name="update_failed">Aktualizace selhala! Wulkanowy nemusí fungovat správně. Zvažte aktualizaci</string>
+    <!--Menu order-->
+    <string name="menu_order_confirm_title">Restartování aplikace</string>
+    <string name="menu_order_confirm_content">Pro uložení změn je nutné aplikaci restartovat</string>
+    <string name="menu_order_confirm_restart">Restartovat</string>
+    <!--Auth-->
+    <string name="auth_api_error">Autorizace byla zamítnuta. Uvedené údaje se neshodují se záznamy v kanceláři tajemníka.</string>
+    <string name="auth_invalid_error">Neplatný PESEL</string>
+    <string name="auth_pesel">PESEL</string>
+    <string name="auth_button">Autorizovat</string>
+    <string name="auth_success">Autorizace byla úspěšně dokončena</string>
+    <string name="auth_title">Autorizace</string>
+    <string name="auth_description">Pro provoz aplikace potřebujeme potvrdit vaši identitu. Zadejte PESEL žáka &lt;b&gt;%1$s&lt;/b&gt; v níže uvedeném poli</string>
+    <string name="auth_button_skip">Zatím přeskočit</string>
     <!--Errors-->
     <string name="error_no_internet">Žádné internetové připojení</string>
     <string name="error_invalid_device_datetime">Vyskytla se chyba. Zkontrolujte hodiny svého zařízení</string>

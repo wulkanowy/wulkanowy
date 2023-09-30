@@ -3,6 +3,7 @@ package io.github.wulkanowy.data.db.migrations
 import android.content.Context
 import androidx.preference.PreferenceManager
 import androidx.room.Room
+import androidx.room.migration.Migration
 import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.core.app.ApplicationProvider
@@ -16,14 +17,19 @@ abstract class AbstractMigrationTest {
 
     val dbName = "migration-test"
 
-    val context: Context get() = ApplicationProvider.getApplicationContext()
+    private val context: Context get() = ApplicationProvider.getApplicationContext()
 
     @get:Rule
     val helper: MigrationTestHelper = MigrationTestHelper(
         InstrumentationRegistry.getInstrumentation(),
-        AppDatabase::class.java.canonicalName,
+        AppDatabase::class.java,
+        listOf(Migration55()),
         FrameworkSQLiteOpenHelperFactory()
     )
+
+    fun runMigrationsAndValidate(migration: Migration) {
+        helper.runMigrationsAndValidate(dbName, migration.endVersion, true, migration).close()
+    }
 
     fun getMigratedRoomDatabase(): AppDatabase {
         val database = Room.databaseBuilder(

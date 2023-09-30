@@ -160,8 +160,29 @@ class GetMailboxByStudentUseCaseTest {
         assertEquals(expectedMailbox, systemUnderTest(student))
     }
 
+    @Test
+    fun `get mailbox for student with mailboxes from two different schools`() = runTest {
+        val student = getStudentEntity(
+            userName = "Kamil Bednarek",
+            studentName = "Kamil Bednarek",
+            schoolShortName = "CKZiU",
+        )
+        val mailbox1 = getMailboxEntity(
+            studentName = "Kamil Bednarek",
+            schoolShortName = "ZSTiO",
+        )
+        val mailbox2 = getMailboxEntity(
+            studentName = "Kamil Bednarek",
+            schoolShortName = "CKZiU",
+        )
+        coEvery { mailboxDao.loadAll(any()) } returns listOf(mailbox1, mailbox2)
+
+        assertEquals(mailbox2, systemUnderTest(student))
+    }
+
     private fun getMailboxEntity(
         studentName: String,
+        schoolShortName: String = "test",
     ) = Mailbox(
         globalKey = "",
         fullName = "",
@@ -170,29 +191,31 @@ class GetMailboxByStudentUseCaseTest {
         schoolId = "",
         symbol = "",
         studentName = studentName,
-        schoolNameShort = "",
+        schoolNameShort = schoolShortName,
         type = MailboxType.STUDENT,
     )
 
     private fun getStudentEntity(
         studentName: String,
         userName: String,
+        schoolShortName: String = "test",
     ) = Student(
         scrapperBaseUrl = "http://fakelog.cf",
+        scrapperDomainSuffix = "",
         email = "jan@fakelog.cf",
         certificateKey = "",
         classId = 0,
         className = "",
         isCurrent = false,
         isParent = false,
-        loginMode = Sdk.Mode.API.name,
+        loginMode = Sdk.Mode.HEBE.name,
         loginType = Sdk.ScrapperLoginType.STANDARD.name,
         mobileBaseUrl = "",
         password = "",
         privateKey = "",
         registrationDate = Instant.now(),
         schoolName = "",
-        schoolShortName = "test",
+        schoolShortName = schoolShortName,
         schoolSymbol = "",
         studentId = 1,
         studentName = studentName,

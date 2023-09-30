@@ -7,8 +7,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.View.*
 import android.widget.CompoundButton
+import androidx.annotation.StringRes
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.core.view.updatePadding
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +29,7 @@ import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.hideSoftInput
+import io.github.wulkanowy.utils.nullableSerializable
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -43,12 +46,8 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
 
         const val MESSAGE_TAB_FOLDER_ID = "message_tab_folder_id"
 
-        fun newInstance(folder: MessageFolder): MessageTabFragment {
-            return MessageTabFragment().apply {
-                arguments = Bundle().apply {
-                    putString(MESSAGE_TAB_FOLDER_ID, folder.name)
-                }
-            }
+        fun newInstance(folder: MessageFolder) = MessageTabFragment().apply {
+            arguments = bundleOf(MESSAGE_TAB_FOLDER_ID to folder.name)
         }
     }
 
@@ -86,6 +85,7 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         }
     }
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -130,18 +130,25 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
 
         setFragmentResultListener(requireArguments().getString(MESSAGE_TAB_FOLDER_ID)!!) { _, bundle ->
             presenter.onMailboxSelected(
-                mailbox = bundle.getSerializable(MailboxChooserDialog.MAILBOX_KEY) as? Mailbox,
+                mailbox = bundle.nullableSerializable(MailboxChooserDialog.MAILBOX_KEY),
             )
         }
     }
 
+    @Deprecated("Deprecated in Java")
+    @Suppress("DEPRECATION")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.action_menu_message_tab, menu)
 
-        val searchView = menu.findItem(R.id.action_search).actionView as SearchView
-        searchView.queryHint = getString(R.string.all_search_hint)
-        searchView.maxWidth = Int.MAX_VALUE
+        initializeSearchView(menu)
+    }
+
+    private fun initializeSearchView(menu: Menu) {
+        val searchView = (menu.findItem(R.id.action_search).actionView as SearchView).apply {
+            queryHint = getString(R.string.all_search_hint)
+            maxWidth = Int.MAX_VALUE
+        }
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String) = false
             override fun onQueryTextChange(query: String): Boolean {
@@ -207,8 +214,8 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         binding.messageTabSwipe.isRefreshing = show
     }
 
-    override fun showMessagesDeleted() {
-        showMessage(getString(R.string.message_messages_deleted))
+    override fun showMessage(@StringRes messageId: Int) {
+        showMessage(getString(messageId))
     }
 
     override fun notifyParentShowNewMessage(show: Boolean) {
@@ -233,6 +240,10 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
 
     fun onParentFinishActionMode() {
         presenter.onParentFinishActionMode()
+    }
+
+    fun onParentReselected() {
+        presenter.onParentReselected()
     }
 
     private fun onChipChecked(chip: CompoundButton, isChecked: Boolean) {

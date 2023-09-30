@@ -1,9 +1,13 @@
 package io.github.wulkanowy.ui.modules.login.symbol
 
-import io.github.wulkanowy.data.db.entities.StudentWithSemesters
+import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.ui.base.BaseView
+import io.github.wulkanowy.ui.modules.login.LoginData
+import io.github.wulkanowy.ui.modules.login.support.LoginSupportInfo
 
 interface LoginSymbolView : BaseView {
+
+    val symbolValue: String?
 
     val symbolNameError: CharSequence?
 
@@ -13,7 +17,13 @@ interface LoginSymbolView : BaseView {
 
     fun setErrorSymbolIncorrect()
 
+    fun setErrorSymbolInvalid()
+
+    fun setErrorSymbolDefinitelyInvalid()
+
     fun setErrorSymbolRequire()
+
+    fun setErrorSymbol(message: String)
 
     fun clearSymbolError()
 
@@ -27,11 +37,11 @@ interface LoginSymbolView : BaseView {
 
     fun showContent(show: Boolean)
 
-    fun navigateToStudentSelect(studentsWithSemesters: List<StudentWithSemesters>)
+    fun navigateToStudentSelect(loginData: LoginData, registerUser: RegisterUser)
 
     fun showContact(show: Boolean)
 
     fun openFaqPage()
 
-    fun openEmail(host: String, lastError: String)
+    fun openSupportDialog(supportInfo: LoginSupportInfo)
 }

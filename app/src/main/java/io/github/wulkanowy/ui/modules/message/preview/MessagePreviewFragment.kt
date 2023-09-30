@@ -12,7 +12,9 @@ import android.view.View.VISIBLE
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.annotation.StringRes
 import androidx.core.content.getSystemService
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -23,6 +25,7 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
+import io.github.wulkanowy.utils.serializable
 import io.github.wulkanowy.utils.shareText
 import javax.inject.Inject
 
@@ -66,13 +69,12 @@ class MessagePreviewFragment :
     companion object {
         const val MESSAGE_ID_KEY = "message_id"
 
-        fun newInstance(message: Message): MessagePreviewFragment {
-            return MessagePreviewFragment().apply {
-                arguments = Bundle().apply { putSerializable(MESSAGE_ID_KEY, message) }
-            }
+        fun newInstance(message: Message) = MessagePreviewFragment().apply {
+            arguments = bundleOf(MESSAGE_ID_KEY to message)
         }
     }
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -83,8 +85,8 @@ class MessagePreviewFragment :
         binding = FragmentMessagePreviewBinding.bind(view)
         messageContainer = binding.messagePreviewContainer
         presenter.onAttachView(
-            this,
-            (savedInstanceState ?: arguments)?.getSerializable(MESSAGE_ID_KEY) as? Message
+            view = this,
+            message = (savedInstanceState ?: arguments)?.serializable(MESSAGE_ID_KEY),
         )
     }
 
@@ -161,6 +163,10 @@ class MessagePreviewFragment :
 
     override fun setErrorRetryCallback(callback: () -> Unit) {
         binding.messagePreviewErrorRetry.setOnClickListener { callback() }
+    }
+
+    override fun showMessage(@StringRes messageId: Int) {
+        showMessage(getString(messageId))
     }
 
     override fun openMessageReply(message: Message?) {
