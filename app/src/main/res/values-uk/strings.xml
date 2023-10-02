@@ -80,8 +80,9 @@
     <string name="login_no_active_student">Активних учнів не знайдено</string>
     <string name="login_symbol_enter">Введіть інший symbol</string>
     <string name="login_support_title">Отримати допомогу</string>
-    <string name="login_support_school_hint">Повне ім\'я школи (обов\'язково)</string>
+    <string name="login_support_school_hint">Full school name with the town (required)</string>
     <string name="login_support_school_placeholder">Напр. ZSTiO Jarosław lub SP nr 99 w Łodzi</string>
+    <string name="login_support_school_invalid">Enter correct name of the school</string>
     <string name="login_support_additional_hint">Додаткова інформація польською мовою (за бажанням)</string>
     <string name="login_support_additional_placeholder">Напр. \"Я нещодавно змінив школу і...\" або \"Я батько і не бачу другу дитину...\"</string>
     <string name="login_support_submit">Надіслати</string>
