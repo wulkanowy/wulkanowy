@@ -80,9 +80,9 @@
     <string name="login_no_active_student">Neboli nájdení žiadni aktívni žiaci</string>
     <string name="login_symbol_enter">Zadajte iný symbol</string>
     <string name="login_support_title">Získať pomoc</string>
-    <string name="login_support_school_hint">Full school name with the town (required)</string>
+    <string name="login_support_school_hint">Celý názov školy s mestom (povinný)</string>
     <string name="login_support_school_placeholder">Napr. ZSTiO Jarosław alebo SP nr 99 w Łodzi</string>
-    <string name="login_support_school_invalid">Enter correct name of the school</string>
+    <string name="login_support_school_invalid">Zadajte správny názov školy</string>
     <string name="login_support_additional_hint">Dodatočné informácie v poľštine (voliteľné)</string>
     <string name="login_support_additional_placeholder">Napr. „Ostatnio zmieniłem szkołę i…“ (Nedávno som zmenil školu a…) alebo „Jestem rodzicem i nie widzę drugiego dziecka…“ (Som rodič a nevidím žiadne ďalšie dieťa…)</string>
     <string name="login_support_submit">Odoslať</string>
