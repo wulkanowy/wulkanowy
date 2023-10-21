@@ -231,6 +231,8 @@ class AttendancePresenter @Inject constructor(
                 }.sortedBy { item -> item.number }
             }
             .onResourceData {
+                isWeekendHasLessons = isWeekendHasLessons || isWeekendHasLessons(it)
+
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)

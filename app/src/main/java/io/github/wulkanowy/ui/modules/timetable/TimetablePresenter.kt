@@ -163,6 +163,8 @@ class TimetablePresenter @Inject constructor(
         }
             .logResourceStatus("load timetable data")
             .onResourceData {
+                isWeekendHasLessons = isWeekendHasLessons || isWeekendHasLessons(it.lessons)
+
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
