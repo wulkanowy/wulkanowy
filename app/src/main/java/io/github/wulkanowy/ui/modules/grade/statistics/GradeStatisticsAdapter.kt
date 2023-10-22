@@ -271,7 +271,7 @@ class GradeStatisticsAdapter @Inject constructor() :
             valueTextSize = 12f
             valueTextColor = binding.root.context.getThemeAttrColor(android.R.attr.textColorPrimary)
             valueFormatter = object : ValueFormatter() {
-                override fun getBarLabel(barEntry: BarEntry) = "${barEntry.y}%"
+                override fun getBarLabel(barEntry: BarEntry) = "${barEntry.y}"
             }
             colors = gradePointsColors
         }
