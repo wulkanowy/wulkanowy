@@ -239,7 +239,9 @@ class TimetablePresenter @Inject constructor(
         tickTimer?.cancel()
 
         tickTimer = timer(period = 2_000) {
-            view?.updateData(createItems(lessons))
+            Handler(Looper.getMainLooper()).post {
+                view?.updateData(createItems(lessons))
+            }
         }
     }
 
