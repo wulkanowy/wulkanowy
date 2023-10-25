@@ -238,9 +238,13 @@ class TimetablePresenter @Inject constructor(
     private fun updateData(lessons: List<Timetable>) {
         tickTimer?.cancel()
 
-        tickTimer = timer(period = 2_000) {
-            Handler(Looper.getMainLooper()).post {
-                view?.updateData(createItems(lessons))
+        if (currentDate != now()) {
+            view?.updateData(createItems(lessons))
+        } else {
+            tickTimer = timer(period = 2_000) {
+                Handler(Looper.getMainLooper()).post {
+                    view?.updateData(createItems(lessons))
+                }
             }
         }
     }
