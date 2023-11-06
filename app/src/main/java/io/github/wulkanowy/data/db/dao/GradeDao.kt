@@ -10,6 +10,6 @@ import javax.inject.Singleton
 @Dao
 interface GradeDao : BaseDao<Grade> {
 
-    @Query("SELECT * FROM Grades WHERE semester_id = :semesterId AND student_id = :studentId")
+    @Query("SELECT * FROM Grades WHERE semester_id = :semesterId AND student_id = :studentId AND entry NOT IN ('1', '1+', '2', '2-', '2+')")
     fun loadAll(semesterId: Int, studentId: Int): Flow<List<Grade>>
 }

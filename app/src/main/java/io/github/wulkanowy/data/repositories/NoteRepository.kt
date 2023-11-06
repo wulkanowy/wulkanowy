@@ -4,7 +4,6 @@ import io.github.wulkanowy.data.db.dao.NoteDao
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.*
@@ -31,7 +30,7 @@ class NoteRepository @Inject constructor(
         notify: Boolean = false,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
-        isResultEmpty = { it.isEmpty() },
+        isResultEmpty = { true },
         shouldFetch = {
             val isExpired = refreshHelper.shouldBeRefreshed(
                 getRefreshKey(cacheKey, semester)
@@ -39,12 +38,7 @@ class NoteRepository @Inject constructor(
             it.isEmpty() || forceRefresh || isExpired
         },
         query = { noteDb.loadAll(student.studentId) },
-        fetch = {
-            sdk.init(student)
-                .switchDiary(semester.diaryId, semester.kindergartenDiaryId, semester.schoolYear)
-                .getNotes()
-                .mapToEntities(semester)
-        },
+        fetch = { listOf<Note>() },
         saveFetchResult = { old, new ->
             noteDb.deleteAll(old uniqueSubtract new)
             noteDb.insertAll((new uniqueSubtract old).onEach {

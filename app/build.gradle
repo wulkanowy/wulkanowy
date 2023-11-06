@@ -141,7 +141,8 @@ android {
     packagingOptions {
         resources {
             excludes += ['META-INF/library_release.kotlin_module',
-                         'META-INF/library-core_release.kotlin_module']
+                         'META-INF/library-core_release.kotlin_module',
+                         'META-INF/*']
         }
     }
 

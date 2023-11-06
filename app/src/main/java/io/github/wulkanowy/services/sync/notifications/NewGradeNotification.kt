@@ -9,7 +9,6 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.pojos.GroupNotificationData
 import io.github.wulkanowy.data.pojos.NotificationData
 import io.github.wulkanowy.ui.modules.Destination
-import io.github.wulkanowy.ui.modules.splash.SplashActivity
 import io.github.wulkanowy.utils.getPlural
 import javax.inject.Inject
 
@@ -19,16 +18,18 @@ class NewGradeNotification @Inject constructor(
 ) {
 
     suspend fun notifyDetails(items: List<Grade>, student: Student) {
-        val notificationDataList = items.map {
-            NotificationData(
-                title = context.getPlural(R.plurals.grade_new_items, 1),
-                content = buildString {
-                    append("${it.subject}: ${it.entry}")
-                    if (it.comment.isNotBlank()) append(" (${it.comment})")
-                },
-                destination = Destination.Grade,
-            )
-        }
+        val notificationDataList = items
+            .filter { !listOf("1", "1+", "2", "2-", "2+").contains(it.entry) }
+            .map {
+                NotificationData(
+                    title = context.getPlural(R.plurals.grade_new_items, 1),
+                    content = buildString {
+                        append("${it.subject}: ${it.entry}")
+                        if (it.comment.isNotBlank()) append(" (${it.comment})")
+                    },
+                    destination = Destination.Grade,
+                )
+            }
 
         val groupNotificationData = GroupNotificationData(
             notificationDataList = notificationDataList,
