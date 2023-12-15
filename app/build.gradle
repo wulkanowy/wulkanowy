@@ -218,7 +218,7 @@ dependencies {
     implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
     implementation 'com.github.lopspower:CircularImageView:4.3.0'
 
-    implementation "androidx.work:work-runtime-ktx:$work_manager"
+    implementation "androidx.work:work-runtime:$work_manager"
     playImplementation "androidx.work:work-gcm:$work_manager"
 
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.2"
