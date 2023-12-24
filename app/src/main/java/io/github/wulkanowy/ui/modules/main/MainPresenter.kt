@@ -177,7 +177,7 @@ class MainPresenter @Inject constructor(
                     .onFailure { Timber.e(it) }
                     .getOrElse { return@launch }
 
-                if (!Instant.now().minus(Duration.ofDays(28)).isAfter(student.registrationDate)) {
+                if (Instant.now().minus(Duration.ofDays(28)).isAfter(student.registrationDate)) {
                     preferencesRepository.isAppSupportShown = true
                     view?.showAppSupport()
                 }
