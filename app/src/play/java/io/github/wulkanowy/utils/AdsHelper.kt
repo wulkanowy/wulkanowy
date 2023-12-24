@@ -15,7 +15,6 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
-import com.google.android.ump.ConsentDebugSettings
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
@@ -53,14 +52,10 @@ class AdsHelper @Inject constructor(
     }
 
     fun initialize() {
-        val debugSettings = ConsentDebugSettings.Builder(context)
-            .addTestDeviceHashedId("6174573243D7B324E18333925709F23D")
-            .build()
         val consentRequestParameters = ConsentRequestParameters.Builder()
-            .setConsentDebugSettings(debugSettings)
             .build()
-        consentInformation = UserMessagingPlatform.getConsentInformation(context)
 
+        consentInformation = UserMessagingPlatform.getConsentInformation(context)
         consentInformation?.requestConsentInfoUpdate(
             activity,
             consentRequestParameters,
