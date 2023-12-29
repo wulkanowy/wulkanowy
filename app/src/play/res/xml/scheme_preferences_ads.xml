@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <SwitchPreferenceCompat
+        app:defaultValue="@string/pref_key_ads_enabled"
+        app:iconSpaceReserved="false"
+        app:key="@string/pref_key_ads_enabled"
+        app:singleLineTitle="false"
+        app:title="@string/pref_ads_show_in_app" />
     <PreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/pref_ads_agreements">
@@ -9,6 +15,7 @@
             app:singleLineTitle="false"
             app:title="@string/pref_ads_privacy_policy" />
         <Preference
+            app:dependency="@string/pref_key_ads_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_ads_ump_agreements"
             app:singleLineTitle="false"
@@ -17,12 +24,6 @@
     <PreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/pref_ads_support_category_name">
-        <SwitchPreferenceCompat
-            app:defaultValue="@string/pref_key_ads_enabled"
-            app:iconSpaceReserved="false"
-            app:key="@string/pref_key_ads_enabled"
-            app:singleLineTitle="false"
-            app:title="@string/pref_ads_show_in_app" />
         <Preference
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_ads_single_support"
