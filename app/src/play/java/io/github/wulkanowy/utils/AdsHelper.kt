@@ -46,7 +46,7 @@ class AdsHelper @Inject constructor(
     val canShowAd get() = isMobileAdsSdkInitialized.value && canRequestAd
 
     init {
-        if (preferencesRepository.isAppSupportShown && preferencesRepository.isAdsEnabled) {
+        if (preferencesRepository.isAdsEnabled) {
             initialize()
         }
     }
