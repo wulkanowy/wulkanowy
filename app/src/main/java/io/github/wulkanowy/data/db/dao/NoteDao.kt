@@ -9,8 +9,9 @@ import javax.inject.Singleton
 @Singleton
 @Dao
 interface NoteDao : BaseDao<Note> {
-
-    // Disabled notes
-    @Query("SELECT * FROM Notes WHERE student_id = :studentId AND 1 != 1")
+    @Query("SELECT * FROM Notes WHERE student_id = :studentId")
     fun loadAll(studentId: Int): Flow<List<Note>>
+
+    @Query("SELECT * FROM Notes WHERE student_id = :studentId AND 1 != 1")
+    fun pretendLoadingAll(studentId: Int): Flow<List<Note>>
 }

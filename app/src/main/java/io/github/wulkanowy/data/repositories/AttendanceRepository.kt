@@ -9,6 +9,7 @@ import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.Absent
+import io.github.wulkanowy.ui.modules.dashboard.DashboardItem
 import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -26,8 +27,8 @@ class AttendanceRepository @Inject constructor(
     private val timetableDb: TimetableDao,
     private val sdk: Sdk,
     private val refreshHelper: AutoRefreshHelper,
+    private val preferencesRepository: PreferencesRepository
 ) {
-
     private val saveFetchResultMutex = Mutex()
 
     private val cacheKey = "attendance"
@@ -49,18 +50,38 @@ class AttendanceRepository @Inject constructor(
             it.isEmpty() || forceRefresh || isExpired
         },
         query = {
-            attendanceDb.loadAll(semester.diaryId, semester.studentId, start.monday, end.sunday)
+            val badAttendanceHidden = preferencesRepository
+                .selectedHiddenSettingTiles
+                .contains(DashboardItem.HiddenSettingTile.BAD_ATTENDANCE)
+
+            if (badAttendanceHidden) {
+                attendanceDb.loadAllCensored(semester.diaryId, semester.studentId, start, end)
+            } else {
+                attendanceDb.loadAll(semester.diaryId, semester.studentId, start, end)
+            }
         },
         fetch = {
+            val badAttendanceHidden = preferencesRepository
+                .selectedHiddenSettingTiles
+                .contains(DashboardItem.HiddenSettingTile.BAD_ATTENDANCE)
+
             val lessons = withContext(Dispatchers.IO) {
                 timetableDb.load(
                     semester.diaryId, semester.studentId, start.monday, end.sunday
                 )
             }
-            sdk.init(student)
+
+            val attendance = sdk.init(student)
                 .switchDiary(semester.diaryId, semester.kindergartenDiaryId, semester.schoolYear)
                 .getAttendance(start.monday, end.sunday)
-                .mapToEntities(semester, lessons)
+
+            val censoredAttendance = if (badAttendanceHidden) {
+                attendance.filter { it.presence || it.excused }
+            } else {
+                attendance
+            }
+
+            censoredAttendance.mapToEntities(semester, lessons)
         },
         saveFetchResult = { old, new ->
             attendanceDb.deleteAll(old uniqueSubtract new)
@@ -79,7 +100,15 @@ class AttendanceRepository @Inject constructor(
         start: LocalDate,
         end: LocalDate
     ): Flow<List<Attendance>> {
-        return attendanceDb.loadAll(semester.diaryId, semester.studentId, start, end)
+        val badAttendanceHidden = preferencesRepository
+            .selectedHiddenSettingTiles
+            .contains(DashboardItem.HiddenSettingTile.BAD_ATTENDANCE)
+
+        return if (badAttendanceHidden) {
+            attendanceDb.loadAllCensored(semester.diaryId, semester.studentId, start, end)
+        } else {
+            attendanceDb.loadAll(semester.diaryId, semester.studentId, start, end)
+        }
     }
 
     suspend fun updateTimetable(timetable: List<Attendance>) {

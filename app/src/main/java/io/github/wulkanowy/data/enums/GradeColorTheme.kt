@@ -8,6 +8,6 @@ enum class GradeColorTheme(val value: String) : Serializable {
     GRADE_COLOR("grade_color");
 
     companion object {
-        fun getByValue(value: String) = values().find { it.value == value } ?: VULCAN
+        fun getByValue(value: String) = entries.find { it.value == value } ?: VULCAN
     }
 }

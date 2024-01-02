@@ -67,4 +67,9 @@
         <item>Тести</item>
         <item>Зустрічі</item>
     </string-array>
+    <string-array name="hidden_settings_entries">
+        <item>Погані оцінки</item>
+        <item>Погана відвідуваність</item>
+        <item>Примітки</item>
+    </string-array>
 </resources>

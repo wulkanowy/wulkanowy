@@ -18,4 +18,13 @@ interface AttendanceDao : BaseDao<Attendance> {
         start: LocalDate,
         end: LocalDate
     ): Flow<List<Attendance>>
+
+    @Query("SELECT * FROM Attendance WHERE diary_id = :diaryId AND student_id = :studentId AND date >= :start AND date <= :end" +
+        " AND (presence OR excused)")
+    fun loadAllCensored(
+        diaryId: Int,
+        studentId: Int,
+        start: LocalDate,
+        end: LocalDate
+    ): Flow<List<Attendance>>
 }

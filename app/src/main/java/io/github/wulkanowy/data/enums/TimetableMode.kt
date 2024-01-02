@@ -6,6 +6,6 @@ enum class TimetableMode(val value: String) {
     SMALL_OTHER_GROUP("small");
 
     companion object {
-        fun getByValue(value: String) = values().find { it.value == value } ?: ONLY_CURRENT_GROUP
+        fun getByValue(value: String) = entries.find { it.value == value } ?: ONLY_CURRENT_GROUP
     }
 }

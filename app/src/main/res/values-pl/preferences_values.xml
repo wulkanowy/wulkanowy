@@ -67,4 +67,9 @@
         <item>Sprawdziany</item>
         <item>Zebrania</item>
     </string-array>
+    <string-array name="hidden_settings_entries">
+        <item>Słabe oceny</item>
+        <item>Słaba frekwencja</item>
+        <item>Uwagi</item>
+    </string-array>
 </resources>

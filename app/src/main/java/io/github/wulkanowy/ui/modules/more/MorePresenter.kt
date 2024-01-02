@@ -6,18 +6,22 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.ui.modules.Destination
+import io.github.wulkanowy.ui.modules.dashboard.DashboardItem
+import okhttp3.internal.notify
 import timber.log.Timber
 import javax.inject.Inject
 
 class MorePresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
-    preferencesRepository: PreferencesRepository
+    private val preferencesRepository: PreferencesRepository
 ) : BasePresenter<MoreView>(errorHandler, studentRepository) {
 
     private val moreAppMenuItem = preferencesRepository.appMenuItemOrder
         .sortedBy { it.order }
         .drop(4)
+
+    private val selectedHiddenSettingsTiles = preferencesRepository.selectedHiddenSettingTiles
 
     override fun onAttachView(view: MoreView) {
         super.onAttachView(view)
@@ -30,6 +34,23 @@ class MorePresenter @Inject constructor(
         Timber.i("Select more item \"${moreItem.destination.destinationType}\"")
 
         view?.openView(moreItem.destination)
+    }
+
+    fun onItemHold(moreItem: MoreItem) {
+        Timber.i("More item hold")
+
+        when (moreItem.destination) {
+            Destination.Settings -> view?.showHiddenSettings(selectedHiddenSettingsTiles)
+            else -> return
+        }
+    }
+
+    fun onHiddenSettingsSelected(selectedItems: List<String>) {
+        preferencesRepository.selectedHiddenSettingTiles = selectedItems.map {
+            DashboardItem.HiddenSettingTile.valueOf(it)
+        }
+
+        view?.restartApp()
     }
 
     fun onViewReselected() {

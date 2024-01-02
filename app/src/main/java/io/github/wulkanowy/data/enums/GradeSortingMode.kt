@@ -6,6 +6,6 @@ enum class GradeSortingMode(val value: String) {
     AVERAGE("average");
 
     companion object {
-        fun getByValue(value: String) = values().find { it.value == value } ?: ALPHABETIC
+        fun getByValue(value: String) = entries.find { it.value == value } ?: ALPHABETIC
     }
 }

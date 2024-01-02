@@ -147,6 +147,12 @@ sealed class DashboardItem(val type: Type) {
         EXAMS,
         CONFERENCES,
     }
+
+    enum class HiddenSettingTile {
+        BAD_GRADES,
+        BAD_ATTENDANCE,
+        NOTES
+    }
 }
 
 fun DashboardItem.Tile.toDashboardItemType() = when (this) {

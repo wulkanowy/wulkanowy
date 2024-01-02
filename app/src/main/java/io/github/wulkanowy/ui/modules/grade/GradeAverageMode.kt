@@ -6,6 +6,6 @@ enum class GradeAverageMode(val value: String) {
     BOTH_SEMESTERS("both_semesters");
 
     companion object {
-        fun getByValue(value: String) = values().firstOrNull { it.value == value } ?: ONE_SEMESTER
+        fun getByValue(value: String) = entries.firstOrNull { it.value == value } ?: ONE_SEMESTER
     }
 }

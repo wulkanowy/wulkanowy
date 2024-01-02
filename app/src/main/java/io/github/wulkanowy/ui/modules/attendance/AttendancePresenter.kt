@@ -5,17 +5,13 @@ import io.github.wulkanowy.data.*
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.repositories.AttendanceRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
-import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.*
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.time.DayOfWeek
@@ -32,7 +28,6 @@ class AttendancePresenter @Inject constructor(
     private val prefRepository: PreferencesRepository,
     private val analytics: AnalyticsHelper
 ) : BasePresenter<AttendanceView>(errorHandler, studentRepository) {
-
     private var initialDate: LocalDate? = null
     private var isWeekendHasLessons: Boolean = false
 

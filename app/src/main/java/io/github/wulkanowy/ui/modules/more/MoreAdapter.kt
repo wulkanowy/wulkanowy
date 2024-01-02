@@ -12,6 +12,8 @@ class MoreAdapter @Inject constructor() : RecyclerView.Adapter<MoreAdapter.ItemV
 
     var onClickListener: (moreItem: MoreItem) -> Unit = {}
 
+    var onLongClickListener: (moreItem: MoreItem) -> Unit = {}
+
     override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
@@ -27,6 +29,10 @@ class MoreAdapter @Inject constructor() : RecyclerView.Adapter<MoreAdapter.ItemV
             moreItemImage.setImageResource(item.icon)
 
             root.setOnClickListener { onClickListener(item) }
+            root.setOnLongClickListener {
+                onLongClickListener(item)
+                true
+            }
         }
     }
 

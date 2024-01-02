@@ -67,4 +67,9 @@
         <item>Тесты</item>
         <item>Встречи</item>
     </string-array>
+    <string-array name="hidden_settings_entries">
+        <item>Плохие оценки</item>
+        <item>Плохая посещаемость</item>
+        <item>Примечания</item>
+    </string-array>
 </resources>

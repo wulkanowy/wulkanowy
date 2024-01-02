@@ -9,11 +9,13 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.ui.modules.dashboard.DashboardItem
 import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
+import timber.log.Timber
 import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,11 +26,24 @@ class GradeRepository @Inject constructor(
     private val gradeSummaryDb: GradeSummaryDao,
     private val sdk: Sdk,
     private val refreshHelper: AutoRefreshHelper,
+    private val preferencesRepository: PreferencesRepository
 ) {
-
     private val saveFetchResultMutex = Mutex()
 
     private val cacheKey = "grade"
+
+    private fun loadGrades(semesterId: Int, studentId: Int): Flow<List<Grade>> {
+        val badGradesHidden = preferencesRepository
+            .selectedHiddenSettingTiles
+            .contains(DashboardItem.HiddenSettingTile.BAD_GRADES)
+
+        Timber.i("Load grades for semester $semesterId student $studentId / $badGradesHidden")
+        return if (badGradesHidden) {
+            gradeDb.loadAllCensored(semesterId, studentId)
+        } else {
+            gradeDb.loadAll(semesterId, studentId)
+        }
+    }
 
     fun getGrades(
         student: Student,
@@ -46,16 +61,26 @@ class GradeRepository @Inject constructor(
             details.isEmpty() || summaries.isEmpty() || forceRefresh || isExpired
         },
         query = {
-            val detailsFlow = gradeDb.loadAll(semester.semesterId, semester.studentId)
+            val detailsFlow = loadGrades(semester.semesterId, semester.studentId)
             val summaryFlow = gradeSummaryDb.loadAll(semester.semesterId, semester.studentId)
             detailsFlow.combine(summaryFlow) { details, summaries -> details to summaries }
         },
         fetch = {
+            val badGradesHidden = preferencesRepository
+                .selectedHiddenSettingTiles
+                .contains(DashboardItem.HiddenSettingTile.BAD_GRADES)
+
             val (details, summary) = sdk.init(student)
                 .switchDiary(semester.diaryId, semester.kindergartenDiaryId, semester.schoolYear)
                 .getGrades(semester.semesterId)
 
-            details.mapToEntities(semester) to summary.mapToEntities(semester)
+            val censoredDetails = if (badGradesHidden) {
+                details.filter { !listOf("1", "1+", "2", "2+", "2-").contains(it.entry) }
+            } else {
+                details
+            }
+
+            censoredDetails.mapToEntities(semester) to summary.mapToEntities(semester)
         },
         saveFetchResult = { (oldDetails, oldSummary), (newDetails, newSummary) ->
             refreshGradeDetails(student, oldDetails, newDetails, notify)
@@ -115,13 +140,13 @@ class GradeRepository @Inject constructor(
     }
 
     fun getUnreadGrades(semester: Semester): Flow<List<Grade>> {
-        return gradeDb.loadAll(semester.semesterId, semester.studentId).map {
+        return loadGrades(semester.semesterId, semester.studentId).map {
             it.filter { grade -> !grade.isRead }
         }
     }
 
     fun getGradesFromDatabase(semester: Semester): Flow<List<Grade>> {
-        return gradeDb.loadAll(semester.semesterId, semester.studentId)
+        return loadGrades(semester.semesterId, semester.studentId)
     }
 
     fun getGradesPredictedFromDatabase(semester: Semester): Flow<List<GradeSummary>> {

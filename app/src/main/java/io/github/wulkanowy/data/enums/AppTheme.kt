@@ -7,6 +7,6 @@ enum class AppTheme(val value: String) {
     BLACK("black");
 
     companion object {
-        fun getByValue(value: String) = values().find { it.value == value } ?: LIGHT
+        fun getByValue(value: String) = entries.find { it.value == value } ?: LIGHT
     }
 }

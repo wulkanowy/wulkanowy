@@ -67,4 +67,9 @@
         <item>Exams</item>
         <item>Conferences</item>
     </string-array>
+    <string-array name="hidden_settings_entries">
+        <item>Bad grades</item>
+        <item>Bad attendance</item>
+        <item>Notes</item>
+    </string-array>
 </resources>

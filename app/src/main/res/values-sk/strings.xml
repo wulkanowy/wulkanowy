@@ -784,6 +784,7 @@
     <string name="pref_grades_appearance_header">Známky</string>
     <string name="pref_dashboard_appearance_header">Domov</string>
     <string name="pref_dashboard_appearance_tiles_title">Viditeľnosť dlaždíc</string>
+    <string name="pref_hidden_settings_title">Tajné nastavenia</string>
     <string name="pref_attendance_appearance_view">Frekvencia</string>
     <string name="pref_timetable_appearance_view">Plán lekcie</string>
     <string name="pref_grades_advanced_header">Známky</string>

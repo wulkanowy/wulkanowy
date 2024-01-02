@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import okhttp3.internal.notifyAll
 import java.time.Instant
 import java.util.*
 import javax.inject.Inject
@@ -29,7 +30,6 @@ class PreferencesRepository @Inject constructor(
     private val flowSharedPref: FlowSharedPreferences,
     private val json: Json,
 ) {
-
     val isShowPresent: Boolean
         get() = getBoolean(
             R.string.pref_key_attendance_present,
@@ -267,11 +267,31 @@ class PreferencesRepository @Inject constructor(
             selectedDashboardTilesPreference.set(filteredValue)
         }
 
+    var selectedHiddenSettingTiles: List<DashboardItem.HiddenSettingTile>
+        get() = selectedHiddenSettingTilesPreference.get()
+            .map { DashboardItem.HiddenSettingTile.valueOf(it) }
+        set(value) {
+            val filteredValue = value
+                .map { it.name }
+                .toSet()
+
+            selectedHiddenSettingTilesPreference.set(filteredValue)
+        }
+
     private val selectedDashboardTilesPreference: Preference<Set<String>>
         get() {
             val defaultSet =
                 context.resources.getStringArray(R.array.pref_default_dashboard_tiles).toSet()
             val prefKey = context.getString(R.string.pref_key_dashboard_tiles)
+
+            return flowSharedPref.getStringSet(prefKey, defaultSet)
+        }
+
+    private val selectedHiddenSettingTilesPreference: Preference<Set<String>>
+        get() {
+            val defaultSet =
+                context.resources.getStringArray(R.array.pref_default_hidden_settings_tiles).toSet()
+            val prefKey = "hidden_settings_tiles"
 
             return flowSharedPref.getStringSet(prefKey, defaultSet)
         }

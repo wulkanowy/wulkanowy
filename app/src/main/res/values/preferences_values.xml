@@ -156,4 +156,15 @@
         <item>EXAMS</item>
         <item>CONFERENCES</item>
     </string-array>
+
+    <string-array name="hidden_settings_entries">
+        <item>Bad grades</item>
+        <item>Bad attendance</item>
+        <item>Notes</item>
+    </string-array>
+    <string-array name="hidden_settings_values" translatable="false">
+        <item>BAD_GRADES</item>
+        <item>BAD_ATTENDANCE</item>
+        <item>NOTES</item>
+    </string-array>
 </resources>

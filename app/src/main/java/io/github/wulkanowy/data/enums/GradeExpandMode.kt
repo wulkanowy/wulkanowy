@@ -6,6 +6,6 @@ enum class GradeExpandMode(val value: String) {
     ALWAYS_EXPANDED("always");
 
     companion object {
-        fun getByValue(value: String) = values().find { it.value == value } ?: ONE
+        fun getByValue(value: String) = entries.find { it.value == value } ?: ONE
     }
 }
