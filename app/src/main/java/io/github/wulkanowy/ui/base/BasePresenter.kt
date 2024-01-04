@@ -36,25 +36,16 @@ open class BasePresenter<T : BaseView>(
     }
 
     fun onExpiredLoginSelected() {
-        Timber.i("Attempt to switch the student after the session expires")
+        Timber.i("Attempt to clear all data")
 
         presenterScope.launch {
-            runCatching {
-                val student = studentRepository.getCurrentStudent(false)
-                studentRepository.logoutStudent(student)
-
-                val students = studentRepository.getSavedStudents(false)
-                if (students.isNotEmpty()) {
-                    Timber.i("Switching current student")
-                    studentRepository.switchStudent(students[0])
-                }
-            }
+            runCatching { studentRepository.clearAll() }
                 .onFailure {
-                    Timber.i("Switch student result: An exception occurred")
+                    Timber.i("Clear data result: An exception occurred")
                     errorHandler.dispatch(it)
                 }
                 .onSuccess {
-                    Timber.i("Switch student result: Open login view")
+                    Timber.i("Clear data result: Open login view")
                     view?.openClearLoginView()
                 }
         }
