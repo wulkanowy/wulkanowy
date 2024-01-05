@@ -70,8 +70,8 @@ abstract class BaseActivity<T : BasePresenter<out BaseView>, VB : ViewBinding> :
 
     override fun showExpiredCredentialsDialog() {
         MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.main_expired_credentials_description)
-            .setMessage(R.string.main_expired_credentials_title)
+            .setTitle(R.string.main_expired_credentials_title)
+            .setMessage(R.string.main_expired_credentials_description)
             .setPositiveButton(R.string.main_log_in) { _, _ -> presenter.onConfirmExpiredCredentialsSelected() }
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
             .show()
