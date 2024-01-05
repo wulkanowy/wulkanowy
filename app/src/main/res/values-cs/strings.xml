@@ -96,6 +96,8 @@
     <string name="main_log_in">Přihlásit se</string>
     <string name="main_session_expired">Relace vypršela</string>
     <string name="main_session_relogin">Relace vypršela. Přihlaste se prosím znovu</string>
+    <string name="main_expired_credentials_description">Your account password has been changed. You need to log in to Wulkanowy again</string>
+    <string name="main_expired_credentials_title">Password changed</string>
     <string name="main_support_title">Podpora aplikace</string>
     <string name="main_support_description">Líbí se Vám tato aplikace? Podpořte její vývoj tím, že povolíte neinvazivní reklamy, které můžete kdykoliv vypnout</string>
     <string name="main_support_positive">Zapnout reklamy</string>
