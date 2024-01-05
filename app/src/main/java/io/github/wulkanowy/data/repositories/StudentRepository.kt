@@ -164,10 +164,14 @@ class StudentRepository @Inject constructor(
         studentDb.update(studentName)
     }
 
+    suspend fun deleteStudentsAssociatedWithAccount(student: Student) {
+        studentDb.deleteByEmailAndUserName(student.email, student.userName)
+    }
+
     suspend fun clearAll() {
         withContext(dispatchers.io) {
-            appDatabase.clearAllTables()
             scrambler.clearKeyPair()
+            appDatabase.clearAllTables()
         }
     }
 }

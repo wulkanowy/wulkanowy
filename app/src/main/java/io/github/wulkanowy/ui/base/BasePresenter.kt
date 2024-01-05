@@ -28,14 +28,15 @@ open class BasePresenter<T : BaseView>(
         this.view = view
         errorHandler.apply {
             showErrorMessage = view::showError
-            onSessionExpired = view::showExpiredDialog
+            onExpiredCredentials = view::showExpiredCredentialsDialog
+            onDecryptionFailed = view::showDecryptionFailedDialog
             onNoCurrentStudent = view::openClearLoginView
             onPasswordChangeRequired = view::showChangePasswordSnackbar
             onAuthorizationRequired = view::showAuthDialog
         }
     }
 
-    fun onExpiredLoginSelected() {
+    fun onConfirmDecryptionFailedSelected() {
         Timber.i("Attempt to clear all data")
 
         presenterScope.launch {
@@ -46,6 +47,31 @@ open class BasePresenter<T : BaseView>(
                 }
                 .onSuccess {
                     Timber.i("Clear data result: Open login view")
+                    view?.openClearLoginView()
+                }
+        }
+    }
+
+    fun onConfirmExpiredCredentialsSelected() {
+        Timber.i("Attempt to delete students associated with the account and switch to new student")
+
+        presenterScope.launch {
+            runCatching {
+                val student = studentRepository.getCurrentStudent(false)
+                studentRepository.deleteStudentsAssociatedWithAccount(student)
+
+                val students = studentRepository.getSavedStudents(false)
+                if (students.isNotEmpty()) {
+                    Timber.i("Switching current student")
+                    studentRepository.switchStudent(students[0])
+                }
+            }
+                .onFailure {
+                    Timber.i("Delete students result: An exception occurred")
+                    errorHandler.dispatch(it)
+                }
+                .onSuccess {
+                    Timber.i("Delete students result: Open login view")
                     view?.openClearLoginView()
                 }
         }
