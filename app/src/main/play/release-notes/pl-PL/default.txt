@@ -1,5 +1,5 @@
-Wersja 2.2.6
+Wersja 2.3.3
 
-— naprawiliśmy logowanie do aplikacji (tym razem musi się udać) na odmianie standardowej i podobnych
+— poprawiliśmy kolejne usterki przy odświeżaniu danych (teraz to powinno działać już dużo lepiej)
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases
