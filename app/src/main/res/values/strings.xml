@@ -14,6 +14,7 @@
     <string name="logviewer_title">Log viewer</string>
     <string name="debug_title">Debug</string>
     <string name="notification_debug_title">Notification debug</string>
+    <string name="debug_cookies_clear">Clear webview cookies</string>
     <string name="contributors_title">Contributors</string>
     <string name="license_title">Licenses</string>
     <string name="message_title">Messages</string>
