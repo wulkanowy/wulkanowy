@@ -22,6 +22,8 @@ class CaptchaDialog : BaseDialogFragment<DialogCaptchaBinding>() {
     @Inject
     lateinit var sdk: Sdk
 
+    private var webView: WebView? = null
+
     companion object {
         const val CAPTCHA_SUCCESS = "captcha_success"
         private const val CAPTCHA_URL = "captcha_url"
@@ -50,6 +52,7 @@ class CaptchaDialog : BaseDialogFragment<DialogCaptchaBinding>() {
         binding.captchaClose.setOnClickListener { dismiss() }
 
         with(binding.captchaWebview) {
+            webView = this
             with(settings) {
                 javaScriptEnabled = true
                 userAgentString = sdk.userAgent
@@ -74,5 +77,10 @@ class CaptchaDialog : BaseDialogFragment<DialogCaptchaBinding>() {
             .onFailure { Timber.e(it) }
         showMessage(getString(R.string.captcha_verified_message))
         dismiss()
+    }
+
+    override fun onDestroy() {
+        webView?.destroy()
+        super.onDestroy()
     }
 }
