@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string-array name="app_theme_entries" tools:ignore="InconsistentArrays">
-        <item>Světlý</item>
-        <item>Tmavý</item>
-        <item>Černý (AMOLED)</item>
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Black (AMOLED)</item>
     </string-array>
     <string-array name="app_language_entries">
-        <item>Jazyk systému</item>
+        <item>System language</item>
         <item>Polski</item>
         <item>English</item>
         <item>Pусский</item>
@@ -16,13 +16,13 @@
         <item>Slovenčina</item>
     </string-array>
     <string-array name="services_interval_entries">
-        <item>15 minut</item>
-        <item>30 minut</item>
-        <item>1 hodina</item>
-        <item>2 hodiny</item>
-        <item>6 hodin</item>
-        <item>12 hodin</item>
-        <item>24 hodin</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>2 hours</item>
+        <item>6 hours</item>
+        <item>12 hours</item>
+        <item>24 hours</item>
     </string-array>
     <string-array name="grade_modifier_entries">
         <item>0,00</item>
@@ -32,39 +32,39 @@
         <item>0,75</item>
     </string-array>
     <string-array name="grade_sorting_mode_entries">
-        <item>Abecedně</item>
-        <item>Podle data</item>
-        <item>Podle průměru</item>
+        <item>Alphabetically</item>
+        <item>By date</item>
+        <item>By average</item>
     </string-array>
     <string-array name="grade_color_scheme_entries">
         <item>Dzienniczek+</item>
         <item>Wulkanowy</item>
-        <item>Barvy známek v deníku</item>
+        <item>Grade colors in register</item>
     </string-array>
     <string-array name="default_expand_grade_entries">
-        <item>Až 1 najednou</item>
-        <item>Vždy rozbalené</item>
-        <item>Neomezené rozbalené</item>
+        <item>Up to 1 at once</item>
+        <item>Always expanded</item>
+        <item>Unlimited expansions</item>
     </string-array>
     <string-array name="grade_average_mode_entries">
-        <item>Průměr známek pouze z vybraného semestru</item>
-        <item>Průměr z průměrů z obou semestrů</item>
-        <item>Průměr známek z celého roku</item>
+        <item>Average of grades only from selected semester</item>
+        <item>Average of averages from both semesters</item>
+        <item>Average of grades from the whole year</item>
     </string-array>
     <string-array name="timetable_show_gaps_entries">
-        <item>Nezobrazovat</item>
-        <item>Pouze mezi lekcemi</item>
-        <item>Před a mezi lekcemi</item>
+        <item>Don\'t show</item>
+        <item>Only between lessons</item>
+        <item>Before and between lessons</item>
     </string-array>
     <string-array name="dashboard_tile_entries">
-        <item>Šťastné číslo</item>
-        <item>Nepřečtené zprávy</item>
-        <item>Frekvence</item>
-        <item>Lekce</item>
-        <item>Známky</item>
-        <item>Domácí úkoly</item>
-        <item>Školní oznámení</item>
-        <item>Zkoušky</item>
-        <item>Setkání</item>
+        <item>Lucky number</item>
+        <item>Unread messages</item>
+        <item>Attendance</item>
+        <item>Lessons</item>
+        <item>Grades</item>
+        <item>Homework</item>
+        <item>School announcements</item>
+        <item>Exams</item>
+        <item>Conferences</item>
     </string-array>
 </resources>
