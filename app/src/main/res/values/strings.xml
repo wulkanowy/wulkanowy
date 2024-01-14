@@ -848,6 +848,7 @@
     <string name="error_service_unavailable">Maintenance underway UONET + register. Try again later</string>
     <string name="error_unknown_uonet">Unknown UONET + register error. Try again later</string>
     <string name="error_unknown_app">Unknown application error. Please try again later</string>
+    <string name="error_cloudflare_captcha">Captcha verification required</string>
     <string name="error_unknown">An unexpected error occurred</string>
     <string name="error_feature_disabled">Feature disabled by your school</string>
     <string name="error_feature_not_available">Feature not available. Login in a mode other than Mobile API</string>
