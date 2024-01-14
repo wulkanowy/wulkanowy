@@ -340,7 +340,10 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     private fun initializeCaptchaVerificationEvent() {
         captchaVerificationEvent
             .debounce(1.seconds)
-            .onEach { url -> showDialogFragment(CaptchaDialog.newInstance(url)) }
+            .onEach { url ->
+                Timber.d("Showing captcha dialog for: $url")
+                showDialogFragment(CaptchaDialog.newInstance(url))
+            }
             .launchIn(lifecycleScope)
     }
 

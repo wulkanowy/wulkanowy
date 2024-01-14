@@ -13,8 +13,20 @@
         android:gravity="center_vertical"
         android:text="@string/captcha_dialog_title"
         app:layout_constraintBottom_toBottomOf="@id/captcha_close"
-        app:layout_constraintEnd_toStartOf="@id/captcha_close"
+        app:layout_constraintEnd_toStartOf="@id/captcha_refresh"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/captcha_refresh"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:contentDescription="@string/logviewer_refresh"
+        app:icon="@drawable/ic_refresh"
+        app:iconTint="?colorOnSurface"
+        app:layout_constraintEnd_toStartOf="@id/captcha_close"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton

@@ -37,6 +37,7 @@ import io.github.wulkanowy.utils.getErrorString
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.openInternetBrowser
 import io.github.wulkanowy.utils.toFormattedString
+import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
 

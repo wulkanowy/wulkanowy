@@ -44,6 +44,9 @@ class CaptchaDialog : BaseDialogFragment<DialogCaptchaBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         isCancelable = false
+        binding.captchaRefresh.setOnClickListener {
+            binding.captchaWebview.loadUrl(arguments?.getString(CAPTCHA_URL).orEmpty())
+        }
         binding.captchaClose.setOnClickListener { dismiss() }
 
         with(binding.captchaWebview) {
