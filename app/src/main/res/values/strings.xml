@@ -836,7 +836,7 @@
 
     <!--Captcha-->
     <string name="captcha_dialog_title">Verification is in progress. Wait…</string>
-    <string name="captcha_verified_message">Verified successfully. Try again</string>
+    <string name="captcha_verified_message">Verified successfully</string>
 
 
     <!--Errors-->
