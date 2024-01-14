@@ -16,6 +16,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -42,10 +43,17 @@ import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.nickOrName
 import io.github.wulkanowy.utils.safelyPopFragments
 import io.github.wulkanowy.utils.setOnViewChangeListener
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainView,
@@ -74,6 +82,8 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     private val navController =
         FragNavController(supportFragmentManager, R.id.main_fragment_container)
+
+    private val captchaVerificationEvent = MutableSharedFlow<String?>()
 
     companion object {
 
@@ -146,6 +156,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         initializeToolbar()
         initializeBottomNavigation(startMenuIndex, rootAppMenuItems)
         initializeNavController(startMenuIndex, rootUpdatedDestinations)
+        initializeCaptchaVerificationEvent()
     }
 
     private fun initializeNavController(
@@ -285,7 +296,6 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
             }
         }
 
-        Timber.e("DIALOG SHOW: $dialog")
         navController.showDialogFragment(dialog)
     }
 
@@ -326,8 +336,18 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
             .show()
     }
 
+    @OptIn(FlowPreview::class)
+    private fun initializeCaptchaVerificationEvent() {
+        captchaVerificationEvent
+            .debounce(1.seconds)
+            .onEach { url -> showDialogFragment(CaptchaDialog.newInstance(url)) }
+            .launchIn(lifecycleScope)
+    }
+
     override fun onCaptchaVerificationRequired(url: String?) {
-        showDialogFragment(CaptchaDialog.newInstance(url))
+        lifecycleScope.launch {
+            captchaVerificationEvent.emit(url)
+        }
     }
 
     override fun showAuthDialog() {

@@ -13,6 +13,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.DialogCaptchaBinding
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.ui.base.BaseDialogFragment
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -66,7 +67,8 @@ class CaptchaDialog : BaseDialogFragment<DialogCaptchaBinding>() {
     }
 
     private fun onChallengeAccepted() {
-        parentFragmentManager.setFragmentResult(CAPTCHA_SUCCESS, bundleOf())
+        runCatching { parentFragmentManager.setFragmentResult(CAPTCHA_SUCCESS, bundleOf()) }
+            .onFailure { Timber.e(it) }
         showMessage(getString(R.string.captcha_verified_message))
         dismiss()
     }
