@@ -833,6 +833,11 @@
     <string name="auth_button_skip">Skip for now</string>
 
 
+    <!--Captcha-->
+    <string name="captcha_dialog_title">Verification is in progress. Wait…</string>
+    <string name="captcha_verified_message">Verified successfully. Try again</string>
+
+
     <!--Errors-->
     <string name="error_no_internet">No internet connection</string>
     <string name="error_invalid_device_datetime">An error occurred. Check your device clock</string>

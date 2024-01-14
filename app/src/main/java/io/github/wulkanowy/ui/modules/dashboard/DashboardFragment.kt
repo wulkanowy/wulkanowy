@@ -18,6 +18,7 @@ import io.github.wulkanowy.databinding.FragmentDashboardBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.account.accountdetails.AccountDetailsFragment
 import io.github.wulkanowy.ui.modules.attendance.summary.AttendanceSummaryFragment
+import io.github.wulkanowy.ui.modules.captcha.CaptchaDialog.Companion.CAPTCHA_SUCCESS
 import io.github.wulkanowy.ui.modules.conference.ConferenceFragment
 import io.github.wulkanowy.ui.modules.dashboard.adapters.DashboardAdapter
 import io.github.wulkanowy.ui.modules.exam.ExamFragment
@@ -62,6 +63,9 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
             return ((recyclerWidth - margin) / resources.displayMetrics.density).toInt()
         }
 
+    override val isViewEmpty
+        get() = dashboardAdapter.itemCount == 0
+
     companion object {
 
         fun newInstance() = DashboardFragment()
@@ -77,6 +81,13 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDashboardBinding.bind(view)
         presenter.onAttachView(this)
+        initializeCaptchaResultObserver()
+    }
+
+    private fun initializeCaptchaResultObserver() {
+        childFragmentManager.setFragmentResultListener(CAPTCHA_SUCCESS, this) { _, _ ->
+            presenter.onRetryAfterCaptcha()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

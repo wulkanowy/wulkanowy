@@ -30,6 +30,8 @@ import io.github.wulkanowy.databinding.ActivityMainBinding
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.modules.Destination
 import io.github.wulkanowy.ui.modules.account.accountquick.AccountQuickDialog
+import io.github.wulkanowy.ui.modules.auth.AuthDialog
+import io.github.wulkanowy.ui.modules.captcha.CaptchaDialog
 import io.github.wulkanowy.ui.modules.settings.appearance.menuorder.AppMenuItem
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.AppInfo
@@ -283,6 +285,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
             }
         }
 
+        Timber.e("DIALOG SHOW: $dialog")
         navController.showDialogFragment(dialog)
     }
 
@@ -321,6 +324,14 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
             .setOnDismissListener { }
             .show()
+    }
+
+    override fun onCaptchaVerificationRequired(url: String?) {
+        showDialogFragment(CaptchaDialog.newInstance(url))
+    }
+
+    override fun showAuthDialog() {
+        showDialogFragment(AuthDialog.newInstance())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
