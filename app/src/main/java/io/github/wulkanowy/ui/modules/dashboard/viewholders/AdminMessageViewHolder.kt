@@ -36,7 +36,7 @@ class AdminMessageViewHolder(
             dashboardAdminMessageItemDescription.text = item.content
             dashboardAdminMessageItemDescription.setTextColor(textColor)
             dashboardAdminMessageItemIcon.setColorFilter(textColor)
-            dashboardAdminMessageItemDismiss.isVisible = true
+            dashboardAdminMessageItemDismiss.isVisible = item.isDismissible
             dashboardAdminMessageItemDismiss.setTextColor(textColor)
             dashboardAdminMessageItemDismiss.setOnClickListener {
                 onAdminMessageDismissClickListener(item)
