@@ -828,7 +828,7 @@ class DashboardPresenter @Inject constructor(
         val wasGeneralError =
             filteredOriginalLoadedList.none { it.error == null } && filteredOriginalLoadedList.isNotEmpty() || wasAccountItemError
 
-        if (true && isItemsLoaded) {
+        if (isGeneralError && isItemsLoaded) {
             lastError = requireNotNull(firstError)
 
             view?.run {
