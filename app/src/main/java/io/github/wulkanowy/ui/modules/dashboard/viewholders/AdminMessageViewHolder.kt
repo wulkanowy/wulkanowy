@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.AdminMessage
 import io.github.wulkanowy.databinding.ItemDashboardAdminMessageBinding
-import io.github.wulkanowy.ui.modules.dashboard.DashboardItem
 import io.github.wulkanowy.utils.getThemeAttrColor
 
 class AdminMessageViewHolder(
@@ -37,7 +36,7 @@ class AdminMessageViewHolder(
             dashboardAdminMessageItemDescription.text = item.content
             dashboardAdminMessageItemDescription.setTextColor(textColor)
             dashboardAdminMessageItemIcon.setColorFilter(textColor)
-            dashboardAdminMessageItemDismiss.isVisible = item.isDismissible
+            dashboardAdminMessageItemDismiss.isVisible = true
             dashboardAdminMessageItemDismiss.setTextColor(textColor)
             dashboardAdminMessageItemDismiss.setOnClickListener {
                 onAdminMessageDismissClickListener(item)
