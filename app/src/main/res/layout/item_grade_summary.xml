@@ -146,7 +146,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="7dp"
             android:fontFamily="sans-serif-medium"
-            android:text="Ocena opisowa"
+            android:text="@string/grade_summary_descriptive"
             android:textSize="14sp" />
 
         <TextView

@@ -160,6 +160,10 @@ class GradeRepository @Inject constructor(
         return gradeSummaryDb.loadAll(semester.semesterId, semester.studentId)
     }
 
+    fun getGradesDescriptiveFromDatabase(semester: Semester): Flow<List<GradeDescriptive>> {
+        return gradeDescriptiveDb.loadAll(semester.semesterId, semester.studentId)
+    }
+
     suspend fun updateGrade(grade: Grade) {
         return gradeDb.updateAll(listOf(grade))
     }
@@ -170,6 +174,10 @@ class GradeRepository @Inject constructor(
 
     suspend fun updateGradesSummary(gradesSummary: List<GradeSummary>) {
         return gradeSummaryDb.updateAll(gradesSummary)
+    }
+
+    suspend fun updateGradesDescriptive(gradesDescriptive: List<GradeDescriptive>) {
+        return gradeDescriptiveDb.updateAll(gradesDescriptive)
     }
 
     private companion object {
