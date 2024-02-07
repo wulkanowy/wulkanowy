@@ -21,7 +21,6 @@ import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.data.toFirstResult
-import io.github.wulkanowy.data.waitForResult
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
@@ -38,7 +37,6 @@ import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.toFormattedString
 import io.github.wulkanowy.utils.until
-import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
 import java.time.DayOfWeek
 import java.time.Instant

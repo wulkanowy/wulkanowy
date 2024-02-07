@@ -5,6 +5,7 @@ import io.github.wulkanowy.data.dataOrNull
 import io.github.wulkanowy.data.db.entities.AdminMessage
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.data.enums.MessageType
 import io.github.wulkanowy.data.errorOrNull
@@ -23,12 +24,15 @@ import io.github.wulkanowy.data.repositories.SchoolAnnouncementRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.repositories.TimetableRepository
+import io.github.wulkanowy.data.toFirstResult
 import io.github.wulkanowy.domain.adminmessage.GetAppropriateAdminMessageUseCase
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AdsHelper
 import io.github.wulkanowy.utils.calculatePercentage
+import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
+import io.github.wulkanowy.utils.sunday
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
@@ -43,6 +47,7 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDate
 import javax.inject.Inject
@@ -435,13 +440,25 @@ class DashboardPresenter @Inject constructor(
     private fun loadLessons(student: Student, forceRefresh: Boolean) {
         flatResourceFlow {
             val semester = semesterRepository.getCurrentSemester(student)
-            val date = LocalDate.now().nextOrSameSchoolDay
+
+            val currentWeekLessons = timetableRepository.getTimetable(
+                student = student,
+                semester = semester,
+                start = LocalDate.now().monday,
+                end = LocalDate.now().sunday,
+                forceRefresh = false,
+            ).toFirstResult().dataOrNull?.lessons.orEmpty()
+
+            val date = when (isWeekendHasLessons(currentWeekLessons)) {
+                true -> LocalDate.now()
+                else -> LocalDate.now().nextOrSameSchoolDay
+            }
 
             timetableRepository.getTimetable(
                 student = student,
                 semester = semester,
                 start = date,
-                end = date,
+                end = date.plusDays(1),
                 forceRefresh = forceRefresh
             )
         }
@@ -477,6 +494,15 @@ class DashboardPresenter @Inject constructor(
                 }
             }
             .launchWithUniqueRefreshJob("dashboard_lessons", forceRefresh)
+    }
+
+    private fun isWeekendHasLessons(
+        lessons: List<Timetable>,
+    ): Boolean = lessons.any {
+        it.date.dayOfWeek in listOf(
+            DayOfWeek.SATURDAY,
+            DayOfWeek.SUNDAY,
+        )
     }
 
     private fun loadHomework(student: Student, forceRefresh: Boolean) {
