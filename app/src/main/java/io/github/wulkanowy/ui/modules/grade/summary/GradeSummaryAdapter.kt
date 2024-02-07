@@ -62,7 +62,9 @@ class GradeSummaryAdapter @Inject constructor(
 
     private fun bindHeaderViewHolder(binding: ScrollableHeaderGradeSummaryBinding) {
         if (items.isEmpty()) return
-        val gradeSummaries = items.map { it.gradeSummary }
+        val gradeSummaries = items
+            .filter { it.gradeDescriptive == null }
+            .map { it.gradeSummary }
 
         val context = binding.root.context
         val finalItemsCount = gradeSummaries.count { isGradeValid(it.finalGrade) }
@@ -76,6 +78,7 @@ class GradeSummaryAdapter @Inject constructor(
             .map { values -> values.average }
             .reversed() // fix average precision
             .average()
+            .let { if (it.isNaN()) 0.0 else it }
 
         with(binding) {
             gradeSummaryScrollableHeaderFinal.text = formatAverage(finalAverage)

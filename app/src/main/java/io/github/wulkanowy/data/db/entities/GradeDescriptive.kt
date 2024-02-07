@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import java.io.Serializable
 
 @Entity(tableName = "GradesDescriptive")
-class GradeDescriptive(
+data class GradeDescriptive(
 
     @ColumnInfo(name = "semester_id")
     val semesterId: Int,
@@ -17,8 +17,7 @@ class GradeDescriptive(
     val subject: String,
 
     val description: String,
-
-    ) : Serializable {
+) : Serializable {
 
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
