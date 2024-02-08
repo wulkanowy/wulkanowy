@@ -65,6 +65,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:id="@+id/gradeSummaryItemPointsDivider"
         android:background="@drawable/ic_all_divider" />
 
     <LinearLayout
@@ -97,6 +98,7 @@
 
     <View
         android:layout_width="match_parent"
+        android:id="@+id/gradeSummaryItemPredictedDivider"
         android:layout_height="1dp"
         android:background="@drawable/ic_all_divider" />
 
@@ -131,6 +133,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:id="@+id/gradeSummaryItemFinalDivider"
         android:background="@drawable/ic_all_divider" />
 
     <LinearLayout
@@ -161,9 +164,4 @@
             tools:maxLines="4"
             tools:text="@tools:sample/lorem/random" />
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@drawable/ic_all_divider" />
 </LinearLayout>

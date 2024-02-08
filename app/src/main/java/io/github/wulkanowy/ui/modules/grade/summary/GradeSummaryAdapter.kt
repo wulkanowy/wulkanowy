@@ -116,6 +116,9 @@ class GradeSummaryAdapter @Inject constructor(
                 root.context.getString(R.string.all_no_data)
             }
 
+            gradeSummaryItemFinalDivider.isVisible = gradeDescriptive == null
+            gradeSummaryItemPredictedDivider.isVisible = gradeDescriptive == null
+            gradeSummaryItemPointsDivider.isVisible = gradeDescriptive == null
             gradeSummaryItemPredictedContainer.isVisible = gradeDescriptive == null
             gradeSummaryItemFinalContainer.isVisible = gradeDescriptive == null
             gradeSummaryItemDescriptiveContainer.isVisible = gradeDescriptive != null
