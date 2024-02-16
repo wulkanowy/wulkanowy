@@ -101,6 +101,12 @@ class LoginFormPresenter @Inject constructor(
         }
     }
 
+    fun onDomainSuffixChanged() {
+        view?.apply {
+            clearDomainSuffixError()
+        }
+    }
+
     fun updateCustomDomainSuffixVisibility() {
         view?.run {
             showDomainSuffixInput("customSuffix" in formHostValue)
@@ -266,6 +272,11 @@ class LoginFormPresenter @Inject constructor(
 
         if (loginData.password.length < 6 && loginData.password.isNotEmpty()) {
             view?.setErrorPassInvalid(focus = isCorrect)
+            isCorrect = false
+        }
+
+        if (loginData.domainSuffix !in listOf("", "rc", "kurs")) {
+            view?.setDomainSuffixInvalid()
             isCorrect = false
         }
 
