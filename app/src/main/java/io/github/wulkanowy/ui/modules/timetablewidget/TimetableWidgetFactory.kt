@@ -27,6 +27,7 @@ import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Co
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getStudentWidgetKey
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getTodayLastLessonEndDateTimeWidgetKey
 import io.github.wulkanowy.utils.getCompatColor
+import io.github.wulkanowy.utils.getErrorString
 import io.github.wulkanowy.utils.getPlural
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.runBlocking
@@ -83,7 +84,7 @@ class TimetableWidgetFactory(
                 createItems(lessons, lastSync)
             }
                 .onFailure {
-                    items = listOf(TimetableWidgetItem.Error)
+                    items = listOf(TimetableWidgetItem.Error(it))
                     Timber.e(it, "An error has occurred in timetable widget factory")
                 }
                 .onSuccess {
@@ -145,7 +146,7 @@ class TimetableWidgetFactory(
             is TimetableWidgetItem.Normal -> getNormalItemRemoteView(item)
             is TimetableWidgetItem.Empty -> getEmptyItemRemoteView(item)
             is TimetableWidgetItem.Synchronized -> getSynchronizedItemRemoteView(item)
-            is TimetableWidgetItem.Error -> getErrorItemRemoteView()
+            is TimetableWidgetItem.Error -> getErrorItemRemoteView(item)
         }
     }
 
@@ -217,11 +218,16 @@ class TimetableWidgetFactory(
         }
     }
 
-    private fun getErrorItemRemoteView(): RemoteViews {
+    private fun getErrorItemRemoteView(item: TimetableWidgetItem.Error): RemoteViews {
         return RemoteViews(
             context.packageName,
             R.layout.item_widget_timetable_error
-        )
+        ).apply {
+            setTextViewText(
+                R.id.timetable_widget_item_error_message,
+                context.resources.getErrorString(item.error)
+            )
+        }
     }
 
     private fun updateTheme() {
