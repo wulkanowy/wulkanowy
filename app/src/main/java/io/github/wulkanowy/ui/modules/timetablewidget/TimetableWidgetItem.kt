@@ -17,10 +17,13 @@ sealed class TimetableWidgetItem(val type: TimetableWidgetItemType) {
     data class Synchronized(
         val timestamp: Instant,
     ) : TimetableWidgetItem(TimetableWidgetItemType.SYNCHRONIZED)
+
+    data object Error : TimetableWidgetItem(TimetableWidgetItemType.ERROR)
 }
 
 enum class TimetableWidgetItemType {
     NORMAL,
     EMPTY,
     SYNCHRONIZED,
+    ERROR,
 }

@@ -11,7 +11,7 @@ import android.view.View.VISIBLE
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.dataOrNull
+import io.github.wulkanowy.data.dataOrThrow
 import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
@@ -67,25 +67,31 @@ class TimetableWidgetFactory(
     override fun onDestroy() {}
 
     override fun onDataSetChanged() {
-        intent?.extras?.getInt(EXTRA_APPWIDGET_ID)?.let { appWidgetId ->
-            val date = LocalDate.ofEpochDay(sharedPref.getLong(getDateWidgetKey(appWidgetId), 0))
-            val studentId = sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0)
+        val appWidgetId = intent?.extras?.getInt(EXTRA_APPWIDGET_ID) ?: return
+        val date = LocalDate.ofEpochDay(sharedPref.getLong(getDateWidgetKey(appWidgetId), 0))
+        val studentId = sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0)
 
+        items = emptyList()
+
+        runBlocking {
             runCatching {
-                runBlocking {
-                    val student = getStudent(studentId) ?: return@runBlocking
-                    val semester = semesterRepository.getCurrentSemester(student)
-                    items = createItems(
-                        lessons = getLessons(student, semester, date),
-                        lastSync = timetableRepository.getLastRefreshTimestamp(semester, date, date)
-                    )
+                val student = getStudent(studentId) ?: return@runBlocking
+                val semester = semesterRepository.getCurrentSemester(student)
+                val lessons = getLessons(student, semester, date)
+                val lastSync = timetableRepository.getLastRefreshTimestamp(semester, date, date)
+
+                createItems(lessons, lastSync)
+            }
+                .onFailure {
+                    items = listOf(TimetableWidgetItem.Error)
+                    Timber.e(it, "An error has occurred in timetable widget factory")
+                }
+                .onSuccess {
+                    items = it
                     if (date == LocalDate.now()) {
                         updateTodayLastLessonEnd(appWidgetId)
                     }
                 }
-            }.onFailure {
-                Timber.e(it, "An error has occurred in timetable widget factory")
-            }
         }
     }
 
@@ -98,7 +104,7 @@ class TimetableWidgetFactory(
         student: Student, semester: Semester, date: LocalDate
     ): List<Timetable> {
         val timetable = timetableRepository.getTimetable(student, semester, date, date, false)
-        val lessons = timetable.toFirstResult().dataOrNull?.lessons.orEmpty()
+        val lessons = timetable.toFirstResult().dataOrThrow.lessons
         return lessons.sortedBy { it.number }
     }
 
@@ -110,6 +116,7 @@ class TimetableWidgetFactory(
             BETWEEN_AND_BEFORE_LESSONS -> 0
             else -> null
         }
+
         return buildList {
             lessons.forEach {
                 if (prefRepository.showTimetableGaps != NO_GAPS && prevNum != null && it.number > prevNum!! + 1) {
@@ -133,15 +140,12 @@ class TimetableWidgetFactory(
         sharedPref.putLong(key, todayLastLessonEnd.epochSecond, true)
     }
 
-    companion object {
-        const val TIME_FORMAT_STYLE = "HH:mm"
-    }
-
     override fun getViewAt(position: Int): RemoteViews? {
         return when (val item = items.getOrNull(position) ?: return null) {
             is TimetableWidgetItem.Normal -> getNormalItemRemoteView(item)
             is TimetableWidgetItem.Empty -> getEmptyItemRemoteView(item)
             is TimetableWidgetItem.Synchronized -> getSynchronizedItemRemoteView(item)
+            is TimetableWidgetItem.Error -> getErrorItemRemoteView()
         }
     }
 
@@ -211,6 +215,13 @@ class TimetableWidgetFactory(
                 getSynchronizationInfoText(item.timestamp)
             )
         }
+    }
+
+    private fun getErrorItemRemoteView(): RemoteViews {
+        return RemoteViews(
+            context.packageName,
+            R.layout.item_widget_timetable_error
+        )
     }
 
     private fun updateTheme() {
@@ -300,4 +311,8 @@ class TimetableWidgetFactory(
                 synchronizationTime,
             )
         }
+
+    private companion object {
+        private const val TIME_FORMAT_STYLE = "HH:mm"
+    }
 }
