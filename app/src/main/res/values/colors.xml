@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorIcon">#d32f2f</color>
-    <color name="colorPrimary">#B91B21</color>
-    <color name="colorOnPrimary">#FFFFFF</color>
-    <color name="colorPrimaryContainer">#FFDAD5</color>
-    <color name="colorOnPrimaryContainer">#410003</color>
+
+    <color name="colorPrimary">#9c423a</color>
+    <color name="colorOnPrimary">#ffffff</color>
+    <color name="colorPrimaryContainer">#ffdad6</color>
+    <color name="colorOnPrimaryContainer">#410002</color>
+
     <color name="colorSurface">#FCFCFC</color>
     <color name="colorOnSurface">#201A1A</color>
     <color name="colorSurfaceVariant">#F4DDDB</color>
@@ -14,10 +16,12 @@
     <color name="colorOnSurfaceInverse">#FAEEEE</color>
     <color name="colorPrimaryInverse">#FFB3AA</color>
 
-    <color name="colorPrimaryDark">#FFB3AA</color>
-    <color name="colorOnPrimaryDark">#680006</color>
-    <color name="colorPrimaryContainerDark">#93000E</color>
-    <color name="colorOnPrimaryContainerDark">#FFDAD5</color>
+
+    <color name="colorPrimaryDark">#ffb4ab</color>
+    <color name="colorOnPrimaryDark">#5f1411</color>
+    <color name="colorPrimaryContainerDark">#7d2b25</color>
+    <color name="colorOnPrimaryContainerDark">#ffdad6</color>
+
     <color name="colorSurfaceDark">#201A1A</color>
     <color name="colorOnSurfaceDark">#ECE0E0</color>
     <color name="colorSurfaceVariantDark">#534341</color>
@@ -27,15 +31,16 @@
     <color name="colorOnSurfaceInverseDark">#201A1A</color>
     <color name="colorPrimaryInverseDark">#B91B21</color>
 
+
     <color name="colorPrimaryDarker">#9a0007</color>
     <color name="colorError">#ff5722</color>
     <color name="colorErrorLight">#e84853</color>
 
-    <color name="colorNavigationBarLight">#f5e8e9</color>
+    <color name="colorNavigationBarLight">#f4ecec</color>
     <color name="colorNavigationBarDark">#312624</color>
     <color name="colorNavigationBarBlack">#150e0e</color>
 
-    <color name="colorStatusBarLight">#f5e5e6</color>
+    <color name="colorStatusBarLight">#f2eae9</color>
     <color name="colorStatusBarDark">#342826</color>
     <color name="colorStatusBarBlack">#181010</color>
 
