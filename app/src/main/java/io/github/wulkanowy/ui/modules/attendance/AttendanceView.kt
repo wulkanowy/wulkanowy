@@ -48,6 +48,8 @@ interface AttendanceView : BaseView {
 
     fun showExcuseButton(show: Boolean)
 
+    fun showExcuseDayButton(show: Boolean)
+
     fun showAttendanceDialog(lesson: Attendance)
 
     fun showDatePickerDialog(selectedDate: LocalDate)
@@ -56,7 +58,7 @@ interface AttendanceView : BaseView {
 
     fun openSummaryView()
 
-    fun startSendMessageIntent(date: LocalDate, numbers: String, reason: String)
+    fun startSendMessageIntent(date: LocalDate, lessons: String, reason: String)
 
     fun startActionMode()
 

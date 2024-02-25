@@ -88,14 +88,35 @@ class AttendanceRepository @Inject constructor(
         return attendanceDb.updateAll(timetable)
     }
 
+    @JvmName("excuseForAbsenceLessons")
     suspend fun excuseForAbsence(
-        student: Student, semester: Semester,
-        absenceList: List<Attendance>, reason: String? = null
+        student: Student,
+        semester: Semester,
+        absenceList: List<Attendance>,
+        reason: String? = null
     ) {
         val items = absenceList.map { attendance ->
             Absent(
                 date = LocalDateTime.of(attendance.date, LocalTime.of(0, 0)),
                 timeId = attendance.timeId
+            )
+        }
+        sdk.init(student)
+            .switchSemester(semester)
+            .excuseForAbsence(items, reason)
+    }
+
+    @JvmName("excuseForAbsenceDays")
+    suspend fun excuseForAbsence(
+        student: Student,
+        semester: Semester,
+        days: List<LocalDate>,
+        reason: String? = null
+    ) {
+        val items = days.map { day ->
+            Absent(
+                date = LocalDateTime.of(day, LocalTime.of(0, 0)),
+                timeId = null,
             )
         }
         sdk.init(student)

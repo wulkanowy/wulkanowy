@@ -38,6 +38,7 @@ class AttendancePresenter @Inject constructor(
     private lateinit var lastError: Throwable
 
     private val attendanceToExcuseList = mutableListOf<Attendance>()
+    private var isWholeDayExcusable = false
 
     private var isVulcanExcusedFunctionEnabled = false
 
@@ -129,6 +130,14 @@ class AttendancePresenter @Inject constructor(
 
     fun onExcuseButtonClick() {
         view?.startActionMode()
+
+        if (isWholeDayExcusable) {
+            view?.showExcuseDayButton(true)
+        }
+    }
+
+    fun onExcuseDayButtonClick() {
+        view?.showExcuseDialog()
     }
 
     fun onExcuseCheckboxSelect(attendanceItem: Attendance, checked: Boolean) {
@@ -152,7 +161,7 @@ class AttendancePresenter @Inject constructor(
     fun onExcuseDialogSubmit(reason: String) {
         view?.finishActionMode()
 
-        if (attendanceToExcuseList.isEmpty()) return
+        if (attendanceToExcuseList.isEmpty() && !isWholeDayExcusable) return
 
         if (isVulcanExcusedFunctionEnabled) {
             excuseAbsence(
@@ -163,8 +172,8 @@ class AttendancePresenter @Inject constructor(
             val attendanceToExcuseNumbers = attendanceToExcuseList.map { it.number }
 
             view?.startSendMessageIntent(
-                date = attendanceToExcuseList[0].date,
-                numbers = attendanceToExcuseNumbers.joinToString(", "),
+                date = currentDate ?: attendanceToExcuseList[0].date,
+                lessons = attendanceToExcuseNumbers.joinToString(", "),
                 reason = reason
             )
         }
@@ -174,6 +183,7 @@ class AttendancePresenter @Inject constructor(
         view?.apply {
             showExcuseCheckboxes(true)
             showExcuseButton(false)
+            showExcuseDayButton(false)
             enableSwipe(false)
             showDayNavigation(false)
         }
@@ -185,6 +195,7 @@ class AttendancePresenter @Inject constructor(
         view?.apply {
             showExcuseCheckboxes(false)
             showExcuseButton(true)
+            showExcuseDayButton(false)
             enableSwipe(true)
             showDayNavigation(true)
         }
@@ -217,7 +228,10 @@ class AttendancePresenter @Inject constructor(
         }
             .logResourceStatus("load attendance")
             .onResourceLoading {
-                view?.showExcuseButton(false)
+                view?.apply {
+                    showExcuseButton(false)
+                    showExcuseDayButton(false)
+                }
             }
             .mapResourceData {
                 if (prefRepository.isShowPresent) {
@@ -240,15 +254,16 @@ class AttendancePresenter @Inject constructor(
                 }
             }
             .onResourceIntermediate { view?.showRefresh(true) }
-            .onResourceSuccess {
-                isVulcanExcusedFunctionEnabled = it.any { item -> item.excusable }
-                val anyExcusables = it.any { it.isExcusableOrNotExcused }
+            .onResourceSuccess { items ->
+                isVulcanExcusedFunctionEnabled = items.any { item -> item.excusable }
+                isWholeDayExcusable = items.all { it.isExcusableOrNotExcused }
+                val anyExcusables = items.any { it.isExcusableOrNotExcused }
                 view?.showExcuseButton(anyExcusables && (isParent || isVulcanExcusedFunctionEnabled))
 
                 analytics.logEvent(
                     "load_data",
                     "type" to "attendance",
-                    "items" to it.size
+                    "items" to items.size
                 )
             }
             .onResourceNotLoading {
@@ -301,7 +316,19 @@ class AttendancePresenter @Inject constructor(
         resourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            attendanceRepository.excuseForAbsence(student, semester, toExcuseList, reason)
+            if (toExcuseList.isEmpty()) {
+                attendanceRepository.excuseForAbsence(
+                    student = student,
+                    semester = semester,
+                    days = listOfNotNull(currentDate),
+                    reason = reason
+                )
+            } else attendanceRepository.excuseForAbsence(
+                student = student,
+                semester = semester,
+                absenceList = toExcuseList,
+                reason = reason
+            )
         }.onEach {
             when (it) {
                 is Resource.Loading -> view?.run {
@@ -309,6 +336,7 @@ class AttendancePresenter @Inject constructor(
                     showProgress(true)
                     showContent(false)
                     showExcuseButton(false)
+                    showExcuseDayButton(false)
                 }
 
                 is Resource.Success -> {
@@ -317,6 +345,7 @@ class AttendancePresenter @Inject constructor(
                     attendanceToExcuseList.clear()
                     view?.run {
                         showExcuseButton(false)
+                        showExcuseDayButton(false)
                         showMessage(excuseSuccessString)
                         showContent(true)
                         showProgress(false)
