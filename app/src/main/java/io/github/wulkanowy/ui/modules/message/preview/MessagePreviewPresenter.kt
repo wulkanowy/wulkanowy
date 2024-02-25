@@ -181,13 +181,51 @@ class MessagePreviewPresenter @Inject constructor(
         return true
     }
 
+    private fun restoreMessage() {
+        message ?: return
+
+        view?.run {
+            showContent(false)
+            showProgress(true)
+            showOptions(
+                show = false,
+                isReplayable = false,
+                isRestorable = false,
+            )
+            showErrorView(false)
+        }
+        Timber.i("Restore message ${message?.messageGlobalKey}")
+        presenterScope.launch {
+            runCatching {
+                val student = studentRepository.getCurrentStudent(decryptPass = true)
+                val mailbox = messageRepository.getMailboxByStudent(student)
+                messageRepository.restoreMessages(student, mailbox, listOfNotNull(message))
+            }
+                .onFailure {
+                    retryCallback = { onMessageRestore() }
+                    errorHandler.dispatch(it)
+                }
+                .onSuccess {
+                    view?.run {
+                        showMessage(restoreMessageSuccessString)
+                        popView()
+                    }
+                }
+            view?.showProgress(false)
+        }
+    }
+
     private fun deleteMessage() {
         message ?: return
 
         view?.run {
             showContent(false)
             showProgress(true)
-            showOptions(show = false, isReplayable = false)
+            showOptions(
+                show = false,
+                isReplayable = false,
+                isRestorable = false,
+            )
             showErrorView(false)
         }
 
@@ -224,6 +262,11 @@ class MessagePreviewPresenter @Inject constructor(
         }
     }
 
+    fun onMessageRestore(): Boolean {
+        restoreMessage()
+        return true
+    }
+
     fun onMessageDelete(): Boolean {
         deleteMessage()
         return true
@@ -234,6 +277,7 @@ class MessagePreviewPresenter @Inject constructor(
             showOptions(
                 show = message != null,
                 isReplayable = message?.folderId != MessageFolder.SENT.id,
+                isRestorable = message?.folderId == MessageFolder.TRASHED.id,
             )
             message?.let {
                 when (it.folderId == MessageFolder.TRASHED.id) {

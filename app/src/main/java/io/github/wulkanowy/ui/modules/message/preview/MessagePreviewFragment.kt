@@ -44,6 +44,8 @@ class MessagePreviewFragment :
 
     private var menuForwardButton: MenuItem? = null
 
+    private var menuRestoreButton: MenuItem? = null
+
     private var menuDeleteButton: MenuItem? = null
 
     private var menuShareButton: MenuItem? = null
@@ -55,6 +57,9 @@ class MessagePreviewFragment :
 
     override val deleteMessageSuccessString: String
         get() = getString(R.string.message_delete_success)
+
+    override val restoreMessageSuccessString: String
+        get() = getString(R.string.message_restore_success)
 
     override val messageNoSubjectString: String
         get() = getString(R.string.message_no_subject)
@@ -103,6 +108,7 @@ class MessagePreviewFragment :
         inflater.inflate(R.menu.action_menu_message_preview, menu)
         menuReplyButton = menu.findItem(R.id.messagePreviewMenuReply)
         menuForwardButton = menu.findItem(R.id.messagePreviewMenuForward)
+        menuRestoreButton = menu.findItem(R.id.messagePreviewMenuRestore)
         menuDeleteButton = menu.findItem(R.id.messagePreviewMenuDelete)
         menuShareButton = menu.findItem(R.id.messagePreviewMenuShare)
         menuPrintButton = menu.findItem(R.id.messagePreviewMenuPrint)
@@ -115,6 +121,7 @@ class MessagePreviewFragment :
         return when (item.itemId) {
             R.id.messagePreviewMenuReply -> presenter.onReply()
             R.id.messagePreviewMenuForward -> presenter.onForward()
+            R.id.messagePreviewMenuRestore -> presenter.onMessageRestore()
             R.id.messagePreviewMenuDelete -> presenter.onMessageDelete()
             R.id.messagePreviewMenuShare -> presenter.onShare()
             R.id.messagePreviewMenuPrint -> presenter.onPrint()
@@ -137,9 +144,10 @@ class MessagePreviewFragment :
         binding.messagePreviewRecycler.visibility = if (show) VISIBLE else GONE
     }
 
-    override fun showOptions(show: Boolean, isReplayable: Boolean) {
+    override fun showOptions(show: Boolean, isReplayable: Boolean, isRestorable: Boolean) {
         menuReplyButton?.isVisible = isReplayable
         menuForwardButton?.isVisible = show
+        menuRestoreButton?.isVisible = isRestorable
         menuDeleteButton?.isVisible = show
         menuShareButton?.isVisible = show
         menuPrintButton?.isVisible = show

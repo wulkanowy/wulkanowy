@@ -9,6 +9,8 @@ interface MessagePreviewView : BaseView {
 
     val deleteMessageSuccessString: String
 
+    val restoreMessageSuccessString: String
+
     val messageNoSubjectString: String
 
     val printHTML: String
@@ -29,7 +31,7 @@ interface MessagePreviewView : BaseView {
 
     fun setErrorRetryCallback(callback: () -> Unit)
 
-    fun showOptions(show: Boolean, isReplayable: Boolean)
+    fun showOptions(show: Boolean, isReplayable: Boolean, isRestorable: Boolean)
 
     fun setDeletedOptionsLabels()
 
