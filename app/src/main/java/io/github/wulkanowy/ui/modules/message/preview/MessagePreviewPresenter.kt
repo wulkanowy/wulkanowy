@@ -268,13 +268,6 @@ class MessagePreviewPresenter @Inject constructor(
                 isReplayable = messageWithAttachments?.message?.folderId != MessageFolder.SENT.id,
                 isRestorable = messageWithAttachments?.message?.folderId == MessageFolder.TRASHED.id,
             )
-            messageWithAttachments?.message?.let {
-                when (it.folderId == MessageFolder.TRASHED.id) {
-                    true -> setDeletedOptionsLabels()
-                    false -> setNotDeletedOptionsLabels()
-                }
-            }
-
         }
     }
 

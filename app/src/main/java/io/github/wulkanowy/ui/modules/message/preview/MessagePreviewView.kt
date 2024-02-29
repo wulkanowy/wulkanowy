@@ -39,10 +39,6 @@ interface MessagePreviewView : BaseView {
 
     fun showOptions(show: Boolean, isReplayable: Boolean, isRestorable: Boolean)
 
-    fun setDeletedOptionsLabels()
-
-    fun setNotDeletedOptionsLabels()
-
     fun openMessageReply(message: Message?)
 
     fun openMessageForward(message: Message?)

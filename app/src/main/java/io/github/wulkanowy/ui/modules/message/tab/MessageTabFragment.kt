@@ -66,12 +66,12 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         }
 
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
-            if (presenter.folder == MessageFolder.TRASHED) {
-                val menuItem = menu.findItem(R.id.messageTabContextMenuDelete)
-                menuItem.setTitle(R.string.message_delete_forever)
-            } else {
-                menu.findItem(R.id.messageTabContextMenuRestore).setVisible(false)
-            }
+            val isTrashFolder = presenter.folder == MessageFolder.TRASHED
+
+            menu.findItem(R.id.messageTabContextMenuDelete).setVisible(!isTrashFolder)
+            menu.findItem(R.id.messageTabContextMenuDeleteForever).setVisible(isTrashFolder)
+            menu.findItem(R.id.messageTabContextMenuRestore).setVisible(isTrashFolder)
+
             return presenter.onPrepareActionMode()
         }
 
@@ -84,6 +84,7 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
             when (menu.itemId) {
                 R.id.messageTabContextMenuDelete -> presenter.onActionModeSelectDelete()
                 R.id.messageTabContextMenuRestore -> presenter.onActionModeSelectRestore()
+                R.id.messageTabContextMenuDeleteForever -> presenter.onActionModeSelectDelete()
                 R.id.messageTabContextMenuSelectAll -> presenter.onActionModeSelectCheckAll()
             }
             return true

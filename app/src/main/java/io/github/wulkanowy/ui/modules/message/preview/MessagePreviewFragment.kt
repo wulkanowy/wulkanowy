@@ -48,6 +48,8 @@ class MessagePreviewFragment :
 
     private var menuDeleteButton: MenuItem? = null
 
+    private var menuDeleteForeverButton: MenuItem? = null
+
     private var menuShareButton: MenuItem? = null
 
     private var menuPrintButton: MenuItem? = null
@@ -118,6 +120,7 @@ class MessagePreviewFragment :
         menuForwardButton = menu.findItem(R.id.messagePreviewMenuForward)
         menuRestoreButton = menu.findItem(R.id.messagePreviewMenuRestore)
         menuDeleteButton = menu.findItem(R.id.messagePreviewMenuDelete)
+        menuDeleteForeverButton = menu.findItem(R.id.messagePreviewMenuDeleteForever)
         menuShareButton = menu.findItem(R.id.messagePreviewMenuShare)
         menuPrintButton = menu.findItem(R.id.messagePreviewMenuPrint)
         menuMuteButton = menu.findItem(R.id.messagePreviewMenuMute)
@@ -132,6 +135,7 @@ class MessagePreviewFragment :
             R.id.messagePreviewMenuForward -> presenter.onForward()
             R.id.messagePreviewMenuRestore -> presenter.onMessageRestore()
             R.id.messagePreviewMenuDelete -> presenter.onMessageDelete()
+            R.id.messagePreviewMenuDeleteForever -> presenter.onMessageDelete()
             R.id.messagePreviewMenuShare -> presenter.onShare()
             R.id.messagePreviewMenuPrint -> presenter.onPrint()
             R.id.messagePreviewMenuMute -> presenter.onMute()
@@ -160,21 +164,14 @@ class MessagePreviewFragment :
     }
 
     override fun showOptions(show: Boolean, isReplayable: Boolean, isRestorable: Boolean) {
-        menuReplyButton?.isVisible = isReplayable
+        menuReplyButton?.isVisible = show && isReplayable
         menuForwardButton?.isVisible = show
-        menuRestoreButton?.isVisible = isRestorable
-        menuDeleteButton?.isVisible = show
+        menuRestoreButton?.isVisible = show && isRestorable
+        menuDeleteButton?.isVisible = show && !isRestorable
+        menuDeleteForeverButton?.isVisible = show && isRestorable
         menuShareButton?.isVisible = show
         menuPrintButton?.isVisible = show
         menuMuteButton?.isVisible = show && isReplayable
-    }
-
-    override fun setDeletedOptionsLabels() {
-        menuDeleteButton?.setTitle(R.string.message_delete_forever)
-    }
-
-    override fun setNotDeletedOptionsLabels() {
-        menuDeleteButton?.setTitle(R.string.message_move_to_trash)
     }
 
     override fun showErrorView(show: Boolean) {
