@@ -855,6 +855,7 @@
     <!--Errors-->
     <string name="error_no_internet">No internet connection</string>
     <string name="error_invalid_device_datetime">An error occurred. Check your device clock</string>
+    <string name="error_account_inactive">This account is inactive. Try logging in again</string>
     <string name="error_timeout">Connection to register failed. Servers can be overloaded. Please try again later</string>
     <string name="error_login_failed">Loading data failed. Please try again later</string>
     <string name="error_password_change_required">Register password change required</string>
@@ -866,4 +867,10 @@
     <string name="error_feature_disabled">Feature disabled by your school</string>
     <string name="error_feature_not_available">Feature not available. Login in a mode other than Mobile API</string>
     <string name="error_field_required">This field is required</string>
+
+    <!-- Mute system -->
+    <string name="message_mute">Mute</string>
+    <string name="message_unmute">Unmute</string>
+    <string name="message_mute_success">You have muted this user</string>
+    <string name="message_unmute_success">You have unmuted this user</string>
 </resources>

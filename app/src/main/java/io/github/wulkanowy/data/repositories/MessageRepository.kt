@@ -8,9 +8,12 @@ import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.MailboxDao
 import io.github.wulkanowy.data.db.dao.MessageAttachmentDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
+import io.github.wulkanowy.data.db.dao.MutedMessageSendersDao
 import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
+import io.github.wulkanowy.data.db.entities.MessageWithMutedAuthor
+import io.github.wulkanowy.data.db.entities.MutedMessageSender
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.enums.MessageFolder
@@ -43,6 +46,7 @@ import javax.inject.Singleton
 @Singleton
 class MessageRepository @Inject constructor(
     private val messagesDb: MessagesDao,
+    private val mutedMessageSendersDao: MutedMessageSendersDao,
     private val messageAttachmentDao: MessageAttachmentDao,
     private val sdk: Sdk,
     @ApplicationContext private val context: Context,
@@ -52,7 +56,6 @@ class MessageRepository @Inject constructor(
     private val mailboxDao: MailboxDao,
     private val getMailboxByStudentUseCase: GetMailboxByStudentUseCase,
 ) {
-
     private val saveFetchResultMutex = Mutex()
 
     private val messagesCacheKey = "message"
@@ -64,7 +67,7 @@ class MessageRepository @Inject constructor(
         folder: MessageFolder,
         forceRefresh: Boolean,
         notify: Boolean = false,
-    ): Flow<Resource<List<Message>>> = networkBoundResource(
+    ): Flow<Resource<List<MessageWithMutedAuthor>>> = networkBoundResource(
         mutex = saveFetchResultMutex,
         isResultEmpty = { it.isEmpty() },
         shouldFetch = {
@@ -75,8 +78,8 @@ class MessageRepository @Inject constructor(
         },
         query = {
             if (mailbox == null) {
-                messagesDb.loadAll(folder.id, student.email)
-            } else messagesDb.loadAll(mailbox.globalKey, folder.id)
+                messagesDb.loadMessagesWithMutedAuthor(folder.id, student.email)
+            } else messagesDb.loadMessagesWithMutedAuthor(mailbox.globalKey, folder.id)
         },
         fetch = {
             sdk.init(student).getMessages(
@@ -84,10 +87,12 @@ class MessageRepository @Inject constructor(
                 mailboxKey = mailbox?.globalKey,
             ).mapToEntities(student, mailbox, mailboxDao.loadAll(student.email))
         },
-        saveFetchResult = { old, new ->
+        saveFetchResult = { oldWithAuthors, new ->
+            val old = oldWithAuthors.map { it.message }
             messagesDb.deleteAll(old uniqueSubtract new)
             messagesDb.insertAll((new uniqueSubtract old).onEach {
-                it.isNotified = !notify
+                val muted = isMuted(it.correspondents)
+                it.isNotified = !notify || muted
             })
 
             refreshHelper.updateLastRefreshTimestamp(
@@ -107,9 +112,7 @@ class MessageRepository @Inject constructor(
             Timber.d("Message content in db empty: ${it.message.content.isBlank()}")
             (it.message.unread && markAsRead) || it.message.content.isBlank()
         },
-        query = {
-            messagesDb.loadMessageWithAttachment(message.messageGlobalKey)
-        },
+        query = { messagesDb.loadMessageWithAttachment(message.messageGlobalKey) },
         fetch = {
             sdk.init(student).getMessageDetails(
                 messageKey = it!!.message.messageGlobalKey,
@@ -256,4 +259,18 @@ class MessageRepository @Inject constructor(
             context.getString(R.string.pref_key_message_draft),
             value?.let { json.encodeToString(it) }
         )
+
+    suspend fun isMuted(author: String): Boolean {
+        return mutedMessageSendersDao.checkMute(author)
+    }
+
+    suspend fun muteMessage(author: String) {
+        if (isMuted(author)) return
+        mutedMessageSendersDao.insertMute(MutedMessageSender(author))
+    }
+
+    suspend fun unmuteMessage(author: String) {
+        if (!isMuted(author)) return
+        mutedMessageSendersDao.deleteMute(author)
+    }
 }

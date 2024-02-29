@@ -9,6 +9,10 @@ interface MessagePreviewView : BaseView {
 
     val deleteMessageSuccessString: String
 
+    val muteMessageSuccessString: String
+
+    val unmuteMessageSuccessString: String
+
     val restoreMessageSuccessString: String
 
     val messageNoSubjectString: String
@@ -20,6 +24,8 @@ interface MessagePreviewView : BaseView {
     fun initView()
 
     fun setMessageWithAttachment(item: MessageWithAttachment)
+
+    fun updateMuteToggleButton(isMuted: Boolean)
 
     fun showProgress(show: Boolean)
 
