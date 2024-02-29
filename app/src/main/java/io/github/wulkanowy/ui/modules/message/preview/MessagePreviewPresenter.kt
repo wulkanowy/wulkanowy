@@ -14,9 +14,11 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.toFormattedString
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 class MessagePreviewPresenter @Inject constructor(
     errorHandler: ErrorHandler,
@@ -74,6 +76,7 @@ class MessagePreviewPresenter @Inject constructor(
                         }
                     }
                 } else {
+                    delay(1.seconds)
                     view?.run {
                         showMessage(messageNotExists)
                         popView()
