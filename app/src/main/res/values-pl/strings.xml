@@ -867,8 +867,8 @@
     <string name="error_feature_not_available">Funkcja niedostępna. Zaloguj się w trybie innym niż Mobilne API</string>
     <string name="error_field_required">To pole jest wymagane</string>
     <!-- Mute system -->
-    <string name="message_mute">Mute</string>
-    <string name="message_unmute">Unmute</string>
-    <string name="message_mute_success">You have muted this user</string>
-    <string name="message_unmute_success">You have unmuted this user</string>
+    <string name="message_mute">Wycisz</string>
+    <string name="message_unmute">Wyłącz wyciszenie</string>
+    <string name="message_mute_success">Wyciszyleś tego użytkownika</string>
+    <string name="message_unmute_success">Wyłączyłeś wyciszenie tego użytkownika</string>
 </resources>
