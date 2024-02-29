@@ -267,7 +267,7 @@ class MessagePreviewPresenter @Inject constructor(
         view?.apply {
             showOptions(
                 show = messageWithAttachments?.message != null,
-                isReplayable = messageWithAttachments?.message?.folderId != MessageFolder.SENT.id,
+                isReplayable = messageWithAttachments?.message?.folderId == MessageFolder.RECEIVED.id,
                 isRestorable = messageWithAttachments?.message?.folderId == MessageFolder.TRASHED.id,
             )
         }
