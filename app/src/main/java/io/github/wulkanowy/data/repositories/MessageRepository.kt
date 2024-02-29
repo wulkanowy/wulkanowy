@@ -175,11 +175,11 @@ class MessageRepository @Inject constructor(
         refreshFolders(student, mailbox)
     }
 
-    suspend fun deleteMessage(student: Student, mailbox: Mailbox?, message: Message) {
-        deleteMessages(student, mailbox, listOf(message))
+    suspend fun deleteMessage(student: Student, message: Message) {
+        deleteMessages(student, listOf(message))
     }
 
-    suspend fun deleteMessages(student: Student, mailbox: Mailbox?, messages: List<Message>) {
+    suspend fun deleteMessages(student: Student, messages: List<Message>) {
         val firstMessage = messages.first()
         sdk.init(student).deleteMessages(
             messages = messages.map { it.messageGlobalKey },
@@ -200,7 +200,6 @@ class MessageRepository @Inject constructor(
             messagesDb.updateAll(deletedMessages)
         } else {
             messagesDb.deleteAll(messages)
-            refreshFolders(student, mailbox)
         }
     }
 

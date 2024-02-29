@@ -153,7 +153,7 @@ class MessageTabPresenter @Inject constructor(
 
             runCatching {
                 val student = studentRepository.getCurrentStudent(true)
-                messageRepository.deleteMessages(student, selectedMailbox, messageList)
+                messageRepository.deleteMessages(student, messageList)
             }
                 .onFailure(errorHandler::dispatch)
                 .onSuccess { view?.showMessage(R.string.message_messages_deleted) }
