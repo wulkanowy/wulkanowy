@@ -69,6 +69,8 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
             val inflater = mode.menuInflater
             inflater.inflate(R.menu.context_menu_attendance, menu)
+            menu.findItem(R.id.excuseMenuDaySubmit).setVisible(presenter.isWholeDayExcusable)
+
             return true
         }
 
@@ -84,6 +86,7 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
 
         override fun onActionItemClicked(mode: ActionMode, menu: MenuItem): Boolean {
             return when (menu.itemId) {
+                R.id.excuseMenuDaySubmit -> presenter.onExcuseDayButtonClick()
                 R.id.excuseMenuSubmit -> presenter.onExcuseSubmitButtonClick()
                 else -> false
             }
@@ -129,7 +132,6 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
             attendanceNextButton.setOnClickListener { presenter.onNextDay() }
 
             attendanceExcuseButton.setOnClickListener { presenter.onExcuseButtonClick() }
-            attendanceExcuseDayButton.setOnClickListener { presenter.onExcuseDayButtonClick() }
 
             attendanceNavContainer.elevation = requireContext().dpToPx(3f)
         }
@@ -220,10 +222,6 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
 
     override fun showExcuseButton(show: Boolean) {
         binding.attendanceExcuseButton.isVisible = show
-    }
-
-    override fun showExcuseDayButton(show: Boolean) {
-        binding.attendanceExcuseDayButton.isVisible = show
     }
 
     override fun showAttendanceDialog(lesson: Attendance) {

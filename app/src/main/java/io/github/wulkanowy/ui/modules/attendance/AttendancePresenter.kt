@@ -38,7 +38,7 @@ class AttendancePresenter @Inject constructor(
     private lateinit var lastError: Throwable
 
     private val attendanceToExcuseList = mutableListOf<Attendance>()
-    private var isWholeDayExcusable = false
+    var isWholeDayExcusable = false
 
     private var isVulcanExcusedFunctionEnabled = false
 
@@ -130,14 +130,12 @@ class AttendancePresenter @Inject constructor(
 
     fun onExcuseButtonClick() {
         view?.startActionMode()
-
-        if (isWholeDayExcusable) {
-            view?.showExcuseDayButton(true)
-        }
     }
 
-    fun onExcuseDayButtonClick() {
+    fun onExcuseDayButtonClick(): Boolean {
         view?.showExcuseDialog()
+
+        return true
     }
 
     fun onExcuseCheckboxSelect(attendanceItem: Attendance, checked: Boolean) {
@@ -183,7 +181,6 @@ class AttendancePresenter @Inject constructor(
         view?.apply {
             showExcuseCheckboxes(true)
             showExcuseButton(false)
-            showExcuseDayButton(false)
             enableSwipe(false)
             showDayNavigation(false)
         }
@@ -195,7 +192,6 @@ class AttendancePresenter @Inject constructor(
         view?.apply {
             showExcuseCheckboxes(false)
             showExcuseButton(true)
-            showExcuseDayButton(false)
             enableSwipe(true)
             showDayNavigation(true)
         }
@@ -230,7 +226,6 @@ class AttendancePresenter @Inject constructor(
             .onResourceLoading {
                 view?.apply {
                     showExcuseButton(false)
-                    showExcuseDayButton(false)
                 }
             }
             .mapResourceData {
@@ -256,7 +251,7 @@ class AttendancePresenter @Inject constructor(
             .onResourceIntermediate { view?.showRefresh(true) }
             .onResourceSuccess { items ->
                 isVulcanExcusedFunctionEnabled = items.any { item -> item.excusable }
-                isWholeDayExcusable = items.all { it.isExcusableOrNotExcused }
+                isWholeDayExcusable = items.all { it.isAbsenceExcusable }
                 val anyExcusables = items.any { it.isExcusableOrNotExcused }
                 view?.showExcuseButton(anyExcusables && (isParent || isVulcanExcusedFunctionEnabled))
 
@@ -336,7 +331,6 @@ class AttendancePresenter @Inject constructor(
                     showProgress(true)
                     showContent(false)
                     showExcuseButton(false)
-                    showExcuseDayButton(false)
                 }
 
                 is Resource.Success -> {
@@ -345,7 +339,6 @@ class AttendancePresenter @Inject constructor(
                     attendanceToExcuseList.clear()
                     view?.run {
                         showExcuseButton(false)
-                        showExcuseDayButton(false)
                         showMessage(excuseSuccessString)
                         showContent(true)
                         showProgress(false)

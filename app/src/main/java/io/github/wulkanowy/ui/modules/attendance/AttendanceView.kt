@@ -48,8 +48,6 @@ interface AttendanceView : BaseView {
 
     fun showExcuseButton(show: Boolean)
 
-    fun showExcuseDayButton(show: Boolean)
-
     fun showAttendanceDialog(lesson: Attendance)
 
     fun showDatePickerDialog(selectedDate: LocalDate)
