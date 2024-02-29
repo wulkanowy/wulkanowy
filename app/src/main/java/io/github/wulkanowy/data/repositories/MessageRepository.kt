@@ -198,9 +198,10 @@ class MessageRepository @Inject constructor(
             }
 
             messagesDb.updateAll(deletedMessages)
-        } else messagesDb.deleteAll(messages)
-
-        refreshFolders(student, mailbox)
+        } else {
+            messagesDb.deleteAll(messages)
+            refreshFolders(student, mailbox)
+        }
     }
 
     private suspend fun refreshFolders(
@@ -260,7 +261,7 @@ class MessageRepository @Inject constructor(
             value?.let { json.encodeToString(it) }
         )
 
-    suspend fun isMuted(author: String): Boolean {
+    private suspend fun isMuted(author: String): Boolean {
         return mutedMessageSendersDao.checkMute(author)
     }
 
