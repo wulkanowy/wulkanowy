@@ -14,6 +14,7 @@
     <string name="logviewer_title">Log viewer</string>
     <string name="debug_title">Debug</string>
     <string name="notification_debug_title">Notification debug</string>
+    <string name="debug_cookies_clear">Clear webview cookies</string>
     <string name="contributors_title">Contributors</string>
     <string name="license_title">Licenses</string>
     <string name="message_title">Messages</string>
@@ -60,6 +61,7 @@
     <string name="login_invalid_email">Invalid email</string>
     <string name="login_invalid_login">Use the assigned login instead of email</string>
     <string name="login_invalid_custom_email">Use the assigned login or email in @%1$s</string>
+    <string name="login_invalid_domain_suffix">Invalid domain suffix</string>
     <string name="login_invalid_symbol">Invalid symbol. If you cannot find it, please contact the school</string>
     <string name="login_invalid_symbol_definitely">Don\'t make this up! If you cannot find it, please contact the school</string>
     <string name="login_incorrect_symbol">Student not found. Validate the symbol and the chosen variation of the UONET+ register</string>
@@ -129,6 +131,7 @@
     <string name="grade_summary_points">Total points</string>
     <string name="grade_summary_final_grade">Final grade</string>
     <string name="grade_summary_predicted_grade">Predicted grade</string>
+    <string name="grade_summary_descriptive">Descriptive grade</string>
     <string name="grade_summary_calculated_average">Calculated average</string>
     <string name="grade_summary_calculated_average_help_dialog_title">How does Calculated Average work?</string>
     <string name="grade_summary_calculated_average_help_dialog_message">The Calculated Average is the arithmetic average calculated from the subjects averages. It allows you to know the approximate final average. It is calculated in a way selected by the user in the application settings. It is recommended that you choose the appropriate option. This is because the calculation of school averages differs. Additionally, if your school reports the average of the subjects on the Vulcan page, the application downloads them and does not calculate these averages. This can be changed by forcing the calculation of the average in the application settings.\n\n<b>Average of grades only from selected semester</b>:\n1. Calculating the weighted average for each subject in a given semester\n2.Adding calculated averages\n3. Calculation of the arithmetic average of the summed averages\n\n<b>Average of averages from both semesters</b>:\n1.Calculating the weighted average for each subject in semester 1 and 2\n2. Calculating the arithmetic average of the calculated averages for semesters 1 and 2 for each subject.\n3. Adding calculated averages\n4. Calculation of the arithmetic average of the summed averages\n\n<b>Average of grades from the whole year:</b>\n1. Calculating weighted average over the year for each subject. The final average in the 1st semester is irrelevant.\n2. Adding calculated averages\n3. Calculating the arithmetic average of summed averages</string>
@@ -164,6 +167,10 @@
         <item quantity="one">New final grade</item>
         <item quantity="other">New final grades</item>
     </plurals>
+    <plurals name="grade_new_items_descriptive">
+        <item quantity="one">New descriptive grade</item>
+        <item quantity="other">New descriptive grades</item>
+    </plurals>
     <plurals name="grade_notify_new_items">
         <item quantity="one">You received %1$d grade</item>
         <item quantity="other">You received %1$d grades</item>
@@ -175,6 +182,10 @@
     <plurals name="grade_notify_new_items_final">
         <item quantity="one">You received %1$d final grade</item>
         <item quantity="other">You received %1$d final grades</item>
+    </plurals>
+    <plurals name="grade_notify_new_items_descriptive">
+        <item quantity="one">You received %1$d descriptive grade</item>
+        <item quantity="other">You received %1$d descriptive grades</item>
     </plurals>
 
 
@@ -319,8 +330,10 @@
     <string name="message_forward">Forward</string>
     <string name="message_select_all">Select all</string>
     <string name="message_unselect_all">Unselect all</string>
+    <string name="message_restore_from_trash">Restore from trash</string>
     <string name="message_move_to_trash">Move to trash</string>
     <string name="message_delete_forever">Delete permanently</string>
+    <string name="message_restore_success">Message restored successfully</string>
     <string name="message_delete_success">Message deleted successfully</string>
     <string name="message_mailbox_type_student">student</string>
     <string name="message_mailbox_type_parent">parent</string>
@@ -358,6 +371,7 @@
         <item quantity="other">%1$d selected</item>
     </plurals>
     <string name="message_messages_deleted">Messages deleted</string>
+    <string name="message_messages_restored">Messages restored</string>
     <string name="message_mailbox_chooser_title">Choose mailbox</string>
     <string name="message_incognito_mode_on">Incognito mode is on</string>
     <string name="message_incognito_description">Thanks to incognito mode sender is not notified when you read the message</string>
@@ -840,17 +854,30 @@
     <string name="auth_button_skip">Skip for now</string>
 
 
+    <!--Captcha-->
+    <string name="captcha_dialog_title">Verification is in progress. Wait…</string>
+    <string name="captcha_verified_message">Verified successfully</string>
+
+
     <!--Errors-->
     <string name="error_no_internet">No internet connection</string>
     <string name="error_invalid_device_datetime">An error occurred. Check your device clock</string>
+    <string name="error_account_inactive">This account is inactive. Try logging in again</string>
     <string name="error_timeout">Connection to register failed. Servers can be overloaded. Please try again later</string>
     <string name="error_login_failed">Loading data failed. Please try again later</string>
     <string name="error_password_change_required">Register password change required</string>
     <string name="error_service_unavailable">Maintenance underway UONET + register. Try again later</string>
     <string name="error_unknown_uonet">Unknown UONET + register error. Try again later</string>
     <string name="error_unknown_app">Unknown application error. Please try again later</string>
+    <string name="error_cloudflare_captcha">Captcha verification required</string>
     <string name="error_unknown">An unexpected error occurred</string>
     <string name="error_feature_disabled">Feature disabled by your school</string>
     <string name="error_feature_not_available">Feature not available. Login in a mode other than Mobile API</string>
     <string name="error_field_required">This field is required</string>
+
+    <!-- Mute system -->
+    <string name="message_mute">Mute</string>
+    <string name="message_unmute">Unmute</string>
+    <string name="message_mute_success">You have muted this user</string>
+    <string name="message_unmute_success">You have unmuted this user</string>
 </resources>

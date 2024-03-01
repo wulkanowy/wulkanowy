@@ -10,9 +10,10 @@
     <string name="settings_title">Einstellungen</string>
     <string name="more_title">Mehr</string>
     <string name="about_title">Über die Applikation</string>
-    <string name="logviewer_title">Log Viewer</string>
+    <string name="logviewer_title">Log viewer</string>
     <string name="debug_title">Debuggen</string>
     <string name="notification_debug_title">Benachrichtigungen debuggen</string>
+    <string name="debug_cookies_clear">Clear webview cookies</string>
     <string name="contributors_title">Mitarbeiter</string>
     <string name="license_title">Lizenzen</string>
     <string name="message_title">Nachrichten</string>
@@ -55,6 +56,7 @@
     <string name="login_invalid_email">Ungültige email</string>
     <string name="login_invalid_login">Den zugewiesenen Login anstelle von email verwenden</string>
     <string name="login_invalid_custom_email">Benutze den zugewiesenen Login oder E-Mail in @%1$s</string>
+    <string name="login_invalid_domain_suffix">Invalid domain suffix</string>
     <string name="login_invalid_symbol">Invalid symbol. If you cannot find it, please contact the school</string>
     <string name="login_invalid_symbol_definitely">Don\'t make this up! If you cannot find it, please contact the school</string>
     <string name="login_incorrect_symbol">Schüler nicht gefunden. Überprüfen Sie das Symbol und die gewählte Variation des UONET+ Registers</string>
@@ -116,6 +118,7 @@
     <string name="grade_summary_points">Gesamtpunkte</string>
     <string name="grade_summary_final_grade">Finaler Note</string>
     <string name="grade_summary_predicted_grade">Vorhergesagte Note</string>
+    <string name="grade_summary_descriptive">Descriptive grade</string>
     <string name="grade_summary_calculated_average">Berechnender Durchschnitt</string>
     <string name="grade_summary_calculated_average_help_dialog_title">Wie funktioniert der berechnete Durchschnitt?</string>
     <string name="grade_summary_calculated_average_help_dialog_message">Der berechnete Mittelwert ist das arithmetische Mittel, das aus den Durchschnittswerten der Probanden errechnet wird. Es erlaubt Ihnen, den ungefähre endgültigen Durchschnitt zu kennen. Sie wird auf eine vom Anwender in den Anwendungseinstellungen gewählte Weise berechnet. Es wird empfohlen, die entsprechende Option zu wählen. Das liegt daran, dass die Berechnung der Schuldurchschnitte unterschiedlich ist. Wenn Ihre Schule den Durchschnitt der Fächer auf der Vulcan-Seite angibt, lädt die Anwendung diese Fächer herunter und berechnet nicht den Durchschnitt. Dies kann geändert werden, indem die Berechnung des Durchschnitts in den Anwendungseinstellungen erzwungen wird. \n\n<b>Durchschnitt der Noten nur aus dem ausgewählten Semester </b>:\n1. Berechnung des gewichteten Durchschnitts für jedes Fach in einem bestimmten Semester\n2. Addition der berechneten Durchschnittswerte\n3. Berechnung des arithmetischen Mittels der summierten Durchschnitte\n<b>Durchschnitt der Durchschnitte aus beiden Semestern</b>:\n1. Berechnung des gewichteten Durchschnitts für jedes Fach in Semester 1 und 2\n2. Berechnung des arithmetischen Mittels der berechneten Durchschnitte für Semester 1 und 2 für jedes Fach. \n3. Hinzufügen von berechneten Durchschnittswerten\n4. Berechnung des arithmetischen Mittels der summierten Durchschnitte\n<b>Durchschnitt der Noten aus dem ganzen Jahr:</b>\n1. Berechnung des gewichteten Jahresdurchschnitts für jedes Fach. Der Abschlussdurchschnitt im 1. Semester ist irrelevant. \n2. Addition der berechneten Durchschnittswerte\n3. Berechnung des arithmetischen Mittels der summierten Mittelwerte</string>
@@ -151,6 +154,10 @@
         <item quantity="one">Neue Abschlussnote</item>
         <item quantity="other">Neue Abschlussnoten</item>
     </plurals>
+    <plurals name="grade_new_items_descriptive">
+        <item quantity="one">New descriptive grade</item>
+        <item quantity="other">New descriptive grades</item>
+    </plurals>
     <plurals name="grade_notify_new_items">
         <item quantity="one">Du hast %1$d Note bekommen</item>
         <item quantity="other">Du hast %1$d Noten bekommen</item>
@@ -162,6 +169,10 @@
     <plurals name="grade_notify_new_items_final">
         <item quantity="one">Sie haben %1$d Abschlussnote bekommen</item>
         <item quantity="other">Sie haben %1$d Abschlussnoten bekommen</item>
+    </plurals>
+    <plurals name="grade_notify_new_items_descriptive">
+        <item quantity="one">You received %1$d descriptive grade</item>
+        <item quantity="other">You received %1$d descriptive grades</item>
     </plurals>
     <!--Timetable-->
     <string name="timetable_lesson">Lektion</string>
@@ -743,17 +754,27 @@
     <string name="auth_title">Authorization</string>
     <string name="auth_description">To operate the application, we need to confirm your identity. Please enter the student\'s PESEL &lt;b&gt;%1$s&lt;/b&gt; in the field below</string>
     <string name="auth_button_skip">Skip for now</string>
+    <!--Captcha-->
+    <string name="captcha_dialog_title">Verification is in progress. Wait…</string>
+    <string name="captcha_verified_message">Verified successfully</string>
     <!--Errors-->
     <string name="error_no_internet">Keine Internetverbindung</string>
     <string name="error_invalid_device_datetime">Es ist ein Fehler aufgetreten. Überprüfen Sie Ihre Geräteuhr</string>
+    <string name="error_account_inactive">This account is inactive. Try logging in again</string>
     <string name="error_timeout">Registrierungsverbindung fehlgeschlagen. Server können überlastet sein. Bitte versuchen Sie es später noch einmal</string>
     <string name="error_login_failed">Das Laden der Daten ist fehlgeschlagen. Bitte versuchen Sie es später noch einmal</string>
     <string name="error_password_change_required">Passwortänderung für Registrierung erforderlich</string>
     <string name="error_service_unavailable">Wartung im Gange UONET + Klassenbuch. Versuchen Sie es später noch einmal</string>
     <string name="error_unknown_uonet">Unbekannter UONET + Registerfehler. Versuchen Sie es später erneut</string>
     <string name="error_unknown_app">Unbekannter Anwendungsfehler. Bitte versuchen Sie es später noch einmal</string>
+    <string name="error_cloudflare_captcha">Captcha verification required</string>
     <string name="error_unknown">Ein unerwarteter Fehler ist aufgetreten</string>
     <string name="error_feature_disabled">Funktion, die von Ihrer Schule deaktiviert wurde</string>
     <string name="error_feature_not_available">Feature in diesem Modus nicht verfügbar</string>
     <string name="error_field_required">Dieses Feld ist erforderlich</string>
+    <!-- Mute system -->
+    <string name="message_mute">Mute</string>
+    <string name="message_unmute">Unmute</string>
+    <string name="message_mute_success">You have muted this user</string>
+    <string name="message_unmute_success">You have unmuted this user</string>
 </resources>

@@ -6,7 +6,6 @@ import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.data.waitForResult
 import io.github.wulkanowy.services.sync.notifications.ChangeTimetableNotification
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
-import kotlinx.coroutines.flow.first
 import java.time.LocalDate.now
 import javax.inject.Inject
 
@@ -16,18 +15,24 @@ class TimetableWork @Inject constructor(
 ) : Work {
 
     override suspend fun doWork(student: Student, semester: Semester, notify: Boolean) {
+        val startDate = now().nextOrSameSchoolDay
+        val endDate = startDate.plusDays(7)
+
         timetableRepository.getTimetable(
             student = student,
             semester = semester,
-            start = now().nextOrSameSchoolDay,
-            end = now().nextOrSameSchoolDay,
+            start = startDate,
+            end = endDate,
             forceRefresh = true,
             notify = notify,
         )
             .waitForResult()
 
-        timetableRepository.getTimetableFromDatabase(semester, now(), now().plusDays(7))
-            .first()
+        timetableRepository.getTimetableFromDatabase(
+            semester = semester,
+            start = startDate,
+            end = endDate,
+        )
             .filterNot { it.isNotified }
             .let {
                 if (it.isNotEmpty()) changeTimetableNotification.notify(it, student)

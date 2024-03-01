@@ -13,6 +13,7 @@
     <string name="logviewer_title">Переглядач логів</string>
     <string name="debug_title">Відладка</string>
     <string name="notification_debug_title">Відладка сповіщень</string>
+    <string name="debug_cookies_clear">Очистити кукі веб - перегляду</string>
     <string name="contributors_title">Розробники</string>
     <string name="license_title">Ліцензії</string>
     <string name="message_title">Листи</string>
@@ -55,6 +56,7 @@
     <string name="login_invalid_email">Недійсна адреса e-mail</string>
     <string name="login_invalid_login">Використовуйте призначений логін замість адреси e-mail</string>
     <string name="login_invalid_custom_email">Використовуйте призначений логін або адресу e-mail в @%1$s</string>
+    <string name="login_invalid_domain_suffix">Invalid domain suffix</string>
     <string name="login_invalid_symbol">Некоректний символ. Якщо ви не можете знайти його, будь ласка, зв\'яжіться зі школою</string>
     <string name="login_invalid_symbol_definitely">Не вигадуйте! Якщо ви не можете знайти його, будь ласка, зв\'яжіться зі школою</string>
     <string name="login_incorrect_symbol">Студента не знайдено. Перевірте symbol та обраний тип щоденника UONET+</string>
@@ -96,8 +98,8 @@
     <string name="main_log_in">Увійти</string>
     <string name="main_session_expired">Минув термін дії сесії</string>
     <string name="main_session_relogin">Минув термін дії сесії, авторизуйтеся знову</string>
-    <string name="main_expired_credentials_description">Your account password has been changed. You need to log in to Wulkanowy again</string>
-    <string name="main_expired_credentials_title">Password changed</string>
+    <string name="main_expired_credentials_description">Пароль вашого облікового запису був змінений. Ви повинні увійти в Wulkanowy знову</string>
+    <string name="main_expired_credentials_title">Пароль змінено</string>
     <string name="main_support_title">Підтримка додатку</string>
     <string name="main_support_description">Вам подобається цей додаток? Підтримайте його розвиток, увімкнувши неінвазивну рекламу, яку ви можете відключити в будь-який час</string>
     <string name="main_support_positive">Увімкнути рекламу</string>
@@ -116,6 +118,7 @@
     <string name="grade_summary_points">Всього балів</string>
     <string name="grade_summary_final_grade">Підсумкова оцінка</string>
     <string name="grade_summary_predicted_grade">Передбачувана оцінка</string>
+    <string name="grade_summary_descriptive">Описова оцінка</string>
     <string name="grade_summary_calculated_average">Розрахована середня оцінка</string>
     <string name="grade_summary_calculated_average_help_dialog_title">Як працює \"Розрахована середня оцінка\"?</string>
     <string name="grade_summary_calculated_average_help_dialog_message">Розрахована середня оцінка - це середнє арифметичне, обчислене з середніх оцінок з предметів. Це дозволяє дізнатися приблизну кінцеву середню оцінку. Вона розраховується спосібом, обраним користувачем у налаштуваннях програми. Рекомендується вибрати відповідний варіант, тому що кожна школа по різному розраховує середню оцінку. Крім того, якщо у вашій школі повідомляється середня оцінка з предметів на сторінці Vulcan, програма тільки завантажує ці оцінки і не розраховує їх самостійно. Це можна змінити шляхом примусового розрахунку середньоЇ оцінки в налаштуваннях програми.\n\n<b>Середні оцінки тільки за обраний семестр</b>:\n1. Розрахунок середньозваженого числа для кожного предмета в даному семестрі\n2. Сумування розрахованих числ\n3. Розрахунок середнього арифметичного з сумованих чисел\n\n<b>Середнє значення з обох семестрів</b>:\n1. Обчислення середньозваженого числа для кожного предмета у 1 та 2 семестрі\n2. Обчислення середнього арифметичного з розрахованих середньозважених числ за 1 та 2 семестри для кожного предмета.\n3. Додавання розрахованих середніх\n4. Розрахунок середнього арифметичного підсумованих середніх значень\n\n<b>Середнє значення оцінок за весь рік: </b>\n1. Розрахунок середньозваженого числа за рік для кожного предмета. Підсумковий середній показник у 1-му семестрі не має значення.\n2. Сумування розрахованих середніх\n3. Обчислення середнього арифметичного з суммованих середніх</string>
@@ -159,6 +162,12 @@
         <item quantity="many">Нові підсумкові оцінки</item>
         <item quantity="other">Нові підсумкові оцінки</item>
     </plurals>
+    <plurals name="grade_new_items_descriptive">
+        <item quantity="one">Нова описова оцінка</item>
+        <item quantity="few">Нових описових оцінок</item>
+        <item quantity="many">Описових оцінок</item>
+        <item quantity="other">Нові описові оцінки</item>
+    </plurals>
     <plurals name="grade_notify_new_items">
         <item quantity="one">Ви отримали %1$d нову оцінку</item>
         <item quantity="few">Ви отримали %1$d нові оцінки</item>
@@ -176,6 +185,12 @@
         <item quantity="few">Ви отримали %1$d нові підсумкові оцінки</item>
         <item quantity="many">Ви отримали %1$d нових підсумкових оцінок</item>
         <item quantity="other">Ви отримали %1$d нових підсумкових оцінок</item>
+    </plurals>
+    <plurals name="grade_notify_new_items_descriptive">
+        <item quantity="one">Ви отримали %1$d описову оцінку</item>
+        <item quantity="few">Ви отримали %1$d нові описові оцінки</item>
+        <item quantity="many">Ви отримали %1$d нових описових оцінок</item>
+        <item quantity="other">Ви отримали %1$d нових описових оцінок</item>
     </plurals>
     <!--Timetable-->
     <string name="timetable_lesson">Урок</string>
@@ -833,17 +848,27 @@
     <string name="auth_title">Авторизувати</string>
     <string name="auth_description">Для роботи програми нам потрібно підтвердити вашу особу. Будь ласка, введіть число PESEL &lt;b&gt;%1$s&lt;/b&gt; студента в поле нижче</string>
     <string name="auth_button_skip">Поки що пропустити</string>
+    <!--Captcha-->
+    <string name="captcha_dialog_title">Верифікація в процесі. Чекайте…</string>
+    <string name="captcha_verified_message">Верифікація завершена</string>
     <!--Errors-->
     <string name="error_no_internet">Немає з\'єднання з інтернетом</string>
     <string name="error_invalid_device_datetime">Сталася помилка. Перевірте годинник пристрою</string>
+    <string name="error_account_inactive">This account is inactive. Try logging in again</string>
     <string name="error_timeout">Помилка підключення до щоденнику. Сервери можуть бути перевантажені, спробуйте пізніше</string>
     <string name="error_login_failed">Помилка завантаження даних, спробуйте пізніше</string>
     <string name="error_password_change_required">Необхідна зміна пароля щоденника</string>
     <string name="error_service_unavailable">UONET+ проводить технічне осблуговування, спробуйте пізніше</string>
     <string name="error_unknown_uonet">Невідома помилка щоденника UONET+, спробуйте пізніше</string>
     <string name="error_unknown_app">Невідома помилка програми, спробуйте пізніше</string>
+    <string name="error_cloudflare_captcha">Необхідна перевірка Captcha</string>
     <string name="error_unknown">Відбулася несподівана помилка</string>
     <string name="error_feature_disabled">Функція вимкнена вашою школою</string>
     <string name="error_feature_not_available">Функція недоступна в режимі Mobile API. Увійдіть в інший режим</string>
     <string name="error_field_required">Це поле обовʼязкове</string>
+    <!-- Mute system -->
+    <string name="message_mute">Mute</string>
+    <string name="message_unmute">Unmute</string>
+    <string name="message_mute_success">You have muted this user</string>
+    <string name="message_unmute_success">You have unmuted this user</string>
 </resources>

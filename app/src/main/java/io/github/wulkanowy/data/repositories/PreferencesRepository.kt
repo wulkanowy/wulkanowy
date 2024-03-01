@@ -10,6 +10,7 @@ import com.fredporciuncula.flow.preferences.Serializer
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.enums.AppTheme
+import io.github.wulkanowy.data.enums.AttendanceCalculatorSortingMode
 import io.github.wulkanowy.data.enums.GradeColorTheme
 import io.github.wulkanowy.data.enums.GradeExpandMode
 import io.github.wulkanowy.data.enums.GradeSortingMode

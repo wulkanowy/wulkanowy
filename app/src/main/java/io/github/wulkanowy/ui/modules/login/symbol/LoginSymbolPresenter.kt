@@ -60,7 +60,7 @@ class LoginSymbolPresenter @Inject constructor(
         }
 
         loginData = loginData.copy(
-            symbol = view?.symbolValue?.getNormalizedSymbol(),
+            userEnteredSymbol = view?.symbolValue?.getNormalizedSymbol(),
         )
         resourceFlow {
             studentRepository.getUserSubjectsFromScrapper(
@@ -68,7 +68,7 @@ class LoginSymbolPresenter @Inject constructor(
                 password = loginData.password,
                 scrapperBaseUrl = loginData.baseUrl,
                 domainSuffix = loginData.domainSuffix,
-                symbol = loginData.symbol.orEmpty(),
+                symbol = loginData.userEnteredSymbol.orEmpty(),
             )
         }.onEach { user ->
             registerUser = user.dataOrNull
@@ -93,13 +93,10 @@ class LoginSymbolPresenter @Inject constructor(
                         else -> {
                             val enteredSymbolDetails = user.data.symbols
                                 .firstOrNull()
-                                ?.takeIf { it.symbol == loginData.symbol }
+                                ?.takeIf { it.symbol == loginData.userEnteredSymbol }
 
                             if (enteredSymbolDetails?.error is InvalidSymbolException) {
-                                view?.run {
-                                    setErrorSymbolInvalid()
-                                    showContact(true)
-                                }
+                                showInvalidSymbolError()
                             } else {
                                 Timber.i("Login with symbol result: Success")
                                 view?.navigateToStudentSelect(loginData, requireNotNull(user.data))
@@ -128,6 +125,9 @@ class LoginSymbolPresenter @Inject constructor(
                     loginErrorHandler.dispatch(user.error)
                     lastError = user.error
                     view?.showContact(true)
+                    if (user.error is InvalidSymbolException) {
+                        showInvalidSymbolError()
+                    }
                 }
             }
         }.onResourceNotLoading {
@@ -143,6 +143,13 @@ class LoginSymbolPresenter @Inject constructor(
         val normalizedSymbol = view?.symbolValue.orEmpty().getNormalizedSymbol()
 
         return normalizedSymbol in definitelyInvalidSymbols
+    }
+
+    private fun showInvalidSymbolError() {
+        view?.run {
+            setErrorSymbolInvalid()
+            showContact(true)
+        }
     }
 
     fun onFaqClick() {

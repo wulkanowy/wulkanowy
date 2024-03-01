@@ -2,7 +2,20 @@ package io.github.wulkanowy.data
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
@@ -24,8 +37,15 @@ val <T> Resource<T>.dataOrNull: T?
     get() = when (this) {
         is Resource.Success -> this.data
         is Resource.Intermediate -> this.data
-        is Resource.Loading -> null
-        is Resource.Error -> null
+        else -> null
+    }
+
+val <T> Resource<T>.dataOrThrow: T
+    get() = when (this) {
+        is Resource.Success -> this.data
+        is Resource.Intermediate -> this.data
+        is Resource.Loading -> throw IllegalStateException("Resource is in loading state")
+        is Resource.Error -> throw this.error
     }
 
 val <T> Resource<T>.errorOrNull: Throwable?
@@ -51,9 +71,12 @@ fun <T, U> Resource<T>.mapData(block: (T) -> U) = when (this) {
     is Resource.Error -> Resource.Error(this.error)
 }
 
-inline fun <T1, T2, R> Flow<Resource<T1>>.combineWithResourceData(flow: Flow<T2>, crossinline block: suspend (T1, T2) -> R): Flow<Resource<R>> =
-    this.combine(flow) { resource, inject ->
-        when(resource) {
+inline fun <T1, T2, R> Flow<Resource<T1>>.combineWithResourceData(
+    flow: Flow<T2>,
+    crossinline block: suspend (T1, T2) -> R
+): Flow<Resource<R>> =
+    combine(flow) { resource, inject ->
+        when (resource) {
             is Resource.Success -> Resource.Success(block(resource.data, inject))
             is Resource.Intermediate -> Resource.Intermediate(block(resource.data, inject))
             is Resource.Loading -> Resource.Loading()
@@ -90,6 +113,7 @@ fun <T, U> Flow<Resource<T>>.flatMapResourceData(
             if (inheritIntermediate && newRes is Resource.Success) Resource.Intermediate(newRes.data)
             else newRes
         }
+
         is Resource.Loading -> flowOf(Resource.Loading())
         is Resource.Error -> flowOf(Resource.Error(it.error))
     }
@@ -152,6 +176,7 @@ inline fun <reified T> combineResourceFlows(
                 isIntermediate = true
                 data.add(item.data)
             }
+
             is Resource.Loading -> return@combine Resource.Loading()
             is Resource.Error -> continue
         }
@@ -213,7 +238,7 @@ inline fun <ResultType, RequestType> networkBoundResource(
             query().map { Resource.Success(filterResult(it)) }
         } catch (throwable: Throwable) {
             onFetchFailed(throwable)
-            query().map { Resource.Error(throwable) }
+            flowOf(Resource.Error(throwable))
         }
     } else {
         query().map { Resource.Success(filterResult(it)) }
@@ -247,7 +272,7 @@ inline fun <ResultType, RequestType, T> networkBoundResource(
             query().map { Resource.Success(mapResult(it)) }
         } catch (throwable: Throwable) {
             onFetchFailed(throwable)
-            query().map { Resource.Error(throwable) }
+            flowOf(Resource.Error(throwable))
         }
     } else {
         query().map { Resource.Success(mapResult(it)) }

@@ -6,6 +6,8 @@ interface DashboardView : BaseView {
 
     val tileWidth: Int
 
+    val isViewEmpty: Boolean
+
     fun initView()
 
     fun updateData(data: List<DashboardItem>)
@@ -18,7 +20,7 @@ interface DashboardView : BaseView {
 
     fun showRefresh(show: Boolean)
 
-    fun showErrorView(show: Boolean)
+    fun showErrorView(show: Boolean, adminMessageItem: DashboardItem.AdminMessages? = null)
 
     fun setErrorDetails(error: Throwable)
 

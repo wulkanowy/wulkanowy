@@ -13,6 +13,7 @@
     <string name="logviewer_title">Przeglądarka logów</string>
     <string name="debug_title">Debugowanie</string>
     <string name="notification_debug_title">Debugowanie powiadomień</string>
+    <string name="debug_cookies_clear">Wyczyść ciasteczka webview</string>
     <string name="contributors_title">Twórcy</string>
     <string name="license_title">Licencje</string>
     <string name="message_title">Wiadomości</string>
@@ -55,6 +56,7 @@
     <string name="login_invalid_email">Nieprawidłowy adres e-mail</string>
     <string name="login_invalid_login">Użyj loginu zamiast adresu e-mail</string>
     <string name="login_invalid_custom_email">Użyj loginu lub adresu e-mail w @%1$s</string>
+    <string name="login_invalid_domain_suffix">Nieprawidłowy sufiks domeny</string>
     <string name="login_invalid_symbol">Nieprawidłowy symbol. Jeśli nie możesz go znaleźć, skontaktuj się ze szkołą</string>
     <string name="login_invalid_symbol_definitely">Nie zmyślaj! Jeśli nie możesz znaleźć symbolu, skontaktuj się ze szkołą</string>
     <string name="login_incorrect_symbol">Nie znaleziono ucznia. Sprawdź poprawność symbolu i wybranej odmiany dziennika UONET+</string>
@@ -116,6 +118,7 @@
     <string name="grade_summary_points">Suma punktów</string>
     <string name="grade_summary_final_grade">Ocena końcowa</string>
     <string name="grade_summary_predicted_grade">Przewidywana ocena</string>
+    <string name="grade_summary_descriptive">Ocena opisowa</string>
     <string name="grade_summary_calculated_average">Obliczona średnia</string>
     <string name="grade_summary_calculated_average_help_dialog_title">Jak działa obliczona średnia?</string>
     <string name="grade_summary_calculated_average_help_dialog_message">Obliczona średnia jest średnią arytmetyczną obliczoną ze średnich przedmiotów. Pozwala ona na poznanie przybliżonej średniej końcowej. Jest obliczana w sposób wybrany przez użytkownika w ustawieniach aplikacji. Zaleca się wybranie odpowiedniej opcji. Dzieje się tak dlatego, że obliczanie średnich w szkołach różni się. Dodatkowo, jeśli twoja szkoła ma włączone średnie przedmiotów na stronie dziennika Vulcan, aplikacja pobiera je i ich nie oblicza. Można to zmienić, wymuszając obliczanie średniej w ustawieniach aplikacji.\n\n<b>Średnia ocen tylko z wybranego semestru</b>:\n1. Obliczanie średniej arytmetycznej każdego przedmiotu w danym semestrze\n2. Zsumowanie obliczonych średnich\n3. Obliczanie średniej arytmetycznej zsumowanych średnich\n\n<b>Średnia ze średnich z obu semestrów</b>:\n1.Obliczanie średniej arytmetycznej każdego przedmiotu w semestrze 1 i 2\n2. Obliczanie średniej arytmetycznej obliczonych średnich w semestrze 1 i 2 każdego przedmiotu.\n3. Zsumowanie obliczonych średnich\n4. Obliczanie średniej arytmetycznej zsumowanych średnich\n\n<b>Średnia wszystkich ocen z całego roku:</b>\n1. Obliczanie średniej arytmetycznej z każdego przedmiotu w ciągu całego roku. Końcowa ocena w 1 semestrze jest bez znaczenia.\n2. Zsumowanie obliczonych średnich\n3. Obliczanie średniej arytmetycznej z zsumowanych średnich</string>
@@ -159,6 +162,12 @@
         <item quantity="many">Nowe oceny końcowe</item>
         <item quantity="other">Nowe oceny końcowe</item>
     </plurals>
+    <plurals name="grade_new_items_descriptive">
+        <item quantity="one">Nowa ocena opisowa</item>
+        <item quantity="few">Nowe oceny opisowe</item>
+        <item quantity="many">Nowe oceny opisowe</item>
+        <item quantity="other">Nowe oceny opisowe</item>
+    </plurals>
     <plurals name="grade_notify_new_items">
         <item quantity="one">Masz %1$d nową ocenę</item>
         <item quantity="few">Masz %1$d nowe oceny</item>
@@ -176,6 +185,12 @@
         <item quantity="few">Masz %1$d nowe końcowe oceny</item>
         <item quantity="many">Masz %1$d nowych końcowych ocen</item>
         <item quantity="other">Masz %1$d nowych końcowych ocen</item>
+    </plurals>
+    <plurals name="grade_notify_new_items_descriptive">
+        <item quantity="one">Masz %1$d nową ocenę opisową</item>
+        <item quantity="few">Masz %1$d nowe oceny opisowe</item>
+        <item quantity="many">Masz %1$d nowych ocen opisowych</item>
+        <item quantity="other">Masz %1$d nowych ocen opisowych</item>
     </plurals>
     <!--Timetable-->
     <string name="timetable_lesson">Lekcja</string>
@@ -833,19 +848,30 @@
     <string name="auth_title">Autoryzacja</string>
     <string name="auth_description">Rodzicu, musimy mieć pewność, że Twój adres e-mail został powiązany z prawidłowym kontem ucznia. W celu autoryzacji konta podaj numer PESEL ucznia &lt;b&gt;%1$s&lt;/b&gt; w polu poniżej</string>
     <string name="auth_button_skip">Na razie pomiń</string>
+    <!--Captcha-->
+    <string name="captcha_dialog_title">Trwa weryfikacja. Czekaj…</string>
+    <string name="captcha_verified_message">Pomyślnie zweryfikowano</string>
     <!--Errors-->
     <string name="error_no_internet">Brak połączenia z internetem</string>
     <string name="error_invalid_device_datetime">Wystąpił błąd. Sprawdź poprawność daty w urządzeniu</string>
+    <string name="error_account_inactive">Konto jest nieaktywne. Spróbuj zalogować się ponownie</string>
     <string name="error_timeout">Nie udało się połączyć z dziennikiem. Serwery mogą być przeciążone. Spróbuj ponownie później</string>
     <string name="error_login_failed">Ładowanie danych nie powiodło się. Spróbuj ponownie później</string>
     <string name="error_password_change_required">Wymagana zmiana hasła do dziennika</string>
     <string name="error_service_unavailable">Trwa przerwa techniczna dziennika UONET+. Spróbuj ponownie później</string>
     <string name="error_unknown_uonet">Nieznany błąd dziennika UONET+. Spróbuj ponownie później</string>
     <string name="error_unknown_app">Nieznany błąd aplikacji. Spróbuj ponownie później</string>
+    <string name="error_cloudflare_captcha">Wymagana weryfikacja captcha</string>
     <string name="error_unknown">Wystąpił nieoczekiwany błąd</string>
     <string name="error_feature_disabled">Funkcja wyłączona przez szkołę</string>
     <string name="error_feature_not_available">Funkcja niedostępna. Zaloguj się w trybie innym niż Mobilne API</string>
     <string name="error_field_required">To pole jest wymagane</string>
+    <!-- Mute system -->
+    <string name="message_mute">Wycisz</string>
+    <string name="message_unmute">Wyłącz wyciszenie</string>
+    <string name="message_mute_success">Wyciszyleś tego użytkownika</string>
+    <string name="message_unmute_success">Wyłączyłeś wyciszenie tego użytkownika</string>
+    <!-- attendance calculator -->
     <string name="pref_attendance_target">Docelowa frekwencja (w %)</string>
     <string name="attendance_calculator_button">Kalkulator frekwencji</string>
 </resources>

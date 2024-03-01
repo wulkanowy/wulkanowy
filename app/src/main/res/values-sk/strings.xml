@@ -13,6 +13,7 @@
     <string name="logviewer_title">Prehliadač protokolov</string>
     <string name="debug_title">Ladenie</string>
     <string name="notification_debug_title">Ladenie oznámení</string>
+    <string name="debug_cookies_clear">Vymazať súbory cookie webview</string>
     <string name="contributors_title">Tvorcovia</string>
     <string name="license_title">Licencie</string>
     <string name="message_title">Správy</string>
@@ -55,6 +56,7 @@
     <string name="login_invalid_email">Neplatný e-mail</string>
     <string name="login_invalid_login">Namiesto e-mailu použite priradené prihlasovacie údaje</string>
     <string name="login_invalid_custom_email">Použite priradené prihlasovacie alebo e-mail v @%1$s</string>
+    <string name="login_invalid_domain_suffix">Invalid domain suffix</string>
     <string name="login_invalid_symbol">Neplatný symbol. Pokiaľ ho nemôžete nájsť, kontaktujte školu</string>
     <string name="login_invalid_symbol_definitely">Nevymýšľajte si! Pokiaľ symbol nemôžete nájsť, kontaktujte školu</string>
     <string name="login_incorrect_symbol">Žiak nebol nájdený. Skontrolujte správnosť symbolu a vybrané varianty denníka UONET+</string>
@@ -116,6 +118,7 @@
     <string name="grade_summary_points">Súčet bodov</string>
     <string name="grade_summary_final_grade">Konečná známka</string>
     <string name="grade_summary_predicted_grade">Predpokladaná známka</string>
+    <string name="grade_summary_descriptive">Popisná známka</string>
     <string name="grade_summary_calculated_average">Vypočítaný priemer</string>
     <string name="grade_summary_calculated_average_help_dialog_title">Ako funguje vypočítaný priemer?</string>
     <string name="grade_summary_calculated_average_help_dialog_message">Vypočítaný priemer je aritmetický priemer vypočítaný z priemerov predmetov. Umožňuje vám to poznať približný konečný priemer. Vypočítava sa spôsobom zvoleným užívateľom v nastaveniach aplikácii. Odporúča sa vybrať príslušnú možnosť. Dôvodom je rozdielny výpočet školských priemerov. Ak vaša škola navyše uvádza priemer predmetov na stránke denníka Vulcan, aplikácia si ich stiahne a tieto priemery nepočíta. To možno zmeniť vynútením výpočtu priemeru v nastavení aplikácii.\n\n<b>Priemer známok iba z vybraného semestra</b>:\n1. Výpočet váženého priemeru pre každý predmet v danom semestri\n2. Sčítanie vypočítaných priemerov\n3. Výpočet aritmetického priemeru součtených priemerov\n\n<b>Priemer priemerov z oboch semestrov</b>:\n1. Výpočet váženého priemeru pre každý predmet v semestri 1 a 2\n2. Výpočet aritmetického priemeru vypočítaných priemerov za semestre 1 a 2 pre každý predmet.\n3. Sčítanie vypočítaných priemerov\n4. Výpočet aritmetického priemeru součtených priemerov\n\n<b>Priemer známok z celého roka:</b>\n1. Výpočet váženého priemeru za rok pre každý predmet. Konečný priemer v 1. semestri je nepodstatný.\n2. Sčítanie vypočítaných priemerov\n3. Výpočet aritmetického priemeru součtených priemerov</string>
@@ -159,6 +162,12 @@
         <item quantity="many">Nové konečné známky</item>
         <item quantity="other">Nové konečné známky</item>
     </plurals>
+    <plurals name="grade_new_items_descriptive">
+        <item quantity="one">Nová popisná známka</item>
+        <item quantity="few">Nové popisné známky</item>
+        <item quantity="many">Nové popisné známky</item>
+        <item quantity="other">Nové popisné známky</item>
+    </plurals>
     <plurals name="grade_notify_new_items">
         <item quantity="one">Máte %1$d novú známku</item>
         <item quantity="few">Máte %1$d nové známky</item>
@@ -176,6 +185,12 @@
         <item quantity="few">Máte %1$d nové konečnej známky</item>
         <item quantity="many">Máte %1$d nových konečných známok</item>
         <item quantity="other">Máte %1$d nových konečných známok</item>
+    </plurals>
+    <plurals name="grade_notify_new_items_descriptive">
+        <item quantity="one">Máte %1$d novú popisnú známku</item>
+        <item quantity="few">Máte %1$d nové popisné známky</item>
+        <item quantity="many">Máte %1$d nových popisných známok</item>
+        <item quantity="other">Máte %1$d nových popisných známok</item>
     </plurals>
     <!--Timetable-->
     <string name="timetable_lesson">Lekcia</string>
@@ -833,17 +848,27 @@
     <string name="auth_title">Autorizácia</string>
     <string name="auth_description">Na prevádzku aplikácie potrebujeme potvrdiť vašu identitu. Zadajte PESEL žiaka &lt;b&gt;%1$s&lt;/b&gt; v nižšie uvedenom poli</string>
     <string name="auth_button_skip">Zatiaľ preskočiť</string>
+    <!--Captcha-->
+    <string name="captcha_dialog_title">Overovanie prebieha. Počkajte…</string>
+    <string name="captcha_verified_message">Úspešne overené</string>
     <!--Errors-->
     <string name="error_no_internet">Žiadne internetové pripojenie</string>
     <string name="error_invalid_device_datetime">Vyskytla sa chyba. Skontrolujte hodiny svojho zariadenia</string>
+    <string name="error_account_inactive">This account is inactive. Try logging in again</string>
     <string name="error_timeout">Nedá sa pripojiť ku denníku. Servery môžu byť preťažené. Prosím skúste to znova neskôr</string>
     <string name="error_login_failed">Načítanie údajov zlyhalo. Skúste neskôr prosím</string>
     <string name="error_password_change_required">Je vyžadovaná zmena hesla pre denník</string>
     <string name="error_service_unavailable">Prebieha údržba denníka UONET+. Skúste to neskôr znova</string>
     <string name="error_unknown_uonet">Neznáma chyba dennika UONET+. Prosím skúste to znova neskôr</string>
     <string name="error_unknown_app">Neznáma chyba aplikácie. Prosím skúste to znova neskôr</string>
+    <string name="error_cloudflare_captcha">Vyžaduje sa overenie Captcha</string>
     <string name="error_unknown">Vyskytla sa neočakávaná chyba</string>
     <string name="error_feature_disabled">Funkcia je deaktivovaná cez vašou školou</string>
     <string name="error_feature_not_available">Funkcia nie je k dispozícii. Prihláste sa v inom režime než Mobile API</string>
     <string name="error_field_required">Toto pole je povinné</string>
+    <!-- Mute system -->
+    <string name="message_mute">Mute</string>
+    <string name="message_unmute">Unmute</string>
+    <string name="message_mute_success">You have muted this user</string>
+    <string name="message_unmute_success">You have unmuted this user</string>
 </resources>

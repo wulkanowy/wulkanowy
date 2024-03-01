@@ -7,6 +7,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.setFragmentResultListener
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.AdminMessage
@@ -14,6 +15,7 @@ import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.databinding.FragmentLoginFormBinding
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.modules.captcha.CaptchaDialog
 import io.github.wulkanowy.ui.modules.dashboard.viewholders.AdminMessageViewHolder
 import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.ui.modules.login.LoginData
@@ -72,6 +74,13 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLoginFormBinding.bind(view)
         presenter.onAttachView(this)
+        initializeCaptchaResultObserver()
+    }
+
+    private fun initializeCaptchaResultObserver() {
+        setFragmentResultListener(CaptchaDialog.CAPTCHA_SUCCESS) { _, _ ->
+            presenter.onRetryAfterCaptcha()
+        }
     }
 
     override fun initView() {
@@ -85,6 +94,7 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
             loginFormUsername.doOnTextChanged { _, _, _, _ -> presenter.onUsernameTextChanged() }
             loginFormPass.doOnTextChanged { _, _, _, _ -> presenter.onPassTextChanged() }
             loginFormHost.setOnItemClickListener { _, _, _, _ -> presenter.onHostSelected() }
+            loginFormDomainSuffix.doOnTextChanged { _, _, _, _ -> presenter.onDomainSuffixChanged() }
             loginFormSignIn.setOnClickListener { presenter.onSignInClick() }
             loginFormAdvancedButton.setOnClickListener { presenter.onAdvancedLoginClick() }
             loginFormPrivacyLink.setOnClickListener { presenter.onPrivacyLinkClick() }
@@ -179,6 +189,12 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
         }
     }
 
+    override fun setDomainSuffixInvalid() {
+        with(binding.loginFormDomainSuffixLayout) {
+            error = getString(R.string.login_invalid_domain_suffix)
+        }
+    }
+
     override fun clearUsernameError() {
         binding.loginFormUsernameLayout.error = null
         binding.loginFormErrorBox.isVisible = false
@@ -195,6 +211,10 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
     override fun clearHostError() {
         binding.loginFormHostLayout.error = null
         binding.loginFormErrorBox.isVisible = false
+    }
+
+    override fun clearDomainSuffixError() {
+        binding.loginFormDomainSuffixLayout.error = null
     }
 
     override fun showSoftKeyboard() {

@@ -1,5 +1,7 @@
-Wersja 2.3.3
+Wersja 2.4.2
 
-— poprawiliśmy kolejne usterki przy odświeżaniu danych (teraz to powinno działać już dużo lepiej)
+- naprawiliśmy crash przy przełączaniu uczniów, motywów i języków
+- naprawiliśmy crash przy dodawaniu dodatkowych lekcji
+- naprawiliśmy obsługę błędów widżetach
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases

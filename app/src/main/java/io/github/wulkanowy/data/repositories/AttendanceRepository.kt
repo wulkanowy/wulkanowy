@@ -9,11 +9,15 @@ import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.Absent
-import io.github.wulkanowy.utils.*
-import kotlinx.coroutines.Dispatchers
+import io.github.wulkanowy.utils.AutoRefreshHelper
+import io.github.wulkanowy.utils.getRefreshKey
+import io.github.wulkanowy.utils.init
+import io.github.wulkanowy.utils.monday
+import io.github.wulkanowy.utils.sunday
+import io.github.wulkanowy.utils.switchSemester
+import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -52,13 +56,11 @@ class AttendanceRepository @Inject constructor(
             attendanceDb.loadAll(semester.diaryId, semester.studentId, start.monday, end.sunday)
         },
         fetch = {
-            val lessons = withContext(Dispatchers.IO) {
-                timetableDb.load(
-                    semester.diaryId, semester.studentId, start.monday, end.sunday
-                )
-            }
+            val lessons = timetableDb.load(
+                semester.diaryId, semester.studentId, start.monday, end.sunday
+            )
             sdk.init(student)
-                .switchDiary(semester.diaryId, semester.kindergartenDiaryId, semester.schoolYear)
+                .switchSemester(semester)
                 .getAttendance(start.monday, end.sunday)
                 .mapToEntities(semester, lessons)
         },
@@ -97,7 +99,7 @@ class AttendanceRepository @Inject constructor(
             )
         }
         sdk.init(student)
-            .switchDiary(semester.diaryId, semester.kindergartenDiaryId, semester.schoolYear)
+            .switchSemester(semester)
             .excuseForAbsence(items, reason)
     }
 }

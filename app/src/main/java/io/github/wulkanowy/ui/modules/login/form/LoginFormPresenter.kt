@@ -14,6 +14,7 @@ import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.resourceFlow
 import io.github.wulkanowy.domain.adminmessage.GetAppropriateAdminMessageUseCase
+import io.github.wulkanowy.sdk.scrapper.login.InvalidSymbolException
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
@@ -90,7 +91,7 @@ class LoginFormPresenter @Inject constructor(
             clearPassError()
             clearUsernameError()
             clearHostError()
-            if (formHostValue.contains("fakelog")) {
+            if (formHostValue.contains("wulkanowy")) {
                 setCredentials("jan@fakelog.cf", "jan123")
             } else if (formUsernameValue == "jan@fakelog.cf" && formPassValue == "jan123") {
                 setCredentials("", "")
@@ -98,6 +99,12 @@ class LoginFormPresenter @Inject constructor(
             updateCustomDomainSuffixVisibility()
             updateUsernameLabel()
             reloadAdminMessage()
+        }
+    }
+
+    fun onDomainSuffixChanged() {
+        view?.apply {
+            clearDomainSuffixError()
         }
     }
 
@@ -148,14 +155,18 @@ class LoginFormPresenter @Inject constructor(
             password = password,
             baseUrl = host,
             domainSuffix = domainSuffix,
-            symbol = symbol
+            defaultSymbol = symbol
         )
+    }
+
+    fun onRetryAfterCaptcha() {
+        onSignInClick()
     }
 
     fun onSignInClick() {
         val loginData = getLoginData()
 
-        if (!validateCredentials(loginData.login, loginData.password, loginData.baseUrl)) return
+        if (!validateCredentials(loginData)) return
 
         resourceFlow {
             studentRepository.getUserSubjectsFromScrapper(
@@ -163,7 +174,7 @@ class LoginFormPresenter @Inject constructor(
                 password = loginData.password,
                 scrapperBaseUrl = loginData.baseUrl,
                 domainSuffix = loginData.domainSuffix,
-                symbol = loginData.symbol.orEmpty(),
+                symbol = loginData.defaultSymbol,
             )
         }
             .logResourceStatus("login")
@@ -194,6 +205,9 @@ class LoginFormPresenter @Inject constructor(
             }
             .onResourceError {
                 loginErrorHandler.dispatch(it)
+                if (it is InvalidSymbolException) {
+                    loginErrorHandler.showDefaultMessage(it)
+                }
                 lastError = it
                 view?.showContact(true)
                 analytics.logEvent(
@@ -225,24 +239,29 @@ class LoginFormPresenter @Inject constructor(
         view?.onRecoverClick()
     }
 
-    private fun validateCredentials(login: String, password: String, host: String): Boolean {
+    private fun validateCredentials(loginData: LoginData): Boolean {
         var isCorrect = true
 
-        if (login.isEmpty()) {
+        if (loginData.login.isEmpty()) {
             view?.setErrorUsernameRequired()
             isCorrect = false
         } else {
-            if ("@" in login && "login" in host) {
+            if ("@" in loginData.login && "login" in loginData.baseUrl) {
                 view?.setErrorLoginRequired()
                 isCorrect = false
             }
-            if ("@" !in login && "email" in host) {
+            if ("@" !in loginData.login && "email" in loginData.baseUrl) {
                 view?.setErrorEmailRequired()
                 isCorrect = false
             }
-            if ("@" in login && "||" !in login && "login" !in host && "email" !in host) {
-                val emailHost = login.substringAfter("@")
-                val emailDomain = URL(host).host
+
+            val isEmailLogin = "@" in loginData.login
+            val isEmailWithLogin = "||" !in loginData.login
+            val isLoginNotRequired = "login" !in loginData.baseUrl
+            val isEmailNotRequired = "email" !in loginData.baseUrl
+            if (isEmailLogin && isEmailWithLogin && isLoginNotRequired && isEmailNotRequired) {
+                val emailHost = loginData.login.substringAfter("@")
+                val emailDomain = URL(loginData.baseUrl).host
                 if (!emailHost.equals(emailDomain, true)) {
                     view?.setErrorEmailInvalid(domain = emailDomain)
                     isCorrect = false
@@ -250,13 +269,18 @@ class LoginFormPresenter @Inject constructor(
             }
         }
 
-        if (password.isEmpty()) {
+        if (loginData.password.isEmpty()) {
             view?.setErrorPassRequired(focus = isCorrect)
             isCorrect = false
         }
 
-        if (password.length < 6 && password.isNotEmpty()) {
+        if (loginData.password.length < 6 && loginData.password.isNotEmpty()) {
             view?.setErrorPassInvalid(focus = isCorrect)
+            isCorrect = false
+        }
+
+        if (loginData.domainSuffix !in listOf("", "rc", "kurs")) {
+            view?.setDomainSuffixInvalid()
             isCorrect = false
         }
 
