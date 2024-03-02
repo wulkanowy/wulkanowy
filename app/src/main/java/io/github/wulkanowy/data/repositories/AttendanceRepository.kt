@@ -1,7 +1,5 @@
 package io.github.wulkanowy.data.repositories
 
-import androidx.room.withTransaction
-import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.AttendanceDao
 import io.github.wulkanowy.data.db.dao.TimetableDao
 import io.github.wulkanowy.data.db.entities.Attendance
@@ -32,7 +30,6 @@ class AttendanceRepository @Inject constructor(
     private val timetableDb: TimetableDao,
     private val sdk: Sdk,
     private val refreshHelper: AutoRefreshHelper,
-    private val appDatabase: AppDatabase,
 ) {
 
     private val saveFetchResultMutex = Mutex()
@@ -71,11 +68,10 @@ class AttendanceRepository @Inject constructor(
             val attendanceToAdd = (new uniqueSubtract old).map { newAttendance ->
                 newAttendance.apply { if (notify) isNotified = false }
             }
-            appDatabase.withTransaction {
-                attendanceDb.deleteAll(old uniqueSubtract new)
-                attendanceDb.insertAll(attendanceToAdd)
-            }
-
+            attendanceDb.removeOldAndSaveNew(
+                oldItems = old uniqueSubtract new,
+                newItems = attendanceToAdd,
+            )
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
         },
         filterResult = { it.filter { item -> item.date in start..end } }

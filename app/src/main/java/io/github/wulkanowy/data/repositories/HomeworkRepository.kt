@@ -1,7 +1,5 @@
 package io.github.wulkanowy.data.repositories
 
-import androidx.room.withTransaction
-import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.HomeworkDao
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.db.entities.Semester
@@ -26,7 +24,6 @@ class HomeworkRepository @Inject constructor(
     private val homeworkDb: HomeworkDao,
     private val sdk: Sdk,
     private val refreshHelper: AutoRefreshHelper,
-    private val appDatabase: AppDatabase,
 ) {
 
     private val saveFetchResultMutex = Mutex()
@@ -64,16 +61,14 @@ class HomeworkRepository @Inject constructor(
                 .mapToEntities(semester)
         },
         saveFetchResult = { old, new ->
-            val homeWorkToSave = (new uniqueSubtract old).onEach {
-                if (notify) it.isNotified = false
-            }
             val filteredOld = old.filterNot { it.isAddedByUser }
 
-            appDatabase.withTransaction {
-                homeworkDb.deleteAll(filteredOld uniqueSubtract new)
-                homeworkDb.insertAll(homeWorkToSave)
-            }
-
+            homeworkDb.removeOldAndSaveNew(
+                oldItems = filteredOld uniqueSubtract new,
+                newItems = (new uniqueSubtract old).onEach {
+                    if (notify) it.isNotified = false
+                },
+            )
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
         }
     )

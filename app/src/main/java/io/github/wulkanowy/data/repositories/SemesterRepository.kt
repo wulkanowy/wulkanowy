@@ -1,13 +1,15 @@
 package io.github.wulkanowy.data.repositories
 
-import androidx.room.withTransaction
-import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.sdk.Sdk
-import io.github.wulkanowy.utils.*
+import io.github.wulkanowy.utils.DispatchersProvider
+import io.github.wulkanowy.utils.getCurrentOrLast
+import io.github.wulkanowy.utils.init
+import io.github.wulkanowy.utils.isCurrent
+import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
@@ -18,7 +20,6 @@ class SemesterRepository @Inject constructor(
     private val semesterDb: SemesterDao,
     private val sdk: Sdk,
     private val dispatchers: DispatchersProvider,
-    private val appDatabase: AppDatabase,
 ) {
 
     suspend fun getSemesters(
@@ -62,11 +63,11 @@ class SemesterRepository @Inject constructor(
         val new = sdk.init(student).getSemesters().mapToEntities(student.studentId)
         if (new.isEmpty()) return Timber.i("Empty semester list!")
 
-        appDatabase.withTransaction {
-            val old = semesterDb.loadAll(student.studentId, student.classId)
-            semesterDb.deleteAll(old.uniqueSubtract(new))
-            semesterDb.insertSemesters(new.uniqueSubtract(old))
-        }
+        val old = semesterDb.loadAll(student.studentId, student.classId)
+        semesterDb.removeOldAndSaveNew(
+            oldItems = old uniqueSubtract new,
+            newItems = new uniqueSubtract old,
+        )
     }
 
     suspend fun getCurrentSemester(student: Student, forceRefresh: Boolean = false) =

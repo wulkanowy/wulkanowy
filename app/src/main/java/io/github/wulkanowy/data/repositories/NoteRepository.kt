@@ -1,7 +1,5 @@
 package io.github.wulkanowy.data.repositories
 
-import androidx.room.withTransaction
-import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.NoteDao
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Semester
@@ -9,7 +7,12 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.sdk.Sdk
-import io.github.wulkanowy.utils.*
+import io.github.wulkanowy.utils.AutoRefreshHelper
+import io.github.wulkanowy.utils.getRefreshKey
+import io.github.wulkanowy.utils.init
+import io.github.wulkanowy.utils.switchSemester
+import io.github.wulkanowy.utils.toLocalDate
+import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex
 import javax.inject.Inject
@@ -20,7 +23,6 @@ class NoteRepository @Inject constructor(
     private val noteDb: NoteDao,
     private val sdk: Sdk,
     private val refreshHelper: AutoRefreshHelper,
-    private val appDatabase: AppDatabase,
 ) {
 
     private val saveFetchResultMutex = Mutex()
@@ -55,10 +57,10 @@ class NoteRepository @Inject constructor(
                     if (notify) isNotified = false
                 }
             }
-            appDatabase.withTransaction {
-                noteDb.deleteAll(old uniqueSubtract new)
-                noteDb.insertAll(notesToAdd)
-            }
+            noteDb.removeOldAndSaveNew(
+                oldItems = old uniqueSubtract new,
+                newItems = notesToAdd,
+            )
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
         }
     )

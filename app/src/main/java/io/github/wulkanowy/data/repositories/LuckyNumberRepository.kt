@@ -1,7 +1,5 @@
 package io.github.wulkanowy.data.repositories
 
-import androidx.room.withTransaction
-import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.LuckyNumberDao
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Student
@@ -21,7 +19,6 @@ import javax.inject.Singleton
 class LuckyNumberRepository @Inject constructor(
     private val luckyNumberDb: LuckyNumberDao,
     private val sdk: Sdk,
-    private val appDatabase: AppDatabase,
 ) {
 
     private val saveFetchResultMutex = Mutex()
@@ -42,13 +39,10 @@ class LuckyNumberRepository @Inject constructor(
             newLuckyNumber ?: return@networkBoundResource
 
             if (newLuckyNumber != oldLuckyNumber) {
-                val updatedLuckNumberList =
-                    listOf(newLuckyNumber.apply { if (notify) isNotified = false })
-
-                appDatabase.withTransaction {
-                    oldLuckyNumber?.let { luckyNumberDb.deleteAll(listOfNotNull(it)) }
-                    luckyNumberDb.insertAll(updatedLuckNumberList)
-                }
+                luckyNumberDb.removeOldAndSaveNew(
+                    oldItems = listOfNotNull(oldLuckyNumber),
+                    newItems = listOf(newLuckyNumber.apply { if (notify) isNotified = false }),
+                )
             }
         }
     )

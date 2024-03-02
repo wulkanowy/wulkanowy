@@ -1,7 +1,5 @@
 package io.github.wulkanowy.data.repositories
 
-import androidx.room.withTransaction
-import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.GradeDao
 import io.github.wulkanowy.data.db.dao.GradeDescriptiveDao
 import io.github.wulkanowy.data.db.dao.GradeSummaryDao
@@ -34,7 +32,6 @@ class GradeRepository @Inject constructor(
     private val gradeDescriptiveDb: GradeDescriptiveDao,
     private val sdk: Sdk,
     private val refreshHelper: AutoRefreshHelper,
-    private val appDatabase: AppDatabase,
 ) {
 
     private val saveFetchResultMutex = Mutex()
@@ -77,11 +74,9 @@ class GradeRepository @Inject constructor(
             )
         },
         saveFetchResult = { (oldDetails, oldSummary, oldDescriptive), (newDetails, newSummary, newDescriptive) ->
-            appDatabase.withTransaction {
-                refreshGradeDetails(student, oldDetails, newDetails, notify)
-                refreshGradeSummaries(oldSummary, newSummary, notify)
-                refreshGradeDescriptions(oldDescriptive, newDescriptive, notify)
-            }
+            refreshGradeDetails(student, oldDetails, newDetails, notify)
+            refreshGradeSummaries(oldSummary, newSummary, notify)
+            refreshGradeDescriptions(oldDescriptive, newDescriptive, notify)
 
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(GRADE_CACHE_KEY, semester))
         }
@@ -92,10 +87,12 @@ class GradeRepository @Inject constructor(
         new: List<GradeDescriptive>,
         notify: Boolean
     ) {
-        gradeDescriptiveDb.deleteAll(old uniqueSubtract new)
-        gradeDescriptiveDb.insertAll((new uniqueSubtract old).onEach {
-            if (notify) it.isNotified = false
-        })
+        gradeDescriptiveDb.removeOldAndSaveNew(
+            oldItems = old uniqueSubtract new,
+            newItems = (new uniqueSubtract old).onEach {
+                if (notify) it.isNotified = false
+            },
+        )
     }
 
     private suspend fun refreshGradeDetails(
@@ -106,13 +103,16 @@ class GradeRepository @Inject constructor(
     ) {
         val notifyBreakDate = oldGrades.maxByOrNull { it.date }?.date
             ?: student.registrationDate.toLocalDate()
-        gradeDb.deleteAll(oldGrades uniqueSubtract newDetails)
-        gradeDb.insertAll((newDetails uniqueSubtract oldGrades).onEach {
-            if (it.date >= notifyBreakDate) it.apply {
-                isRead = false
-                if (notify) isNotified = false
-            }
-        })
+
+        gradeDb.removeOldAndSaveNew(
+            oldItems = oldGrades uniqueSubtract newDetails,
+            newItems = (newDetails uniqueSubtract oldGrades).onEach {
+                if (it.date >= notifyBreakDate) it.apply {
+                    isRead = false
+                    if (notify) isNotified = false
+                }
+            },
+        )
     }
 
     private suspend fun refreshGradeSummaries(
@@ -120,31 +120,33 @@ class GradeRepository @Inject constructor(
         newSummary: List<GradeSummary>,
         notify: Boolean
     ) {
-        gradeSummaryDb.deleteAll(oldSummaries uniqueSubtract newSummary)
-        gradeSummaryDb.insertAll((newSummary uniqueSubtract oldSummaries).onEach { summary ->
-            val oldSummary = oldSummaries.find { old -> old.subject == summary.subject }
-            summary.isPredictedGradeNotified = when {
-                summary.predictedGrade.isEmpty() -> true
-                notify && oldSummary?.predictedGrade != summary.predictedGrade -> false
-                else -> true
-            }
-            summary.isFinalGradeNotified = when {
-                summary.finalGrade.isEmpty() -> true
-                notify && oldSummary?.finalGrade != summary.finalGrade -> false
-                else -> true
-            }
+        gradeSummaryDb.removeOldAndSaveNew(
+            oldItems = oldSummaries uniqueSubtract newSummary,
+            newItems = (newSummary uniqueSubtract oldSummaries).onEach { summary ->
+                val oldSummary = oldSummaries.find { old -> old.subject == summary.subject }
+                summary.isPredictedGradeNotified = when {
+                    summary.predictedGrade.isEmpty() -> true
+                    notify && oldSummary?.predictedGrade != summary.predictedGrade -> false
+                    else -> true
+                }
+                summary.isFinalGradeNotified = when {
+                    summary.finalGrade.isEmpty() -> true
+                    notify && oldSummary?.finalGrade != summary.finalGrade -> false
+                    else -> true
+                }
 
-            summary.predictedGradeLastChange = when {
-                oldSummary == null -> Instant.now()
-                summary.predictedGrade != oldSummary.predictedGrade -> Instant.now()
-                else -> oldSummary.predictedGradeLastChange
-            }
-            summary.finalGradeLastChange = when {
-                oldSummary == null -> Instant.now()
-                summary.finalGrade != oldSummary.finalGrade -> Instant.now()
-                else -> oldSummary.finalGradeLastChange
-            }
-        })
+                summary.predictedGradeLastChange = when {
+                    oldSummary == null -> Instant.now()
+                    summary.predictedGrade != oldSummary.predictedGrade -> Instant.now()
+                    else -> oldSummary.predictedGradeLastChange
+                }
+                summary.finalGradeLastChange = when {
+                    oldSummary == null -> Instant.now()
+                    summary.finalGrade != oldSummary.finalGrade -> Instant.now()
+                    else -> oldSummary.finalGradeLastChange
+                }
+            },
+        )
     }
 
     fun getUnreadGrades(semester: Semester): Flow<List<Grade>> {

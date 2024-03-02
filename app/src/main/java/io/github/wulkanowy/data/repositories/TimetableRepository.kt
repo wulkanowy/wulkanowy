@@ -1,7 +1,5 @@
 package io.github.wulkanowy.data.repositories
 
-import androidx.room.withTransaction
-import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.TimetableAdditionalDao
 import io.github.wulkanowy.data.db.dao.TimetableDao
 import io.github.wulkanowy.data.db.dao.TimetableHeaderDao
@@ -38,7 +36,6 @@ class TimetableRepository @Inject constructor(
     private val sdk: Sdk,
     private val schedulerHelper: TimetableNotificationSchedulerHelper,
     private val refreshHelper: AutoRefreshHelper,
-    private val appDatabase: AppDatabase,
 ) {
 
     private val saveFetchResultMutex = Mutex()
@@ -84,11 +81,9 @@ class TimetableRepository @Inject constructor(
             timetableFull.mapToEntities(semester)
         },
         saveFetchResult = { timetableOld, timetableNew ->
-            appDatabase.withTransaction {
-                refreshTimetable(student, timetableOld.lessons, timetableNew.lessons, notify)
-                refreshAdditional(timetableOld.additional, timetableNew.additional)
-                refreshDayHeaders(timetableOld.headers, timetableNew.headers)
-            }
+            refreshTimetable(student, timetableOld.lessons, timetableNew.lessons, notify)
+            refreshAdditional(timetableOld.additional, timetableNew.additional)
+            refreshDayHeaders(timetableOld.headers, timetableNew.headers)
 
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
         },
@@ -159,8 +154,10 @@ class TimetableRepository @Inject constructor(
             new.apply { if (notify) isNotified = false }
         }
 
-        timetableDb.deleteAll(lessonsToRemove)
-        timetableDb.insertAll(lessonsToAdd)
+        timetableDb.removeOldAndSaveNew(
+            oldItems = lessonsToRemove,
+            newItems = lessonsToAdd,
+        )
 
         schedulerHelper.cancelScheduled(lessonsToRemove, student)
         schedulerHelper.scheduleNotifications(lessonsToAdd, student)
@@ -171,13 +168,17 @@ class TimetableRepository @Inject constructor(
         new: List<TimetableAdditional>
     ) {
         val oldFiltered = old.filter { !it.isAddedByUser }
-        timetableAdditionalDb.deleteAll(oldFiltered uniqueSubtract new)
-        timetableAdditionalDb.insertAll(new uniqueSubtract old)
+        timetableAdditionalDb.removeOldAndSaveNew(
+            oldItems = oldFiltered uniqueSubtract new,
+            newItems = new uniqueSubtract old,
+        )
     }
 
     private suspend fun refreshDayHeaders(old: List<TimetableHeader>, new: List<TimetableHeader>) {
-        timetableHeaderDb.deleteAll(old uniqueSubtract new)
-        timetableHeaderDb.insertAll(new uniqueSubtract old)
+        timetableHeaderDb.removeOldAndSaveNew(
+            oldItems = old uniqueSubtract new,
+            newItems = new uniqueSubtract old,
+        )
     }
 
     fun getLastRefreshTimestamp(semester: Semester, start: LocalDate, end: LocalDate): Instant {

@@ -1,11 +1,9 @@
 package io.github.wulkanowy.data.repositories
 
 import android.content.Context
-import androidx.room.withTransaction
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.Resource
-import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.MailboxDao
 import io.github.wulkanowy.data.db.dao.MessageAttachmentDao
@@ -57,7 +55,6 @@ class MessageRepository @Inject constructor(
     private val json: Json,
     private val mailboxDao: MailboxDao,
     private val getMailboxByStudentUseCase: GetMailboxByStudentUseCase,
-    private val appDatabase: AppDatabase,
 ) {
     private val saveFetchResultMutex = Mutex()
 
@@ -92,15 +89,13 @@ class MessageRepository @Inject constructor(
         },
         saveFetchResult = { oldWithAuthors, new ->
             val old = oldWithAuthors.map { it.message }
-            val messagesToAdd = (new uniqueSubtract old).onEach {
-                val muted = isMuted(it.correspondents)
-                it.isNotified = !notify || muted
-            }
-            appDatabase.withTransaction {
-                messagesDb.deleteAll(old uniqueSubtract new)
-                messagesDb.insertAll(messagesToAdd)
-            }
-
+            messagesDb.removeOldAndSaveNew(
+                oldItems = old uniqueSubtract new,
+                newItems = (new uniqueSubtract old).onEach {
+                    val muted = isMuted(it.correspondents)
+                    it.isNotified = !notify || muted
+                },
+            )
             refreshHelper.updateLastRefreshTimestamp(
                 getRefreshKey(messagesCacheKey, mailbox, folder)
             )
