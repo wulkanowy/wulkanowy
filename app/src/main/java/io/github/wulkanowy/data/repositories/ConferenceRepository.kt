@@ -1,5 +1,7 @@
 package io.github.wulkanowy.data.repositories
 
+import androidx.room.withTransaction
+import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.ConferenceDao
 import io.github.wulkanowy.data.db.entities.Conference
 import io.github.wulkanowy.data.db.entities.Semester
@@ -23,6 +25,7 @@ class ConferenceRepository @Inject constructor(
     private val conferenceDb: ConferenceDao,
     private val sdk: Sdk,
     private val refreshHelper: AutoRefreshHelper,
+    private val appDatabase: AppDatabase,
 ) {
 
     private val saveFetchResultMutex = Mutex()
@@ -56,9 +59,10 @@ class ConferenceRepository @Inject constructor(
             val conferencesToSave = (new uniqueSubtract old).onEach {
                 if (notify) it.isNotified = false
             }
-
-            conferenceDb.deleteAll(old uniqueSubtract new)
-            conferenceDb.insertAll(conferencesToSave)
+            appDatabase.withTransaction {
+                conferenceDb.deleteAll(old uniqueSubtract new)
+                conferenceDb.insertAll(conferencesToSave)
+            }
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
         }
     )

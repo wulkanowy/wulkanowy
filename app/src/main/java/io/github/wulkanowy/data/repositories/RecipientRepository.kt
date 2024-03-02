@@ -1,5 +1,7 @@
 package io.github.wulkanowy.data.repositories
 
+import androidx.room.withTransaction
+import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.RecipientDao
 import io.github.wulkanowy.data.db.entities.*
 import io.github.wulkanowy.data.mappers.mapToEntities
@@ -16,6 +18,7 @@ class RecipientRepository @Inject constructor(
     private val recipientDb: RecipientDao,
     private val sdk: Sdk,
     private val refreshHelper: AutoRefreshHelper,
+    private val appDatabase: AppDatabase,
 ) {
 
     private val cacheKey = "recipient"
@@ -25,8 +28,10 @@ class RecipientRepository @Inject constructor(
             .mapToEntities(mailbox.globalKey)
         val old = recipientDb.loadAll(type, mailbox.globalKey)
 
-        recipientDb.deleteAll(old uniqueSubtract new)
-        recipientDb.insertAll(new uniqueSubtract old)
+        appDatabase.withTransaction {
+            recipientDb.deleteAll(old uniqueSubtract new)
+            recipientDb.insertAll(new uniqueSubtract old)
+        }
 
         refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student))
     }

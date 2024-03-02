@@ -1,5 +1,7 @@
 package io.github.wulkanowy.data.repositories
 
+import androidx.room.withTransaction
+import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.TimetableAdditionalDao
 import io.github.wulkanowy.data.db.dao.TimetableDao
 import io.github.wulkanowy.data.db.dao.TimetableHeaderDao
@@ -36,6 +38,7 @@ class TimetableRepository @Inject constructor(
     private val sdk: Sdk,
     private val schedulerHelper: TimetableNotificationSchedulerHelper,
     private val refreshHelper: AutoRefreshHelper,
+    private val appDatabase: AppDatabase,
 ) {
 
     private val saveFetchResultMutex = Mutex()
@@ -81,9 +84,11 @@ class TimetableRepository @Inject constructor(
             timetableFull.mapToEntities(semester)
         },
         saveFetchResult = { timetableOld, timetableNew ->
-            refreshTimetable(student, timetableOld.lessons, timetableNew.lessons, notify)
-            refreshAdditional(timetableOld.additional, timetableNew.additional)
-            refreshDayHeaders(timetableOld.headers, timetableNew.headers)
+            appDatabase.withTransaction {
+                refreshTimetable(student, timetableOld.lessons, timetableNew.lessons, notify)
+                refreshAdditional(timetableOld.additional, timetableNew.additional)
+                refreshDayHeaders(timetableOld.headers, timetableNew.headers)
+            }
 
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
         },

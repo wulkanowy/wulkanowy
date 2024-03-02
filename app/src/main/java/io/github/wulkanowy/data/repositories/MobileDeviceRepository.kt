@@ -1,5 +1,7 @@
 package io.github.wulkanowy.data.repositories
 
+import androidx.room.withTransaction
+import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.MobileDeviceDao
 import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.data.db.entities.Semester
@@ -23,6 +25,7 @@ class MobileDeviceRepository @Inject constructor(
     private val mobileDb: MobileDeviceDao,
     private val sdk: Sdk,
     private val refreshHelper: AutoRefreshHelper,
+    private val appDatabase: AppDatabase,
 ) {
 
     private val saveFetchResultMutex = Mutex()
@@ -48,9 +51,10 @@ class MobileDeviceRepository @Inject constructor(
                 .mapToEntities(student)
         },
         saveFetchResult = { old, new ->
-            mobileDb.deleteAll(old uniqueSubtract new)
-            mobileDb.insertAll(new uniqueSubtract old)
-
+            appDatabase.withTransaction {
+                mobileDb.deleteAll(old uniqueSubtract new)
+                mobileDb.insertAll(new uniqueSubtract old)
+            }
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student))
         }
     )

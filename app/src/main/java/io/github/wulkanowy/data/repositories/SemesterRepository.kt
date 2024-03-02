@@ -1,5 +1,7 @@
 package io.github.wulkanowy.data.repositories
 
+import androidx.room.withTransaction
+import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
@@ -15,7 +17,8 @@ import javax.inject.Singleton
 class SemesterRepository @Inject constructor(
     private val semesterDb: SemesterDao,
     private val sdk: Sdk,
-    private val dispatchers: DispatchersProvider
+    private val dispatchers: DispatchersProvider,
+    private val appDatabase: AppDatabase,
 ) {
 
     suspend fun getSemesters(
@@ -45,6 +48,7 @@ class SemesterRepository @Inject constructor(
                     0 == it.diaryId && 0 == it.kindergartenDiaryId
                 } == true
             }
+
             else -> false
         }
 
@@ -58,9 +62,11 @@ class SemesterRepository @Inject constructor(
         val new = sdk.init(student).getSemesters().mapToEntities(student.studentId)
         if (new.isEmpty()) return Timber.i("Empty semester list!")
 
-        val old = semesterDb.loadAll(student.studentId, student.classId)
-        semesterDb.deleteAll(old.uniqueSubtract(new))
-        semesterDb.insertSemesters(new.uniqueSubtract(old))
+        appDatabase.withTransaction {
+            val old = semesterDb.loadAll(student.studentId, student.classId)
+            semesterDb.deleteAll(old.uniqueSubtract(new))
+            semesterDb.insertSemesters(new.uniqueSubtract(old))
+        }
     }
 
     suspend fun getCurrentSemester(student: Student, forceRefresh: Boolean = false) =

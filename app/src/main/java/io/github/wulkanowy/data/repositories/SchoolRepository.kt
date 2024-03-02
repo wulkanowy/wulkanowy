@@ -1,5 +1,7 @@
 package io.github.wulkanowy.data.repositories
 
+import androidx.room.withTransaction
+import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.SchoolDao
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
@@ -19,6 +21,7 @@ class SchoolRepository @Inject constructor(
     private val schoolDb: SchoolDao,
     private val sdk: Sdk,
     private val refreshHelper: AutoRefreshHelper,
+    private val appDatabase: AppDatabase,
 ) {
 
     private val saveFetchResultMutex = Mutex()
@@ -47,9 +50,9 @@ class SchoolRepository @Inject constructor(
         },
         saveFetchResult = { old, new ->
             if (old != null && new != old) {
-                with(schoolDb) {
-                    deleteAll(listOf(old))
-                    insertAll(listOf(new))
+                appDatabase.withTransaction {
+                    schoolDb.deleteAll(listOf(old))
+                    schoolDb.insertAll(listOf(new))
                 }
             } else if (old == null) {
                 schoolDb.insertAll(listOf(new))

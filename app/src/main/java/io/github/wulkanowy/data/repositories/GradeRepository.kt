@@ -1,5 +1,7 @@
 package io.github.wulkanowy.data.repositories
 
+import androidx.room.withTransaction
+import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.GradeDao
 import io.github.wulkanowy.data.db.dao.GradeDescriptiveDao
 import io.github.wulkanowy.data.db.dao.GradeSummaryDao
@@ -32,6 +34,7 @@ class GradeRepository @Inject constructor(
     private val gradeDescriptiveDb: GradeDescriptiveDao,
     private val sdk: Sdk,
     private val refreshHelper: AutoRefreshHelper,
+    private val appDatabase: AppDatabase,
 ) {
 
     private val saveFetchResultMutex = Mutex()
@@ -74,9 +77,11 @@ class GradeRepository @Inject constructor(
             )
         },
         saveFetchResult = { (oldDetails, oldSummary, oldDescriptive), (newDetails, newSummary, newDescriptive) ->
-            refreshGradeDetails(student, oldDetails, newDetails, notify)
-            refreshGradeSummaries(oldSummary, newSummary, notify)
-            refreshGradeDescriptions(oldDescriptive, newDescriptive, notify)
+            appDatabase.withTransaction {
+                refreshGradeDetails(student, oldDetails, newDetails, notify)
+                refreshGradeSummaries(oldSummary, newSummary, notify)
+                refreshGradeDescriptions(oldDescriptive, newDescriptive, notify)
+            }
 
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(GRADE_CACHE_KEY, semester))
         }

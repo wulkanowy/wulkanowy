@@ -1,5 +1,7 @@
 package io.github.wulkanowy.data.repositories
 
+import androidx.room.withTransaction
+import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.GradePartialStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradePointsStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradeSemesterStatisticsDao
@@ -30,6 +32,7 @@ class GradeStatisticsRepository @Inject constructor(
     private val gradeSemesterStatisticsDb: GradeSemesterStatisticsDao,
     private val sdk: Sdk,
     private val refreshHelper: AutoRefreshHelper,
+    private val appDatabase: AppDatabase,
 ) {
 
     private val partialMutex = Mutex()
@@ -62,8 +65,10 @@ class GradeStatisticsRepository @Inject constructor(
                 .mapToEntities(semester)
         },
         saveFetchResult = { old, new ->
-            gradePartialStatisticsDb.deleteAll(old uniqueSubtract new)
-            gradePartialStatisticsDb.insertAll(new uniqueSubtract old)
+            appDatabase.withTransaction {
+                gradePartialStatisticsDb.deleteAll(old uniqueSubtract new)
+                gradePartialStatisticsDb.insertAll(new uniqueSubtract old)
+            }
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(partialCacheKey, semester))
         },
         mapResult = { items ->
@@ -80,6 +85,7 @@ class GradeStatisticsRepository @Inject constructor(
                     )
                     listOf(summaryItem) + items
                 }
+
                 else -> items.filter { it.subject == subjectName }
             }.mapPartialToStatisticItems()
         }
@@ -107,8 +113,10 @@ class GradeStatisticsRepository @Inject constructor(
                 .mapToEntities(semester)
         },
         saveFetchResult = { old, new ->
-            gradeSemesterStatisticsDb.deleteAll(old uniqueSubtract new)
-            gradeSemesterStatisticsDb.insertAll(new uniqueSubtract old)
+            appDatabase.withTransaction {
+                gradeSemesterStatisticsDb.deleteAll(old uniqueSubtract new)
+                gradeSemesterStatisticsDb.insertAll(new uniqueSubtract old)
+            }
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(semesterCacheKey, semester))
         },
         mapResult = { items ->
@@ -138,6 +146,7 @@ class GradeStatisticsRepository @Inject constructor(
                     }
                     listOf(summaryItem) + itemsWithAverage
                 }
+
                 else -> itemsWithAverage.filter { it.subject == subjectName }
             }.mapSemesterToStatisticItems()
         }
@@ -163,8 +172,10 @@ class GradeStatisticsRepository @Inject constructor(
                 .mapToEntities(semester)
         },
         saveFetchResult = { old, new ->
-            gradePointsStatisticsDb.deleteAll(old uniqueSubtract new)
-            gradePointsStatisticsDb.insertAll(new uniqueSubtract old)
+            appDatabase.withTransaction {
+                gradePointsStatisticsDb.deleteAll(old uniqueSubtract new)
+                gradePointsStatisticsDb.insertAll(new uniqueSubtract old)
+            }
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(pointsCacheKey, semester))
         },
         mapResult = { items ->

@@ -1,5 +1,7 @@
 package io.github.wulkanowy.data.repositories
 
+import androidx.room.withTransaction
+import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.NoteDao
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Semester
@@ -18,6 +20,7 @@ class NoteRepository @Inject constructor(
     private val noteDb: NoteDao,
     private val sdk: Sdk,
     private val refreshHelper: AutoRefreshHelper,
+    private val appDatabase: AppDatabase,
 ) {
 
     private val saveFetchResultMutex = Mutex()
@@ -46,14 +49,16 @@ class NoteRepository @Inject constructor(
                 .mapToEntities(semester)
         },
         saveFetchResult = { old, new ->
-            noteDb.deleteAll(old uniqueSubtract new)
-            noteDb.insertAll((new uniqueSubtract old).onEach {
+            val notesToAdd = (new uniqueSubtract old).onEach {
                 if (it.date >= student.registrationDate.toLocalDate()) it.apply {
                     isRead = false
                     if (notify) isNotified = false
                 }
-            })
-
+            }
+            appDatabase.withTransaction {
+                noteDb.deleteAll(old uniqueSubtract new)
+                noteDb.insertAll(notesToAdd)
+            }
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
         }
     )
