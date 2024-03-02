@@ -852,7 +852,8 @@
     <string name="auth_description">Na prevádzku aplikácie potrebujeme potvrdiť vašu identitu. Zadajte PESEL žiaka &lt;b&gt;%1$s&lt;/b&gt; v nižšie uvedenom poli</string>
     <string name="auth_button_skip">Zatiaľ preskočiť</string>
     <!--Captcha-->
-    <string name="captcha_dialog_title">Overovanie prebieha. Počkajte…</string>
+    <string name="captcha_dialog_title">VULCAN\'s website requires verification</string>
+    <string name="captcha_dialog_description"><b>Why am I seeing this?</b>\nThe register website from which Wulkanowy downloads data displays the same screen as above, so Wulkanowy must also show it to be able to download data from this website. There\'s no way around it</string>
     <string name="captcha_verified_message">Úspešne overené</string>
     <!--Errors-->
     <string name="error_no_internet">Žiadne internetové pripojenie</string>
