@@ -190,7 +190,7 @@ ext {
     android_hilt = "1.2.0"
     room = "2.6.1"
     chucker = "4.0.0"
-    mockk = "1.13.9"
+    mockk = "1.13.10"
     coroutines = "1.8.0"
 }
 
@@ -252,7 +252,7 @@ dependencies {
     implementation 'com.fredporciuncula:flow-preferences:1.9.1'
     implementation 'org.apache.commons:commons-text:1.11.0'
 
-    playImplementation platform('com.google.firebase:firebase-bom:32.7.2')
+    playImplementation platform('com.google.firebase:firebase-bom:32.7.3')
     playImplementation 'com.google.firebase:firebase-analytics'
     playImplementation 'com.google.firebase:firebase-messaging'
     playImplementation 'com.google.firebase:firebase-crashlytics:'
