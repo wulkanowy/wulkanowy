@@ -123,30 +123,40 @@ class GradeRepository @Inject constructor(
         gradeSummaryDb.removeOldAndSaveNew(
             oldItems = oldSummaries uniqueSubtract newSummary,
             newItems = (newSummary uniqueSubtract oldSummaries).onEach { summary ->
-                val oldSummary = oldSummaries.find { old -> old.subject == summary.subject }
-                summary.isPredictedGradeNotified = when {
-                    summary.predictedGrade.isEmpty() -> true
-                    notify && oldSummary?.predictedGrade != summary.predictedGrade -> false
-                    else -> true
-                }
-                summary.isFinalGradeNotified = when {
-                    summary.finalGrade.isEmpty() -> true
-                    notify && oldSummary?.finalGrade != summary.finalGrade -> false
-                    else -> true
-                }
-
-                summary.predictedGradeLastChange = when {
-                    oldSummary == null -> Instant.now()
-                    summary.predictedGrade != oldSummary.predictedGrade -> Instant.now()
-                    else -> oldSummary.predictedGradeLastChange
-                }
-                summary.finalGradeLastChange = when {
-                    oldSummary == null -> Instant.now()
-                    summary.finalGrade != oldSummary.finalGrade -> Instant.now()
-                    else -> oldSummary.finalGradeLastChange
-                }
+                getGradeSummaryWithUpdatedNotificationState(
+                    summary = summary,
+                    oldSummary = oldSummaries.find { it.subject == summary.subject },
+                    notify = notify,
+                )
             },
         )
+    }
+
+    private fun getGradeSummaryWithUpdatedNotificationState(
+        summary: GradeSummary,
+        oldSummary: GradeSummary?,
+        notify: Boolean,
+    ) {
+        summary.isPredictedGradeNotified = when {
+            summary.predictedGrade.isEmpty() -> true
+            notify && oldSummary?.predictedGrade != summary.predictedGrade -> false
+            else -> true
+        }
+        summary.isFinalGradeNotified = when {
+            summary.finalGrade.isEmpty() -> true
+            notify && oldSummary?.finalGrade != summary.finalGrade -> false
+            else -> true
+        }
+        summary.predictedGradeLastChange = when {
+            oldSummary == null -> Instant.now()
+            summary.predictedGrade != oldSummary.predictedGrade -> Instant.now()
+            else -> oldSummary.predictedGradeLastChange
+        }
+        summary.finalGradeLastChange = when {
+            oldSummary == null -> Instant.now()
+            summary.finalGrade != oldSummary.finalGrade -> Instant.now()
+            else -> oldSummary.finalGradeLastChange
+        }
     }
 
     fun getUnreadGrades(semester: Semester): Flow<List<Grade>> {
