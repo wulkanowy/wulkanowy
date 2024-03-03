@@ -2,8 +2,14 @@ package io.github.wulkanowy.ui.modules.attendance
 
 import android.content.DialogInterface.BUTTON_POSITIVE
 import android.os.Bundle
-import android.view.*
-import android.view.View.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.View.GONE
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import androidx.appcompat.view.ActionMode
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -63,6 +69,8 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
             val inflater = mode.menuInflater
             inflater.inflate(R.menu.context_menu_attendance, menu)
+            menu.findItem(R.id.excuseMenuDaySubmit).setVisible(presenter.isWholeDayExcusable)
+
             return true
         }
 
@@ -78,6 +86,7 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
 
         override fun onActionItemClicked(mode: ActionMode, menu: MenuItem): Boolean {
             return when (menu.itemId) {
+                R.id.excuseMenuDaySubmit -> presenter.onExcuseDayButtonClick()
                 R.id.excuseMenuSubmit -> presenter.onExcuseSubmitButtonClick()
                 else -> false
             }
@@ -257,11 +266,18 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
         actionMode = (activity as MainActivity?)?.startSupportActionMode(actionModeCallback)
     }
 
-    override fun startSendMessageIntent(date: LocalDate, numbers: String, reason: String) {
-        val reasonFullText = getString(
-            R.string.attendance_excuse_formula,
+    override fun startSendMessageIntent(date: LocalDate, lessons: String, reason: String) {
+        val reasonFullText = if (lessons.isEmpty()) {
+            getString(
+                R.string.attendance_excuse_day_formula,
+                date,
+                if (reason.isNotBlank()) " ${getString(R.string.attendance_excuse_reason)} " else "",
+                reason.ifBlank { "" }
+            )
+        } else getString(
+            R.string.attendance_excuse_lessons_formula,
             date,
-            numbers,
+            lessons,
             if (reason.isNotBlank()) " ${getString(R.string.attendance_excuse_reason)} " else "",
             reason.ifBlank { "" }
         )

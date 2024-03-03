@@ -38,6 +38,7 @@ class AttendancePresenter @Inject constructor(
     private lateinit var lastError: Throwable
 
     private val attendanceToExcuseList = mutableListOf<Attendance>()
+    var isWholeDayExcusable = false
 
     private var isVulcanExcusedFunctionEnabled = false
 
@@ -131,6 +132,12 @@ class AttendancePresenter @Inject constructor(
         view?.startActionMode()
     }
 
+    fun onExcuseDayButtonClick(): Boolean {
+        view?.showExcuseDialog()
+
+        return true
+    }
+
     fun onExcuseCheckboxSelect(attendanceItem: Attendance, checked: Boolean) {
         if (checked) attendanceToExcuseList.add(attendanceItem)
         else attendanceToExcuseList.remove(attendanceItem)
@@ -152,7 +159,7 @@ class AttendancePresenter @Inject constructor(
     fun onExcuseDialogSubmit(reason: String) {
         view?.finishActionMode()
 
-        if (attendanceToExcuseList.isEmpty()) return
+        if (attendanceToExcuseList.isEmpty() && !isWholeDayExcusable) return
 
         if (isVulcanExcusedFunctionEnabled) {
             excuseAbsence(
@@ -163,8 +170,8 @@ class AttendancePresenter @Inject constructor(
             val attendanceToExcuseNumbers = attendanceToExcuseList.map { it.number }
 
             view?.startSendMessageIntent(
-                date = attendanceToExcuseList[0].date,
-                numbers = attendanceToExcuseNumbers.joinToString(", "),
+                date = currentDate ?: attendanceToExcuseList[0].date,
+                lessons = attendanceToExcuseNumbers.joinToString(", "),
                 reason = reason
             )
         }
@@ -217,7 +224,9 @@ class AttendancePresenter @Inject constructor(
         }
             .logResourceStatus("load attendance")
             .onResourceLoading {
-                view?.showExcuseButton(false)
+                view?.apply {
+                    showExcuseButton(false)
+                }
             }
             .mapResourceData {
                 if (prefRepository.isShowPresent) {
@@ -240,15 +249,16 @@ class AttendancePresenter @Inject constructor(
                 }
             }
             .onResourceIntermediate { view?.showRefresh(true) }
-            .onResourceSuccess {
-                isVulcanExcusedFunctionEnabled = it.any { item -> item.excusable }
-                val anyExcusables = it.any { it.isExcusableOrNotExcused }
+            .onResourceSuccess { items ->
+                isVulcanExcusedFunctionEnabled = items.any { item -> item.excusable }
+                isWholeDayExcusable = items.all { it.isAbsenceExcusable }
+                val anyExcusables = items.any { it.isExcusableOrNotExcused }
                 view?.showExcuseButton(anyExcusables && (isParent || isVulcanExcusedFunctionEnabled))
 
                 analytics.logEvent(
                     "load_data",
                     "type" to "attendance",
-                    "items" to it.size
+                    "items" to items.size
                 )
             }
             .onResourceNotLoading {
@@ -301,7 +311,19 @@ class AttendancePresenter @Inject constructor(
         resourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            attendanceRepository.excuseForAbsence(student, semester, toExcuseList, reason)
+            if (toExcuseList.isEmpty()) {
+                attendanceRepository.excuseForAbsence(
+                    student = student,
+                    semester = semester,
+                    days = listOfNotNull(currentDate),
+                    reason = reason
+                )
+            } else attendanceRepository.excuseForAbsence(
+                student = student,
+                semester = semester,
+                absenceList = toExcuseList,
+                reason = reason
+            )
         }.onEach {
             when (it) {
                 is Resource.Loading -> view?.run {
