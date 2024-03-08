@@ -4,7 +4,7 @@
     <string name="login_title">Přihlášení</string>
     <string name="main_title">Wulkanowy</string>
     <string name="grade_title">Známky</string>
-    <string name="attendance_title">Frekvence</string>
+    <string name="attendance_title">Attendance</string>
     <string name="exam_title">Zkoušky</string>
     <string name="timetable_title">Plán lekce</string>
     <string name="settings_title">Nastavení</string>
@@ -264,7 +264,7 @@
     <string name="additional_lessons_end">Čas ukončení</string>
     <string name="additional_lessons_end_time_error">Čas ukončení musí být pozdější než čas zahájení</string>
     <!--Attendance-->
-    <string name="attendance_summary_button">Shrnutí frekvencí</string>
+    <string name="attendance_summary_button">Attendance summary</string>
     <string name="attendance_calculator_button">Attendance calculator</string>
     <string name="attendance_calculator_summary_balance_positive"><b>%1$d</b> over target</string>
     <string name="attendance_calculator_summary_balance_neutral">right on target</string>
@@ -287,22 +287,22 @@
     <string name="attendance_excuse_no_selection">Musíte vybrat alespoň jednu nepřítomnost!</string>
     <string name="attendance_excuse_title">Ospravedlnit</string>
     <plurals name="attendance_notify_new_items_title">
-        <item quantity="one">Nové frekvence</item>
-        <item quantity="few">Nové frekvence</item>
-        <item quantity="many">Nové frekvence</item>
-        <item quantity="other">Nové frekvence</item>
+        <item quantity="one">New attendance</item>
+        <item quantity="few">New attendance</item>
+        <item quantity="many">New attendance</item>
+        <item quantity="other">New attendance</item>
     </plurals>
     <plurals name="attendance_notify_new_items">
-        <item quantity="one">%1$d nové frekvence</item>
-        <item quantity="few">%1$d nové frekvence</item>
-        <item quantity="many">%1$d nových frekvencí</item>
-        <item quantity="other">%1$d nových frekvencí</item>
+        <item quantity="one">%1$d new attendance</item>
+        <item quantity="few">%1$d attendance</item>
+        <item quantity="many">%1$d attendance</item>
+        <item quantity="other">%1$d attendance</item>
     </plurals>
     <plurals name="attendance_number_item">
-        <item quantity="one">%d frekvence</item>
-        <item quantity="few">%d frekvence</item>
-        <item quantity="many">%d frekvencí</item>
-        <item quantity="other">%d frekvencí</item>
+        <item quantity="one">%d attendance</item>
+        <item quantity="few">%d attendance</item>
+        <item quantity="many">%d attendance</item>
+        <item quantity="other">%d attendance</item>
     </plurals>
     <!--Attendance summary-->
     <string name="attendance_summary_total">Společně</string>
