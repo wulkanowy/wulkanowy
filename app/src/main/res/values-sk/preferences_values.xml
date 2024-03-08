@@ -31,6 +31,11 @@
         <item>0,5</item>
         <item>0,75</item>
     </string-array>
+    <string-array name="attendance_calculator_sorting_mode_entries">
+        <item>Alphabetically</item>
+        <item>By attendance percentage</item>
+        <item>By lesson balance</item>
+    </string-array>
     <string-array name="grade_sorting_mode_entries">
         <item>Abecedne</item>
         <item>Podľa dátumu</item>
