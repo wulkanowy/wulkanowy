@@ -877,6 +877,34 @@
     <string name="error_feature_not_available">Feature not available. Login in a mode other than Mobile API</string>
     <string name="error_field_required">This field is required</string>
 
+    <string name="all_options">Options</string>
+    <string name="all_edit">Edit</string>
+    <string name="all_delete">Delete</string>
+    <string name="all_plus_value">Plus value</string>
+    <string name="all_minus_value">Minus value</string>
+    <string name="all_clear">Clear</string>
+
+    <!--Calculator -->
+    <string name="calculator_item_weight">Weight %1$s</string>
+    <string name="calculator_item_grade">Value %1$s</string>
+    <string name="calculator_item_title_fallback">No Title</string>
+    <string name="calculator_empty">No Grades</string>
+    <string name="calculator_add_item_title">Add Grade</string>
+    <string name="calculator_edit_item_title">Edit grade</string>
+    <string name="calculator_item_add">Add Grade</string>
+    <string name="calculator_item_edit">Edit Grade</string>
+    <string name="calculator_average_from_x_items">%1$d grades</string>
+    <string name="calculator_invalid_grade_error">Invalid format, use 5+, 5-, 5, 5.0…</string>
+    <string name="calculator_options_dialog_title">Options</string>
+    <string name="invalid_minus_or_plus_modifier">Invalid value, try 0.33, .33…</string>
+    <string name="calculator_invalid_weight_error">Invalid weight</string>
+    <string name="new_calculator_from_grades">New calculator</string>
+    <string name="append_calculator">Add to calculator</string>
+    <string name="change_this_settings_will_clear_the_calculator">Change this settings will clear the calculator.</string>
+    <string name="grade_header_required">Grade*</string>
+    <string name="grade_weight_required">Weight*</string>
+    <string name="calculator_title">Average Calculator</string>
+
     <!-- Mute system -->
     <string name="message_mute">Mute</string>
     <string name="message_unmute">Unmute</string>

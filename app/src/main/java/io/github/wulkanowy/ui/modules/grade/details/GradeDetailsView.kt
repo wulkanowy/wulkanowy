@@ -46,4 +46,6 @@ interface GradeDetailsView : BaseView {
     fun enableMarkAsDoneButton(enable: Boolean)
 
     fun getHeaderOfItem(subject: String): GradeDetailsItem
+
+    fun showHeaderContextMenu(header: GradeDetailsHeader, headerPosition: Int)
 }

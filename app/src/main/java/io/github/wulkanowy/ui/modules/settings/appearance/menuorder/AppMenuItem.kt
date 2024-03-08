@@ -22,6 +22,7 @@ sealed class AppMenuItem {
             SchoolAndTeachersAppMenuItem(),
             MobileDevicesAppMenuItem(),
             ConferenceAppMenuItem(),
+            AverageCalculatorAppMenuItem(),
             MessageAppMenuItem()
         ).sortedBy { it.order }
     }
@@ -202,5 +203,18 @@ sealed class AppMenuItem {
 
         @Transient
         override val destinationType = Destination.Type.MOBILE_DEVICE
+    }
+
+    @Serializable
+    data class AverageCalculatorAppMenuItem(override var order: Int = 13) : AppMenuItem() {
+
+        @Transient
+        override val icon = R.drawable.ic_main_calculator
+
+        @Transient
+        override val title = R.string.calculator_title
+
+        @Transient
+        override val destinationType = Destination.Type.AVERAGE_CALCULATOR
     }
 }

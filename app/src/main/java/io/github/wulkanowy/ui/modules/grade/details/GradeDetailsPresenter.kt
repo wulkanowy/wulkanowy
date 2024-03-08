@@ -248,4 +248,9 @@ class GradeDetailsPresenter @Inject constructor(
             .onResourceError(errorHandler::dispatch)
             .launch("update")
     }
+
+    fun onHeaderLongClick(header: GradeDetailsHeader, headerPosition: Int): Boolean {
+        view?.showHeaderContextMenu(header, headerPosition)
+        return true
+    }
 }

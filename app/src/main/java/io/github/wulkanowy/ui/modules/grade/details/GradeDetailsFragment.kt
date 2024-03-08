@@ -5,7 +5,9 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -16,6 +18,7 @@ import io.github.wulkanowy.databinding.FragmentGradeDetailsBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeView
+import io.github.wulkanowy.ui.modules.grade.details.contextmenu.GradeHeaderContextMenu
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.getThemeAttrColor
 import javax.inject.Inject
@@ -40,7 +43,6 @@ class GradeDetailsFragment :
     override val isViewEmpty
         get() = gradeDetailsAdapter.itemCount == 0
 
-    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -61,6 +63,7 @@ class GradeDetailsFragment :
 
     override fun initView() {
         gradeDetailsAdapter.onClickListener = presenter::onGradeItemSelected
+        gradeDetailsAdapter.onHeaderLongClickListener = presenter::onHeaderLongClick
 
         with(binding) {
             with(gradeDetailsRecycler) {
@@ -174,5 +177,12 @@ class GradeDetailsFragment :
     override fun onDestroyView() {
         presenter.onDetachView()
         super.onDestroyView()
+    }
+
+    override fun showHeaderContextMenu(header: GradeDetailsHeader, headerPosition: Int) {
+        val grades = header.grades.map { it.value as Grade }
+        val gradeList = SerializableGradleList(grades)
+        val contextMenu = GradeHeaderContextMenu.newInstance(gradeList)
+        (activity as? MainActivity)?.showDialogFragment(contextMenu)
     }
 }

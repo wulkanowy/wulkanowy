@@ -29,12 +29,13 @@ class GradeDetailsDialog : BaseDialogFragment<DialogGradeBinding>() {
 
         private const val COLOR_THEME_KEY = "Theme"
 
-        fun newInstance(grade: Grade, colorTheme: GradeColorTheme) = GradeDetailsDialog().apply {
-            arguments = bundleOf(
-                ARGUMENT_KEY to grade,
-                COLOR_THEME_KEY to colorTheme
-            )
-        }
+        fun newInstance(grade: Grade, colorTheme: GradeColorTheme) =
+            GradeDetailsDialog().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARGUMENT_KEY, grade)
+                    putSerializable(COLOR_THEME_KEY, colorTheme)
+                }
+            }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

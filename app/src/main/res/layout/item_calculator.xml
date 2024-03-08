@@ -1,0 +1,68 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:paddingStart="8dp"
+    android:paddingTop="6dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="6dp"
+    tools:context=".ui.modules.calculator.CalculatorAdapter">
+
+    <TextView
+        android:id="@+id/calculatorItemOriginalGrade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="40dp"
+        android:minHeight="40dp"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:maxLength="2"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="32sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="5+"/>
+
+    <TextView
+        android:id="@+id/calculatorItemTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="15sp"
+        app:layout_constraintStart_toEndOf="@+id/calculatorItemOriginalGrade"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@tools:sample/lorem" />
+
+    <TextView
+        android:id="@+id/calculatorItemWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:maxLines="1"
+        android:textColor="?android:textColorSecondary"
+        android:textSize="13sp"
+        app:layout_constraintStart_toEndOf="@+id/calculatorItemOriginalGrade"
+        app:layout_constraintTop_toBottomOf="@+id/calculatorItemTitle"
+        tools:text="Waga: 0.6"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/calculatorItemGrade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:maxLines="1"
+        android:textColor="?android:textColorSecondary"
+        android:textSize="13sp"
+        app:layout_constraintStart_toEndOf="@+id/calculatorItemWeight"
+        app:layout_constraintTop_toBottomOf="@+id/calculatorItemTitle"
+        tools:text="Obliczona wartość: 5.50"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

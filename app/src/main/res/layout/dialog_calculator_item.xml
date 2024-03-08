@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.modules.calculator.CalculatorItemDialog">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="300dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="8dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            tools:ignore="UselessParent">
+
+            <LinearLayout
+                android:id="@+id/calculatorItemDialogValueLayout"
+                android:layout_width="101dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="end"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/calculatorItemDialogOriginalGradeValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="86dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/grade_material_default"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="30sp"
+                    tools:text="@string/all_no_data" />
+
+                <TextView
+                    android:id="@+id/calculatorItemDialogColorAndWeightValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/grade_black"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:minHeight="32dp"
+                    android:textColor="@android:color/white"
+                    android:textIsSelectable="true"
+                    android:textSize="14sp"
+                    tools:text="@string/all_no_data" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/calculatorItemDialogHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="14dp"
+                android:layout_marginRight="14dp"
+                android:layout_toStartOf="@+id/calculatorItemDialogValueLayout"
+                android:layout_toLeftOf="@+id/calculatorItemDialogValueLayout"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/calculatorItemDialogTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:gravity="center_vertical"
+                    android:text="@string/all_no_data"
+                    android:textIsSelectable="true"
+                    android:textSize="21sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/calculatorItemDialogWeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/calculatorItemDialogHeader"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="16dp"
+                android:text="@string/grade_weight"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/calculatorItemDialogWeightValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/calculatorItemDialogWeight"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginEnd="24dp"
+                android:layout_toStartOf="@+id/calculatorItemDialogValueLayout"
+                android:text="@string/all_no_data"
+                android:textIsSelectable="true"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/calculatorItemDialogGrade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/calculatorItemDialogWeightValue"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="16dp"
+                android:text="@string/grade_header"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="12sp" />
+
+
+            <TextView
+                android:id="@+id/calculatorItemDialogGradeValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/calculatorItemDialogGrade"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_toStartOf="@+id/calculatorItemDialogValueLayout"
+                android:text="@string/all_no_data"
+                android:textIsSelectable="true"
+                android:textSize="16sp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/calculatorItemDialogGradeValue"
+                android:minHeight="62dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/calculatorItemDialogDelete"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginBottom="8dp"
+                    android:insetLeft="0dp"
+                    android:insetTop="0dp"
+                    android:insetRight="0dp"
+                    android:insetBottom="0dp"
+                    android:minWidth="88dp"
+                    android:text="@string/all_delete"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/calculatorItemDialogClose"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:insetLeft="0dp"
+                    android:insetTop="0dp"
+                    android:insetRight="0dp"
+                    android:insetBottom="0dp"
+                    android:minWidth="88dp"
+                    android:text="@string/all_close"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

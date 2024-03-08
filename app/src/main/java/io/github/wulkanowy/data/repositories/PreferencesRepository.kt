@@ -16,6 +16,7 @@ import io.github.wulkanowy.data.enums.GradeExpandMode
 import io.github.wulkanowy.data.enums.GradeSortingMode
 import io.github.wulkanowy.data.enums.TimetableGapsMode
 import io.github.wulkanowy.data.enums.TimetableMode
+import io.github.wulkanowy.ui.modules.calculator.CalculatorItem
 import io.github.wulkanowy.ui.modules.dashboard.DashboardItem
 import io.github.wulkanowy.ui.modules.grade.GradeAverageMode
 import io.github.wulkanowy.ui.modules.settings.appearance.menuorder.AppMenuItem
@@ -120,6 +121,10 @@ class PreferencesRepository @Inject constructor(
         get() = getBoolean(servicesOnlyWifiKey, R.bool.pref_default_services_wifi_only)
 
     val notificationsEnableKey = context.getString(R.string.pref_key_notifications_enable)
+    private val calculatorMinusKey = context.getString(R.string.pref_key_calculator_minus_value)
+    private val calculatorPlusKey = context.getString(R.string.pref_key_calculator_plus_value)
+    private val calculatorItemsKey = context.getString(R.string.pref_key_calculator_items)
+
     val isNotificationsEnable: Boolean
         get() = getBoolean(notificationsEnableKey, R.bool.pref_default_notifications_enable)
 
@@ -358,6 +363,18 @@ class PreferencesRepository @Inject constructor(
     var installationId: String
         get() = sharedPref.getString(PREF_KEY_INSTALLATION_ID, null).orEmpty()
         private set(value) = sharedPref.edit { putString(PREF_KEY_INSTALLATION_ID, value) }
+
+    var calculatorMinusValue: Double?
+        set(v) = sharedPref.edit { putString(calculatorMinusKey, v?.toString()); }
+        get() = sharedPref.getString(calculatorMinusKey, null)?.toDoubleOrNull()
+
+    var calculatorPlusValue: Double?
+        set(v) = sharedPref.edit { putString(calculatorPlusKey, v?.toString()); }
+        get() = sharedPref.getString(calculatorPlusKey, null)?.toDoubleOrNull()
+
+    var calculatorItems: List<CalculatorItem>
+        set(v) = sharedPref.edit {putString(calculatorItemsKey, json.encodeToString(v))}
+        get() = json.decodeFromString(sharedPref.getString(calculatorItemsKey, "[]")!!)
 
     init {
         if (installationId.isEmpty()) {

@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.modules
 import androidx.fragment.app.Fragment
 import io.github.wulkanowy.data.serializers.LocalDateSerializer
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
+import io.github.wulkanowy.ui.modules.calculator.CalculatorFragment
 import io.github.wulkanowy.ui.modules.conference.ConferenceFragment
 import io.github.wulkanowy.ui.modules.dashboard.DashboardFragment
 import io.github.wulkanowy.ui.modules.exam.ExamFragment
@@ -48,29 +49,31 @@ sealed class Destination {
         MORE(More),
         MESSAGE(Message),
         MOBILE_DEVICE(MobileDevice),
+        AVERAGE_CALCULATOR(AverageCalculator),
         SETTINGS(Settings);
     }
 
+
     @Serializable
-    object Dashboard : Destination() {
+    data object Dashboard : Destination() {
         override val destinationType get() = Type.DASHBOARD
         override val destinationFragment get() = DashboardFragment.newInstance()
     }
 
     @Serializable
-    object Grade : Destination() {
+    data object Grade : Destination() {
         override val destinationType get() = Type.GRADE
         override val destinationFragment get() = GradeFragment.newInstance()
     }
 
     @Serializable
-    object Attendance : Destination() {
+    data object Attendance : Destination() {
         override val destinationType get() = Type.ATTENDANCE
         override val destinationFragment get() = AttendanceFragment.newInstance()
     }
 
     @Serializable
-    object Exam : Destination() {
+    data object Exam : Destination() {
         override val destinationType get() = Type.EXAM
         override val destinationFragment get() = ExamFragment.newInstance()
     }
@@ -85,68 +88,74 @@ sealed class Destination {
     }
 
     @Serializable
-    object Homework : Destination() {
+    data object Homework : Destination() {
         override val destinationType get() = Type.HOMEWORK
         override val destinationFragment get() = HomeworkFragment.newInstance()
     }
 
     @Serializable
-    object Note : Destination() {
+    data object Note : Destination() {
         override val destinationType get() = Type.NOTE
         override val destinationFragment get() = NoteFragment.newInstance()
     }
 
     @Serializable
-    object Conference : Destination() {
+    data object Conference : Destination() {
         override val destinationType get() = Type.CONFERENCE
         override val destinationFragment get() = ConferenceFragment.newInstance()
     }
 
     @Serializable
-    object SchoolAnnouncement : Destination() {
+    data object SchoolAnnouncement : Destination() {
         override val destinationType get() = Type.SCHOOL_ANNOUNCEMENT
         override val destinationFragment get() = SchoolAnnouncementFragment.newInstance()
     }
 
     @Serializable
-    object SchoolAndTeachers : Destination() {
+    data object SchoolAndTeachers : Destination() {
         override val destinationType get() = Type.SCHOOL_AND_TEACHERS
         override val destinationFragment get() = SchoolAndTeachersFragment.newInstance()
     }
 
     @Serializable
-    object LuckyNumber : Destination() {
+    data object LuckyNumber : Destination() {
         override val destinationType get() = Type.LUCKY_NUMBER
         override val destinationFragment get() = LuckyNumberFragment.newInstance()
     }
 
     @Serializable
-    object LuckyNumberHistory : Destination() {
+    data object LuckyNumberHistory : Destination() {
         override val destinationType get() = Type.LUCKY_NUMBER_HISTORY
         override val destinationFragment get() = LuckyNumberHistoryFragment.newInstance()
     }
 
     @Serializable
-    object More : Destination() {
+    data object More : Destination() {
         override val destinationType get() = Type.MORE
         override val destinationFragment get() = MoreFragment.newInstance()
     }
 
     @Serializable
-    object Message : Destination() {
+    data object Message : Destination() {
         override val destinationType get() = Type.MESSAGE
         override val destinationFragment get() = MessageFragment.newInstance()
     }
 
     @Serializable
-    object MobileDevice : Destination() {
+    data object MobileDevice : Destination() {
         override val destinationType get() = Type.MOBILE_DEVICE
         override val destinationFragment get() = MobileDeviceFragment.newInstance()
     }
 
     @Serializable
-    object Settings : Destination() {
+    data object Settings : Destination() {
         override val destinationType get() = Type.SETTINGS
         override val destinationFragment get() = SettingsFragment.newInstance()
+    }
+
+    @Serializable
+    data object AverageCalculator : Destination() {
+        override val destinationType: Type get() = Type.AVERAGE_CALCULATOR
+        override val destinationFragment: Fragment get() = CalculatorFragment.newInstance()
     }
 }
