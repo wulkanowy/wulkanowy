@@ -131,7 +131,7 @@ jobs:
           BITRISE_KEYSTORE_PASSWORD: ${{ secrets.BITRISE_KEYSTORE_PASSWORD }}
           BITRISE_KEY_ALIAS: ${{ secrets.BITRISE_KEY_ALIAS }}
           BITRISE_KEY_PASSWORD: ${{ secrets.BITRISE_KEY_PASSWORD }}
-        run: ./gradlew assemblePlayDebug -PenableFirebase --stacktrace
+        run: ./gradlew assemblePlayDebug --stacktrace
       - name: Upload apk to github artifacts
         uses: actions/upload-artifact@v3
         with:
