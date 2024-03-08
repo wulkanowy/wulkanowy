@@ -64,7 +64,7 @@
     <string name="login_symbol_helper">Symbol najdete na stránce deníku v &#160;<b>Uczeń</b>→&#160;<b>Dostęp Mobilny</b> →&#160;<b>Wygeneruj kod dostępu</b>.\n\nUjistěte se, že jste nastavili správnou variantu deníku v poli <b>Variace deníku UONET+</b> na první přihlašovací obrazovce</string>
     <string name="login_select_student">Vyberte žáky, kteří se mají do aplikace přihlásit</string>
     <string name="login_advanced">Jiné možnosti</string>
-    <string name="login_advanced_warning_mobile_api">V tomto režimu nefungují následující: šťastné číslo, statistiky třídy, shrnutí frekvencí, ospravedlnění nepřítomnosti, dokončené lekce, informace o škole a prohlížení seznamu registrovaných zařízení</string>
+    <string name="login_advanced_warning_mobile_api">In this mode, a lucky number does not work, a class grade stats, summary of attendance, excuse for absence, completed lessons, school information and preview of the list of registered devices</string>
     <string name="login_advanced_warning_scraper">Tento režim zobrazuje stejná data, která se zobrazují na webových stránkách deníka</string>
     <string name="login_advanced_warning_hybrid">Kombinace nejlepších vlastností ostatních dvou režimů. Funguje rychleji než scraper a poskytuje funkce, které nejsou k dispozici v režimu Mobile API. Je to v experimentální fázi</string>
     <string name="login_privacy_policy">Ochrana osobních údajů</string>
@@ -804,7 +804,7 @@
     <string name="pref_grades_appearance_header">Známky</string>
     <string name="pref_dashboard_appearance_header">Domů</string>
     <string name="pref_dashboard_appearance_tiles_title">Viditelnost dlaždic</string>
-    <string name="pref_attendance_appearance_view">Frekvence</string>
+    <string name="pref_attendance_appearance_view">Attendance</string>
     <string name="pref_timetable_appearance_view">Plán lekce</string>
     <string name="pref_grades_advanced_header">Známky</string>
     <string name="pref_counted_average_advanced_header">Vypočítaný průměr</string>
@@ -832,7 +832,7 @@
     <string name="channel_upcoming_lessons">Nadcházející lekce</string>
     <string name="channel_debug">Ladění</string>
     <string name="channel_change_timetable">Změny plánu lekcí</string>
-    <string name="channel_new_attendance">Nové frekvence</string>
+    <string name="channel_new_attendance">New attendance</string>
     <!--Colors-->
     <string name="all_black">Černá</string>
     <string name="all_red">Červená</string>
