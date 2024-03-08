@@ -123,4 +123,6 @@ Thumbs.db
 agconnect-services.json
 agconnect-credentials.json
 google-services.json
+!app/google-services.json
+
 
