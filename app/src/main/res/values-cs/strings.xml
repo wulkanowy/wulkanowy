@@ -265,6 +265,11 @@
     <string name="additional_lessons_end_time_error">Čas ukončení musí být pozdější než čas zahájení</string>
     <!--Attendance-->
     <string name="attendance_summary_button">Shrnutí frekvencí</string>
+    <string name="attendance_calculator_button">Attendance calculator</string>
+    <string name="attendance_calculator_summary_balance_positive"><b>%1$d</b> over target</string>
+    <string name="attendance_calculator_summary_balance_neutral">right on target</string>
+    <string name="attendance_calculator_summary_balance_negative"><b>%1$d</b> under target</string>
+    <string name="attendance_calculator_summary_values">%1$d/%2$d presences</string>
     <string name="attendance_absence_school">Nepřítomnost ze školních důvodů</string>
     <string name="attendance_absence_excused">Omluvená nepřítomnost</string>
     <string name="attendance_absence_unexcused">Neomluvená nepřítomnost</string>
@@ -731,6 +736,8 @@
     <string name="pref_view_grade_average_mode">Možnosti vypočítaného průměru</string>
     <string name="pref_view_grade_average_force_calc">Vynutit průměrný výpočet podle aplikace</string>
     <string name="pref_view_present">Zobrazit přítomnost</string>
+    <string name="pref_attendance_target">Attendance target</string>
+    <string name="pref_view_attendance_calculator_sorting_mode">Attendance calculator sorting</string>
     <string name="pref_view_app_theme">Motiv</string>
     <string name="pref_view_expand_grade">Rozvíjení známek</string>
     <string name="pref_view_timetable_show_groups">Zobrazit skupiny vedle předmětů</string>
