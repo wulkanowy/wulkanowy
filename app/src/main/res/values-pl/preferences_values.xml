@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="general_alphabetically">Alphabetically</string>
     <string-array name="app_theme_entries" tools:ignore="InconsistentArrays">
         <item>Jasny</item>
         <item>Ciemny</item>
@@ -32,12 +33,12 @@
         <item>0,75</item>
     </string-array>
     <string-array name="attendance_calculator_sorting_mode_entries">
-        <item>Alphabetically</item>
-        <item>By attendance percentage</item>
+        <item>@string/general_alphabetically</item>
+        <item>Według procentu obecności</item>
         <item>Według balansu frekwencji przedmiotu</item>
     </string-array>
     <string-array name="grade_sorting_mode_entries">
-        <item>Alfabetycznie</item>
+        <item>@string/general_alphabetically</item>
         <item>Według daty</item>
         <item>Według średniej</item>
     </string-array>
