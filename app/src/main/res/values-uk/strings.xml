@@ -265,8 +265,8 @@
     <string name="additional_lessons_end_time_error">Час завершення має бути пізніше часу початку</string>
     <!--Attendance-->
     <string name="attendance_summary_button">Підсумок відвідуваності</string>
-    <string name="attendance_calculator_button">Attendance calculator</string>
-    <string name="attendance_calculator_summary_balance_positive"><b>%1$d</b> over target</string>
+    <string name="attendance_calculator_button">Калькулятор відвідуваності</string>
+    <string name="attendance_calculator_summary_balance_positive"><b>%1$d</b> понад ціль</string>
     <string name="attendance_calculator_summary_balance_neutral">right on target</string>
     <string name="attendance_calculator_summary_balance_negative"><b>%1$d</b> under target</string>
     <string name="attendance_calculator_summary_values">%1$d/%2$d presences</string>
