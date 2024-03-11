@@ -1,6 +1,10 @@
 package io.github.wulkanowy.data
 
-import io.mockk.*
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerifyOrder
+import io.mockk.just
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOf
@@ -42,7 +46,6 @@ class ResourceTest {
         // first
         networkBoundResource(
             isResultEmpty = { false },
-            showSavedOnLoading = false,
             query = { repo.query() },
             fetch = {
                 val data = repo.fetch()
@@ -50,14 +53,13 @@ class ResourceTest {
                 data
             },
             saveFetchResult = { old, new -> repo.save(old, new) }
-        ).launchIn(testScope)
+        ).filterNotIntermediate().launchIn(testScope)
 
         testScope.advanceTimeBy(1_000)
 
         // second
         networkBoundResource(
             isResultEmpty = { false },
-            showSavedOnLoading = false,
             query = { repo.query() },
             fetch = {
                 val data = repo.fetch()
@@ -65,7 +67,7 @@ class ResourceTest {
                 data
             },
             saveFetchResult = { old, new -> repo.save(old, new) }
-        ).launchIn(testScope)
+        ).filterNotIntermediate().launchIn(testScope)
 
         testScope.advanceTimeBy(3_000)
 
@@ -124,7 +126,6 @@ class ResourceTest {
         networkBoundResource(
             isResultEmpty = { false },
             mutex = saveResultMutex,
-            showSavedOnLoading = false,
             query = { repo.query() },
             fetch = {
                 val data = repo.fetch()
@@ -135,7 +136,7 @@ class ResourceTest {
                 delay(1_500)
                 repo.save(old, new)
             }
-        ).launchIn(testScope)
+        ).filterNotIntermediate().launchIn(testScope)
 
         testScope.advanceTimeBy(1_000)
 
@@ -143,7 +144,6 @@ class ResourceTest {
         networkBoundResource(
             isResultEmpty = { false },
             mutex = saveResultMutex,
-            showSavedOnLoading = false,
             query = { repo.query() },
             fetch = {
                 val data = repo.fetch()
@@ -153,7 +153,7 @@ class ResourceTest {
             saveFetchResult = { old, new ->
                 repo.save(old, new)
             }
-        ).launchIn(testScope)
+        ).filterNotIntermediate().launchIn(testScope)
 
         testScope.advanceTimeBy(3_000)
 

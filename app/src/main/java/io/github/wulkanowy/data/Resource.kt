@@ -214,9 +214,10 @@ fun <T> Flow<Resource<T>>.debounceIntermediates(timeout: Duration = 5.seconds) =
     })
 }
 
+fun <T> Flow<Resource<T>>.filterNotIntermediate() = filter { it !is Resource.Intermediate }
+
 inline fun <ResultType, RequestType> networkBoundResource(
     mutex: Mutex = Mutex(),
-    showSavedOnLoading: Boolean = true,
     crossinline isResultEmpty: (ResultType) -> Boolean,
     crossinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend () -> RequestType,
@@ -230,7 +231,7 @@ inline fun <ResultType, RequestType> networkBoundResource(
     if (shouldFetch(data)) {
         val filteredResult = filterResult(data)
 
-        if (showSavedOnLoading && !isResultEmpty(filteredResult)) {
+        if (!isResultEmpty(filteredResult)) {
             emit(Resource.Intermediate(filteredResult))
         }
 
@@ -249,7 +250,6 @@ inline fun <ResultType, RequestType> networkBoundResource(
 @JvmName("networkBoundResourceWithMap")
 inline fun <ResultType, RequestType, T> networkBoundResource(
     mutex: Mutex = Mutex(),
-    showSavedOnLoading: Boolean = true,
     crossinline isResultEmpty: (T) -> Boolean,
     crossinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend () -> RequestType,
@@ -263,7 +263,7 @@ inline fun <ResultType, RequestType, T> networkBoundResource(
     if (shouldFetch(data)) {
         val mappedResult = mapResult(data)
 
-        if (showSavedOnLoading && !isResultEmpty(mappedResult)) {
+        if (!isResultEmpty(mappedResult)) {
             emit(Resource.Intermediate(mappedResult))
         }
 
