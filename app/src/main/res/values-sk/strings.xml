@@ -31,7 +31,7 @@
     <!--Subtitles-->
     <string name="grade_subtitle">Semester %1$d, %2$d/%3$d</string>
     <!--Login-->
-    <string name="login_header_default">Prihláste sa pomocou študentského alebo rodičovského konta</string>
+    <string name="login_header_default">Sign in with the student or parent account</string>
     <string name="login_header_symbol">Zadajte symbol zo stránky denníka: &lt;b&gt;%1$s&lt;/b&gt;</string>
     <string name="login_nickname_hint">Užívateľské meno</string>
     <string name="login_email_hint">Email</string>
@@ -270,6 +270,7 @@
     <string name="attendance_calculator_summary_balance_neutral">presne v cieli</string>
     <string name="attendance_calculator_summary_balance_negative"><b>%1$d</b> pod cieľom</string>
     <string name="attendance_calculator_summary_values">%1$d/%2$d prítomnosti</string>
+    <string name="attendance_calculator_summary_values_empty">No attendances recorded</string>
     <string name="attendance_absence_school">Neprítomnosť zo školských dôvodov</string>
     <string name="attendance_absence_excused">Ospravedlnená neprítomnosť</string>
     <string name="attendance_absence_unexcused">Neospravedlnená neprítomnosť</string>
@@ -737,6 +738,7 @@
     <string name="pref_view_grade_average_force_calc">Vynútiť priemerný výpočet podľa aplikácie</string>
     <string name="pref_view_present">Zobraziť prítomnosť</string>
     <string name="pref_attendance_target">Cieľová dochádzka</string>
+    <string name="pref_attendance_calculator_show_empty_subjects">Show subjects without any attendances</string>
     <string name="pref_view_attendance_calculator_sorting_mode">Triedenie kalkulačky dochádzky</string>
     <string name="pref_view_app_theme">Motív</string>
     <string name="pref_view_expand_grade">Rozvijanie známok</string>
