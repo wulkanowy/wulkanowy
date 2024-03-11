@@ -227,7 +227,7 @@ inline fun <ResultType, RequestType> networkBoundResource(
     emit(Resource.Loading())
 
     val data = query().first()
-    emitAll(if (shouldFetch(data)) {
+    if (shouldFetch(data)) {
         val filteredResult = filterResult(data)
 
         if (showSavedOnLoading && !isResultEmpty(filteredResult)) {
@@ -237,13 +237,13 @@ inline fun <ResultType, RequestType> networkBoundResource(
         try {
             val newData = fetch()
             mutex.withLock { saveFetchResult(query().first(), newData) }
-            query().map { Resource.Success(filterResult(it)) }
         } catch (throwable: Throwable) {
-            flowOf(Resource.Error(throwable))
+            emit(Resource.Error(throwable))
+            return@flow
         }
-    } else {
-        query().map { Resource.Success(filterResult(it)) }
-    })
+    }
+
+    emitAll(query().map { Resource.Success(filterResult(it)) })
 }
 
 @JvmName("networkBoundResourceWithMap")
@@ -260,20 +260,21 @@ inline fun <ResultType, RequestType, T> networkBoundResource(
     emit(Resource.Loading())
 
     val data = query().first()
-    emitAll(if (shouldFetch(data)) {
+    if (shouldFetch(data)) {
         val mappedResult = mapResult(data)
 
         if (showSavedOnLoading && !isResultEmpty(mappedResult)) {
             emit(Resource.Intermediate(mappedResult))
         }
+
         try {
             val newData = fetch()
             mutex.withLock { saveFetchResult(query().first(), newData) }
-            query().map { Resource.Success(mapResult(it)) }
         } catch (throwable: Throwable) {
-            flowOf(Resource.Error(throwable))
+            emit(Resource.Error(throwable))
+            return@flow
         }
-    } else {
-        query().map { Resource.Success(mapResult(it)) }
-    })
+    }
+
+    emitAll(query().map { Resource.Success(mapResult(it)) })
 }
