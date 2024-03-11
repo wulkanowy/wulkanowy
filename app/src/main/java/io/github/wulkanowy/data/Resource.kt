@@ -219,7 +219,7 @@ inline fun <ResultType, RequestType> networkBoundResource(
     showSavedOnLoading: Boolean = true,
     crossinline isResultEmpty: (ResultType) -> Boolean,
     crossinline query: () -> Flow<ResultType>,
-    crossinline fetch: suspend (ResultType) -> RequestType,
+    crossinline fetch: suspend () -> RequestType,
     crossinline saveFetchResult: suspend (old: ResultType, new: RequestType) -> Unit,
     crossinline shouldFetch: (ResultType) -> Boolean = { true },
     crossinline filterResult: (ResultType) -> ResultType = { it }
@@ -235,7 +235,7 @@ inline fun <ResultType, RequestType> networkBoundResource(
         }
 
         try {
-            val newData = fetch(data)
+            val newData = fetch()
             mutex.withLock { saveFetchResult(query().first(), newData) }
             query().map { Resource.Success(filterResult(it)) }
         } catch (throwable: Throwable) {
@@ -252,7 +252,7 @@ inline fun <ResultType, RequestType, T> networkBoundResource(
     showSavedOnLoading: Boolean = true,
     crossinline isResultEmpty: (T) -> Boolean,
     crossinline query: () -> Flow<ResultType>,
-    crossinline fetch: suspend (ResultType) -> RequestType,
+    crossinline fetch: suspend () -> RequestType,
     crossinline saveFetchResult: suspend (old: ResultType, new: RequestType) -> Unit,
     crossinline shouldFetch: (ResultType) -> Boolean = { true },
     crossinline mapResult: (ResultType) -> T,
@@ -267,7 +267,7 @@ inline fun <ResultType, RequestType, T> networkBoundResource(
             emit(Resource.Intermediate(mappedResult))
         }
         try {
-            val newData = fetch(data)
+            val newData = fetch()
             mutex.withLock { saveFetchResult(query().first(), newData) }
             query().map { Resource.Success(mapResult(it)) }
         } catch (throwable: Throwable) {
