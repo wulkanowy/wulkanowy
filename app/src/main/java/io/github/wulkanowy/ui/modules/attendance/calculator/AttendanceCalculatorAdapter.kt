@@ -50,11 +50,16 @@ class AttendanceCalculatorAdapter @Inject constructor() :
             }
             attendanceCalculatorWarning.isVisible = item.lessonBalance < 0
             attendanceCalculatorTitle.text = item.subjectName
-            attendanceCalculatorSummaryValues.text = root.context.getString(
-                R.string.attendance_calculator_summary_values,
-                item.presences,
-                item.total
-            )
+            if (item.total == 0) {
+                attendanceCalculatorSummaryValues.text =
+                    root.context.getString(R.string.attendance_calculator_summary_values_empty)
+            } else {
+                attendanceCalculatorSummaryValues.text = root.context.getString(
+                    R.string.attendance_calculator_summary_values,
+                    item.presences,
+                    item.total
+                )
+            }
         }
     }
 
