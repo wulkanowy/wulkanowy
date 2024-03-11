@@ -221,7 +221,6 @@ inline fun <ResultType, RequestType> networkBoundResource(
     crossinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend (ResultType) -> RequestType,
     crossinline saveFetchResult: suspend (old: ResultType, new: RequestType) -> Unit,
-    crossinline onFetchFailed: (Throwable) -> Unit = { },
     crossinline shouldFetch: (ResultType) -> Boolean = { true },
     crossinline filterResult: (ResultType) -> ResultType = { it }
 ) = flow {
@@ -240,7 +239,6 @@ inline fun <ResultType, RequestType> networkBoundResource(
             mutex.withLock { saveFetchResult(query().first(), newData) }
             query().map { Resource.Success(filterResult(it)) }
         } catch (throwable: Throwable) {
-            onFetchFailed(throwable)
             flowOf(Resource.Error(throwable))
         }
     } else {
@@ -256,7 +254,6 @@ inline fun <ResultType, RequestType, T> networkBoundResource(
     crossinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend (ResultType) -> RequestType,
     crossinline saveFetchResult: suspend (old: ResultType, new: RequestType) -> Unit,
-    crossinline onFetchFailed: (Throwable) -> Unit = { },
     crossinline shouldFetch: (ResultType) -> Boolean = { true },
     crossinline mapResult: (ResultType) -> T,
 ) = flow {
@@ -274,7 +271,6 @@ inline fun <ResultType, RequestType, T> networkBoundResource(
             mutex.withLock { saveFetchResult(query().first(), newData) }
             query().map { Resource.Success(mapResult(it)) }
         } catch (throwable: Throwable) {
-            onFetchFailed(throwable)
             flowOf(Resource.Error(throwable))
         }
     } else {
