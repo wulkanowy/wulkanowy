@@ -224,28 +224,15 @@ inline fun <ResultType, RequestType> networkBoundResource(
     crossinline saveFetchResult: suspend (old: ResultType, new: RequestType) -> Unit,
     crossinline shouldFetch: (ResultType) -> Boolean = { true },
     crossinline filterResult: (ResultType) -> ResultType = { it }
-) = flow {
-    emit(Resource.Loading())
-
-    val data = query().first()
-    if (shouldFetch(data)) {
-        val filteredResult = filterResult(data)
-
-        if (!isResultEmpty(filteredResult)) {
-            emit(Resource.Intermediate(filteredResult))
-        }
-
-        try {
-            val newData = fetch()
-            mutex.withLock { saveFetchResult(query().first(), newData) }
-        } catch (throwable: Throwable) {
-            emit(Resource.Error(throwable))
-            return@flow
-        }
-    }
-
-    emitAll(query().map { Resource.Success(filterResult(it)) })
-}
+) = networkBoundResource<ResultType, RequestType, ResultType>(
+    mutex,
+    isResultEmpty,
+    query,
+    fetch,
+    saveFetchResult,
+    shouldFetch,
+    filterResult
+)
 
 @JvmName("networkBoundResourceWithMap")
 inline fun <ResultType, RequestType, T> networkBoundResource(
