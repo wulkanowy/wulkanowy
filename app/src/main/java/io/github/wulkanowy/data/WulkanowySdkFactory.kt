@@ -14,21 +14,21 @@ import javax.inject.Singleton
 class WulkanowySdkFactory @Inject constructor(
     private val chuckerInterceptor: ChuckerInterceptor,
     private val remoteConfig: RemoteConfigHelper,
-    private val webkitCookieManagerProxy: WebkitCookieManagerProxy,
+    private val webkitCookieManagerProxy: WebkitCookieManagerProxy
 ) {
 
-    fun create(): Sdk {
-        return Sdk().apply {
-            androidVersion = android.os.Build.VERSION.RELEASE
-            buildTag = android.os.Build.MODEL
-            userAgentTemplate = remoteConfig.userAgentTemplate
-            setSimpleHttpLogger { Timber.d(it) }
-            setAdditionalCookieManager(webkitCookieManagerProxy)
+    private val sdk = Sdk().apply {
+        androidVersion = android.os.Build.VERSION.RELEASE
+        buildTag = android.os.Build.MODEL
+        userAgentTemplate = remoteConfig.userAgentTemplate
+        setSimpleHttpLogger { Timber.d(it) }
+        setAdditionalCookieManager(webkitCookieManagerProxy)
 
-            // for debug only
-            addInterceptor(chuckerInterceptor, network = true)
-        }
+        // for debug only
+        addInterceptor(chuckerInterceptor, network = true)
     }
+
+    fun create() = sdk
 
     fun create(student: Student, semester: Semester? = null): Sdk {
         return create().apply {
