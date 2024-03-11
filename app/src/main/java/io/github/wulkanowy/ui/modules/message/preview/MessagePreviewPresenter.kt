@@ -33,7 +33,7 @@ class MessagePreviewPresenter @Inject constructor(
     private val analytics: AnalyticsHelper
 ) : BasePresenter<MessagePreviewView>(errorHandler, studentRepository) {
 
-    var messageWithAttachments: MessageWithAttachment? = null
+    private var messageWithAttachments: MessageWithAttachment? = null
 
     private lateinit var lastError: Throwable
 
