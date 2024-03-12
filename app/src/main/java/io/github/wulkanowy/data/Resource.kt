@@ -265,4 +265,4 @@ inline fun <ResultType, RequestType, T> networkBoundResource(
     }
 
     emitAll(query().map { Resource.Success(it) })
-}.mapResourceData(mapResult).filterIntermediates { !isResultEmpty(it) }
+}.mapResourceData { mapResult(it) }.filterIntermediates { !isResultEmpty(it) }

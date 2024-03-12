@@ -53,7 +53,7 @@ class ResourceTest {
                 data
             },
             saveFetchResult = { old, new -> repo.save(old, new) }
-        ).filterNotIntermediate().launchIn(testScope)
+        ).launchIn(testScope)
 
         testScope.advanceTimeBy(1_000)
 
@@ -67,7 +67,7 @@ class ResourceTest {
                 data
             },
             saveFetchResult = { old, new -> repo.save(old, new) }
-        ).filterNotIntermediate().launchIn(testScope)
+        ).launchIn(testScope)
 
         testScope.advanceTimeBy(3_000)
 
@@ -136,7 +136,7 @@ class ResourceTest {
                 delay(1_500)
                 repo.save(old, new)
             }
-        ).filterNotIntermediate().launchIn(testScope)
+        ).launchIn(testScope)
 
         testScope.advanceTimeBy(1_000)
 
@@ -153,7 +153,7 @@ class ResourceTest {
             saveFetchResult = { old, new ->
                 repo.save(old, new)
             }
-        ).filterNotIntermediate().launchIn(testScope)
+        ).launchIn(testScope)
 
         testScope.advanceTimeBy(3_000)
 
