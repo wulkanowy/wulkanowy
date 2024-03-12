@@ -31,7 +31,7 @@
     <!--Subtitles-->
     <string name="grade_subtitle">Semestr %1$d, %2$d/%3$d</string>
     <!--Login-->
-    <string name="login_header_default">Sign in with the student or parent account</string>
+    <string name="login_header_default">Přihlaste se pomocí žákovského nebo rodičovského účtu</string>
     <string name="login_header_symbol">Zadejte symbol ze stránky deníku: &lt;b&gt;%1$s&lt;/b&gt;</string>
     <string name="login_nickname_hint">Uživatelské jméno</string>
     <string name="login_email_hint">Email</string>
