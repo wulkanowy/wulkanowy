@@ -97,7 +97,7 @@ fun <T> Flow<Resource<T>>.logResourceStatus(name: String, showData: Boolean = fa
     Timber.i("$name: $description")
 }
 
-fun <T, U> Flow<Resource<T>>.mapResourceData(block: suspend (T) -> U) = map {
+inline fun <T, U> Flow<Resource<T>>.mapResourceData(crossinline block: suspend (T) -> U) = map {
     when (it) {
         is Resource.Success -> Resource.Success(block(it.data))
         is Resource.Intermediate -> Resource.Intermediate(block(it.data))
@@ -216,6 +216,11 @@ fun <T> Flow<Resource<T>>.debounceIntermediates(timeout: Duration = 5.seconds) =
 
 fun <T> Flow<Resource<T>>.filterNotIntermediate() = filter { it !is Resource.Intermediate }
 
+inline fun <T> Flow<Resource<T>>.filterIntermediates(crossinline predicate: (T) -> Boolean) =
+    filter {
+        it !is Resource.Intermediate || predicate(it.data)
+    }
+
 inline fun <ResultType, RequestType> networkBoundResource(
     mutex: Mutex = Mutex(),
     crossinline isResultEmpty: (ResultType) -> Boolean,
@@ -248,11 +253,7 @@ inline fun <ResultType, RequestType, T> networkBoundResource(
 
     val data = query().first()
     if (shouldFetch(data)) {
-        val mappedResult = mapResult(data)
-
-        if (!isResultEmpty(mappedResult)) {
-            emit(Resource.Intermediate(mappedResult))
-        }
+        emit(Resource.Intermediate(data))
 
         try {
             val newData = fetch()
@@ -263,5 +264,5 @@ inline fun <ResultType, RequestType, T> networkBoundResource(
         }
     }
 
-    emitAll(query().map { Resource.Success(mapResult(it)) })
-}
+    emitAll(query().map { Resource.Success(it) })
+}.mapResourceData(mapResult).filterIntermediates { !isResultEmpty(it) }
