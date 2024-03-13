@@ -4,9 +4,9 @@ import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.api.AdminMessageService
 import io.github.wulkanowy.data.db.dao.AdminMessageDao
 import io.github.wulkanowy.data.db.entities.AdminMessage
-import io.github.wulkanowy.data.filterNotIntermediate
 import io.github.wulkanowy.data.networkBoundResource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.sync.Mutex
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,5 +29,6 @@ class AdminMessageRepository @Inject constructor(
             saveFetchResult = { oldItems, newItems ->
                 adminMessageDao.removeOldAndSaveNew(oldItems, newItems)
             },
-        ).filterNotIntermediate()
+        )
+            .filterNot { it is Resource.Intermediate }
 }

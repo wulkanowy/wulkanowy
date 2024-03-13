@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -22,15 +23,15 @@ import timber.log.Timber
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-sealed class Resource<out T> {
+sealed interface Resource<out T> {
 
-    open class Loading<T> : Resource<T>()
+    open class Loading<T> : Resource<T>
 
     data class Intermediate<T>(val data: T) : Loading<T>()
 
-    data class Success<T>(val data: T) : Resource<T>()
+    data class Success<T>(val data: T) : Resource<T>
 
-    data class Error<T>(val error: Throwable) : Resource<T>()
+    data class Error<T>(val error: Throwable) : Resource<T>
 }
 
 val <T> Resource<T>.dataOrNull: T?
@@ -167,33 +168,32 @@ suspend fun <T> Flow<Resource<T>>.waitForResult() = takeWhile { it is Resource.L
 
 // Can cause excessive amounts of `Resource.Intermediate` to be emitted. Unless that is desired,
 // use `debounceIntermediates` to alleviate this behavior.
-inline fun <reified T> combineResourceFlows(
-    flows: Iterable<Flow<Resource<T>>>,
-): Flow<Resource<List<T>>> = combine(flows) { items ->
-    var isIntermediate = false
-    val data = mutableListOf<T>()
-    for (item in items) {
-        when (item) {
-            is Resource.Success -> data.add(item.data)
-            is Resource.Intermediate -> {
-                isIntermediate = true
-                data.add(item.data)
-            }
+inline fun <reified T> combineResourceFlows(flows: Iterable<Flow<Resource<T>>>): Flow<Resource<List<T>>> =
+    combine(flows) { items ->
+        var isIntermediate = false
+        val data = mutableListOf<T>()
+        for (item in items) {
+            when (item) {
+                is Resource.Success -> data.add(item.data)
+                is Resource.Intermediate -> {
+                    isIntermediate = true
+                    data.add(item.data)
+                }
 
-            is Resource.Loading -> return@combine Resource.Loading()
-            is Resource.Error -> continue
+                is Resource.Loading -> return@combine Resource.Loading()
+                is Resource.Error -> continue
+            }
+        }
+        if (data.isEmpty()) {
+            // All items have to be errors for this to happen, so just return the first one.
+            // mapData is functionally useless and exists only to satisfy the type checker
+            items.first().mapData { listOf(it) }
+        } else if (isIntermediate) {
+            Resource.Intermediate(data)
+        } else {
+            Resource.Success(data)
         }
     }
-    if (data.isEmpty()) {
-        // All items have to be errors for this to happen, so just return the first one.
-        // mapData is functionally useless and exists only to satisfy the type checker
-        items.first().mapData { listOf(it) }
-    } else if (isIntermediate) {
-        Resource.Intermediate(data)
-    } else {
-        Resource.Success(data)
-    }
-}
 
 @OptIn(FlowPreview::class)
 fun <T> Flow<Resource<T>>.debounceIntermediates(timeout: Duration = 5.seconds) = flow {
@@ -214,12 +214,6 @@ fun <T> Flow<Resource<T>>.debounceIntermediates(timeout: Duration = 5.seconds) =
     })
 }
 
-fun <T> Flow<Resource<T>>.filterNotIntermediate() = filter { it !is Resource.Intermediate }
-
-inline fun <T> Flow<Resource<T>>.filterIntermediates(crossinline predicate: (T) -> Boolean) =
-    filter {
-        it !is Resource.Intermediate || predicate(it.data)
-    }
 
 inline fun <ResultType, RequestType> networkBoundResource(
     mutex: Mutex = Mutex(),
@@ -229,25 +223,25 @@ inline fun <ResultType, RequestType> networkBoundResource(
     crossinline saveFetchResult: suspend (old: ResultType, new: RequestType) -> Unit,
     crossinline shouldFetch: (ResultType) -> Boolean = { true },
     crossinline filterResult: (ResultType) -> ResultType = { it }
-) = networkBoundResource<ResultType, RequestType, ResultType>(
-    mutex,
-    isResultEmpty,
-    query,
-    fetch,
-    saveFetchResult,
-    shouldFetch,
-    filterResult
+) = networkBoundResource(
+    mutex = mutex,
+    isResultEmpty = isResultEmpty,
+    query = query,
+    fetch = fetch,
+    saveFetchResult = saveFetchResult,
+    shouldFetch = shouldFetch,
+    mapResult = filterResult
 )
 
 @JvmName("networkBoundResourceWithMap")
-inline fun <ResultType, RequestType, T> networkBoundResource(
+inline fun <ResultType, RequestType, MappedResultType> networkBoundResource(
     mutex: Mutex = Mutex(),
-    crossinline isResultEmpty: (T) -> Boolean,
+    crossinline isResultEmpty: (MappedResultType) -> Boolean,
     crossinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend () -> RequestType,
     crossinline saveFetchResult: suspend (old: ResultType, new: RequestType) -> Unit,
     crossinline shouldFetch: (ResultType) -> Boolean = { true },
-    crossinline mapResult: (ResultType) -> T,
+    crossinline mapResult: (ResultType) -> MappedResultType,
 ) = flow {
     emit(Resource.Loading())
 
@@ -265,4 +259,6 @@ inline fun <ResultType, RequestType, T> networkBoundResource(
     }
 
     emitAll(query().map { Resource.Success(it) })
-}.mapResourceData { mapResult(it) }.filterIntermediates { !isResultEmpty(it) }
+}
+    .mapResourceData { mapResult(it) }
+    .filterNot { it is Resource.Intermediate && isResultEmpty(it.data) }
