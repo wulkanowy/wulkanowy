@@ -1,5 +1,6 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.createWulkanowySdkFactoryMock
 import io.github.wulkanowy.data.dataOrNull
 import io.github.wulkanowy.data.db.dao.AttendanceDao
 import io.github.wulkanowy.data.db.dao.TimetableDao
@@ -10,11 +11,17 @@ import io.github.wulkanowy.getSemesterEntity
 import io.github.wulkanowy.getStudentEntity
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.AutoRefreshHelper
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.SpyK
+import io.mockk.just
+import io.mockk.spyk
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -24,8 +31,8 @@ import io.github.wulkanowy.sdk.pojo.Attendance as SdkAttendance
 
 class AttendanceRepositoryTest {
 
-    @SpyK
-    private var sdk = Sdk()
+    private var sdk = spyk<Sdk>()
+    private val wulkanowySdkFactory = createWulkanowySdkFactoryMock(sdk)
 
     @MockK
     private lateinit var attendanceDb: AttendanceDao
@@ -57,30 +64,41 @@ class AttendanceRepositoryTest {
         every { refreshHelper.shouldBeRefreshed(any()) } returns false
         coEvery { timetableDb.load(any(), any(), any(), any()) } returns emptyList()
 
-        attendanceRepository = AttendanceRepository(attendanceDb, timetableDb, sdk, refreshHelper)
+        attendanceRepository =
+            AttendanceRepository(attendanceDb, timetableDb, wulkanowySdkFactory, refreshHelper)
     }
 
     @Test
-    fun `force refresh without difference`() {
+    fun `force refresh without difference`() = runTest {
         // prepare
         coEvery { sdk.getAttendance(startDate, endDate) } returns remoteList
         coEvery { attendanceDb.loadAll(1, 1, startDate, endDate) } returnsMany listOf(
             flowOf(remoteList.mapToEntities(semester, emptyList())),
             flowOf(remoteList.mapToEntities(semester, emptyList()))
         )
-        coEvery { attendanceDb.insertAll(any()) } returns listOf(1, 2, 3)
-        coEvery { attendanceDb.deleteAll(any()) } just Runs
+        coEvery { attendanceDb.removeOldAndSaveNew(any(), any()) } just Runs
 
         // execute
-        val res = runBlocking { attendanceRepository.getAttendance(student, semester, startDate, endDate, true).toFirstResult() }
+        val res = attendanceRepository.getAttendance(
+            student = student,
+            semester = semester,
+            start = startDate,
+            end = endDate,
+            forceRefresh = true,
+        ).toFirstResult()
+
 
         // verify
         assertEquals(null, res.errorOrNull)
         assertEquals(2, res.dataOrNull?.size)
         coVerify { sdk.getAttendance(startDate, endDate) }
         coVerify { attendanceDb.loadAll(1, 1, startDate, endDate) }
-        coVerify { attendanceDb.insertAll(match { it.isEmpty() }) }
-        coVerify { attendanceDb.deleteAll(match { it.isEmpty() }) }
+        coVerify {
+            attendanceDb.removeOldAndSaveNew(
+                oldItems = match { it.isEmpty() },
+                newItems = match { it.isEmpty() },
+            )
+        }
     }
 
     @Test
@@ -89,14 +107,23 @@ class AttendanceRepositoryTest {
         coEvery { sdk.getAttendance(startDate, endDate) } returns remoteList
         coEvery { attendanceDb.loadAll(1, 1, startDate, endDate) } returnsMany listOf(
             flowOf(remoteList.dropLast(1).mapToEntities(semester, emptyList())),
-            flowOf(remoteList.dropLast(1).mapToEntities(semester, emptyList())), // after fetch end before save result
+            flowOf(
+                remoteList.dropLast(1).mapToEntities(semester, emptyList())
+            ), // after fetch end before save result
             flowOf(remoteList.mapToEntities(semester, emptyList()))
         )
-        coEvery { attendanceDb.insertAll(any()) } returns listOf(1, 2, 3)
-        coEvery { attendanceDb.deleteAll(any()) } just Runs
+        coEvery { attendanceDb.removeOldAndSaveNew(any(), any()) } just Runs
 
         // execute
-        val res = runBlocking { attendanceRepository.getAttendance(student, semester, startDate, endDate, true).toFirstResult() }
+        val res = runBlocking {
+            attendanceRepository.getAttendance(
+                student,
+                semester,
+                startDate,
+                endDate,
+                true
+            ).toFirstResult()
+        }
 
         // verify
         assertEquals(null, res.errorOrNull)
@@ -104,11 +131,13 @@ class AttendanceRepositoryTest {
         coVerify { sdk.getAttendance(startDate, endDate) }
         coVerify { attendanceDb.loadAll(1, 1, startDate, endDate) }
         coVerify {
-            attendanceDb.insertAll(match {
-                it.size == 1 && it[0] == remoteList.mapToEntities(semester, emptyList())[1]
-            })
+            attendanceDb.removeOldAndSaveNew(
+                oldItems = match { it.isEmpty() },
+                newItems = match {
+                    it.size == 1 && it[0] == remoteList.mapToEntities(semester, emptyList())[1]
+                },
+            )
         }
-        coVerify { attendanceDb.deleteAll(match { it.isEmpty() }) }
     }
 
     @Test
@@ -117,25 +146,39 @@ class AttendanceRepositoryTest {
         coEvery { sdk.getAttendance(startDate, endDate) } returns remoteList.dropLast(1)
         coEvery { attendanceDb.loadAll(1, 1, startDate, endDate) } returnsMany listOf(
             flowOf(remoteList.mapToEntities(semester, emptyList())),
-            flowOf(remoteList.mapToEntities(semester, emptyList())), // after fetch end before save result
+            flowOf(
+                remoteList.mapToEntities(
+                    semester,
+                    emptyList()
+                )
+            ), // after fetch end before save result
             flowOf(remoteList.dropLast(1).mapToEntities(semester, emptyList()))
         )
-        coEvery { attendanceDb.insertAll(any()) } returns listOf(1, 2, 3)
-        coEvery { attendanceDb.deleteAll(any()) } just Runs
+        coEvery { attendanceDb.removeOldAndSaveNew(any(), any()) } just Runs
 
         // execute
-        val res = runBlocking { attendanceRepository.getAttendance(student, semester, startDate, endDate, true).toFirstResult() }
+        val res = runBlocking {
+            attendanceRepository.getAttendance(
+                student,
+                semester,
+                startDate,
+                endDate,
+                true
+            ).toFirstResult()
+        }
 
         // verify
         assertEquals(null, res.errorOrNull)
         assertEquals(1, res.dataOrNull?.size)
         coVerify { sdk.getAttendance(startDate, endDate) }
         coVerify { attendanceDb.loadAll(1, 1, startDate, endDate) }
-        coVerify { attendanceDb.insertAll(match { it.isEmpty() }) }
         coVerify {
-            attendanceDb.deleteAll(match {
-                it.size == 1 && it[0] == remoteList.mapToEntities(semester, emptyList())[1]
-            })
+            attendanceDb.removeOldAndSaveNew(
+                oldItems = match {
+                    it.size == 1 && it[0] == remoteList.mapToEntities(semester, emptyList())[1]
+                },
+                newItems = emptyList(),
+            )
         }
     }
 

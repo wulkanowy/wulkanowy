@@ -1,5 +1,6 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.createWulkanowySdkFactoryMock
 import io.github.wulkanowy.data.dataOrNull
 import io.github.wulkanowy.data.db.dao.GradeDao
 import io.github.wulkanowy.data.db.dao.GradeDescriptiveDao
@@ -18,10 +19,11 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.SpyK
 import io.mockk.just
+import io.mockk.spyk
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -34,8 +36,8 @@ import io.github.wulkanowy.sdk.pojo.Grade as SdkGrade
 
 class GradeRepositoryTest {
 
-    @SpyK
-    private var sdk = Sdk()
+    private var sdk = spyk<Sdk>()
+    private val wulkanowySdkFactory = createWulkanowySdkFactoryMock(sdk)
 
     @MockK
     private lateinit var gradeDb: GradeDao
@@ -60,26 +62,27 @@ class GradeRepositoryTest {
         MockKAnnotations.init(this)
         every { refreshHelper.shouldBeRefreshed(any()) } returns false
 
-        gradeRepository =
-            GradeRepository(gradeDb, gradeSummaryDb, gradeDescriptiveDb, sdk, refreshHelper)
+        gradeRepository = GradeRepository(
+            gradeDb = gradeDb,
+            gradeSummaryDb = gradeSummaryDb,
+            gradeDescriptiveDb = gradeDescriptiveDb,
+            wulkanowySdkFactory = wulkanowySdkFactory,
+            refreshHelper = refreshHelper,
+        )
 
-        coEvery { gradeDb.deleteAll(any()) } just Runs
-        coEvery { gradeDb.insertAll(any()) } returns listOf()
+        coEvery { gradeDb.removeOldAndSaveNew(any(), any()) } just Runs
 
+        coEvery { gradeSummaryDb.removeOldAndSaveNew(any(), any()) } just Runs
         coEvery { gradeSummaryDb.loadAll(1, 1) } returnsMany listOf(
             flowOf(listOf()),
             flowOf(listOf()),
             flowOf(listOf())
         )
-        coEvery { gradeSummaryDb.deleteAll(any()) } just Runs
-        coEvery { gradeSummaryDb.insertAll(any()) } returns listOf()
 
+        coEvery { gradeDescriptiveDb.removeOldAndSaveNew(any(), any()) } just Runs
         coEvery { gradeDescriptiveDb.loadAll(any(), any()) } returnsMany listOf(
             flowOf(listOf()),
         )
-
-        coEvery { gradeDescriptiveDb.deleteAll(any()) } just Runs
-        coEvery { gradeDescriptiveDb.insertAll(any()) } returns listOf()
     }
 
     @Test
@@ -113,13 +116,16 @@ class GradeRepositoryTest {
         assertEquals(null, res.errorOrNull)
         assertEquals(4, res.dataOrNull?.first?.size)
         coVerify {
-            gradeDb.insertAll(withArg {
-                assertEquals(4, it.size)
-                assertTrue(it[0].isRead)
-                assertTrue(it[1].isRead)
-                assertFalse(it[2].isRead)
-                assertFalse(it[3].isRead)
-            })
+            gradeDb.removeOldAndSaveNew(
+                oldItems = emptyList(),
+                newItems = withArg {
+                    assertEquals(4, it.size)
+                    assertTrue(it[0].isRead)
+                    assertTrue(it[1].isRead)
+                    assertFalse(it[2].isRead)
+                    assertFalse(it[3].isRead)
+                },
+            )
         }
     }
 
@@ -167,23 +173,23 @@ class GradeRepositoryTest {
         assertEquals(null, res.errorOrNull)
         assertEquals(4, res.dataOrNull?.first?.size)
         coVerify {
-            gradeDb.insertAll(withArg {
-                assertEquals(3, it.size)
-                assertTrue(it[0].isRead)
-                assertTrue(it[1].isRead)
-                assertFalse(it[2].isRead)
-                assertEquals(remoteList.mapToEntities(semester).last(), it[2])
-            })
-        }
-        coVerify {
-            gradeDb.deleteAll(withArg {
-                assertEquals(2, it.size)
-            })
+            gradeDb.removeOldAndSaveNew(
+                oldItems = withArg {
+                    assertEquals(2, it.size)
+                },
+                newItems = withArg {
+                    assertEquals(3, it.size)
+                    assertTrue(it[0].isRead)
+                    assertTrue(it[1].isRead)
+                    assertFalse(it[2].isRead)
+                    assertEquals(remoteList.mapToEntities(semester).last(), it[2])
+                }
+            )
         }
     }
 
     @Test
-    fun `force refresh when local contains duplicated grades`() {
+    fun `force refresh when local contains duplicated grades`() = runTest {
         // prepare
         val remoteList = listOf(
             createGradeApi(5, 3.0, of(2019, 2, 25), "Taka sama ocena"),
@@ -203,13 +209,17 @@ class GradeRepositoryTest {
         )
 
         // execute
-        val res = runBlocking { gradeRepository.getGrades(student, semester, true).toFirstResult() }
+        val res = gradeRepository.getGrades(student, semester, true).toFirstResult()
 
         // verify
         assertEquals(null, res.errorOrNull)
         assertEquals(2, res.dataOrNull?.first?.size)
-        coVerify { gradeDb.insertAll(match { it.isEmpty() }) }
-        coVerify { gradeDb.deleteAll(match { it.size == 1 }) } // ... here
+        coVerify {
+            gradeDb.removeOldAndSaveNew(
+                oldItems = match { it.size == 1 }, // ... here
+                newItems = emptyList()
+            )
+        }
     }
 
     @Test
@@ -238,8 +248,12 @@ class GradeRepositoryTest {
         // verify
         assertEquals(null, res.errorOrNull)
         assertEquals(3, res.dataOrNull?.first?.size)
-        coVerify { gradeDb.insertAll(match { it.size == 1 }) } // ... here
-        coVerify { gradeDb.deleteAll(match { it.isEmpty() }) }
+        coVerify {
+            gradeDb.removeOldAndSaveNew(
+                oldItems = emptyList(),
+                newItems = match { it.size == 1 }, // ... here
+            )
+        }
     }
 
     @Test

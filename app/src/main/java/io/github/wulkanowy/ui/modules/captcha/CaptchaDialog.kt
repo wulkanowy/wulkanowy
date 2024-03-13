@@ -10,9 +10,10 @@ import android.webkit.WebViewClient
 import androidx.core.os.bundleOf
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.WulkanowySdkFactory
 import io.github.wulkanowy.databinding.DialogCaptchaBinding
-import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.ui.base.BaseDialogFragment
+import io.github.wulkanowy.utils.WebkitCookieManagerProxy
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -20,7 +21,10 @@ import javax.inject.Inject
 class CaptchaDialog : BaseDialogFragment<DialogCaptchaBinding>() {
 
     @Inject
-    lateinit var sdk: Sdk
+    lateinit var wulkanowySdkFactory: WulkanowySdkFactory
+
+    @Inject
+    lateinit var webkitCookieManagerProxy: WebkitCookieManagerProxy
 
     private var webView: WebView? = null
 
@@ -55,7 +59,7 @@ class CaptchaDialog : BaseDialogFragment<DialogCaptchaBinding>() {
             webView = this
             with(settings) {
                 javaScriptEnabled = true
-                userAgentString = sdk.userAgent
+                userAgentString = wulkanowySdkFactory.create().userAgent
             }
 
             webViewClient = object : WebViewClient() {
@@ -80,6 +84,7 @@ class CaptchaDialog : BaseDialogFragment<DialogCaptchaBinding>() {
     }
 
     override fun onDestroy() {
+        webkitCookieManagerProxy.webkitCookieManager?.flush()
         webView?.destroy()
         super.onDestroy()
     }

@@ -1,14 +1,13 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.data.WulkanowySdkFactory
 import io.github.wulkanowy.data.db.dao.SchoolAnnouncementDao
 import io.github.wulkanowy.data.db.entities.SchoolAnnouncement
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.data.networkBoundResource
-import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.AutoRefreshHelper
 import io.github.wulkanowy.utils.getRefreshKey
-import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex
@@ -18,7 +17,7 @@ import javax.inject.Singleton
 @Singleton
 class SchoolAnnouncementRepository @Inject constructor(
     private val schoolAnnouncementDb: SchoolAnnouncementDao,
-    private val sdk: Sdk,
+    private val wulkanowySdkFactory: WulkanowySdkFactory,
     private val refreshHelper: AutoRefreshHelper,
 ) {
 
@@ -41,17 +40,18 @@ class SchoolAnnouncementRepository @Inject constructor(
             schoolAnnouncementDb.loadAll(student.userLoginId)
         },
         fetch = {
-            sdk.init(student)
-                .getDirectorInformation()
-                .mapToEntities(student)
+            val sdk = wulkanowySdkFactory.create(student)
+            val lastAnnouncements = sdk.getLastAnnouncements().mapToEntities(student)
+            val directorInformation = sdk.getDirectorInformation().mapToEntities(student)
+            lastAnnouncements + directorInformation
         },
         saveFetchResult = { old, new ->
-            val schoolAnnouncementsToSave = (new uniqueSubtract old).onEach {
-                if (notify) it.isNotified = false
-            }
-
-            schoolAnnouncementDb.deleteAll(old uniqueSubtract new)
-            schoolAnnouncementDb.insertAll(schoolAnnouncementsToSave)
+            schoolAnnouncementDb.removeOldAndSaveNew(
+                oldItems = old uniqueSubtract new,
+                newItems = (new uniqueSubtract old).onEach {
+                    if (notify) it.isNotified = false
+                },
+            )
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student))
         }
     )

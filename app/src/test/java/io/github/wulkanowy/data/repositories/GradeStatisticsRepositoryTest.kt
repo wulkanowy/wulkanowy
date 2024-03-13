@@ -1,5 +1,6 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.createWulkanowySdkFactoryMock
 import io.github.wulkanowy.data.dataOrNull
 import io.github.wulkanowy.data.db.dao.GradePartialStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradePointsStatisticsDao
@@ -13,9 +14,14 @@ import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.GradeStatisticsItem
 import io.github.wulkanowy.sdk.pojo.GradeStatisticsSubject
 import io.github.wulkanowy.utils.AutoRefreshHelper
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.SpyK
+import io.mockk.just
+import io.mockk.spyk
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -24,8 +30,8 @@ import org.junit.Test
 
 class GradeStatisticsRepositoryTest {
 
-    @SpyK
-    private var sdk = Sdk()
+    private var sdk = spyk<Sdk>()
+    private val wulkanowySdkFactory = createWulkanowySdkFactoryMock(sdk)
 
     @MockK
     private lateinit var gradePartialStatisticsDb: GradePartialStatisticsDao
@@ -54,7 +60,7 @@ class GradeStatisticsRepositoryTest {
             gradePartialStatisticsDb = gradePartialStatisticsDb,
             gradePointsStatisticsDb = gradePointsStatisticsDb,
             gradeSemesterStatisticsDb = gradeSemesterStatisticsDb,
-            sdk = sdk,
+            wulkanowySdkFactory = wulkanowySdkFactory,
             refreshHelper = refreshHelper,
         )
     }
@@ -71,8 +77,7 @@ class GradeStatisticsRepositoryTest {
             flowOf(remotePartialList.mapToEntities(semester)),
             flowOf(remotePartialList.mapToEntities(semester))
         )
-        coEvery { gradePartialStatisticsDb.insertAll(any()) } returns listOf(1, 2, 3)
-        coEvery { gradePartialStatisticsDb.deleteAll(any()) } just Runs
+        coEvery { gradePartialStatisticsDb.removeOldAndSaveNew(any(), any()) } just Runs
 
         // execute
         val res = runBlocking {
@@ -93,8 +98,7 @@ class GradeStatisticsRepositoryTest {
         assertEquals("", items[2].partial?.studentAverage)
         coVerify { sdk.getGradesPartialStatistics(1) }
         coVerify { gradePartialStatisticsDb.loadAll(1, 1) }
-        coVerify { gradePartialStatisticsDb.insertAll(match { it.isEmpty() }) }
-        coVerify { gradePartialStatisticsDb.deleteAll(match { it.isEmpty() }) }
+        coVerify { gradePartialStatisticsDb.removeOldAndSaveNew(emptyList(), emptyList()) }
     }
 
     @Test
@@ -109,8 +113,7 @@ class GradeStatisticsRepositoryTest {
             flowOf(remotePartialList.mapToEntities(semester)),
             flowOf(remotePartialList.mapToEntities(semester))
         )
-        coEvery { gradePartialStatisticsDb.insertAll(any()) } returns listOf(1, 2, 3)
-        coEvery { gradePartialStatisticsDb.deleteAll(any()) } just Runs
+        coEvery { gradePartialStatisticsDb.removeOldAndSaveNew(any(), any()) } just Runs
 
         // execute
         val res = runBlocking {
@@ -131,8 +134,7 @@ class GradeStatisticsRepositoryTest {
         assertEquals("5.0", items[2].partial?.studentAverage)
         coVerify { sdk.getGradesPartialStatistics(1) }
         coVerify { gradePartialStatisticsDb.loadAll(1, 1) }
-        coVerify { gradePartialStatisticsDb.insertAll(match { it.isEmpty() }) }
-        coVerify { gradePartialStatisticsDb.deleteAll(match { it.isEmpty() }) }
+        coVerify { gradePartialStatisticsDb.removeOldAndSaveNew(emptyList(), emptyList()) }
     }
 
     private fun getGradeStatisticsPartialSubject(

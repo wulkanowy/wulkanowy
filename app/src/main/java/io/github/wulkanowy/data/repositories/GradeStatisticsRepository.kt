@@ -1,5 +1,6 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.data.WulkanowySdkFactory
 import io.github.wulkanowy.data.db.dao.GradePartialStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradePointsStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradeSemesterStatisticsDao
@@ -12,14 +13,11 @@ import io.github.wulkanowy.data.mappers.mapPointsToStatisticsItems
 import io.github.wulkanowy.data.mappers.mapSemesterToStatisticItems
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.data.networkBoundResource
-import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.AutoRefreshHelper
 import io.github.wulkanowy.utils.getRefreshKey
-import io.github.wulkanowy.utils.init
-import io.github.wulkanowy.utils.switchSemester
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.sync.Mutex
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,7 +26,7 @@ class GradeStatisticsRepository @Inject constructor(
     private val gradePartialStatisticsDb: GradePartialStatisticsDao,
     private val gradePointsStatisticsDb: GradePointsStatisticsDao,
     private val gradeSemesterStatisticsDb: GradeSemesterStatisticsDao,
-    private val sdk: Sdk,
+    private val wulkanowySdkFactory: WulkanowySdkFactory,
     private val refreshHelper: AutoRefreshHelper,
 ) {
 
@@ -56,14 +54,15 @@ class GradeStatisticsRepository @Inject constructor(
         },
         query = { gradePartialStatisticsDb.loadAll(semester.semesterId, semester.studentId) },
         fetch = {
-            sdk.init(student)
-                .switchSemester(semester)
+            wulkanowySdkFactory.create(student, semester)
                 .getGradesPartialStatistics(semester.semesterId)
                 .mapToEntities(semester)
         },
         saveFetchResult = { old, new ->
-            gradePartialStatisticsDb.deleteAll(old uniqueSubtract new)
-            gradePartialStatisticsDb.insertAll(new uniqueSubtract old)
+            gradePartialStatisticsDb.removeOldAndSaveNew(
+                oldItems = old uniqueSubtract new,
+                newItems = new uniqueSubtract old,
+            )
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(partialCacheKey, semester))
         },
         mapResult = { items ->
@@ -80,6 +79,7 @@ class GradeStatisticsRepository @Inject constructor(
                     )
                     listOf(summaryItem) + items
                 }
+
                 else -> items.filter { it.subject == subjectName }
             }.mapPartialToStatisticItems()
         }
@@ -101,14 +101,15 @@ class GradeStatisticsRepository @Inject constructor(
         },
         query = { gradeSemesterStatisticsDb.loadAll(semester.semesterId, semester.studentId) },
         fetch = {
-            sdk.init(student)
-                .switchSemester(semester)
+            wulkanowySdkFactory.create(student, semester)
                 .getGradesSemesterStatistics(semester.semesterId)
                 .mapToEntities(semester)
         },
         saveFetchResult = { old, new ->
-            gradeSemesterStatisticsDb.deleteAll(old uniqueSubtract new)
-            gradeSemesterStatisticsDb.insertAll(new uniqueSubtract old)
+            gradeSemesterStatisticsDb.removeOldAndSaveNew(
+                oldItems = old uniqueSubtract new,
+                newItems = new uniqueSubtract old,
+            )
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(semesterCacheKey, semester))
         },
         mapResult = { items ->
@@ -138,6 +139,7 @@ class GradeStatisticsRepository @Inject constructor(
                     }
                     listOf(summaryItem) + itemsWithAverage
                 }
+
                 else -> itemsWithAverage.filter { it.subject == subjectName }
             }.mapSemesterToStatisticItems()
         }
@@ -157,14 +159,15 @@ class GradeStatisticsRepository @Inject constructor(
         },
         query = { gradePointsStatisticsDb.loadAll(semester.semesterId, semester.studentId) },
         fetch = {
-            sdk.init(student)
-                .switchSemester(semester)
+            wulkanowySdkFactory.create(student, semester)
                 .getGradesPointsStatistics(semester.semesterId)
                 .mapToEntities(semester)
         },
         saveFetchResult = { old, new ->
-            gradePointsStatisticsDb.deleteAll(old uniqueSubtract new)
-            gradePointsStatisticsDb.insertAll(new uniqueSubtract old)
+            gradePointsStatisticsDb.removeOldAndSaveNew(
+                oldItems = old uniqueSubtract new,
+                newItems = new uniqueSubtract old,
+            )
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(pointsCacheKey, semester))
         },
         mapResult = { items ->

@@ -1,15 +1,23 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.data.WulkanowySdkFactory
 import io.github.wulkanowy.data.db.dao.TimetableAdditionalDao
 import io.github.wulkanowy.data.db.dao.TimetableDao
 import io.github.wulkanowy.data.db.dao.TimetableHeaderDao
-import io.github.wulkanowy.data.db.entities.*
+import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.db.entities.Timetable
+import io.github.wulkanowy.data.db.entities.TimetableAdditional
+import io.github.wulkanowy.data.db.entities.TimetableHeader
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.data.pojos.TimetableFull
-import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.services.alarm.TimetableNotificationSchedulerHelper
-import io.github.wulkanowy.utils.*
+import io.github.wulkanowy.utils.AutoRefreshHelper
+import io.github.wulkanowy.utils.getRefreshKey
+import io.github.wulkanowy.utils.monday
+import io.github.wulkanowy.utils.sunday
+import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.sync.Mutex
@@ -23,7 +31,7 @@ class TimetableRepository @Inject constructor(
     private val timetableDb: TimetableDao,
     private val timetableAdditionalDb: TimetableAdditionalDao,
     private val timetableHeaderDb: TimetableHeaderDao,
-    private val sdk: Sdk,
+    private val wulkanowySdkFactory: WulkanowySdkFactory,
     private val schedulerHelper: TimetableNotificationSchedulerHelper,
     private val refreshHelper: AutoRefreshHelper,
 ) {
@@ -64,8 +72,7 @@ class TimetableRepository @Inject constructor(
         },
         query = { getFullTimetableFromDatabase(student, semester, start, end) },
         fetch = {
-            val timetableFull = sdk.init(student)
-                .switchSemester(semester)
+            val timetableFull = wulkanowySdkFactory.create(student, semester)
                 .getTimetable(start.monday, end.sunday)
 
             timetableFull.mapToEntities(semester)
@@ -121,12 +128,12 @@ class TimetableRepository @Inject constructor(
         }
     }
 
-    fun getTimetableFromDatabase(
+    suspend fun getTimetableFromDatabase(
         semester: Semester,
-        from: LocalDate,
+        start: LocalDate,
         end: LocalDate
-    ): Flow<List<Timetable>> {
-        return timetableDb.loadAll(semester.diaryId, semester.studentId, from, end)
+    ): List<Timetable> {
+        return timetableDb.load(semester.diaryId, semester.studentId, start, end)
     }
 
     suspend fun updateTimetable(timetable: List<Timetable>) {
@@ -144,8 +151,10 @@ class TimetableRepository @Inject constructor(
             new.apply { if (notify) isNotified = false }
         }
 
-        timetableDb.deleteAll(lessonsToRemove)
-        timetableDb.insertAll(lessonsToAdd)
+        timetableDb.removeOldAndSaveNew(
+            oldItems = lessonsToRemove,
+            newItems = lessonsToAdd,
+        )
 
         schedulerHelper.cancelScheduled(lessonsToRemove, student)
         schedulerHelper.scheduleNotifications(lessonsToAdd, student)
@@ -156,13 +165,17 @@ class TimetableRepository @Inject constructor(
         new: List<TimetableAdditional>
     ) {
         val oldFiltered = old.filter { !it.isAddedByUser }
-        timetableAdditionalDb.deleteAll(oldFiltered uniqueSubtract new)
-        timetableAdditionalDb.insertAll(new uniqueSubtract old)
+        timetableAdditionalDb.removeOldAndSaveNew(
+            oldItems = oldFiltered uniqueSubtract new,
+            newItems = new uniqueSubtract old,
+        )
     }
 
     private suspend fun refreshDayHeaders(old: List<TimetableHeader>, new: List<TimetableHeader>) {
-        timetableHeaderDb.deleteAll(old uniqueSubtract new)
-        timetableHeaderDb.insertAll(new uniqueSubtract old)
+        timetableHeaderDb.removeOldAndSaveNew(
+            oldItems = old uniqueSubtract new,
+            newItems = new uniqueSubtract old,
+        )
     }
 
     fun getLastRefreshTimestamp(semester: Semester, start: LocalDate, end: LocalDate): Instant {

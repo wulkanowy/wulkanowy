@@ -1,21 +1,37 @@
 package io.github.wulkanowy.ui.modules.attendance
 
 import android.annotation.SuppressLint
-import io.github.wulkanowy.data.*
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.Semester
-import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.db.entities.Timetable
+import io.github.wulkanowy.data.flatResourceFlow
+import io.github.wulkanowy.data.logResourceStatus
+import io.github.wulkanowy.data.mapResourceData
+import io.github.wulkanowy.data.onResourceData
+import io.github.wulkanowy.data.onResourceError
+import io.github.wulkanowy.data.onResourceIntermediate
+import io.github.wulkanowy.data.onResourceLoading
+import io.github.wulkanowy.data.onResourceNotLoading
+import io.github.wulkanowy.data.onResourceSuccess
 import io.github.wulkanowy.data.repositories.AttendanceRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
-import io.github.wulkanowy.data.repositories.TimetableRepository
+import io.github.wulkanowy.data.resourceFlow
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.*
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
+import io.github.wulkanowy.utils.AnalyticsHelper
+import io.github.wulkanowy.utils.capitalise
+import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
+import io.github.wulkanowy.utils.isExcusableOrNotExcused
+import io.github.wulkanowy.utils.isHolidays
+import io.github.wulkanowy.utils.monday
+import io.github.wulkanowy.utils.nextSchoolDay
+import io.github.wulkanowy.utils.previousOrSameSchoolDay
+import io.github.wulkanowy.utils.previousSchoolDay
+import io.github.wulkanowy.utils.sunday
+import io.github.wulkanowy.utils.toFormattedString
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.time.DayOfWeek
@@ -199,6 +215,11 @@ class AttendancePresenter @Inject constructor(
         return true
     }
 
+    fun onCalculatorSwitchSelected(): Boolean {
+        view?.openCalculatorView()
+        return true
+    }
+
     private fun loadData(forceRefresh: Boolean = false) {
         Timber.i("Loading attendance data started")
 
@@ -210,7 +231,7 @@ class AttendancePresenter @Inject constructor(
 
             val semester = semesterRepository.getCurrentSemester(student)
 
-            checkInitialAndCurrentDate(student, semester)
+            checkInitialAndCurrentDate(semester)
             attendanceRepository.getAttendance(
                 student = student,
                 semester = semester,
@@ -266,15 +287,13 @@ class AttendancePresenter @Inject constructor(
             .launch()
     }
 
-    private suspend fun checkInitialAndCurrentDate(student: Student, semester: Semester) {
+    private suspend fun checkInitialAndCurrentDate(semester: Semester) {
         if (initialDate == null) {
-            val lessons = attendanceRepository.getAttendance(
-                student = student,
+            val lessons = attendanceRepository.getAttendanceFromDatabase(
                 semester = semester,
                 start = now().monday,
                 end = now().sunday,
-                forceRefresh = false,
-            ).toFirstResult().dataOrNull.orEmpty()
+            ).firstOrNull().orEmpty()
             isWeekendHasLessons = isWeekendHasLessons(lessons)
             initialDate = getInitialDate(semester)
         }
@@ -316,6 +335,7 @@ class AttendancePresenter @Inject constructor(
                     showContent(false)
                     showExcuseButton(false)
                 }
+
                 is Resource.Success -> {
                     Timber.i("Excusing for absence result: Success")
                     analytics.logEvent("excuse_absence", "items" to attendanceToExcuseList.size)
@@ -328,6 +348,7 @@ class AttendancePresenter @Inject constructor(
                     }
                     loadData(forceRefresh = true)
                 }
+
                 is Resource.Error -> {
                     Timber.i("Excusing for absence result: An exception occurred")
                     errorHandler.dispatch(it.error)

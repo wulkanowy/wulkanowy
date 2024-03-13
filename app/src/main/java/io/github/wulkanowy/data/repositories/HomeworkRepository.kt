@@ -1,18 +1,16 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.data.WulkanowySdkFactory
 import io.github.wulkanowy.data.db.dao.HomeworkDao
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.data.networkBoundResource
-import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.AutoRefreshHelper
 import io.github.wulkanowy.utils.getRefreshKey
-import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.sunday
-import io.github.wulkanowy.utils.switchSemester
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.sync.Mutex
 import java.time.LocalDate
@@ -22,7 +20,7 @@ import javax.inject.Singleton
 @Singleton
 class HomeworkRepository @Inject constructor(
     private val homeworkDb: HomeworkDao,
-    private val sdk: Sdk,
+    private val wulkanowySdkFactory: WulkanowySdkFactory,
     private val refreshHelper: AutoRefreshHelper,
 ) {
 
@@ -55,20 +53,19 @@ class HomeworkRepository @Inject constructor(
             )
         },
         fetch = {
-            sdk.init(student)
-                .switchSemester(semester)
+            wulkanowySdkFactory.create(student, semester)
                 .getHomework(start.monday, end.sunday)
                 .mapToEntities(semester)
         },
         saveFetchResult = { old, new ->
-            val homeWorkToSave = (new uniqueSubtract old).onEach {
-                if (notify) it.isNotified = false
-            }
             val filteredOld = old.filterNot { it.isAddedByUser }
 
-            homeworkDb.deleteAll(filteredOld uniqueSubtract new)
-            homeworkDb.insertAll(homeWorkToSave)
-
+            homeworkDb.removeOldAndSaveNew(
+                oldItems = filteredOld uniqueSubtract new,
+                newItems = (new uniqueSubtract old).onEach {
+                    if (notify) it.isNotified = false
+                },
+            )
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
         }
     )

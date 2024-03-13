@@ -1,6 +1,7 @@
 package io.github.wulkanowy.data.repositories
 
 import io.github.wulkanowy.TestDispatchersProvider
+import io.github.wulkanowy.createWulkanowySdkFactoryMock
 import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.getSemesterEntity
@@ -12,8 +13,8 @@ import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.SpyK
 import io.mockk.just
+import io.mockk.spyk
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -24,8 +25,8 @@ import java.time.LocalDate.now
 
 class SemesterRepositoryTest {
 
-    @SpyK
-    private var sdk = Sdk()
+    private var sdk = spyk<Sdk>()
+    private val wulkanowySdkFactory = createWulkanowySdkFactoryMock(sdk)
 
     @MockK
     private lateinit var semesterDb: SemesterDao
@@ -38,7 +39,8 @@ class SemesterRepositoryTest {
     fun initTest() {
         MockKAnnotations.init(this)
 
-        semesterRepository = SemesterRepository(semesterDb, sdk, TestDispatchersProvider())
+        semesterRepository =
+            SemesterRepository(semesterDb, wulkanowySdkFactory, TestDispatchersProvider())
     }
 
     @Test
@@ -50,13 +52,16 @@ class SemesterRepositoryTest {
 
         coEvery { semesterDb.loadAll(student.studentId, student.classId) } returns emptyList()
         coEvery { sdk.getSemesters() } returns semesters
-        coEvery { semesterDb.deleteAll(any()) } just Runs
-        coEvery { semesterDb.insertSemesters(any()) } returns emptyList()
+        coEvery { semesterDb.removeOldAndSaveNew(any(), any()) } just Runs
 
         runBlocking { semesterRepository.getSemesters(student) }
 
-        coVerify { semesterDb.insertSemesters(semesters.mapToEntities(student.studentId)) }
-        coVerify { semesterDb.deleteAll(emptyList()) }
+        coVerify {
+            semesterDb.removeOldAndSaveNew(
+                oldItems = emptyList(),
+                newItems = semesters.mapToEntities(student.studentId),
+            )
+        }
     }
 
     @Test
@@ -71,12 +76,17 @@ class SemesterRepositoryTest {
             getSemesterPojo(123, 2, now().minusMonths(3), now())
         )
 
-        coEvery { semesterDb.loadAll(student.studentId, student.classId) } returns badSemesters.mapToEntities(student.studentId)
+        coEvery {
+            semesterDb.loadAll(
+                student.studentId,
+                student.classId
+            )
+        } returns badSemesters.mapToEntities(student.studentId)
         coEvery { sdk.getSemesters() } returns goodSemesters
-        coEvery { semesterDb.deleteAll(any()) } just Runs
-        coEvery { semesterDb.insertSemesters(any()) } returns listOf()
+        coEvery { semesterDb.removeOldAndSaveNew(any(), any()) } just Runs
 
-        val items = runBlocking { semesterRepository.getSemesters(student.copy(loginMode = Sdk.Mode.HEBE.name)) }
+        val items =
+            runBlocking { semesterRepository.getSemesters(student.copy(loginMode = Sdk.Mode.HEBE.name)) }
         assertEquals(2, items.size)
         assertEquals(0, items[0].diaryId)
     }
@@ -99,8 +109,7 @@ class SemesterRepositoryTest {
             goodSemesters.mapToEntities(student.studentId)
         )
         coEvery { sdk.getSemesters() } returns goodSemesters
-        coEvery { semesterDb.deleteAll(any()) } just Runs
-        coEvery { semesterDb.insertSemesters(any()) } returns listOf()
+        coEvery { semesterDb.removeOldAndSaveNew(any(), any()) } just Runs
 
         val items = semesterRepository.getSemesters(
             student = student.copy(loginMode = Sdk.Mode.SCRAPPER.name)
@@ -157,13 +166,16 @@ class SemesterRepositoryTest {
 
         coEvery { semesterDb.loadAll(student.studentId, student.classId) } returns emptyList()
         coEvery { sdk.getSemesters() } returns semesters
-        coEvery { semesterDb.deleteAll(any()) } just Runs
-        coEvery { semesterDb.insertSemesters(any()) } returns listOf()
+        coEvery { semesterDb.removeOldAndSaveNew(any(), any()) } just Runs
 
         runBlocking { semesterRepository.getSemesters(student, refreshOnNoCurrent = true) }
 
-        coVerify { semesterDb.deleteAll(emptyList()) }
-        coVerify { semesterDb.insertSemesters(semesters.mapToEntities(student.studentId)) }
+        coVerify {
+            semesterDb.removeOldAndSaveNew(
+                oldItems = emptyList(),
+                newItems = semesters.mapToEntities(student.studentId),
+            )
+        }
     }
 
     @Test
@@ -181,12 +193,17 @@ class SemesterRepositoryTest {
             getSemesterPojo(2, 2, now().plusMonths(5), now().plusMonths(11)),
         )
 
-        coEvery { semesterDb.loadAll(student.studentId, student.classId) } returns semestersWithNoCurrent
+        coEvery {
+            semesterDb.loadAll(
+                student.studentId,
+                student.classId
+            )
+        } returns semestersWithNoCurrent
         coEvery { sdk.getSemesters() } returns newSemesters
-        coEvery { semesterDb.deleteAll(any()) } just Runs
-        coEvery { semesterDb.insertSemesters(any()) } returns listOf()
+        coEvery { semesterDb.removeOldAndSaveNew(any(), any()) } just Runs
 
-        val items = runBlocking { semesterRepository.getSemesters(student, refreshOnNoCurrent = true) }
+        val items =
+            runBlocking { semesterRepository.getSemesters(student, refreshOnNoCurrent = true) }
         assertEquals(2, items.size)
     }
 

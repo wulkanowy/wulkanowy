@@ -4,7 +4,7 @@
     <string name="login_title">Prihlásenie</string>
     <string name="main_title">Wulkanowy</string>
     <string name="grade_title">Známky</string>
-    <string name="attendance_title">Frekvencia</string>
+    <string name="attendance_title">Dochádzka</string>
     <string name="exam_title">Skúšky</string>
     <string name="timetable_title">Plán lekcie</string>
     <string name="settings_title">Nastavenia</string>
@@ -56,7 +56,7 @@
     <string name="login_invalid_email">Neplatný e-mail</string>
     <string name="login_invalid_login">Namiesto e-mailu použite priradené prihlasovacie údaje</string>
     <string name="login_invalid_custom_email">Použite priradené prihlasovacie alebo e-mail v @%1$s</string>
-    <string name="login_invalid_domain_suffix">Invalid domain suffix</string>
+    <string name="login_invalid_domain_suffix">Neplatná prípona domény</string>
     <string name="login_invalid_symbol">Neplatný symbol. Pokiaľ ho nemôžete nájsť, kontaktujte školu</string>
     <string name="login_invalid_symbol_definitely">Nevymýšľajte si! Pokiaľ symbol nemôžete nájsť, kontaktujte školu</string>
     <string name="login_incorrect_symbol">Žiak nebol nájdený. Skontrolujte správnosť symbolu a vybrané varianty denníka UONET+</string>
@@ -64,7 +64,7 @@
     <string name="login_symbol_helper">Symbol nájdete na stránke denníka v &#160;<b>Uczeń</b>→&#160;<b>Dostęp Mobilny</b> →&#160;<b>Wygeneruj kod dostępu</b>.\n\nUistite sa, že ste nastavili správny variant denníka v poli <b>Variácia denníka UONET+</b> na prvej prihlasovacej obrazovke</string>
     <string name="login_select_student">Vyberte žiakov, ktorí sa majú do aplikácie prihlásiť</string>
     <string name="login_advanced">Iné možnosti</string>
-    <string name="login_advanced_warning_mobile_api">V tomto režime nefungujú nasledovné: šťastné číslo, štatistiky triedy, zhrnutie frekvencií, ospravedlnenie neprítomnosti, dokončené lekcie, informácie o škole a prezeranie zoznamu registrovaných zariadení</string>
+    <string name="login_advanced_warning_mobile_api">V tomto režime nefungujú nasledovné: šťastné číslo, štatistiky triedy, zhrnutie dochádzky, ospravedlnenie neprítomnosti, dokončené lekcie, informácie o škole a prezeranie zoznamu registrovaných zariadení</string>
     <string name="login_advanced_warning_scraper">Tento režim zobrazuje rovnaké dáta, ktoré sa zobrazujú na webových stránkach denníka</string>
     <string name="login_advanced_warning_hybrid">Kombinácia najlepších vlastností ostatných dvoch režimov. Funguje rýchlejšie ako scraper a poskytuje funkcie, ktoré nie sú k dispozícii v režime Mobilne API. Je to v experimentálnej fáze</string>
     <string name="login_privacy_policy">Ochrana osobných údajov</string>
@@ -98,8 +98,8 @@
     <string name="main_log_in">Prihlásiť sa</string>
     <string name="main_session_expired">Relácia vypršala</string>
     <string name="main_session_relogin">Relácia vypršala. Prihláste sa prosím znovu</string>
-    <string name="main_expired_credentials_description">Heslo k vášmu účtu bolo zmenené. Musíte sa znovu prihlásiť do Wulkanového</string>
-    <string name="main_expired_credentials_title">Heslo bolo zmenené</string>
+    <string name="main_expired_credentials_title">Heslo vypršalo alebo bolo zmenené</string>
+    <string name="main_expired_credentials_description">Platnosť hesla k vášmu účtu vypršala alebo bolo zmenené. Budete sa musieť znova prihlásiť do Wulkanového</string>
     <string name="main_support_title">Podpora aplikácie</string>
     <string name="main_support_description">Páči sa Vám táto aplikácia? Podporte jej vývoj tým, že povolíte neinvazívne reklamy, ktoré môžete kedykoľvek vypnúť</string>
     <string name="main_support_positive">Zapnúť reklamy</string>
@@ -264,7 +264,12 @@
     <string name="additional_lessons_end">Čas ukončenia</string>
     <string name="additional_lessons_end_time_error">Čas ukončenia musí byť neskorší ako čas začatia</string>
     <!--Attendance-->
-    <string name="attendance_summary_button">Zhrnutie frekvencií</string>
+    <string name="attendance_summary_button">Zhrnutie dochádzky</string>
+    <string name="attendance_calculator_button">Kalkulačka dochádzky</string>
+    <string name="attendance_calculator_summary_balance_positive"><b>%1$d</b> nad cieľom</string>
+    <string name="attendance_calculator_summary_balance_neutral">presne v cieli</string>
+    <string name="attendance_calculator_summary_balance_negative"><b>%1$d</b> pod cieľom</string>
+    <string name="attendance_calculator_summary_values">%1$d/%2$d prítomnosti</string>
     <string name="attendance_absence_school">Neprítomnosť zo školských dôvodov</string>
     <string name="attendance_absence_excused">Ospravedlnená neprítomnosť</string>
     <string name="attendance_absence_unexcused">Neospravedlnená neprítomnosť</string>
@@ -282,22 +287,22 @@
     <string name="attendance_excuse_no_selection">Musíte vybrať aspoň jednu neprítomnosť!</string>
     <string name="attendance_excuse_title">Ospravedlniť</string>
     <plurals name="attendance_notify_new_items_title">
-        <item quantity="one">Nová frekvencia</item>
-        <item quantity="few">Nové frekvencie</item>
-        <item quantity="many">Nové frekvencie</item>
-        <item quantity="other">Nové frekvencie</item>
+        <item quantity="one">Nová dochádzka</item>
+        <item quantity="few">Nové dochádzky</item>
+        <item quantity="many">Nové dochádzky</item>
+        <item quantity="other">Nové dochádzky</item>
     </plurals>
     <plurals name="attendance_notify_new_items">
-        <item quantity="one">%1$d nová frekvencia</item>
-        <item quantity="few">%1$d nové frekvencie</item>
-        <item quantity="many">%1$d nových frekvencií</item>
-        <item quantity="other">%1$d nových frekvencií</item>
+        <item quantity="one">%1$d nová dochádzka</item>
+        <item quantity="few">%1$d nové dochádzky</item>
+        <item quantity="many">%1$d nových dochádzok</item>
+        <item quantity="other">%1$d nových dochádzok</item>
     </plurals>
     <plurals name="attendance_number_item">
-        <item quantity="one">%d frekvencia</item>
-        <item quantity="few">%d frekvencie</item>
-        <item quantity="many">%d frekvencií</item>
-        <item quantity="other">%d frekvencií</item>
+        <item quantity="one">%d dochádzka</item>
+        <item quantity="few">%d dochádzky</item>
+        <item quantity="many">%d dochádzok</item>
+        <item quantity="other">%d dochádzok</item>
     </plurals>
     <!--Attendance summary-->
     <string name="attendance_summary_total">Spoločne</string>
@@ -336,8 +341,10 @@
     <string name="message_forward">Poslať ďalej</string>
     <string name="message_select_all">Vybrať všetko</string>
     <string name="message_unselect_all">Odznačiť všetko</string>
+    <string name="message_restore_from_trash">Obnoviť z koša</string>
     <string name="message_move_to_trash">Presunúť do koša</string>
     <string name="message_delete_forever">Odstrániť natrvalo</string>
+    <string name="message_restore_success">Správa úspešne obnovená</string>
     <string name="message_delete_success">Správa bola úspešne odstránená</string>
     <string name="message_mailbox_type_student">žiak</string>
     <string name="message_mailbox_type_parent">rodič</string>
@@ -383,6 +390,7 @@
         <item quantity="other">%1$d vybraných</item>
     </plurals>
     <string name="message_messages_deleted">Správy odstránené</string>
+    <string name="message_messages_restored">Obnovené správy</string>
     <string name="message_mailbox_chooser_title">Vyberte poštovú schránku</string>
     <string name="message_incognito_mode_on">Režim inkognito je zapnutý</string>
     <string name="message_incognito_description">Vďaka inkognito režimu nie je odosielateľ upozornený, keď si správu prečítate</string>
@@ -728,6 +736,8 @@
     <string name="pref_view_grade_average_mode">Možnosti vypočítaného priemeru</string>
     <string name="pref_view_grade_average_force_calc">Vynútiť priemerný výpočet podľa aplikácie</string>
     <string name="pref_view_present">Zobraziť prítomnosť</string>
+    <string name="pref_attendance_target">Cieľová dochádzka</string>
+    <string name="pref_view_attendance_calculator_sorting_mode">Triedenie kalkulačky dochádzky</string>
     <string name="pref_view_app_theme">Motív</string>
     <string name="pref_view_expand_grade">Rozvijanie známok</string>
     <string name="pref_view_timetable_show_groups">Zobraziť skupiny vedľa predmetov</string>
@@ -794,7 +804,7 @@
     <string name="pref_grades_appearance_header">Známky</string>
     <string name="pref_dashboard_appearance_header">Domov</string>
     <string name="pref_dashboard_appearance_tiles_title">Viditeľnosť dlaždíc</string>
-    <string name="pref_attendance_appearance_view">Frekvencia</string>
+    <string name="pref_attendance_appearance_view">Dochádzka</string>
     <string name="pref_timetable_appearance_view">Plán lekcie</string>
     <string name="pref_grades_advanced_header">Známky</string>
     <string name="pref_counted_average_advanced_header">Vypočítaný priemer</string>
@@ -822,7 +832,7 @@
     <string name="channel_upcoming_lessons">Nadchádzajúce lekcie</string>
     <string name="channel_debug">Ladenie</string>
     <string name="channel_change_timetable">Zmeny plánu lekcií</string>
-    <string name="channel_new_attendance">Nové frekvencie</string>
+    <string name="channel_new_attendance">Nové dochádzky</string>
     <!--Colors-->
     <string name="all_black">Čierna</string>
     <string name="all_red">Červená</string>
@@ -849,13 +859,16 @@
     <string name="auth_description">Na prevádzku aplikácie potrebujeme potvrdiť vašu identitu. Zadajte PESEL žiaka &lt;b&gt;%1$s&lt;/b&gt; v nižšie uvedenom poli</string>
     <string name="auth_button_skip">Zatiaľ preskočiť</string>
     <!--Captcha-->
-    <string name="captcha_dialog_title">Overovanie prebieha. Počkajte…</string>
+    <string name="captcha_dialog_title">Webová stránka denníka VULCAN vyžaduje overenie</string>
+    <string name="captcha_dialog_description"><b>Prečo sa mi to zobrazuje?</b>\nWebová stránka denníka, z ktorej Wulkanowy sťahuje dáta, zobrazuje rovnakú obrazovku ako vyššie, takže Wulkanowy ju musí tiež zobraziť, aby bolo možné získavať dáta z tejto stránky. Nedá sa to obísť</string>
     <string name="captcha_verified_message">Úspešne overené</string>
     <!--Errors-->
     <string name="error_no_internet">Žiadne internetové pripojenie</string>
     <string name="error_invalid_device_datetime">Vyskytla sa chyba. Skontrolujte hodiny svojho zariadenia</string>
+    <string name="error_account_inactive">Tento účet je neaktívny. Skúste sa znova prihlásiť</string>
     <string name="error_timeout">Nedá sa pripojiť ku denníku. Servery môžu byť preťažené. Prosím skúste to znova neskôr</string>
     <string name="error_login_failed">Načítanie údajov zlyhalo. Skúste neskôr prosím</string>
+    <string name="error_password_invalid">Vaše heslo vypršalo alebo bolo zmenené. Prihláste sa znova</string>
     <string name="error_password_change_required">Je vyžadovaná zmena hesla pre denník</string>
     <string name="error_service_unavailable">Prebieha údržba denníka UONET+. Skúste to neskôr znova</string>
     <string name="error_unknown_uonet">Neznáma chyba dennika UONET+. Prosím skúste to znova neskôr</string>
@@ -865,4 +878,9 @@
     <string name="error_feature_disabled">Funkcia je deaktivovaná cez vašou školou</string>
     <string name="error_feature_not_available">Funkcia nie je k dispozícii. Prihláste sa v inom režime než Mobile API</string>
     <string name="error_field_required">Toto pole je povinné</string>
+    <!-- Mute system -->
+    <string name="message_mute">Stlmiť</string>
+    <string name="message_unmute">Zrušiť stlmenie</string>
+    <string name="message_mute_success">Stlmili ste tohto používateľa</string>
+    <string name="message_unmute_success">Zrušili ste stlmenie tohto používateľa</string>
 </resources>
