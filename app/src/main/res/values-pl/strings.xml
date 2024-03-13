@@ -270,7 +270,7 @@
     <string name="attendance_calculator_summary_balance_neutral">dokładnie u celu</string>
     <string name="attendance_calculator_summary_balance_negative"><b>%1$d</b> poniżej celu</string>
     <string name="attendance_calculator_summary_values">%1$d/%2$d obecności</string>
-    <string name="attendance_calculator_summary_values_empty">No attendances recorded</string>
+    <string name="attendance_calculator_summary_values_empty">Nie odnotowano żadnej frekwencji</string>
     <string name="attendance_absence_school">Nieobecność z przyczyn szkolnych</string>
     <string name="attendance_absence_excused">Nieobecność usprawiedliwiona</string>
     <string name="attendance_absence_unexcused">Nieobecność nieusprawiedliwiona</string>
@@ -738,7 +738,7 @@
     <string name="pref_view_grade_average_force_calc">Wymuś obliczanie średniej przez aplikację</string>
     <string name="pref_view_present">Pokazuj obecność</string>
     <string name="pref_attendance_target">Docelowa obecność</string>
-    <string name="pref_attendance_calculator_show_empty_subjects">Show subjects without any attendances</string>
+    <string name="pref_attendance_calculator_show_empty_subjects">Pokazuj przedmioty bez frekwencji</string>
     <string name="pref_view_attendance_calculator_sorting_mode">Sortowanie kalkulatora obecności</string>
     <string name="pref_view_app_theme">Motyw</string>
     <string name="pref_view_expand_grade">Rozwijanie ocen</string>
