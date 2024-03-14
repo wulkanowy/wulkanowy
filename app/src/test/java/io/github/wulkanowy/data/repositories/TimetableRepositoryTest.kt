@@ -13,6 +13,7 @@ import io.github.wulkanowy.getStudentEntity
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.services.alarm.TimetableNotificationSchedulerHelper
 import io.github.wulkanowy.utils.AutoRefreshHelper
+import io.github.wulkanowy.utils.WidgetUpdater
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -53,6 +54,10 @@ class TimetableRepositoryTest {
     @MockK(relaxUnitFun = true)
     private lateinit var refreshHelper: AutoRefreshHelper
 
+    private val widgetUpdater = mockk<WidgetUpdater>().apply {
+        every { updateAllWidgets(any()) } just Runs
+    }
+
     private val student = getStudentEntity()
 
     private val semester = getSemesterEntity()
@@ -74,7 +79,8 @@ class TimetableRepositoryTest {
             timetableHeaderDao,
             wulkanowySdkFactory,
             timetableNotificationSchedulerHelper,
-            refreshHelper
+            refreshHelper,
+            widgetUpdater
         )
     }
 
