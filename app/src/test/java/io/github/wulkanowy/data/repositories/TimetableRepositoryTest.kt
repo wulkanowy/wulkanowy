@@ -54,7 +54,8 @@ class TimetableRepositoryTest {
     @MockK(relaxUnitFun = true)
     private lateinit var refreshHelper: AutoRefreshHelper
 
-    private val appWidgetUpdater = mockk<AppWidgetUpdater>(relaxed = true)
+    @MockK(relaxed = true)
+    private lateinit var appWidgetUpdater: AppWidgetUpdater
 
     private val student = getStudentEntity()
 

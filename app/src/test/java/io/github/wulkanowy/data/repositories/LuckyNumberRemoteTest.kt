@@ -15,7 +15,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
-import io.mockk.mockk
 import io.mockk.spyk
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
@@ -34,7 +33,8 @@ class LuckyNumberRemoteTest {
     @MockK
     private lateinit var luckyNumberDb: LuckyNumberDao
 
-    private val appWidgetUpdater = mockk<AppWidgetUpdater>(relaxed = true)
+    @MockK(relaxed = true)
+    private lateinit var appWidgetUpdater: AppWidgetUpdater
 
     private val student = getStudentEntity()
 
