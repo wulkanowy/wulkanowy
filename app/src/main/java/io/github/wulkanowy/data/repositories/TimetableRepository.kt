@@ -14,8 +14,8 @@ import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.data.pojos.TimetableFull
 import io.github.wulkanowy.services.alarm.TimetableNotificationSchedulerHelper
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider
+import io.github.wulkanowy.utils.AppWidgetUpdater
 import io.github.wulkanowy.utils.AutoRefreshHelper
-import io.github.wulkanowy.utils.WidgetUpdater
 import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.sunday
@@ -37,7 +37,7 @@ class TimetableRepository @Inject constructor(
     private val wulkanowySdkFactory: WulkanowySdkFactory,
     private val schedulerHelper: TimetableNotificationSchedulerHelper,
     private val refreshHelper: AutoRefreshHelper,
-    private val widgetUpdater: WidgetUpdater,
+    private val appWidgetUpdater: AppWidgetUpdater,
 ) {
 
     private val saveFetchResultMutex = Mutex()
@@ -87,7 +87,7 @@ class TimetableRepository @Inject constructor(
             refreshDayHeaders(timetableOld.headers, timetableNew.headers)
 
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
-            widgetUpdater.updateAllWidgets(TimetableWidgetProvider::class)
+            appWidgetUpdater.updateAllAppWidgetsByProvider(TimetableWidgetProvider::class)
         },
         filterResult = { (timetable, additional, headers) ->
             TimetableFull(
