@@ -29,6 +29,7 @@ class LuckyNumberRepository @Inject constructor(
         student: Student,
         forceRefresh: Boolean,
         notify: Boolean = false,
+        isFromAppWidget: Boolean = false
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
         isResultEmpty = { it == null },
@@ -47,7 +48,9 @@ class LuckyNumberRepository @Inject constructor(
                     oldItems = listOfNotNull(oldLuckyNumber),
                     newItems = listOf(newLuckyNumber.apply { if (notify) isNotified = false }),
                 )
-                appWidgetUpdater.updateAllAppWidgetsByProvider(LuckyNumberWidgetProvider::class)
+                if (!isFromAppWidget) {
+                    appWidgetUpdater.updateAllAppWidgetsByProvider(LuckyNumberWidgetProvider::class)
+                }
             }
         }
     )

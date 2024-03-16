@@ -56,7 +56,8 @@ class TimetableRepository @Inject constructor(
         forceRefresh: Boolean,
         refreshAdditional: Boolean = false,
         notify: Boolean = false,
-        timetableType: TimetableType = TimetableType.NORMAL
+        timetableType: TimetableType = TimetableType.NORMAL,
+        isFromAppWidget: Boolean = false
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
         isResultEmpty = {
@@ -87,7 +88,9 @@ class TimetableRepository @Inject constructor(
             refreshDayHeaders(timetableOld.headers, timetableNew.headers)
 
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
-            appWidgetUpdater.updateAllAppWidgetsByProvider(TimetableWidgetProvider::class)
+            if (!isFromAppWidget) {
+                appWidgetUpdater.updateAllAppWidgetsByProvider(TimetableWidgetProvider::class)
+            }
         },
         filterResult = { (timetable, additional, headers) ->
             TimetableFull(
