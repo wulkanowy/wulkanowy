@@ -243,12 +243,12 @@ class TimetableWidgetProvider : BroadcastReceiver() {
     }
 
     private suspend fun getStudent(studentId: Long, appWidgetId: Int) = try {
-        val students = studentRepository.getSavedStudents(false)
+        val students = studentRepository.getSavedStudents()
         val student = students.singleOrNull { it.student.id == studentId }?.student
         when {
             student != null -> student
             studentId != 0L && studentRepository.isCurrentStudentSet() -> {
-                studentRepository.getCurrentStudent(false).also {
+                studentRepository.getCurrentStudent().also {
                     sharedPref.putLong(getStudentWidgetKey(appWidgetId), it.id)
                 }
             }

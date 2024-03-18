@@ -13,7 +13,6 @@ import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
 import io.github.wulkanowy.data.mappers.mapToPojo
 import io.github.wulkanowy.data.pojos.RegisterUser
-import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.DispatchersProvider
 import io.github.wulkanowy.utils.security.Scrambler
 import kotlinx.coroutines.withContext
@@ -28,6 +27,7 @@ class StudentRepository @Inject constructor(
     private val wulkanowySdkFactory: WulkanowySdkFactory,
     private val appDatabase: AppDatabase,
     private val scrambler: Scrambler,
+    private val passwordRepository: PasswordRepository
 ) {
 
     suspend fun isCurrentStudentSet() = studentDb.loadCurrent()?.isCurrent ?: false
@@ -59,68 +59,34 @@ class StudentRepository @Inject constructor(
         .getStudentsHybrid(email, password, scrapperBaseUrl, "", symbol)
         .mapToPojo(password)
 
-    suspend fun getSavedStudents(decryptPass: Boolean = true): List<StudentWithSemesters> {
+    suspend fun getSavedStudents(): List<StudentWithSemesters> {
         return studentDb.loadStudentsWithSemesters().map { (student, semesters) ->
-            StudentWithSemesters(
-                student = student.apply {
-                    if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HEBE) {
-                        student.password = withContext(dispatchers.io) {
-                            scrambler.decrypt(student.password)
-                        }
-                    }
-                },
-                semesters = semesters,
-            )
+            StudentWithSemesters(student, semesters)
         }
     }
 
-    suspend fun getSavedStudentById(id: Long, decryptPass: Boolean = true): StudentWithSemesters? =
+    suspend fun getSavedStudentById(id: Long): StudentWithSemesters? =
         studentDb.loadStudentWithSemestersById(id).let { res ->
             StudentWithSemesters(
                 student = res.keys.firstOrNull() ?: return null,
                 semesters = res.values.first(),
             )
-        }.apply {
-            if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HEBE) {
-                student.password = withContext(dispatchers.io) {
-                    scrambler.decrypt(student.password)
-                }
-            }
         }
 
-    suspend fun getStudentById(id: Long, decryptPass: Boolean = true): Student {
-        val student = studentDb.loadById(id) ?: throw NoCurrentStudentException()
-
-        if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HEBE) {
-            student.password = withContext(dispatchers.io) {
-                scrambler.decrypt(student.password)
-            }
-        }
-        return student
+    suspend fun getStudentById(id: Long): Student {
+        return studentDb.loadById(id) ?: throw NoCurrentStudentException()
     }
 
-    suspend fun getCurrentStudent(decryptPass: Boolean = true): Student {
-        val student = studentDb.loadCurrent() ?: throw NoCurrentStudentException()
-
-        if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HEBE) {
-            student.password = withContext(dispatchers.io) {
-                scrambler.decrypt(student.password)
-            }
-        }
-        return student
+    suspend fun getCurrentStudent(): Student {
+        return studentDb.loadCurrent() ?: throw NoCurrentStudentException()
     }
 
     suspend fun saveStudents(studentsWithSemesters: List<StudentWithSemesters>) {
         val semesters = studentsWithSemesters.flatMap { it.semesters }
         val students = studentsWithSemesters.map { it.student }
             .map {
-                it.apply {
-                    if (Sdk.Mode.valueOf(it.loginMode) != Sdk.Mode.HEBE) {
-                        password = withContext(dispatchers.io) {
-                            scrambler.encrypt(password)
-                        }
-                    }
-                }
+                passwordRepository.savePassword(it)
+                it.apply { password = "" }
             }
             .mapIndexed { index, student ->
                 if (index == 0) {
@@ -144,7 +110,7 @@ class StudentRepository @Inject constructor(
     suspend fun updateStudentNickAndAvatar(studentNickAndAvatar: StudentNickAndAvatar) =
         studentDb.update(studentNickAndAvatar)
 
-    suspend fun isOneUniqueStudent() = getSavedStudents(false)
+    suspend fun isOneUniqueStudent() = getSavedStudents()
         .distinctBy { it.student.studentName }.size == 1
 
     suspend fun authorizePermission(student: Student, semester: Semester, pesel: String) =

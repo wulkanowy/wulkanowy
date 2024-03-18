@@ -60,7 +60,6 @@ class GradeAverageProviderTest {
         privateKey = "",
         isParent = false,
         email = "",
-        password = "",
         symbol = "",
         studentId = 101,
         userLoginId = 0,
@@ -72,7 +71,8 @@ class GradeAverageProviderTest {
         className = "",
         classId = 1,
         isCurrent = true,
-        registrationDate = Instant.now()
+        registrationDate = Instant.now(),
+        password = ""
     )
 
     private val semesters = mutableListOf(

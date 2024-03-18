@@ -196,7 +196,7 @@ class MessagePreviewPresenter @Inject constructor(
         Timber.i("Restore message ${message.messageGlobalKey}")
         presenterScope.launch {
             runCatching {
-                val student = studentRepository.getCurrentStudent(decryptPass = true)
+                val student = studentRepository.getCurrentStudent()
                 val mailbox = messageRepository.getMailboxByStudent(student)
                 messageRepository.restoreMessages(student, mailbox, listOfNotNull(message))
             }
@@ -232,7 +232,7 @@ class MessagePreviewPresenter @Inject constructor(
 
         presenterScope.launch {
             runCatching {
-                val student = studentRepository.getCurrentStudent(decryptPass = true)
+                val student = studentRepository.getCurrentStudent()
                 messageRepository.deleteMessage(student, messageWithAttachments?.message!!)
             }.onFailure {
                 retryCallback = { onMessageDelete() }

@@ -136,7 +136,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
             val currentStudent = when {
                 student != null -> student
                 studentId != 0L && studentRepository.isCurrentStudentSet() -> {
-                    studentRepository.getCurrentStudent(false).also {
+                    studentRepository.getCurrentStudent().also {
                         sharedPref.putLong(getStudentWidgetKey(appWidgetId), it.id)
                     }
                 }

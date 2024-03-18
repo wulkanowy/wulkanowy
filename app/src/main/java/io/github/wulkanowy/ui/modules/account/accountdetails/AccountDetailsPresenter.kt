@@ -105,7 +105,7 @@ class AccountDetailsPresenter @Inject constructor(
             val studentToLogout = studentWithSemesters!!.student
 
             studentRepository.logoutStudent(studentToLogout)
-            val students = studentRepository.getSavedStudents(false)
+            val students = studentRepository.getSavedStudents()
 
             if (studentToLogout.isCurrent && students.isNotEmpty()) {
                 studentRepository.switchStudent(students[0])

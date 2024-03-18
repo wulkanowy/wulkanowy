@@ -8,7 +8,11 @@ import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
-import io.github.wulkanowy.databinding.*
+import io.github.wulkanowy.databinding.ItemLoginStudentSelectEmptySymbolHeaderBinding
+import io.github.wulkanowy.databinding.ItemLoginStudentSelectHeaderSchoolBinding
+import io.github.wulkanowy.databinding.ItemLoginStudentSelectHeaderSymbolBinding
+import io.github.wulkanowy.databinding.ItemLoginStudentSelectHelpBinding
+import io.github.wulkanowy.databinding.ItemLoginStudentSelectStudentBinding
 import javax.inject.Inject
 
 @SuppressLint("SetTextI18n")
@@ -19,7 +23,7 @@ class LoginStudentSelectAdapter @Inject constructor() :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return when (LoginStudentSelectItemType.values()[viewType]) {
+        return when (LoginStudentSelectItemType.entries[viewType]) {
             LoginStudentSelectItemType.EMPTY_SYMBOLS_HEADER -> EmptySymbolsHeaderViewHolder(
                 ItemLoginStudentSelectEmptySymbolHeaderBinding.inflate(inflater, parent, false),
             )

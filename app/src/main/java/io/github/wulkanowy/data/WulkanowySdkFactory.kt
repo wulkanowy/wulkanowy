@@ -3,6 +3,7 @@ package io.github.wulkanowy.data
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.repositories.PasswordRepository
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.RemoteConfigHelper
 import io.github.wulkanowy.utils.WebkitCookieManagerProxy
@@ -14,7 +15,8 @@ import javax.inject.Singleton
 class WulkanowySdkFactory @Inject constructor(
     private val chuckerInterceptor: ChuckerInterceptor,
     private val remoteConfig: RemoteConfigHelper,
-    private val webkitCookieManagerProxy: WebkitCookieManagerProxy
+    private val webkitCookieManagerProxy: WebkitCookieManagerProxy,
+    private val passwordRepository: PasswordRepository,
 ) {
 
     private val sdk = Sdk().apply {
@@ -33,7 +35,7 @@ class WulkanowySdkFactory @Inject constructor(
     fun create(student: Student, semester: Semester? = null): Sdk {
         return create().apply {
             email = student.email
-            password = student.password
+            password = passwordRepository.getPassword(student)
             symbol = student.symbol
             schoolSymbol = student.schoolSymbol
             studentId = student.studentId

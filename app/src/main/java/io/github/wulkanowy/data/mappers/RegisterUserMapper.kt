@@ -81,9 +81,9 @@ fun RegisterStudent.mapToStudentWithSemesters(
         mobileBaseUrl = symbol.hebeBaseUrl.orEmpty(),
         certificateKey = symbol.keyId.orEmpty(),
         privateKey = symbol.privatePem.orEmpty(),
-        password = user.password.orEmpty(),
         isCurrent = false,
         registrationDate = Instant.now(),
+        password = user.password.orEmpty(),
     ).apply {
         avatarColor = colors.random()
     },

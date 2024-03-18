@@ -38,7 +38,7 @@ class SchoolsRepository @Inject constructor(
     private suspend fun logLogin(loginData: LoginData, student: Student, semester: Semester) {
         val requestId = UUID.randomUUID().toString()
         val token = integrityHelper.getIntegrityToken(requestId) ?: return
-        val updatedStudent = student.copy(password = loginData.password)
+        val updatedStudent = student.apply { password = loginData.password }
 
         val schoolInfo = wulkanowySdkFactory.create(updatedStudent, semester)
             .getSchool()

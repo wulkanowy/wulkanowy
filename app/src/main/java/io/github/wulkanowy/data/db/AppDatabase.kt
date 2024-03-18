@@ -309,6 +309,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val adminMessagesDao: AdminMessageDao
 
     abstract val mutedMessageSendersDao: MutedMessageSendersDao
-  
+
     abstract val gradeDescriptiveDao: GradeDescriptiveDao
 }

@@ -42,6 +42,7 @@ data class Student(
 
     val email: String,
 
+    @Deprecated("Use PasswordRepository.getPassword instead")
     var password: String,
 
     val symbol: String,

@@ -26,7 +26,7 @@ class AuthPresenter @Inject constructor(
 
     private fun loadName() {
         presenterScope.launch {
-            runCatching { studentRepository.getCurrentStudent(false) }
+            runCatching { studentRepository.getCurrentStudent() }
                 .onSuccess { view?.showDescriptionWithName(it.studentName) }
                 .onFailure { errorHandler.dispatch(it) }
         }

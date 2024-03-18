@@ -84,7 +84,7 @@ class MainPresenter @Inject constructor(
             return
         }
 
-        resourceFlow { studentRepository.getSavedStudents(false) }
+        resourceFlow { studentRepository.getSavedStudents() }
             .logResourceStatus("load student avatar")
             .onResourceSuccess {
                 studentsWitSemesters = it
@@ -173,7 +173,7 @@ class MainPresenter @Inject constructor(
             && appInfo.buildFlavor == "play"
         ) {
             presenterScope.launch {
-                val student = runCatching { studentRepository.getCurrentStudent(false) }
+                val student = runCatching { studentRepository.getCurrentStudent() }
                     .onFailure { Timber.e(it) }
                     .getOrElse { return@launch }
 

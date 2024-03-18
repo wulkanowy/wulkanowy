@@ -32,6 +32,7 @@ import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.flow.firstOrNull
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.time.DayOfWeek

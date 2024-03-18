@@ -44,7 +44,7 @@ class NotificationsCenterPresenter @Inject constructor(
         Timber.i("Loading notifications data started")
 
         flow {
-            val studentId = studentRepository.getCurrentStudent(false).id
+            val studentId = studentRepository.getCurrentStudent().id
             emitAll(notificationRepository.getNotifications(studentId))
         }
             .map { notificationList -> notificationList.sortedByDescending { it.date } }

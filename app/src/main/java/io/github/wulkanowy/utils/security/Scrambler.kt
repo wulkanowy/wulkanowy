@@ -5,38 +5,21 @@ package io.github.wulkanowy.utils.security
 import android.content.Context
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.M
-import android.security.KeyPairGeneratorSpec
-import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyProperties.DIGEST_SHA256
-import android.security.keystore.KeyProperties.DIGEST_SHA512
-import android.security.keystore.KeyProperties.ENCRYPTION_PADDING_RSA_OAEP
-import android.security.keystore.KeyProperties.PURPOSE_DECRYPT
-import android.security.keystore.KeyProperties.PURPOSE_ENCRYPT
 import android.util.Base64.DEFAULT
 import android.util.Base64.decode
-import android.util.Base64.encode
-import android.util.Base64.encodeToString
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.math.BigInteger
 import java.nio.charset.Charset
-import java.security.KeyPairGenerator
 import java.security.KeyStore
 import java.security.spec.MGF1ParameterSpec.SHA1
-import java.util.Calendar
-import java.util.Calendar.YEAR
 import javax.crypto.Cipher
 import javax.crypto.Cipher.DECRYPT_MODE
-import javax.crypto.Cipher.ENCRYPT_MODE
 import javax.crypto.CipherInputStream
-import javax.crypto.CipherOutputStream
 import javax.crypto.spec.OAEPParameterSpec
 import javax.crypto.spec.PSource.PSpecified
 import javax.inject.Inject
 import javax.inject.Singleton
-import javax.security.auth.x500.X500Principal
 
 @Singleton
 class Scrambler @Inject constructor(
@@ -58,33 +41,6 @@ class Scrambler @Inject constructor(
             )
             else Cipher.getInstance("RSA/ECB/PKCS1Padding", "AndroidOpenSSL")
         }
-
-    fun encrypt(plainText: String): String {
-        if (plainText.isEmpty()) throw ScramblerException("Text to be encrypted is empty")
-
-        return try {
-            if (!isKeyPairExists) generateKeyPair()
-
-            cipher.let {
-                if (SDK_INT >= M) {
-                    OAEPParameterSpec("SHA-256", "MGF1", SHA1, PSpecified.DEFAULT).let { spec ->
-                        it.init(ENCRYPT_MODE, keyStore.getCertificate(KEY_ALIAS).publicKey, spec)
-                    }
-                } else it.init(ENCRYPT_MODE, keyStore.getCertificate(KEY_ALIAS).publicKey)
-
-                ByteArrayOutputStream().let { output ->
-                    CipherOutputStream(output, it).apply {
-                        write(plainText.toByteArray(keyCharset))
-                        close()
-                    }
-                    encodeToString(output.toByteArray(), DEFAULT)
-                }
-            }
-        } catch (exception: Exception) {
-            Timber.e(exception, "An error occurred while encrypting text")
-            String(encode(plainText.toByteArray(keyCharset), DEFAULT), keyCharset)
-        }
-    }
 
     fun decrypt(cipherText: String): String {
         if (cipherText.isEmpty()) throw ScramblerException("Text to be encrypted is empty")
@@ -120,38 +76,13 @@ class Scrambler @Inject constructor(
         }
     }
 
-    private fun generateKeyPair() {
-        (if (SDK_INT >= M) {
-            KeyGenParameterSpec.Builder(KEY_ALIAS, PURPOSE_DECRYPT or PURPOSE_ENCRYPT)
-                .setDigests(DIGEST_SHA256, DIGEST_SHA512)
-                .setEncryptionPaddings(ENCRYPTION_PADDING_RSA_OAEP)
-                .setCertificateSerialNumber(BigInteger.TEN)
-                .setCertificateSubject(X500Principal("CN=Wulkanowy"))
-                .build()
-        } else {
-            KeyPairGeneratorSpec.Builder(context)
-                .setAlias(KEY_ALIAS)
-                .setSubject(X500Principal("CN=Wulkanowy"))
-                .setSerialNumber(BigInteger.TEN)
-                .setStartDate(Calendar.getInstance().time)
-                .setEndDate(Calendar.getInstance().apply { add(YEAR, 99) }.time)
-                .build()
-        }).let {
-            KeyPairGenerator.getInstance("RSA", KEYSTORE_NAME).apply {
-                initialize(it)
-                genKeyPair()
-            }
-        }
-        Timber.i("A new KeyPair has been generated")
-    }
-
     fun clearKeyPair() {
         keyStore.deleteEntry(KEY_ALIAS)
         Timber.i("KeyPair has been cleared")
     }
 
-    private companion object {
-        private const val KEYSTORE_NAME = "AndroidKeyStore"
-        private const val KEY_ALIAS = "wulkanowy_password"
+    companion object {
+        const val KEYSTORE_NAME = "AndroidKeyStore"
+        const val KEY_ALIAS = "wulkanowy_password"
     }
 }

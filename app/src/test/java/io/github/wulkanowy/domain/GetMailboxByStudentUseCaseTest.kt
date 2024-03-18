@@ -211,7 +211,6 @@ class GetMailboxByStudentUseCaseTest {
         loginMode = Sdk.Mode.HEBE.name,
         loginType = Sdk.ScrapperLoginType.STANDARD.name,
         mobileBaseUrl = "",
-        password = "",
         privateKey = "",
         registrationDate = Instant.now(),
         schoolName = "",
@@ -222,5 +221,6 @@ class GetMailboxByStudentUseCaseTest {
         symbol = "",
         userLoginId = 1,
         userName = userName,
+        password = ""
     )
 }

@@ -1,13 +1,21 @@
 package io.github.wulkanowy.ui.modules.message.tab
 
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.*
+import io.github.wulkanowy.data.dataOrNull
 import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageWithMutedAuthor
 import io.github.wulkanowy.data.enums.MessageFolder
+import io.github.wulkanowy.data.flatResourceFlow
+import io.github.wulkanowy.data.logResourceStatus
+import io.github.wulkanowy.data.onResourceData
+import io.github.wulkanowy.data.onResourceError
+import io.github.wulkanowy.data.onResourceIntermediate
+import io.github.wulkanowy.data.onResourceNotLoading
+import io.github.wulkanowy.data.onResourceSuccess
 import io.github.wulkanowy.data.repositories.MessageRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.data.toFirstResult
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
@@ -132,7 +140,7 @@ class MessageTabPresenter @Inject constructor(
                 showActionMode(false)
             }
             runCatching {
-                val student = studentRepository.getCurrentStudent(true)
+                val student = studentRepository.getCurrentStudent()
                 messageRepository.restoreMessages(student, selectedMailbox, messageList)
             }
                 .onFailure(errorHandler::dispatch)
@@ -152,7 +160,7 @@ class MessageTabPresenter @Inject constructor(
             }
 
             runCatching {
-                val student = studentRepository.getCurrentStudent(true)
+                val student = studentRepository.getCurrentStudent()
                 messageRepository.deleteMessages(student, messageList)
             }
                 .onFailure(errorHandler::dispatch)

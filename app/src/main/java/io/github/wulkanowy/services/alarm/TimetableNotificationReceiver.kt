@@ -60,7 +60,7 @@ class TimetableNotificationReceiver : BroadcastReceiver() {
 
         resourceFlow {
             val showStudentName = !studentRepository.isOneUniqueStudent()
-            val student = studentRepository.getCurrentStudent(false)
+            val student = studentRepository.getCurrentStudent()
             val studentId = intent.getIntExtra(STUDENT_ID, 0)
 
             if (student.studentId == studentId) {

@@ -35,7 +35,7 @@ class LuckyNumberWidgetConfigurePresenter @Inject constructor(
     }
 
     private fun loadData() {
-        resourceFlow { studentRepository.getSavedStudents(false) }.onEach {
+        resourceFlow { studentRepository.getSavedStudents() }.onEach {
             when (it) {
                 is Resource.Loading -> Timber.d("Lucky number widget configure students data load")
                 is Resource.Success -> {

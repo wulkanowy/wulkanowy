@@ -191,7 +191,7 @@ class DashboardPresenter @Inject constructor(
     ) {
         presenterScope.launch {
             Timber.i("Loading dashboard account data started")
-            val student = runCatching { studentRepository.getCurrentStudent(true) }
+            val student = runCatching { studentRepository.getCurrentStudent() }
                 .onFailure {
                     Timber.i("Loading dashboard account result: An exception occurred")
                     errorHandler.dispatch(it)
