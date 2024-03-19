@@ -14,6 +14,7 @@ import io.github.wulkanowy.data.mappers.mapToPojo
 import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.DispatchersProvider
+import io.github.wulkanowy.utils.getCurrentOrLast
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.security.Scrambler
 import io.github.wulkanowy.utils.switchSemester
@@ -100,6 +101,22 @@ class StudentRepository @Inject constructor(
         return student
     }
 
+    suspend fun checkCurrentStudentAuthorizationStatus() {
+        val student = getCurrentStudent()
+
+        if (student.isAuthorized) {
+            val currentSemester =
+                semesterDb.loadAll(student.studentId, student.classId).getCurrentOrLast()
+            val initializedSdk = sdk.init(student).switchSemester(currentSemester)
+            val isAuthorized = initializedSdk.getCurrentStudent()?.isAuthorized ?: false
+
+            if (isAuthorized) {
+                val updatedStudent = student.copy(isAuthorized = true)
+                studentDb.update(updatedStudent)
+            } else throw NoAuthorizationException()
+        }
+    }
+
     suspend fun getCurrentStudent(decryptPass: Boolean = true): Student {
         val student = studentDb.loadCurrent() ?: throw NoCurrentStudentException()
 
@@ -176,3 +193,6 @@ class StudentRepository @Inject constructor(
         }
     }
 }
+
+class NoAuthorizationException : Exception()
+

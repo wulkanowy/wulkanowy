@@ -23,6 +23,9 @@ abstract class StudentDao {
     @Delete
     abstract suspend fun delete(student: Student)
 
+    @Update
+    abstract suspend fun update(student: Student)
+
     @Update(entity = Student::class)
     abstract suspend fun update(studentNickAndAvatar: StudentNickAndAvatar)
 
