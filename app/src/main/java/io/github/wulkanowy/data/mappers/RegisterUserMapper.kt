@@ -44,7 +44,7 @@ fun SdkRegisterUser.mapToPojo(password: String?) = RegisterUser(
                                 classId = registerStudent.classId,
                                 isParent = registerStudent.isParent,
                                 isAuthorized = registerStudent.isAuthorized,
-                                isEduOne = false,
+                                isEduOne = registerStudent.isEduOne,
                                 semesters = registerStudent.semesters
                                     .mapToEntities(registerStudent.studentId),
                             )
