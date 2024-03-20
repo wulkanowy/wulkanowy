@@ -104,9 +104,11 @@ class StudentRepository @Inject constructor(
     suspend fun checkCurrentStudentAuthorizationStatus() {
         val student = getCurrentStudent()
 
-        if (student.isAuthorized) {
-            val currentSemester =
-                semesterDb.loadAll(student.studentId, student.classId).getCurrentOrLast()
+        if (!student.isAuthorized) {
+            val currentSemester = semesterDb.loadAll(
+                studentId = student.studentId,
+                classId = student.classId,
+            ).getCurrentOrLast()
             val initializedSdk = sdk.init(student).switchSemester(currentSemester)
             val isAuthorized = initializedSdk.getCurrentStudent()?.isAuthorized ?: false
 
