@@ -6,6 +6,7 @@ import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.db.entities.StudentIsAuthorized
 import io.github.wulkanowy.data.db.entities.StudentName
 import io.github.wulkanowy.data.db.entities.StudentNickAndAvatar
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
@@ -113,8 +114,9 @@ class StudentRepository @Inject constructor(
             val isAuthorized = initializedSdk.getCurrentStudent()?.isAuthorized ?: false
 
             if (isAuthorized) {
-                val updatedStudent = student.copy(isAuthorized = true)
-                studentDb.update(updatedStudent)
+                studentDb.update(StudentIsAuthorized(isAuthorized = true).apply {
+                    id = student.id
+                })
             } else throw NoAuthorizationException()
         }
     }
