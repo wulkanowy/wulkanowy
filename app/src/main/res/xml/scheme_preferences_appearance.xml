@@ -138,5 +138,12 @@
             app:key="@string/pref_key_timetable_show_gaps"
             app:title="@string/pref_view_timetable_show_gaps"
             app:useSimpleSummaryProvider="true" />
+        <ListPreference
+            app:defaultValue="@string/pref_default_timetable_show_additional_lessons"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_key_timetable_show_additional_lessons"
+            app:title="@string/pref_view_timetable_show_additional_lessons"
+            app:entries="@array/timetable_show_additional_lessons_entries"
+            app:entryValues="@array/timetable_show_additional_lessons_values" />
     </PreferenceCategory>
 </PreferenceScreen>

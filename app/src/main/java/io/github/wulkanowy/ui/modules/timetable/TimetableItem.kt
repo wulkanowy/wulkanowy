@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.timetable
 
 import io.github.wulkanowy.data.db.entities.Timetable
+import io.github.wulkanowy.data.db.entities.TimetableAdditional
 import java.time.Duration
 
 sealed class TimetableItem(val type: TimetableItemType) {
@@ -21,6 +22,10 @@ sealed class TimetableItem(val type: TimetableItemType) {
         val numFrom: Int,
         val numTo: Int
     ) : TimetableItem(TimetableItemType.EMPTY)
+
+    data class Additional(
+        val additional: TimetableAdditional,
+    ) : TimetableItem(TimetableItemType.ADDITIONAL)
 }
 
 data class TimeLeft(
@@ -32,5 +37,6 @@ data class TimeLeft(
 enum class TimetableItemType {
     SMALL,
     NORMAL,
-    EMPTY
+    EMPTY,
+    ADDITIONAL,
 }

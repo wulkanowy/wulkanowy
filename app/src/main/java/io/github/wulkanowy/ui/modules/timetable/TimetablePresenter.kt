@@ -4,6 +4,9 @@ import android.os.Handler
 import android.os.Looper
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Timetable
+import io.github.wulkanowy.data.db.entities.TimetableAdditional
+import io.github.wulkanowy.data.enums.ShowAdditionalLessonsMode.BELOW
+import io.github.wulkanowy.data.enums.ShowAdditionalLessonsMode.NONE
 import io.github.wulkanowy.data.enums.TimetableGapsMode.BETWEEN_AND_BEFORE_LESSONS
 import io.github.wulkanowy.data.enums.TimetableGapsMode.NO_GAPS
 import io.github.wulkanowy.data.enums.TimetableMode
@@ -14,6 +17,7 @@ import io.github.wulkanowy.data.onResourceError
 import io.github.wulkanowy.data.onResourceIntermediate
 import io.github.wulkanowy.data.onResourceNotLoading
 import io.github.wulkanowy.data.onResourceSuccess
+import io.github.wulkanowy.data.pojos.TimetableFull
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
@@ -167,9 +171,9 @@ class TimetablePresenter @Inject constructor(
                     enableSwipe(true)
                     showProgress(false)
                     showErrorView(false)
-                    showContent(it.lessons.isNotEmpty())
-                    showEmpty(it.lessons.isEmpty())
-                    updateData(it.lessons)
+                    showContent(it.lessons.isNotEmpty() || it.additional.isNotEmpty())
+                    showEmpty(it.lessons.isEmpty() && it.additional.isEmpty())
+                    updateData(it)
                     setDayHeaderMessage(it.headers.find { header -> header.date == currentDate }?.content)
                     reloadNavigation()
                 }
@@ -214,7 +218,7 @@ class TimetablePresenter @Inject constructor(
         }
     }
 
-    private fun updateData(lessons: List<Timetable>) {
+    private fun updateData(lessons: TimetableFull) {
         tickTimer?.cancel()
 
         if (currentDate != now()) {
@@ -228,52 +232,82 @@ class TimetablePresenter @Inject constructor(
         }
     }
 
-    private fun createItems(items: List<Timetable>): List<TimetableItem> {
-        val filteredItems = items
-            .filter {
+    private sealed class Item(
+        val isStudentPlan: Boolean,
+        val start: Instant,
+        val number: Int?,
+    ) {
+        class Lesson(val lesson: Timetable) :
+            Item(lesson.isStudentPlan, lesson.start, lesson.number)
+
+        class Additional(val additional: TimetableAdditional) : Item(true, additional.start, null)
+    }
+
+    private fun createItems(fullTimetable: TimetableFull): List<TimetableItem> {
+        val showAdditionalLessonsInPlan = prefRepository.showAdditionalLessonsInPlan
+        val allItems =
+            fullTimetable.lessons.map(Item::Lesson) + fullTimetable.additional.map(Item::Additional)
+                .takeIf { showAdditionalLessonsInPlan != NONE }.orEmpty()
+
+        val filteredItems = allItems.filter {
                 if (prefRepository.showWholeClassPlan == TimetableMode.ONLY_CURRENT_GROUP) {
                     it.isStudentPlan
                 } else true
-            }.sortedWith(
-                compareBy({ item -> item.number }, { item -> !item.isStudentPlan })
-            )
+        }.sortedWith(
+            (compareBy<Item> { it is Item.Additional }
+                .takeIf { showAdditionalLessonsInPlan == BELOW } ?: EmptyComparator())
+                .thenBy { it.start }
+                .thenBy { !it.isStudentPlan }
+        )
 
         var prevNum = when (prefRepository.showTimetableGaps) {
             BETWEEN_AND_BEFORE_LESSONS -> 0
             else -> null
         }
+        var prevIsAdditional = false
         return buildList {
             filteredItems.forEachIndexed { i, it ->
-                if (prefRepository.showTimetableGaps != NO_GAPS && prevNum != null && it.number > prevNum!! + 1) {
-                    val emptyLesson = TimetableItem.Empty(
-                        numFrom = prevNum!! + 1,
-                        numTo = it.number - 1
-                    )
-                    add(emptyLesson)
+                if (prefRepository.showTimetableGaps != NO_GAPS) {
+                    if (prevNum != null && it.number != null && it.number > prevNum!! + 1) {
+                        if (!prevIsAdditional) {
+                            // Additional lessons do count as a lesson so don't add empty lessons
+                            // when there is an additional lesson present
+                            val emptyLesson = TimetableItem.Empty(
+                                numFrom = prevNum!! + 1, numTo = it.number - 1
+                            )
+                            add(emptyLesson)
+                        }
+                    }
+                    prevNum = it.number
+                    prevIsAdditional = it is Item.Additional
                 }
 
-                if (it.isStudentPlan) {
-                    val normalLesson = TimetableItem.Normal(
-                        lesson = it,
-                        showGroupsInPlan = prefRepository.showGroupsInPlan,
-                        timeLeft = filteredItems.getTimeLeftForLesson(it, i),
-                        onClick = ::onTimetableItemSelected
-                    )
-                    add(normalLesson)
-                } else {
-                    val smallLesson = TimetableItem.Small(
-                        lesson = it,
-                        onClick = ::onTimetableItemSelected
-                    )
-                    add(smallLesson)
+                if (it is Item.Lesson) {
+                    if (it.isStudentPlan) {
+                        val normalLesson = TimetableItem.Normal(
+                            lesson = it.lesson,
+                            showGroupsInPlan = prefRepository.showGroupsInPlan,
+                            timeLeft = filteredItems.getTimeLeftForLesson(it.lesson, i),
+                            onClick = ::onTimetableItemSelected
+                        )
+                        add(normalLesson)
+                    } else {
+                        val smallLesson = TimetableItem.Small(
+                            lesson = it.lesson,
+                            onClick = ::onTimetableItemSelected
+                        )
+                        add(smallLesson)
+                    }
+                } else if (it is Item.Additional) {
+                    // If the user disabled showing additional lessons, they would've been filtered
+                    // out already, so there's no need to check it again.
+                    add(TimetableItem.Additional(it.additional))
                 }
-
-                prevNum = it.number
             }
         }
     }
 
-    private fun List<Timetable>.getTimeLeftForLesson(lesson: Timetable, index: Int): TimeLeft {
+    private fun List<Item>.getTimeLeftForLesson(lesson: Timetable, index: Int): TimeLeft {
         val isShowTimeUntil = lesson.isShowTimeUntil(getPreviousLesson(index))
         return TimeLeft(
             until = lesson.until.plusMinutes(1).takeIf { isShowTimeUntil },
@@ -282,8 +316,8 @@ class TimetablePresenter @Inject constructor(
         )
     }
 
-    private fun List<Timetable>.getPreviousLesson(position: Int): Instant? {
-        return filter { it.isStudentPlan }
+    private fun List<Item>.getPreviousLesson(position: Int): Instant? {
+        return mapNotNull { (it as? Item.Lesson)?.lesson.takeIf { it?.isStudentPlan == true } }
             .getOrNull(position - 1 - filterIndexed { i, item -> i < position && !item.isStudentPlan }.size)
             ?.let {
                 if (!it.canceled && it.isStudentPlan) it.end
@@ -338,4 +372,8 @@ class TimetablePresenter @Inject constructor(
         tickTimer = null
         super.onDetachView()
     }
+}
+
+private class EmptyComparator<T> : Comparator<T> {
+    override fun compare(o1: T, o2: T) = 0
 }
