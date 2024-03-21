@@ -1,12 +1,17 @@
 package io.github.wulkanowy.data
 
 import com.chuckerteam.chucker.api.ChuckerInterceptor
+import io.github.wulkanowy.data.db.dao.SemesterDao
+import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.db.entities.StudentIsEduOne
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.RemoteConfigHelper
 import io.github.wulkanowy.utils.WebkitCookieManagerProxy
+import io.github.wulkanowy.utils.getCurrentOrLast
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,8 +19,12 @@ import javax.inject.Singleton
 class WulkanowySdkFactory @Inject constructor(
     private val chuckerInterceptor: ChuckerInterceptor,
     private val remoteConfig: RemoteConfigHelper,
-    private val webkitCookieManagerProxy: WebkitCookieManagerProxy
+    private val webkitCookieManagerProxy: WebkitCookieManagerProxy,
+    private val semesterDb: SemesterDao,
+    private val studentDb: StudentDao,
 ) {
+
+    private val isEduOneChecked = AtomicBoolean(false)
 
     private val sdk = Sdk().apply {
         androidVersion = android.os.Build.VERSION.RELEASE
@@ -30,7 +39,12 @@ class WulkanowySdkFactory @Inject constructor(
 
     fun create() = sdk
 
-    fun create(student: Student, semester: Semester? = null): Sdk {
+    suspend fun create(student: Student, semester: Semester? = null): Sdk {
+        val overrideIsEduOne = migrateStudentToEduOneIfNecessary(student)
+        return buildSdk(student, semester, overrideIsEduOne)
+    }
+
+    private fun buildSdk(student: Student, semester: Semester?, isStudentEduOne: Boolean): Sdk {
         return create().apply {
             email = student.email
             password = student.password
@@ -39,6 +53,7 @@ class WulkanowySdkFactory @Inject constructor(
             studentId = student.studentId
             classId = student.classId
             emptyCookieJarInterceptor = true
+            isEduOne = isStudentEduOne
 
             if (Sdk.Mode.valueOf(student.loginMode) == Sdk.Mode.HEBE) {
                 mobileBaseUrl = student.mobileBaseUrl
@@ -60,5 +75,25 @@ class WulkanowySdkFactory @Inject constructor(
                 unitId = semester.unitId
             }
         }
+    }
+
+    private suspend fun migrateStudentToEduOneIfNecessary(student: Student): Boolean {
+        if (student.isEduOne) return true
+        if (studentDb.loadById(student.id)?.isEduOne == true) return true
+
+        val currentSemester = semesterDb.loadAll(
+            studentId = student.studentId,
+            classId = student.classId,
+        ).getCurrentOrLast()
+        val initializedSdk = buildSdk(student, currentSemester, false)
+        val newCurrentStudent = initializedSdk.getCurrentStudent()
+            ?: throw IllegalStateException("Can't get current student from WulkanowySDK")
+
+        if (!newCurrentStudent.isEduOne) return false
+
+        val studentIsEduOne = StudentIsEduOne(true)
+        studentDb.update(studentIsEduOne)
+
+        return true
     }
 }

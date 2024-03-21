@@ -7,7 +7,7 @@ import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.db.entities.StudentIsAuthorizedAndEduOne
+import io.github.wulkanowy.data.db.entities.StudentIsAuthorized
 import io.github.wulkanowy.data.db.entities.StudentName
 import io.github.wulkanowy.data.db.entities.StudentNickAndAvatar
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
@@ -101,26 +101,22 @@ class StudentRepository @Inject constructor(
         return student
     }
 
-    suspend fun updateCurrentStudentProperties() {
+    suspend fun updateCurrentStudentAuthStatus() {
         val student = getCurrentStudent()
-        if (student.isAuthorized && student.isEduOne) return
+        if (student.isAuthorized) return
 
         val currentSemester = semesterDb.loadAll(
             studentId = student.studentId,
             classId = student.classId,
         ).getCurrentOrLast()
-        val initializedSdk = sdk.init(student).switchSemester(currentSemester)
+        val initializedSdk = wulkanowySdkFactory.create(student, currentSemester)
         val newCurrentStudent = initializedSdk.getCurrentStudent() ?: return
 
         if (!newCurrentStudent.isAuthorized) {
             throw NoAuthorizationException()
         }
 
-        val studentIsAuthorizedAndEduOne = StudentIsAuthorizedAndEduOne(
-            isAuthorized = true,
-            isEduOne = newCurrentStudent.isEduOne
-        )
-
+        val studentIsAuthorizedAndEduOne = StudentIsAuthorized(true)
         studentDb.update(studentIsAuthorizedAndEduOne)
     }
 
