@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
@@ -21,38 +20,50 @@ import io.github.wulkanowy.utils.getBackgroundColor
 import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.toFormattedString
 import timber.log.Timber
-import java.util.*
+import java.util.BitSet
 import javax.inject.Inject
 
 class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<RecyclerView.ViewHolder>() {
 
-    private var headers = mutableListOf<GradeDetailsItem>()
-
+    private var headers = mutableListOf<GradeDetailsItem.Header>()
     private var items = mutableListOf<GradeDetailsItem>()
 
     private val expandedPositions = BitSet(items.size)
-
     private var expandMode = GradeExpandMode.ONE
 
     var onClickListener: (Grade, position: Int) -> Unit = { _, _ -> }
 
     lateinit var gradeColorTheme: GradeColorTheme
 
-    fun setDataItems(data: List<GradeDetailsItem>, expandMode: GradeExpandMode = this.expandMode) {
-        headers = data.filter { it.viewType == ViewType.HEADER }.toMutableList()
-        items =
-            (if (expandMode != GradeExpandMode.ALWAYS_EXPANDED) headers else data).toMutableList()
-        this.expandMode = expandMode
-        expandedPositions.clear()
+    fun setDataItems(
+        data: List<GradeDetailsItem.Header>,
+        newExpandMode: GradeExpandMode = this.expandMode
+    ) {
+        // Prevent recreating all items and collapsing all items when changing layout unrelated
+        // settings, such as grade color theme.
+        if (headers == data && expandMode == newExpandMode) {
+            // Still need to update the items but there are no structural changes.
+            notifyItemRangeChanged(0, items.size)
+            return
+        }
+
+        headers = data.toMutableList()
+        expandMode = newExpandMode
+        if (expandMode == GradeExpandMode.ALWAYS_EXPANDED) {
+            expandedPositions.set(0, expandedPositions.size())
+        } else {
+            expandedPositions.clear()
+        }
+        recreateItems()
     }
 
     fun updateDetailsItem(position: Int, grade: Grade) {
-        items[position] = GradeDetailsItem(grade, ViewType.ITEM)
+        items[position] = GradeDetailsItem.Grade(grade)
         notifyItemChanged(position)
     }
 
-    fun getHeaderItem(subject: String): GradeDetailsItem {
-        val candidates = headers.filter { (it.value as GradeDetailsHeader).subject == subject }
+    fun getHeaderItem(subject: String): GradeDetailsItem.Header {
+        val candidates = headers.filter { it.subject == subject }
 
         if (candidates.size > 1) {
             Timber.e("Header with subject $subject found ${candidates.size} times! Expanded: $expandedPositions. Items: $candidates")
@@ -61,7 +72,7 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
         return candidates.first()
     }
 
-    fun updateHeaderItem(item: GradeDetailsItem) {
+    fun updateHeaderItem(item: GradeDetailsItem.Header) {
         val headerPosition = headers.indexOf(item)
         val itemPosition = items.indexOf(item)
 
@@ -70,11 +81,23 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
         notifyItemChanged(itemPosition)
     }
 
-    fun collapseAll() {
-        if (!expandedPositions.isEmpty) {
-            refreshList(headers.toMutableList())
-            expandedPositions.clear()
+    private fun recreateItems() {
+        val newItems = mutableListOf<GradeDetailsItem>()
+        for ((i, header) in headers.withIndex()) {
+            newItems.add(header)
+            if (expandedPositions[i]) {
+                newItems.addAll(header.grades)
+            }
         }
+        refreshList(newItems)
+    }
+
+    fun collapseAll() {
+        if (expandMode == GradeExpandMode.ALWAYS_EXPANDED) {
+            return
+        }
+        expandedPositions.clear()
+        recreateItems()
     }
 
     @Synchronized
@@ -107,19 +130,19 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
         when (holder) {
             is HeaderViewHolder -> bindHeaderViewHolder(
                 holder = holder,
-                header = items[position].value as GradeDetailsHeader,
+                header = items[position] as GradeDetailsItem.Header,
                 position = position
             )
+
             is ItemViewHolder -> bindItemViewHolder(
-                holder = holder,
-                grade = items[position].value as Grade
+                holder = holder, grade = (items[position] as GradeDetailsItem.Grade).grade
             )
         }
     }
 
     private fun bindHeaderViewHolder(
         holder: HeaderViewHolder,
-        header: GradeDetailsHeader,
+        header: GradeDetailsItem.Header,
         position: Int
     ) {
         val context = holder.binding.root.context
@@ -141,10 +164,14 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
                 header.grades.size,
                 header.grades.size
             )
-            gradeHeaderNote.isVisible = header.newGrades > 0
 
-            if (header.newGrades > 0) {
-                gradeHeaderNote.text = header.newGrades.toString()
+            header.newGrades.let { newGrades ->
+                if (newGrades > 0) {
+                    gradeHeaderNote.isVisible = true
+                    gradeHeaderNote.text = newGrades.toString()
+                } else {
+                    gradeHeaderNote.isVisible = false
+                }
             }
 
             gradeHeaderContainer.isEnabled = expandMode != GradeExpandMode.ALWAYS_EXPANDED
@@ -155,46 +182,25 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
     }
 
     private fun expandGradeHeader(
-        headerPosition: Int,
-        header: GradeDetailsHeader,
+        position: Int,
+        header: GradeDetailsItem.Header,
         holder: HeaderViewHolder
     ) {
-        if (expandMode == GradeExpandMode.ONE) {
-            val isHeaderExpanded = expandedPositions[headerPosition]
-
-            expandedPositions.clear()
-
-            if (!isHeaderExpanded) {
-                val updatedItemList = headers.toMutableList()
-                    .apply { addAll(headerPosition + 1, header.grades) }
-
-                expandedPositions.set(headerPosition)
-                refreshList(updatedItemList)
-                scrollToHeaderWithSubItems(headerPosition, header.grades.size)
-            } else {
-                refreshList(headers.toMutableList())
+        val wasExpanded = expandedPositions[position]
+        when (expandMode) {
+            GradeExpandMode.ONE -> {
+                expandedPositions.clear()
+                expandedPositions[position] = !wasExpanded
             }
-        } else if (expandMode == GradeExpandMode.UNLIMITED) {
-            val headerAdapterPosition = holder.bindingAdapterPosition
-            val isHeaderExpanded = expandedPositions[headerPosition]
 
-            expandedPositions.flip(headerPosition)
+            GradeExpandMode.UNLIMITED -> expandedPositions[position] = !wasExpanded
+            GradeExpandMode.ALWAYS_EXPANDED -> return
+        }
 
-            if (!isHeaderExpanded) {
-                val updatedList = items.toMutableList()
-                    .apply { addAll(headerAdapterPosition + 1, header.grades) }
-
-                refreshList(updatedList)
-                scrollToHeaderWithSubItems(headerAdapterPosition, header.grades.size)
-            } else {
-                val startPosition = headerAdapterPosition + 1
-                val updatedList = items.toMutableList()
-                    .apply {
-                        subList(startPosition, startPosition + header.grades.size).clear()
-                    }
-
-                refreshList(updatedList)
-            }
+        recreateItems()
+        if (!wasExpanded) {
+            // If it wasn't expanded, it will be now - scroll make sure it's all on screen
+            scrollToHeaderWithSubItems(holder.bindingAdapterPosition, header.grades.size)
         }
     }
 
@@ -216,7 +222,7 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
             }
             gradeItemDate.text = grade.date.toFormattedString()
             gradeItemWeight.text = "${context.getString(R.string.grade_weight)}: ${grade.weight}"
-            gradeItemNote.visibility = if (!grade.isRead) View.VISIBLE else View.GONE
+            gradeItemNote.isVisible = !grade.isRead
 
             root.setOnClickListener {
                 holder.bindingAdapterPosition.let {

@@ -13,6 +13,7 @@ import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SubjectRepository
 import io.github.wulkanowy.utils.allAbsences
 import io.github.wulkanowy.utils.allPresences
+import io.github.wulkanowy.utils.filterIf
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import kotlin.math.ceil
@@ -50,9 +51,12 @@ class GetAttendanceCalculatorDataUseCase @Inject constructor(
                     .debounceIntermediates()
             }
             .combineWithResourceData(preferencesRepository.attendanceCalculatorShowEmptySubjects) { attendanceDataList, showEmptySubjects ->
-                attendanceDataList.filter { it.total != 0 || showEmptySubjects }
+                attendanceDataList.filterIf(!showEmptySubjects) { it.total != 0 }
             }
-            .combineWithResourceData(preferencesRepository.attendanceCalculatorSortingModeFlow, List<AttendanceData>::sortedBy)
+            .combineWithResourceData(
+                preferencesRepository.attendanceCalculatorSortingModeFlow,
+                Iterable<AttendanceData>::sortedBy
+            )
 }
 
 private fun List<AttendanceSummary>.toAttendanceData(subjectName: String, targetFreq: Int): AttendanceData {
@@ -99,7 +103,7 @@ private fun calcMissingAbsences(targetFreq: Double, absences: Int, presences: In
 private fun calcMinRequiredAbsencesFor(targetFreq: Double, presences: Int) =
     floor((presences * (1 - targetFreq)) / targetFreq).toInt()
 
-private fun List<AttendanceData>.sortedBy(mode: AttendanceCalculatorSortingMode) = when (mode) {
+private fun Iterable<AttendanceData>.sortedBy(mode: AttendanceCalculatorSortingMode) = when (mode) {
     ALPHABETIC -> sortedBy(AttendanceData::subjectName)
     ATTENDANCE -> sortedByDescending(AttendanceData::presencePercentage)
     LESSON_BALANCE -> sortedBy(AttendanceData::lessonBalance)

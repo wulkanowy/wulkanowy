@@ -96,18 +96,98 @@ fun <T, U> Resource<T>.mapData(block: (T) -> U) = when (this) {
 /**
  * Injects another flow into this flow's resource data.
  */
-inline fun <T1, T2, R> Flow<Resource<T1>>.combineWithResourceData(
-    flow: Flow<T2>,
-    crossinline block: suspend (T1, T2) -> R
+inline fun <Data, T1, R> Flow<Resource<Data>>.combineWithResourceData(
+    flow: Flow<T1>,
+    crossinline block: suspend (Data, T1) -> R
 ): Flow<Resource<R>> =
-    combine(flow) { resource, inject ->
+    combine(flow) { resource, a ->
         when (resource) {
-            is Resource.Success -> Resource.Success(block(resource.data, inject))
-            is Resource.Intermediate -> Resource.Intermediate(block(resource.data, inject))
+            is Resource.Success -> Resource.Success(block(resource.data, a))
+            is Resource.Intermediate -> Resource.Intermediate(block(resource.data, a))
             is Resource.Loading -> Resource.Loading()
             is Resource.Error -> Resource.Error(resource.error)
         }
     }
+
+inline fun <Data, T1, T2, R> Flow<Resource<Data>>.combineWithResourceData(
+    flow1: Flow<T1>,
+    flow2: Flow<T2>,
+    crossinline block: suspend (Data, T1, T2) -> R
+): Flow<Resource<R>> = combine(this, flow1, flow2) { resource, a, b ->
+    when (resource) {
+        is Resource.Success -> Resource.Success(block(resource.data, a, b))
+        is Resource.Intermediate -> Resource.Intermediate(block(resource.data, a, b))
+        is Resource.Loading -> Resource.Loading()
+        is Resource.Error -> Resource.Error(resource.error)
+    }
+}
+
+inline fun <Data, T1, T2, T3, R> Flow<Resource<Data>>.combineWithResourceData(
+    flow1: Flow<T1>,
+    flow2: Flow<T2>,
+    flow3: Flow<T3>,
+    crossinline block: suspend (Data, T1, T2, T3) -> R
+): Flow<Resource<R>> = combine(this, flow1, flow2, flow3) { resource, a, b, c ->
+    when (resource) {
+        is Resource.Success -> Resource.Success(block(resource.data, a, b, c))
+        is Resource.Intermediate -> Resource.Intermediate(block(resource.data, a, b, c))
+        is Resource.Loading -> Resource.Loading()
+        is Resource.Error -> Resource.Error(resource.error)
+    }
+}
+
+inline fun <Data, T1, T2, T3, T4, R> Flow<Resource<Data>>.combineWithResourceData(
+    flow1: Flow<T1>,
+    flow2: Flow<T2>,
+    flow3: Flow<T3>,
+    flow4: Flow<T4>,
+    crossinline block: suspend (Data, T1, T2, T3, T4) -> R
+): Flow<Resource<R>> = combine(this, flow1, flow2, flow3, flow4) { resource, a, b, c, d ->
+    when (resource) {
+        is Resource.Success -> Resource.Success(block(resource.data, a, b, c, d))
+        is Resource.Intermediate -> Resource.Intermediate(block(resource.data, a, b, c, d))
+        is Resource.Loading -> Resource.Loading()
+        is Resource.Error -> Resource.Error(resource.error)
+    }
+}
+
+inline fun <Data, T1> Flow<Resource<Data>>.onResourceDataCombinedWith(
+    flow1: Flow<T1>,
+    crossinline block: suspend (Data, T1) -> Unit
+): Flow<Resource<Data>> = combineWithResourceData(flow1) { data, a ->
+    block(data, a)
+    data
+}
+
+inline fun <Data, T1, T2> Flow<Resource<Data>>.onResourceDataCombinedWith(
+    flow1: Flow<T1>,
+    flow2: Flow<T2>,
+    crossinline block: suspend (Data, T1, T2) -> Unit
+): Flow<Resource<Data>> = combineWithResourceData(flow1, flow2) { data, a, b ->
+    block(data, a, b)
+    data
+}
+
+inline fun <Data, T1, T2, T3> Flow<Resource<Data>>.onResourceDataCombinedWith(
+    flow1: Flow<T1>,
+    flow2: Flow<T2>,
+    flow3: Flow<T3>,
+    crossinline block: suspend (Data, T1, T2, T3) -> Unit
+): Flow<Resource<Data>> = combineWithResourceData(flow1, flow2, flow3) { data, a, b, c ->
+    block(data, a, b, c)
+    data
+}
+
+inline fun <Data, T1, T2, T3, T4> Flow<Resource<Data>>.onResourceDataCombinedWith(
+    flow1: Flow<T1>,
+    flow2: Flow<T2>,
+    flow3: Flow<T3>,
+    flow4: Flow<T4>,
+    crossinline block: suspend (Data, T1, T2, T3, T4) -> Unit
+): Flow<Resource<Data>> = combineWithResourceData(flow1, flow2, flow3, flow4) { data, a, b, c, d ->
+    block(data, a, b, c, d)
+    data
+}
 
 fun <T> Flow<Resource<T>>.logResourceStatus(name: String, showData: Boolean = false) = onEach {
     val description = when (it) {

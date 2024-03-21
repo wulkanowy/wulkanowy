@@ -7,3 +7,9 @@ infix fun <T> List<T>.uniqueSubtract(other: List<T>): List<T> {
     }
     return list.toList()
 }
+
+fun <T> Iterable<T>.filterIf(condition: Boolean, predicate: (T) -> Boolean) = if (condition) {
+    filter(predicate)
+} else {
+    this
+}

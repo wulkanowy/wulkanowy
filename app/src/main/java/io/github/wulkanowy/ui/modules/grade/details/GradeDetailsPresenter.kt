@@ -1,13 +1,11 @@
 package io.github.wulkanowy.ui.modules.grade.details
 
+import io.github.wulkanowy.data.combineWithResourceData
 import io.github.wulkanowy.data.db.entities.Grade
-import io.github.wulkanowy.data.enums.GradeExpandMode
-import io.github.wulkanowy.data.enums.GradeSortingMode.ALPHABETIC
-import io.github.wulkanowy.data.enums.GradeSortingMode.AVERAGE
-import io.github.wulkanowy.data.enums.GradeSortingMode.DATE
+import io.github.wulkanowy.data.enums.GradeSortingMode
 import io.github.wulkanowy.data.flatResourceFlow
 import io.github.wulkanowy.data.logResourceStatus
-import io.github.wulkanowy.data.onResourceData
+import io.github.wulkanowy.data.onResourceDataCombinedWith
 import io.github.wulkanowy.data.onResourceError
 import io.github.wulkanowy.data.onResourceIntermediate
 import io.github.wulkanowy.data.onResourceNotLoading
@@ -22,6 +20,7 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.ui.modules.grade.GradeAverageProvider
 import io.github.wulkanowy.ui.modules.grade.GradeSubject
 import io.github.wulkanowy.utils.AnalyticsHelper
+import io.github.wulkanowy.utils.filterIf
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import timber.log.Timber
@@ -63,10 +62,9 @@ class GradeDetailsPresenter @Inject constructor(
             if (!grade.isRead) {
                 grade.isRead = true
                 updateItem(grade, position)
-                getHeaderOfItem(grade.subject).let { header ->
-                    (header.value as GradeDetailsHeader).newGrades--
-                    updateHeaderItem(header)
-                }
+                val header = getHeaderOfItem(grade.subject)
+                // Required to update the unread grade count
+                updateHeaderItem(header)
                 newGradesAmount--
                 updateMarkAsDoneButton()
                 updateGrade(grade)
@@ -111,7 +109,7 @@ class GradeDetailsPresenter @Inject constructor(
     fun onParentViewReselected() {
         view?.run {
             if (!isViewEmpty) {
-                if (preferencesRepository.gradeExpandMode != GradeExpandMode.ALWAYS_EXPANDED) collapseAllItems()
+                collapseAllItems()
                 scrollToStart()
             }
         }
@@ -139,20 +137,28 @@ class GradeDetailsPresenter @Inject constructor(
             averageProvider.getGradesDetailsWithAverage(student, semesterId, forceRefresh)
         }
             .logResourceStatus("load grade details")
-            .onResourceData {
-                val gradeItems = createGradeItems(it)
+            .combineWithResourceData(
+                preferencesRepository.showSubjectsWithoutGradesFlow,
+                preferencesRepository.gradeSortingModeFlow,
+            ) { it, showSubjectsWithoutGrades, gradeSortingMode ->
+                createGradeItems(it, showSubjectsWithoutGrades, gradeSortingMode)
+            }
+            .onResourceDataCombinedWith(
+                preferencesRepository.gradeExpandModeFlow,
+                preferencesRepository.gradeColorThemeFlow,
+            ) { it, expandMode, colorTheme ->
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
                     showErrorView(false)
-                    showContent(gradeItems.isNotEmpty())
-                    showEmpty(gradeItems.isEmpty())
+                    showContent(it.isNotEmpty())
+                    showEmpty(it.isEmpty())
                     updateNewGradesAmount(it)
                     updateMarkAsDoneButton()
                     updateData(
-                        data = gradeItems,
-                        expandMode = preferencesRepository.gradeExpandMode,
-                        preferencesRepository.gradeColorTheme
+                        data = it,
+                        expandMode = expandMode,
+                        gradeColorTheme = colorTheme
                     )
                 }
             }
@@ -180,9 +186,9 @@ class GradeDetailsPresenter @Inject constructor(
             .launch()
     }
 
-    private fun updateNewGradesAmount(grades: List<GradeSubject>) {
-        newGradesAmount = grades.sumOf { item ->
-            item.grades.sumOf { grade -> (if (!grade.isRead) 1 else 0).toInt() }
+    private fun updateNewGradesAmount(headers: List<GradeDetailsItem.Header>) {
+        newGradesAmount = headers.sumOf { header ->
+            header.grades.count { !it.grade.isRead }
         }
     }
 
@@ -198,49 +204,25 @@ class GradeDetailsPresenter @Inject constructor(
         }
     }
 
-    private fun createGradeItems(items: List<GradeSubject>): List<GradeDetailsItem> {
-        return items
-            .let { gradesWithAverages ->
-                if (!preferencesRepository.showSubjectsWithoutGrades) {
-                    gradesWithAverages.filter { it.grades.isNotEmpty() }
-                } else gradesWithAverages
-            }
-            .let { gradeSubjects ->
-                when (preferencesRepository.gradeSortingMode) {
-                    DATE -> gradeSubjects.sortedByDescending { gradeDetailsWithAverage ->
-                        gradeDetailsWithAverage.grades.maxByOrNull { it.date }?.date
-                    }
-                    ALPHABETIC -> gradeSubjects.sortedBy { gradeDetailsWithAverage ->
-                        gradeDetailsWithAverage.subject.lowercase()
-                    }
-                    AVERAGE -> gradeSubjects.sortedByDescending { it.average }
-                }
-            }
+    private fun createGradeItems(
+        items: List<GradeSubject>,
+        showSubjectsWithoutGrades: Boolean,
+        gradeSortingMode: GradeSortingMode
+    ): List<GradeDetailsItem.Header> =
+        items
+            .filterIf(!showSubjectsWithoutGrades) { it.grades.isNotEmpty() }
+            .let { gradeSortingMode.sort(it) }
             .map { gradeSubject ->
-                val subItems = gradeSubject.grades
-                    .sortedByDescending { it.date }
-                    .map { GradeDetailsItem(it, ViewType.ITEM) }
+                val subItems = gradeSubject.grades.sortedByDescending { it.date }
+                    .map { GradeDetailsItem.Grade(it) }
 
-                val gradeDetailsItems = listOf(
-                    GradeDetailsItem(
-                        GradeDetailsHeader(
-                            subject = gradeSubject.subject,
-                            average = gradeSubject.average,
-                            pointsSum = gradeSubject.points,
-                            grades = subItems
-                        ).apply {
-                            newGrades = gradeSubject.grades.filter { grade -> !grade.isRead }.size
-                        }, ViewType.HEADER
-                    )
+                GradeDetailsItem.Header(
+                    subject = gradeSubject.subject,
+                    average = gradeSubject.average,
+                    pointsSum = gradeSubject.points,
+                    grades = subItems
                 )
-
-                if (preferencesRepository.gradeExpandMode == GradeExpandMode.ALWAYS_EXPANDED) {
-                    gradeDetailsItems + subItems
-                } else {
-                    gradeDetailsItems
-                }
-            }.flatten()
-    }
+            }
 
     private fun updateGrade(grade: Grade) {
         resourceFlow { gradeRepository.updateGrade(grade) }

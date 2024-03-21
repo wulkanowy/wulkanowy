@@ -2,11 +2,11 @@ package io.github.wulkanowy.ui.modules.attendance
 
 import android.annotation.SuppressLint
 import io.github.wulkanowy.data.Resource
+import io.github.wulkanowy.data.combineWithResourceData
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.flatResourceFlow
 import io.github.wulkanowy.data.logResourceStatus
-import io.github.wulkanowy.data.mapResourceData
 import io.github.wulkanowy.data.onResourceData
 import io.github.wulkanowy.data.onResourceError
 import io.github.wulkanowy.data.onResourceIntermediate
@@ -22,6 +22,7 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.capitalise
+import io.github.wulkanowy.utils.filterIf
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isExcusableOrNotExcused
 import io.github.wulkanowy.utils.isHolidays
@@ -244,12 +245,10 @@ class AttendancePresenter @Inject constructor(
             .onResourceLoading {
                 view?.showExcuseButton(false)
             }
-            .mapResourceData {
-                if (prefRepository.isShowPresent) {
-                    it
-                } else {
-                    it.filter { item -> !item.presence }
-                }.sortedBy { item -> item.number }
+            .combineWithResourceData(prefRepository.isShowPresentFlow) { it, isShowPresent ->
+                it
+                    .filterIf(!isShowPresent) { item -> !item.presence }
+                    .sortedBy(Attendance::number)
             }
             .onResourceData {
                 isWeekendHasLessons = isWeekendHasLessons || isWeekendHasLessons(it)

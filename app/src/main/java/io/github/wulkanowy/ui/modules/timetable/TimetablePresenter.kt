@@ -4,12 +4,13 @@ import android.os.Handler
 import android.os.Looper
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Timetable
+import io.github.wulkanowy.data.enums.TimetableGapsMode
 import io.github.wulkanowy.data.enums.TimetableGapsMode.BETWEEN_AND_BEFORE_LESSONS
 import io.github.wulkanowy.data.enums.TimetableGapsMode.NO_GAPS
 import io.github.wulkanowy.data.enums.TimetableMode
 import io.github.wulkanowy.data.flatResourceFlow
 import io.github.wulkanowy.data.logResourceStatus
-import io.github.wulkanowy.data.onResourceData
+import io.github.wulkanowy.data.onResourceDataCombinedWith
 import io.github.wulkanowy.data.onResourceError
 import io.github.wulkanowy.data.onResourceIntermediate
 import io.github.wulkanowy.data.onResourceNotLoading
@@ -24,6 +25,7 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.capitalise
+import io.github.wulkanowy.utils.filterIf
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.isJustFinished
@@ -160,7 +162,11 @@ class TimetablePresenter @Inject constructor(
             )
         }
             .logResourceStatus("load timetable data")
-            .onResourceData {
+            .onResourceDataCombinedWith(
+                prefRepository.showWholeClassPlanFlow,
+                prefRepository.showTimetableGapsFlow,
+                prefRepository.showGroupsInPlanFlow
+            ) { it, showWholeClassPlan, showTimetableGaps, showGroupsInPlan ->
                 isWeekendHasLessons = isWeekendHasLessons || isWeekendHasLessonsUseCase(it.lessons)
 
                 view?.run {
@@ -169,7 +175,7 @@ class TimetablePresenter @Inject constructor(
                     showErrorView(false)
                     showContent(it.lessons.isNotEmpty())
                     showEmpty(it.lessons.isEmpty())
-                    updateData(it.lessons)
+                    updateData(it.lessons, showWholeClassPlan, showTimetableGaps, showGroupsInPlan)
                     setDayHeaderMessage(it.headers.find { header -> header.date == currentDate }?.content)
                     reloadNavigation()
                 }
@@ -214,37 +220,58 @@ class TimetablePresenter @Inject constructor(
         }
     }
 
-    private fun updateData(lessons: List<Timetable>) {
+    private fun updateData(
+        lessons: List<Timetable>,
+        timetableMode: TimetableMode,
+        timetableGapsMode: TimetableGapsMode,
+        showGroupsInPlan: Boolean
+    ) {
         tickTimer?.cancel()
 
         if (currentDate != now()) {
-            view?.updateData(createItems(lessons))
+            view?.updateData(
+                createItems(
+                    lessons,
+                    timetableMode,
+                    timetableGapsMode,
+                    showGroupsInPlan
+                )
+            )
         } else {
             tickTimer = timer(period = 2_000) {
                 Handler(Looper.getMainLooper()).post {
-                    view?.updateData(createItems(lessons))
+                    view?.updateData(
+                        createItems(
+                            lessons,
+                            timetableMode,
+                            timetableGapsMode,
+                            showGroupsInPlan
+                        )
+                    )
                 }
             }
         }
     }
 
-    private fun createItems(items: List<Timetable>): List<TimetableItem> {
+    private fun createItems(
+        items: List<Timetable>,
+        timetableMode: TimetableMode,
+        timetableGapsMode: TimetableGapsMode,
+        showGroupsInPlan: Boolean
+    ): List<TimetableItem> {
         val filteredItems = items
-            .filter {
-                if (prefRepository.showWholeClassPlan == TimetableMode.ONLY_CURRENT_GROUP) {
-                    it.isStudentPlan
-                } else true
-            }.sortedWith(
-                compareBy({ item -> item.number }, { item -> !item.isStudentPlan })
+            .filterIf(timetableMode == TimetableMode.ONLY_CURRENT_GROUP) { it.isStudentPlan }
+            .sortedWith(
+                compareBy(Timetable::number, { item -> !item.isStudentPlan })
             )
 
-        var prevNum = when (prefRepository.showTimetableGaps) {
+        var prevNum = when (timetableGapsMode) {
             BETWEEN_AND_BEFORE_LESSONS -> 0
             else -> null
         }
         return buildList {
             filteredItems.forEachIndexed { i, it ->
-                if (prefRepository.showTimetableGaps != NO_GAPS && prevNum != null && it.number > prevNum!! + 1) {
+                if (timetableGapsMode != NO_GAPS && prevNum != null && it.number > prevNum!! + 1) {
                     val emptyLesson = TimetableItem.Empty(
                         numFrom = prevNum!! + 1,
                         numTo = it.number - 1
@@ -255,7 +282,7 @@ class TimetablePresenter @Inject constructor(
                 if (it.isStudentPlan) {
                     val normalLesson = TimetableItem.Normal(
                         lesson = it,
-                        showGroupsInPlan = prefRepository.showGroupsInPlan,
+                        showGroupsInPlan = showGroupsInPlan,
                         timeLeft = filteredItems.getTimeLeftForLesson(it, i),
                         onClick = ::onTimetableItemSelected
                     )

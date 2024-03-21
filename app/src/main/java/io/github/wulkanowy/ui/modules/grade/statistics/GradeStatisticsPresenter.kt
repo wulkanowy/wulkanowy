@@ -1,9 +1,20 @@
 package io.github.wulkanowy.ui.modules.grade.statistics
 
-import io.github.wulkanowy.data.*
 import io.github.wulkanowy.data.db.entities.Subject
+import io.github.wulkanowy.data.flatResourceFlow
+import io.github.wulkanowy.data.logResourceStatus
+import io.github.wulkanowy.data.mapResourceData
+import io.github.wulkanowy.data.onResourceDataCombinedWith
+import io.github.wulkanowy.data.onResourceError
+import io.github.wulkanowy.data.onResourceIntermediate
+import io.github.wulkanowy.data.onResourceNotLoading
+import io.github.wulkanowy.data.onResourceSuccess
 import io.github.wulkanowy.data.pojos.GradeStatisticsItem
-import io.github.wulkanowy.data.repositories.*
+import io.github.wulkanowy.data.repositories.GradeStatisticsRepository
+import io.github.wulkanowy.data.repositories.PreferencesRepository
+import io.github.wulkanowy.data.repositories.SemesterRepository
+import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.data.repositories.SubjectRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
@@ -124,12 +135,12 @@ class GradeStatisticsPresenter @Inject constructor(
             subjectRepository.getSubjects(student, semester)
         }
             .logResourceStatus("load grade stats subjects")
-            .onResourceData {
+            .onResourceDataCombinedWith(preferencesRepository.showAllSubjectsOnStatisticsListFlow) { it, showAllSubjectsOnStatisticsList ->
                 subjects = it
                 view?.run {
-                    showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
+                    showSubjects(!showAllSubjectsOnStatisticsList)
                     updateSubjects(
-                        data = it.map { subject -> subject.name },
+                        data = it.map(Subject::name),
                         selectedIndex = it.indexOfFirst { subject ->
                             subject.name == currentSubjectName
                         },
@@ -193,7 +204,10 @@ class GradeStatisticsPresenter @Inject constructor(
                 val isNoContent = checkIsNoContent(it, type)
                 if (isNoContent) emptyList() else it
             }
-            .onResourceData {
+            .onResourceDataCombinedWith(
+                preferencesRepository.gradeColorThemeFlow,
+                preferencesRepository.showAllSubjectsOnStatisticsListFlow
+            ) { it, gradeColorTheme, showAllSubjectsOnStatisticsList ->
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
@@ -201,8 +215,8 @@ class GradeStatisticsPresenter @Inject constructor(
                     showEmpty(it.isEmpty())
                     updateData(
                         newItems = it,
-                        newTheme = preferencesRepository.gradeColorTheme,
-                        showAllSubjectsOnStatisticsList = preferencesRepository.showAllSubjectsOnStatisticsList
+                        newTheme = gradeColorTheme,
+                        showAllSubjectsOnStatisticsList = showAllSubjectsOnStatisticsList
                     )
                 }
             }
