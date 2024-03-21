@@ -4,18 +4,22 @@
 
     <style name="BaseWulkanowyTheme" parent="@style/Theme.Material3.Light">
         <item name="android:forceDarkAllowed" tools:targetApi="Q">false</item>
+
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorOnPrimary">@android:color/white</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
         <item name="colorPrimaryContainer">@color/colorPrimaryContainer</item>
         <item name="colorOnPrimaryContainer">@color/colorOnPrimaryContainer</item>
+
         <item name="colorSecondary">@color/colorPrimary</item>
-        <item name="colorOnSecondary">@android:color/white</item>
+        <item name="colorOnSecondary">@color/colorOnPrimary</item>
         <item name="colorSecondaryContainer">@color/colorPrimaryContainer</item>
         <item name="colorOnSecondaryContainer">@color/colorOnPrimaryContainer</item>
+
         <item name="colorTertiary">@color/colorPrimary</item>
-        <item name="colorOnTertiary">@android:color/white</item>
+        <item name="colorOnTertiary">@color/colorOnPrimary</item>
         <item name="colorTertiaryContainer">@color/colorPrimaryContainer</item>
         <item name="colorOnTertiaryContainer">@color/colorOnPrimaryContainer</item>
+
         <item name="colorSurface">@color/colorSurface</item>
         <item name="colorTimetableCanceled">@color/timetable_canceled_light</item>
         <item name="colorTimetableChange">@color/timetable_change_light</item>
