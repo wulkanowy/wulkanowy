@@ -73,7 +73,7 @@ class MainPresenter @Inject constructor(
         syncManager.startPeriodicSyncWorker()
 
         checkAppSupport()
-        checkCurrentStudentAuthorizationStatus()
+        updateCurrentStudentProperties()
 
         analytics.logEvent("app_open", "destination" to initDestination.toString())
         Timber.i("Main view was initialized with $initDestination")
@@ -193,12 +193,10 @@ class MainPresenter @Inject constructor(
         view?.showStudentAvatar(currentStudent)
     }
 
-    private fun checkCurrentStudentAuthorizationStatus() {
+    private fun updateCurrentStudentProperties() {
         presenterScope.launch {
-            runCatching { studentRepository.checkCurrentStudentAuthorizationStatus() }
+            runCatching { studentRepository.updateCurrentStudentProperties() }
                 .onFailure { errorHandler.dispatch(it) }
-
-            Timber.i("Current student authorization status checked")
         }
     }
 }

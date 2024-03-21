@@ -6,7 +6,7 @@ import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.db.entities.StudentIsAuthorized
+import io.github.wulkanowy.data.db.entities.StudentIsAuthorizedAndEduOne
 import io.github.wulkanowy.data.db.entities.StudentName
 import io.github.wulkanowy.data.db.entities.StudentNickAndAvatar
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
@@ -102,23 +102,27 @@ class StudentRepository @Inject constructor(
         return student
     }
 
-    suspend fun checkCurrentStudentAuthorizationStatus() {
+    suspend fun updateCurrentStudentProperties() {
         val student = getCurrentStudent()
+        if (student.isAuthorized && student.isEduOne) return
 
-        if (!student.isAuthorized) {
-            val currentSemester = semesterDb.loadAll(
-                studentId = student.studentId,
-                classId = student.classId,
-            ).getCurrentOrLast()
-            val initializedSdk = sdk.init(student).switchSemester(currentSemester)
-            val isAuthorized = initializedSdk.getCurrentStudent()?.isAuthorized ?: false
+        val currentSemester = semesterDb.loadAll(
+            studentId = student.studentId,
+            classId = student.classId,
+        ).getCurrentOrLast()
+        val initializedSdk = sdk.init(student).switchSemester(currentSemester)
+        val newCurrentStudent = initializedSdk.getCurrentStudent() ?: return
 
-            if (isAuthorized) {
-                studentDb.update(StudentIsAuthorized(isAuthorized = true).apply {
-                    id = student.id
-                })
-            } else throw NoAuthorizationException()
+        if (!newCurrentStudent.isAuthorized) {
+            throw NoAuthorizationException()
         }
+
+        val studentIsAuthorizedAndEduOne = StudentIsAuthorizedAndEduOne(
+            isAuthorized = true,
+            isEduOne = newCurrentStudent.isEduOne
+        )
+
+        studentDb.update(studentIsAuthorizedAndEduOne)
     }
 
     suspend fun getCurrentStudent(decryptPass: Boolean = true): Student {
