@@ -120,7 +120,6 @@ import io.github.wulkanowy.data.db.migrations.Migration55
 import io.github.wulkanowy.data.db.migrations.Migration57
 import io.github.wulkanowy.data.db.migrations.Migration58
 import io.github.wulkanowy.data.db.migrations.Migration6
-import io.github.wulkanowy.data.db.migrations.Migration63
 import io.github.wulkanowy.data.db.migrations.Migration7
 import io.github.wulkanowy.data.db.migrations.Migration8
 import io.github.wulkanowy.data.db.migrations.Migration9
@@ -176,6 +175,7 @@ import javax.inject.Singleton
         AutoMigration(from = 59, to = 60),
         AutoMigration(from = 60, to = 61),
         AutoMigration(from = 61, to = 62),
+        AutoMigration(from = 62, to = 63),
     ],
     version = AppDatabase.VERSION_SCHEMA,
     exportSchema = true
@@ -236,7 +236,7 @@ abstract class AppDatabase : RoomDatabase() {
             Migration51(),
             Migration53(),
             Migration54(),
-            Migration63(),
+            //Migration63(),
         )
 
         fun newInstance(
