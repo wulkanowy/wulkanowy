@@ -81,12 +81,13 @@ class WulkanowySdkFactory @Inject constructor(
 
     private suspend fun migrateStudentToEduOneIfNecessary(student: Student): Boolean {
         if (student.isEduOne) return true
-        if (isEduOneCheckedMap[student.id] == true) {
-            return studentDb.loadById(student.id)?.isEduOne ?: false
-        }
-        isEduOneCheckedMap[student.id] = true
 
         eduOneMutex.withLock {
+            if (isEduOneCheckedMap[student.id] == true) {
+                return studentDb.loadById(student.id)?.isEduOne ?: false
+            }
+            isEduOneCheckedMap[student.id] = true
+
             val currentSemester = semesterDb.loadAll(
                 studentId = student.studentId,
                 classId = student.classId,
