@@ -10,8 +10,9 @@ import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.RemoteConfigHelper
 import io.github.wulkanowy.utils.WebkitCookieManagerProxy
 import io.github.wulkanowy.utils.getCurrentOrLast
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
-import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,7 +25,8 @@ class WulkanowySdkFactory @Inject constructor(
     private val studentDb: StudentDao,
 ) {
 
-    private val isEduOneChecked = AtomicBoolean(false)
+    private val isEduOneCheckedMap = mutableMapOf<Long, Boolean>()
+    private val eduOneMutex = Mutex()
 
     private val sdk = Sdk().apply {
         androidVersion = android.os.Build.VERSION.RELEASE
@@ -79,21 +81,26 @@ class WulkanowySdkFactory @Inject constructor(
 
     private suspend fun migrateStudentToEduOneIfNecessary(student: Student): Boolean {
         if (student.isEduOne) return true
-        if (studentDb.loadById(student.id)?.isEduOne == true) return true
+        if (isEduOneCheckedMap[student.id] == true) {
+            return studentDb.loadById(student.id)?.isEduOne ?: false
+        }
+        isEduOneCheckedMap[student.id] = true
 
-        val currentSemester = semesterDb.loadAll(
-            studentId = student.studentId,
-            classId = student.classId,
-        ).getCurrentOrLast()
-        val initializedSdk = buildSdk(student, currentSemester, false)
-        val newCurrentStudent = initializedSdk.getCurrentStudent()
-            ?: throw IllegalStateException("Can't get current student from WulkanowySDK")
+        eduOneMutex.withLock {
+            val currentSemester = semesterDb.loadAll(
+                studentId = student.studentId,
+                classId = student.classId,
+            ).getCurrentOrLast()
+            val initializedSdk = buildSdk(student, currentSemester, false)
+            val newCurrentStudent = runCatching { initializedSdk.getCurrentStudent() }
+                .onFailure { Timber.e(it, "Can't get current student from WulkanowySDK") }
+                .getOrNull() ?: return false
 
-        if (!newCurrentStudent.isEduOne) return false
+            if (!newCurrentStudent.isEduOne) return false
 
-        val studentIsEduOne = StudentIsEduOne(true)
-        studentDb.update(studentIsEduOne)
-
-        return true
+            val studentIsEduOne = StudentIsEduOne(true)
+            studentDb.update(studentIsEduOne)
+            return true
+        }
     }
 }
