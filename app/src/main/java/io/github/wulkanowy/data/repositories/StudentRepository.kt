@@ -116,7 +116,10 @@ class StudentRepository @Inject constructor(
             throw NoAuthorizationException()
         }
 
-        val studentIsAuthorizedAndEduOne = StudentIsAuthorized(true)
+        val studentIsAuthorizedAndEduOne = StudentIsAuthorized(
+            id = student.id,
+            isAuthorized = true
+        )
         studentDb.update(studentIsAuthorizedAndEduOne)
     }
 

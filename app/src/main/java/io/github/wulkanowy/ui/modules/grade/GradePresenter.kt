@@ -113,7 +113,7 @@ class GradePresenter @Inject constructor(
                 }
 
                 view?.run {
-                    initTabs(if (student.isEduOne) 2 else 3)
+                    initTabs(if (student.isEduOne == true) 2 else 3)
                     setCurrentSemesterName(currentSemester.semesterName, schoolYear)
 
                     Timber.i("Loading grade data: Attempt load index $currentPageIndex")

@@ -25,7 +25,6 @@ class WulkanowySdkFactory @Inject constructor(
     private val studentDb: StudentDao,
 ) {
 
-    private val isEduOneCheckedMap = mutableMapOf<Long, Boolean>()
     private val eduOneMutex = Mutex()
 
     private val sdk = Sdk().apply {
@@ -80,13 +79,13 @@ class WulkanowySdkFactory @Inject constructor(
     }
 
     private suspend fun migrateStudentToEduOneIfNecessary(student: Student): Boolean {
-        if (student.isEduOne) return true
+        if (student.isEduOne != null) return student.isEduOne
 
         eduOneMutex.withLock {
-            if (isEduOneCheckedMap[student.id] == true) {
-                return studentDb.loadById(student.id)?.isEduOne ?: false
+            val studentFromDatabase = studentDb.loadById(student.id)
+            if (studentFromDatabase?.isEduOne != null) {
+                return studentFromDatabase.isEduOne
             }
-            isEduOneCheckedMap[student.id] = true
 
             val currentSemester = semesterDb.loadAll(
                 studentId = student.studentId,
@@ -97,11 +96,12 @@ class WulkanowySdkFactory @Inject constructor(
                 .onFailure { Timber.e(it, "Can't get current student from WulkanowySDK") }
                 .getOrNull() ?: return false
 
-            if (!newCurrentStudent.isEduOne) return false
-
-            val studentIsEduOne = StudentIsEduOne(true)
+            val studentIsEduOne = StudentIsEduOne(
+                id = student.id,
+                isEduOne = newCurrentStudent.isEduOne
+            )
             studentDb.update(studentIsEduOne)
-            return true
+            return newCurrentStudent.isEduOne
         }
     }
 }

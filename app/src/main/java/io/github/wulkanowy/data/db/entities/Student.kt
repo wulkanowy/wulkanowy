@@ -82,8 +82,8 @@ data class Student(
     @ColumnInfo(name = "is_authorized", defaultValue = "0")
     val isAuthorized: Boolean,
 
-    @ColumnInfo(name = "is_edu_one", defaultValue = "0")
-    val isEduOne: Boolean,
+    @ColumnInfo(name = "is_edu_one", defaultValue = "NULL")
+    val isEduOne: Boolean?,
 
 ) : Serializable {
 
@@ -99,21 +99,18 @@ data class Student(
 @Entity
 data class StudentIsAuthorized(
 
-    @ColumnInfo(name = "is_authorized", defaultValue = "0")
-    val isAuthorized: Boolean,
-) : Serializable {
-
     @PrimaryKey
-    var id: Long = 0
-}
+    var id: Long,
+
+    @ColumnInfo(name = "is_authorized", defaultValue = "NULL")
+    val isAuthorized: Boolean?,
+) : Serializable
 
 @Entity
 data class StudentIsEduOne(
-
-    @ColumnInfo(name = "is_edu_one", defaultValue = "0")
-    val isEduOne: Boolean,
-) : Serializable {
-
     @PrimaryKey
-    var id: Long = 0
-}
+    var id: Long,
+
+    @ColumnInfo(name = "is_edu_one", defaultValue = "NULL")
+    val isEduOne: Boolean?,
+) : Serializable
