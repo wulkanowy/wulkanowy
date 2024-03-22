@@ -236,7 +236,6 @@ abstract class AppDatabase : RoomDatabase() {
             Migration51(),
             Migration53(),
             Migration54(),
-            //Migration63(),
         )
 
         fun newInstance(
