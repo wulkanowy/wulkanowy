@@ -19,6 +19,7 @@ import io.github.wulkanowy.utils.DispatchersProvider
 import io.github.wulkanowy.utils.getCurrentOrLast
 import io.github.wulkanowy.utils.security.Scrambler
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -102,8 +103,12 @@ class StudentRepository @Inject constructor(
     }
 
     suspend fun updateCurrentStudentAuthStatus() {
+        Timber.i("Checking isAuthorized status")
         val student = getCurrentStudent()
-        if (student.isAuthorized) return
+        if (student.isAuthorized) {
+            Timber.i("Student is authorized, early return")
+            return
+        }
 
         val currentSemester = semesterDb.loadAll(
             studentId = student.studentId,
@@ -113,14 +118,17 @@ class StudentRepository @Inject constructor(
         val newCurrentStudent = initializedSdk.getCurrentStudent() ?: return
 
         if (!newCurrentStudent.isAuthorized) {
+            Timber.i("Student is not authorized")
             throw NoAuthorizationException()
         }
 
-        val studentIsAuthorizedAndEduOne = StudentIsAuthorized(
+        val studentIsAuthorized = StudentIsAuthorized(
             id = student.id,
             isAuthorized = true
         )
-        studentDb.update(studentIsAuthorizedAndEduOne)
+
+        Timber.i("Student is authorized, updating database")
+        studentDb.update(studentIsAuthorized)
     }
 
     suspend fun getCurrentStudent(decryptPass: Boolean = true): Student {

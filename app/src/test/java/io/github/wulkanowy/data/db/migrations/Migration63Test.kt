@@ -12,6 +12,9 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import kotlin.random.Random
 import kotlin.test.Test
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
@@ -31,7 +34,7 @@ class Migration63Test : AbstractMigrationTest() {
         val studentDb = database.studentDao
         val student = studentDb.loadById(1)
 
-        assert(student!!.isEduOne == null)
+        assertNull(student!!.isEduOne)
 
         database.close()
     }
@@ -49,8 +52,8 @@ class Migration63Test : AbstractMigrationTest() {
         val studentDb = database.studentDao
         val student = studentDb.loadById(1)
 
-        assert(student!!.isEduOne == true)
-
+        val isEduOne = assertNotNull(student!!.isEduOne)
+        assertTrue(isEduOne)
         database.close()
     }
 

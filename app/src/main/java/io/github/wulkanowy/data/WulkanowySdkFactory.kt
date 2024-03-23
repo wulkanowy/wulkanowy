@@ -41,7 +41,7 @@ class WulkanowySdkFactory @Inject constructor(
     fun create() = sdk
 
     suspend fun create(student: Student, semester: Semester? = null): Sdk {
-        val overrideIsEduOne = migrateStudentToEduOneIfNecessary(student)
+        val overrideIsEduOne = checkEduOneAndMigrateIfNecessary(student)
         return buildSdk(student, semester, overrideIsEduOne)
     }
 
@@ -78,7 +78,7 @@ class WulkanowySdkFactory @Inject constructor(
         }
     }
 
-    private suspend fun migrateStudentToEduOneIfNecessary(student: Student): Boolean {
+    private suspend fun checkEduOneAndMigrateIfNecessary(student: Student): Boolean {
         if (student.isEduOne != null) return student.isEduOne
 
         eduOneMutex.withLock {

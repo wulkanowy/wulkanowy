@@ -12,12 +12,13 @@ import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.RegisterStudent
 import io.mockk.Runs
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -52,62 +53,77 @@ class WulkanowySdkFactoryTest {
     }
 
     @Test
-    fun `check sdk flag isEduOne when student is already eduone`() {
+    fun `check sdk flag isEduOne when local student is eduone`() = runTest {
         val student = getStudentEntity().copy(isEduOne = true)
 
-        runBlocking {
-            wulkanowySdkFactory.create(student)
-        }
+        wulkanowySdkFactory.create(student)
 
         verify { sdk.isEduOne = true }
+        coVerify(exactly = 0) { sdk.getCurrentStudent() }
     }
 
     @Test
-    fun `check sdk flag isEduOne when student is not eduone`() {
+    fun `check sdk flag isEduOne when local student is not eduone`() = runTest {
         val student = getStudentEntity().copy(isEduOne = false)
 
-        runBlocking {
-            wulkanowySdkFactory.create(student)
-        }
+        wulkanowySdkFactory.create(student)
 
         verify { sdk.isEduOne = false }
+        coVerify(exactly = 0) { sdk.getCurrentStudent() }
     }
 
     @Test
-    fun `check sdk flag isEduOne when student is eduone null and migrating`() {
-        val studentToProcess = getStudentEntity().copy(isEduOne = null)
-        val registerStudent = studentToProcess.toRegisterStudent(isEduOne = true)
-        val semesters = listOf(getSemesterEntity())
+    fun `check sdk flag isEduOne when local student is eduone null and remote student is eduone true`() =
+        runTest {
+            val studentToProcess = getStudentEntity().copy(isEduOne = null)
+            val registerStudent = studentToProcess.toRegisterStudent(isEduOne = true)
+            val semesters = listOf(getSemesterEntity())
 
-        coEvery { studentDao.loadById(any()) } returns studentToProcess
-        coEvery { studentDao.update(any(StudentIsEduOne::class)) } just Runs
-        coEvery { semesterDao.loadAll(any(), any()) } returns semesters
-        coEvery { sdk.getCurrentStudent() } returns registerStudent
+            coEvery { studentDao.loadById(any()) } returns studentToProcess
+            coEvery { studentDao.update(any(StudentIsEduOne::class)) } just Runs
+            coEvery { semesterDao.loadAll(any(), any()) } returns semesters
+            coEvery { sdk.getCurrentStudent() } returns registerStudent
 
-        runBlocking {
             wulkanowySdkFactory.create(studentToProcess)
-        }
 
-        verify { sdk.isEduOne = true }
-    }
+            verify { sdk.isEduOne = true }
+            coVerify { sdk.getCurrentStudent() }
+        }
 
     @Test
-    fun `check sdk flag isEduOne when student is eduone null and not migrating`() {
-        val studentToProcess = getStudentEntity().copy(isEduOne = null)
-        val registerStudent = studentToProcess.toRegisterStudent(isEduOne = false)
-        val semesters = listOf(getSemesterEntity())
+    fun `check sdk flag isEduOne when local student is eduone null and remote student is eduone false`() =
+        runTest {
+            val studentToProcess = getStudentEntity().copy(isEduOne = null)
+            val registerStudent = studentToProcess.toRegisterStudent(isEduOne = false)
+            val semesters = listOf(getSemesterEntity())
 
-        coEvery { studentDao.loadById(any()) } returns studentToProcess
-        coEvery { studentDao.update(any(StudentIsEduOne::class)) } just Runs
-        coEvery { semesterDao.loadAll(any(), any()) } returns semesters
-        coEvery { sdk.getCurrentStudent() } returns registerStudent
+            coEvery { studentDao.loadById(any()) } returns studentToProcess
+            coEvery { studentDao.update(any(StudentIsEduOne::class)) } just Runs
+            coEvery { semesterDao.loadAll(any(), any()) } returns semesters
+            coEvery { sdk.getCurrentStudent() } returns registerStudent
 
-        runBlocking {
             wulkanowySdkFactory.create(studentToProcess)
+
+            verify { sdk.isEduOne = false }
+            coVerify { sdk.getCurrentStudent() }
         }
 
-        verify { sdk.isEduOne = false }
-    }
+    @Test
+    fun `check sdk flag isEduOne when sdk getCurrentStudent throws error`() =
+        runTest {
+            val studentToProcess = getStudentEntity().copy(isEduOne = null)
+            val semesters = listOf(getSemesterEntity())
+
+            coEvery { studentDao.loadById(any()) } returns studentToProcess
+            coEvery { studentDao.update(any(StudentIsEduOne::class)) } just Runs
+            coEvery { semesterDao.loadAll(any(), any()) } returns semesters
+            coEvery { sdk.getCurrentStudent() } throws Exception()
+
+            wulkanowySdkFactory.create(studentToProcess)
+
+            verify { sdk.isEduOne = false }
+            coVerify { sdk.getCurrentStudent() }
+        }
 
     private fun Student.toRegisterStudent(isEduOne: Boolean) = RegisterStudent(
         studentId = studentId,
