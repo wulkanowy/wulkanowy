@@ -2,11 +2,9 @@ package io.github.wulkanowy.data
 
 import android.os.Build
 import dagger.hilt.android.testing.HiltTestApplication
-import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.StudentIsEduOne
-import io.github.wulkanowy.getSemesterEntity
 import io.github.wulkanowy.getStudentEntity
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.RegisterStudent
@@ -31,20 +29,17 @@ class WulkanowySdkFactoryTest {
 
     private lateinit var wulkanowySdkFactory: WulkanowySdkFactory
     private lateinit var studentDao: StudentDao
-    private lateinit var semesterDao: SemesterDao
     private lateinit var sdk: Sdk
 
     @Before
     fun setUp() {
         sdk = mockk(relaxed = true)
         studentDao = mockk()
-        semesterDao = mockk()
         wulkanowySdkFactory = spyk(
             WulkanowySdkFactory(
                 chuckerInterceptor = mockk(),
                 remoteConfig = mockk(relaxed = true),
                 webkitCookieManagerProxy = mockk(),
-                semesterDb = semesterDao,
                 studentDb = studentDao
             )
         )
@@ -77,11 +72,9 @@ class WulkanowySdkFactoryTest {
         runTest {
             val studentToProcess = getStudentEntity().copy(isEduOne = null)
             val registerStudent = studentToProcess.toRegisterStudent(isEduOne = true)
-            val semesters = listOf(getSemesterEntity())
 
             coEvery { studentDao.loadById(any()) } returns studentToProcess
             coEvery { studentDao.update(any(StudentIsEduOne::class)) } just Runs
-            coEvery { semesterDao.loadAll(any(), any()) } returns semesters
             coEvery { sdk.getCurrentStudent() } returns registerStudent
 
             wulkanowySdkFactory.create(studentToProcess)
@@ -95,11 +88,9 @@ class WulkanowySdkFactoryTest {
         runTest {
             val studentToProcess = getStudentEntity().copy(isEduOne = null)
             val registerStudent = studentToProcess.toRegisterStudent(isEduOne = false)
-            val semesters = listOf(getSemesterEntity())
 
             coEvery { studentDao.loadById(any()) } returns studentToProcess
             coEvery { studentDao.update(any(StudentIsEduOne::class)) } just Runs
-            coEvery { semesterDao.loadAll(any(), any()) } returns semesters
             coEvery { sdk.getCurrentStudent() } returns registerStudent
 
             wulkanowySdkFactory.create(studentToProcess)
@@ -112,11 +103,9 @@ class WulkanowySdkFactoryTest {
     fun `check sdk flag isEduOne when sdk getCurrentStudent throws error`() =
         runTest {
             val studentToProcess = getStudentEntity().copy(isEduOne = null)
-            val semesters = listOf(getSemesterEntity())
 
             coEvery { studentDao.loadById(any()) } returns studentToProcess
             coEvery { studentDao.update(any(StudentIsEduOne::class)) } just Runs
-            coEvery { semesterDao.loadAll(any(), any()) } returns semesters
             coEvery { sdk.getCurrentStudent() } throws Exception()
 
             wulkanowySdkFactory.create(studentToProcess)

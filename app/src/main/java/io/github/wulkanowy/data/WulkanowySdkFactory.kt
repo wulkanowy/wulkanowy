@@ -1,7 +1,6 @@
 package io.github.wulkanowy.data
 
 import com.chuckerteam.chucker.api.ChuckerInterceptor
-import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
@@ -20,7 +19,6 @@ class WulkanowySdkFactory @Inject constructor(
     private val chuckerInterceptor: ChuckerInterceptor,
     private val remoteConfig: RemoteConfigHelper,
     private val webkitCookieManagerProxy: WebkitCookieManagerProxy,
-    private val semesterDb: SemesterDao,
     private val studentDb: StudentDao,
 ) {
 
@@ -83,13 +81,26 @@ class WulkanowySdkFactory @Inject constructor(
         eduOneMutex.withLock {
             val studentFromDatabase = studentDb.loadById(student.id)
             if (studentFromDatabase?.isEduOne != null) {
+                Timber.d("Migration eduOne: already done")
                 return studentFromDatabase.isEduOne
             }
 
-            val initializedSdk = buildSdk(student, semester = null, isStudentEduOne = false)
+            Timber.d("Migration eduOne: flag missing. Running migration...")
+            val initializedSdk = buildSdk(
+                student = student,
+                semester = null,
+                isStudentEduOne = false, // doesn't matter
+            )
             val newCurrentStudent = runCatching { initializedSdk.getCurrentStudent() }
-                .onFailure { Timber.e(it, "Can't get current student from WulkanowySDK") }
-                .getOrNull() ?: return false
+                .onFailure { Timber.e(it, "Migration eduOne: can't get current student") }
+                .getOrNull()
+
+            if (newCurrentStudent == null) {
+                Timber.d("Migration eduOne: failed, so skipping")
+                return false
+            }
+
+            Timber.d("Migration eduOne: success. New isEduOne flag: ${newCurrentStudent.isEduOne}")
 
             val studentIsEduOne = StudentIsEduOne(
                 id = student.id,
