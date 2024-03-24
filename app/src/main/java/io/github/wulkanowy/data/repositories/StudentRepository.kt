@@ -194,15 +194,21 @@ class StudentRepository @Inject constructor(
         wulkanowySdkFactory.create(student, semester)
             .authorizePermission(pesel)
 
-    suspend fun refreshStudentName(student: Student, semester: Semester) {
-        val newCurrentApiStudent = wulkanowySdkFactory.create(student, semester)
-            .getCurrentStudent() ?: return
+    suspend fun refreshStudentAfterAuthorize(student: Student, semester: Semester) {
+        val newCurrentApiStudent = wulkanowySdkFactory
+            .create(student, semester)
+            .getCurrentStudent()
+            ?: return Timber.d("Can't find student with id ${student.studentId}")
 
         val studentName = StudentName(
             studentName = "${newCurrentApiStudent.studentName} ${newCurrentApiStudent.studentSurname}"
         ).apply { id = student.id }
 
         studentDb.update(studentName)
+        semesterDb.removeOldAndSaveNew(
+            oldItems = semesterDb.loadAll(student.studentId, semester.classId),
+            newItems = newCurrentApiStudent.semesters.mapToEntities(newCurrentApiStudent.studentId)
+        )
     }
 
     suspend fun deleteStudentsAssociatedWithAccount(student: Student) {
@@ -218,4 +224,3 @@ class StudentRepository @Inject constructor(
 }
 
 class NoAuthorizationException : Exception()
-
