@@ -102,10 +102,10 @@ class StudentRepository @Inject constructor(
     }
 
     suspend fun updateCurrentStudentAuthStatus() {
-        Timber.i("Checking isAuthorized status")
+        Timber.i("Check isAuthorized: started")
         val student = getCurrentStudent()
         if (student.isAuthorized) {
-            Timber.i("Student is authorized, early return")
+            Timber.i("Check isAuthorized: already authorized")
             return
         }
 
@@ -113,7 +113,7 @@ class StudentRepository @Inject constructor(
         val newCurrentStudent = initializedSdk.getCurrentStudent() ?: return
 
         if (!newCurrentStudent.isAuthorized) {
-            Timber.i("Student is not authorized")
+            Timber.i("Check isAuthorized: authorization required")
             throw NoAuthorizationException()
         }
 
@@ -122,7 +122,7 @@ class StudentRepository @Inject constructor(
             isAuthorized = true
         )
 
-        Timber.i("Student is authorized, updating database")
+        Timber.i("Check isAuthorized: already authorized, update local status")
         studentDb.update(studentIsAuthorized)
     }
 
