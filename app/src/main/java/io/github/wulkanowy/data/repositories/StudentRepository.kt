@@ -16,7 +16,6 @@ import io.github.wulkanowy.data.mappers.mapToPojo
 import io.github.wulkanowy.data.pojos.RegisterUser
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.DispatchersProvider
-import io.github.wulkanowy.utils.getCurrentOrLast
 import io.github.wulkanowy.utils.security.Scrambler
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -110,11 +109,7 @@ class StudentRepository @Inject constructor(
             return
         }
 
-        val currentSemester = semesterDb.loadAll(
-            studentId = student.studentId,
-            classId = student.classId,
-        ).getCurrentOrLast()
-        val initializedSdk = wulkanowySdkFactory.create(student, currentSemester)
+        val initializedSdk = wulkanowySdkFactory.create(student)
         val newCurrentStudent = initializedSdk.getCurrentStudent() ?: return
 
         if (!newCurrentStudent.isAuthorized) {

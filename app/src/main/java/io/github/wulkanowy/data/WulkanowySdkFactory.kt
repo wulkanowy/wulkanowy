@@ -9,7 +9,6 @@ import io.github.wulkanowy.data.db.entities.StudentIsEduOne
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.RemoteConfigHelper
 import io.github.wulkanowy.utils.WebkitCookieManagerProxy
-import io.github.wulkanowy.utils.getCurrentOrLast
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
@@ -87,11 +86,7 @@ class WulkanowySdkFactory @Inject constructor(
                 return studentFromDatabase.isEduOne
             }
 
-            val currentSemester = semesterDb.loadAll(
-                studentId = student.studentId,
-                classId = student.classId,
-            ).getCurrentOrLast()
-            val initializedSdk = buildSdk(student, currentSemester, false)
+            val initializedSdk = buildSdk(student, semester = null, isStudentEduOne = false)
             val newCurrentStudent = runCatching { initializedSdk.getCurrentStudent() }
                 .onFailure { Timber.e(it, "Can't get current student from WulkanowySDK") }
                 .getOrNull() ?: return false
