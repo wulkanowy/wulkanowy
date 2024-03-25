@@ -198,10 +198,10 @@ class StudentRepository @Inject constructor(
             .authorizePermission(pesel)
 
     suspend fun refreshStudentAfterAuthorize(student: Student, semester: Semester) {
-        val newCurrentApiStudent = wulkanowySdkFactory
-            .create(student, semester)
-            .getCurrentStudent()
-            ?: return Timber.d("Can't find student with id ${student.studentId}")
+        val wulkanowySdk = wulkanowySdkFactory.create(student, semester)
+        val newCurrentApiStudent = runCatching { wulkanowySdk.getCurrentStudent() }
+            .onFailure { Timber.e(it, "Can't find student with id ${student.studentId}") }
+            .getOrNull() ?: return
 
         val studentName = StudentName(
             studentName = "${newCurrentApiStudent.studentName} ${newCurrentApiStudent.studentSurname}"
