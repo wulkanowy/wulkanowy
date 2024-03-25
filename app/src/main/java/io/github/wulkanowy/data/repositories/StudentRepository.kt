@@ -226,11 +226,11 @@ class StudentRepository @Inject constructor(
     }
 
     private fun RegisterUser.logErrors() {
-        val symbolsErrors = symbols.filter { symbol -> symbol.error != null }
-            .map { symbol -> symbol.error }
-        val unitsErrors = symbols.flatMap { symbol -> symbol.schools }
-            .filter { unit -> unit.error != null }
-            .map { unit -> unit.error }
+        val symbolsErrors = symbols.filter { it.error != null }
+            .map { it.error }
+        val unitsErrors = symbols.flatMap { it.schools }
+            .filter { it.error != null }
+            .map { it.error }
 
         (symbolsErrors + unitsErrors).forEach { error ->
             Timber.e(error, "Error occurred while fetching students")
