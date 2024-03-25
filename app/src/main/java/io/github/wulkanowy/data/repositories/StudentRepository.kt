@@ -42,6 +42,7 @@ class StudentRepository @Inject constructor(
     ): RegisterUser = wulkanowySdkFactory.create()
         .getStudentsFromHebe(token, pin, symbol, "")
         .mapToPojo(null)
+        .also { it.logErrors() }
 
     suspend fun getUserSubjectsFromScrapper(
         email: String,
@@ -52,6 +53,7 @@ class StudentRepository @Inject constructor(
     ): RegisterUser = wulkanowySdkFactory.create()
         .getUserSubjectsFromScrapper(email, password, scrapperBaseUrl, domainSuffix, symbol)
         .mapToPojo(password)
+        .also { it.logErrors() }
 
     suspend fun getStudentsHybrid(
         email: String,
@@ -61,6 +63,7 @@ class StudentRepository @Inject constructor(
     ): RegisterUser = wulkanowySdkFactory.create()
         .getStudentsHybrid(email, password, scrapperBaseUrl, "", symbol)
         .mapToPojo(password)
+        .also { it.logErrors() }
 
     suspend fun getSavedStudents(decryptPass: Boolean = true): List<StudentWithSemesters> {
         return studentDb.loadStudentsWithSemesters().map { (student, semesters) ->
@@ -219,6 +222,18 @@ class StudentRepository @Inject constructor(
         withContext(dispatchers.io) {
             scrambler.clearKeyPair()
             appDatabase.clearAllTables()
+        }
+    }
+
+    private fun RegisterUser.logErrors() {
+        val symbolsErrors = symbols.filter { symbol -> symbol.error != null }
+            .map { symbol -> symbol.error }
+        val unitsErrors = symbols.flatMap { symbol -> symbol.schools }
+            .filter { unit -> unit.error != null }
+            .map { unit -> unit.error }
+
+        (symbolsErrors + unitsErrors).forEach { error ->
+            Timber.e(error, "Error occurred while fetching students")
         }
     }
 }
