@@ -66,7 +66,7 @@
     <string name="login_invalid_symbol_definitely">Don\'t make this up! If you cannot find it, please contact the school</string>
     <string name="login_incorrect_symbol">Student not found. Validate the symbol and the chosen variation of the UONET+ register</string>
     <string name="login_duplicate_student">Selected student is already logged in</string>
-    <string name="login_symbol_helper">The symbol can be found on the register page in&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Wygeneruj kod dostępu</b>.\n\nMake sure that you have set the appropriate register variant in the <b>UONET+ register variant</b> field on the first login screen</string>
+    <string name="login_symbol_helper">The symbol can be found on the register page in&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Wygeneruj kod dostępu</b>.&lt;br>&lt;br>Make sure that you have set the appropriate register variant in the <b>UONET+ register variant</b> field on the first login screen</string>
     <string name="login_select_student">Select students to log in to the application</string>
     <string name="login_advanced">Other options</string>
     <string name="login_advanced_warning_mobile_api">In this mode, a lucky number does not work, a class grade stats, summary of attendance, excuse for absence, completed lessons, school information and preview of the list of registered devices</string>
@@ -78,7 +78,7 @@
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Send email</string>
     <string name="login_email_subject" translatable="false">Zgłoszenie: Problemy z logowaniem</string>
-    <string name="login_email_text" translatable="false">Informacje o aplikacji:\n\nUrządzenie: %1$s\nWersja SDK: %2$s\nWersja aplikacji: %3$s\nDodatkowe informacje: %4$s\nIdentyfikator instalacji: %5$s\nOstatni błąd: %6$s\n\nNazwa szkoły i miejscowość: %7$s\nDodatkowe informacje: %8$s</string>
+    <string name="login_email_text" translatable="false">Informacje o aplikacji:&lt;br>&lt;br>Urządzenie: %1$s\nWersja SDK: %2$s\nWersja aplikacji: %3$s\nDodatkowe informacje: %4$s\nIdentyfikator instalacji: %5$s\nOstatni błąd: %6$s&lt;br>&lt;br>Nazwa szkoły i miejscowość: %7$s\nDodatkowe informacje: %8$s</string>
     <string name="login_recover_warning">Make sure you select the correct UONET+ register variation!</string>
     <string name="login_recover_button">Reset password</string>
     <string name="login_recover_title">Recover your account</string>
@@ -134,9 +134,9 @@
     <string name="grade_summary_descriptive">Descriptive grade</string>
     <string name="grade_summary_calculated_average">Calculated average</string>
     <string name="grade_summary_calculated_average_help_dialog_title">How does Calculated Average work?</string>
-    <string name="grade_summary_calculated_average_help_dialog_message">The Calculated Average is the arithmetic average calculated from the subjects averages. It allows you to know the approximate final average. It is calculated in a way selected by the user in the application settings. It is recommended that you choose the appropriate option. This is because the calculation of school averages differs. Additionally, if your school reports the average of the subjects on the Vulcan page, the application downloads them and does not calculate these averages. This can be changed by forcing the calculation of the average in the application settings.\n\n<b>Average of grades only from selected semester</b>:\n1. Calculating the weighted average for each subject in a given semester\n2.Adding calculated averages\n3. Calculation of the arithmetic average of the summed averages\n\n<b>Average of averages from both semesters</b>:\n1.Calculating the weighted average for each subject in semester 1 and 2\n2. Calculating the arithmetic average of the calculated averages for semesters 1 and 2 for each subject.\n3. Adding calculated averages\n4. Calculation of the arithmetic average of the summed averages\n\n<b>Average of grades from the whole year:</b>\n1. Calculating weighted average over the year for each subject. The final average in the 1st semester is irrelevant.\n2. Adding calculated averages\n3. Calculating the arithmetic average of summed averages</string>
+    <string name="grade_summary_calculated_average_help_dialog_message">The Calculated Average is the arithmetic average calculated from the subjects averages. It allows you to know the approximate final average. It is calculated in a way selected by the user in the application settings. It is recommended that you choose the appropriate option. This is because the calculation of school averages differs. Additionally, if your school reports the average of the subjects on the Vulcan page, the application downloads them and does not calculate these averages. This can be changed by forcing the calculation of the average in the application settings.&lt;br>&lt;br><b>Average of grades only from selected semester</b>:\n1. Calculating the weighted average for each subject in a given semester\n2.Adding calculated averages\n3. Calculation of the arithmetic average of the summed averages&lt;br>&lt;br><b>Average of averages from both semesters</b>:\n1.Calculating the weighted average for each subject in semester 1 and 2\n2. Calculating the arithmetic average of the calculated averages for semesters 1 and 2 for each subject.\n3. Adding calculated averages\n4. Calculation of the arithmetic average of the summed averages&lt;br>&lt;br><b>Average of grades from the whole year:</b>\n1. Calculating weighted average over the year for each subject. The final average in the 1st semester is irrelevant.\n2. Adding calculated averages\n3. Calculating the arithmetic average of summed averages</string>
     <string name="grade_summary_final_average_help_dialog_title">How does the Final Average work?</string>
-    <string name="grade_summary_final_average_help_dialog_message">The Final Average is the arithmetic average calculated from all currently available final grades in the given semester.\n\nThe calculation scheme consists of the following steps:\n1. Summing up the final grades given by teachers\n2. Divide by the number of subjects that have already been graded</string>
+    <string name="grade_summary_final_average_help_dialog_message">The Final Average is the arithmetic average calculated from all currently available final grades in the given semester.&lt;br>&lt;br>The calculation scheme consists of the following steps:\n1. Summing up the final grades given by teachers\n2. Divide by the number of subjects that have already been graded</string>
     <string name="grade_summary_final_average">Final average</string>
     <string name="grade_summary_from_subjects">from %1$d of %2$d subjects</string>
     <string name="grade_menu_summary">Summary</string>
@@ -281,7 +281,7 @@
     <string name="attendance_excuse_no_selection">You must select at least one absence!</string>
     <string name="attendance_excuse_title">Excuse</string>
     <string name="attendance_excuse_reason" translatable="false">z powodu</string>
-    <string name="attendance_excuse_formula" translatable="false">Dzień dobry,\nProszę o usprawiedliwienie mojego dziecka w dniu %s z lekcji %s%s%s.\n\nPozdrawiam.</string>
+    <string name="attendance_excuse_formula" translatable="false">Dzień dobry,\nProszę o usprawiedliwienie mojego dziecka w dniu %s z lekcji %s%s%s.&lt;br>&lt;br>Pozdrawiam.</string>
     <plurals name="attendance_notify_new_items_title">
         <item quantity="one">New attendance</item>
         <item quantity="other">New attendance</item>
@@ -570,7 +570,7 @@
     <string name="about_homepage_summary">Visit the website and help develop the application</string>
     <string name="about_licenses">Licenses</string>
     <string name="about_licenses_summary">Licenses of libraries used in the application</string>
-    <string name="about_feedback_template" translatable="false">Informacje o aplikacji:\n\nUrządzenie: %1$s\nWersja SDK: %2$s\nWersja aplikacji: %3$s\nIdentyfikator instalacji: %4$s\nTreść zgłoszenia:</string>
+    <string name="about_feedback_template" translatable="false">Informacje o aplikacji:&lt;br>&lt;br>Urządzenie: %1$s\nWersja SDK: %2$s\nWersja aplikacji: %3$s\nIdentyfikator instalacji: %4$s\nTreść zgłoszenia:</string>
 
 
     <!--Licenses-->
@@ -743,14 +743,14 @@
     <string name="pref_notify_upcoming_lessons_persistent_summary">Turn off when notification is not showing in your watch/band</string>
     <string name="pref_notify_open_system_settings">Open system notification settings</string>
     <string name="pref_notify_fix_sync_issues">Fix synchronization &amp; notifications issues</string>
-    <string name="pref_notify_fix_sync_issues_message">Your device may have data synchronization issues and with notifications.\n\nTo fix them, you need to add Wulkanowy to the autostart and turn off battery optimization/saving in the phone settings.</string>
+    <string name="pref_notify_fix_sync_issues_message">Your device may have data synchronization issues and with notifications.&lt;br>&lt;br>To fix them, you need to add Wulkanowy to the autostart and turn off battery optimization/saving in the phone settings.</string>
     <string name="pref_notify_debug_switch">Show debug notifications</string>
     <string name="pref_notify_disabled_summary">Synchronization is disabled</string>
     <string name="pref_notify_notifications_piggyback_header">Official app notifications</string>
     <string name="pref_notify_notifications_piggyback">Capture official app notifications</string>
     <string name="pref_notify_notifications_piggyback_cancel_original">Remove official app notifications after capture</string>
     <string name="pref_notification_piggyback_popup_title">Capture notifications</string>
-    <string name="pref_notification_piggyback_popup_description">With this feature you can gain a substitute of push notifications like in the official app. All you need to do is allow Wulkanowy to receive all notifications in your system settings.\n\nHow it works?\nWhen you get a notification in Dziennik VULCAN, Wulkanowy will be notified (that\'s what these extra permissions are for) and will trigger a sync so that can send its own notification.\n\nFOR ADVANCED USERS ONLY</string>
+    <string name="pref_notification_piggyback_popup_description">With this feature you can gain a substitute of push notifications like in the official app. All you need to do is allow Wulkanowy to receive all notifications in your system settings.&lt;br>&lt;br>How it works?\nWhen you get a notification in Dziennik VULCAN, Wulkanowy will be notified (that\'s what these extra permissions are for) and will trigger a sync so that can send its own notification.&lt;br>&lt;br>FOR ADVANCED USERS ONLY</string>
     <string name="pref_notification_exact_alarm_popup_title">Upcoming lesson notifications</string>
     <string name="pref_notification_exact_alarm_popup_descriptions">You must allow the Wulkanowy app to set alarms and reminders in your system settings to use this feature.</string>
     <string name="pref_notification_go_to_settings">Go to settings</string>
@@ -852,7 +852,7 @@
     <string name="auth_button">Authorize</string>
     <string name="auth_success">Authorization completed successfully</string>
     <string name="auth_title">Authorization</string>
-    <string name="auth_description">To operate the application, we need to confirm your identity. Please enter the student\'s PESEL &lt;b>%1$s&lt;/b> in the field below</string>
+    <string name="auth_description">Szanowny Rodzicu,&lt;br>&lt;br>W celu autoryzacji i zapewnienia bezpieczeństwa danych, uprzejmie prosimy o wprowadzenie poniżej numeru PESEL ucznia &lt;b>%1$s&lt;/b>. Te informacje są niezbędne do prawidłowego przypisania dostępu i ochrony danych osobowych zgodnie z obowiązującymi przepisami.&lt;br>&lt;br>Po wprowadzeniu danych, będą one weryfikowane w celu zapewnienia, że dostęp do systemu VULCAN jest przyznawany wyłącznie upoważnionym osobom. W przypadku jakichkolwiek wątpliwości lub problemów, prosimy o kontakt z administratorem dziennika szkolnego w celu wyjaśnienia sytuacji.&lt;br>&lt;br>Zachowujemy najwyższe standardy ochrony danych osobowych i zapewniamy, że wszelkie przekazane informacje są chronione.&lt;br>&lt;br>Przypominamy, że podanie pełnych i prawdziwych danych jest obowiązkowe i konieczne do korzystania z systemu VULCAN.</string>
     <string name="auth_button_skip">Skip for now</string>
 
 
