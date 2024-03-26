@@ -2,8 +2,14 @@ package io.github.wulkanowy.ui.modules.attendance
 
 import android.content.DialogInterface.BUTTON_POSITIVE
 import android.os.Bundle
-import android.view.*
-import android.view.View.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.View.GONE
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import androidx.appcompat.view.ActionMode
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -52,7 +58,7 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
 
     override val titleStringId get() = R.string.attendance_title
 
-    override val isViewEmpty get() = attendanceAdapter.items.isEmpty()
+    override val isViewEmpty get() = attendanceAdapter.isEmpty()
 
     override val currentStackSize get() = (activity as? MainActivity)?.currentStackSize
 
@@ -140,10 +146,7 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
     }
 
     override fun updateData(data: List<Attendance>) {
-        with(attendanceAdapter) {
-            items = data
-            notifyDataSetChanged()
-        }
+        attendanceAdapter.submitList(data)
     }
 
     override fun updateNavigationDay(date: String) {
@@ -155,10 +158,7 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
     }
 
     override fun clearData() {
-        with(attendanceAdapter) {
-            items = emptyList()
-            notifyDataSetChanged()
-        }
+        attendanceAdapter.submitList(emptyList())
     }
 
     override fun resetView() {

@@ -33,7 +33,7 @@ class SchoolAnnouncementFragment :
         get() = R.string.school_announcement_title
 
     override val isViewEmpty: Boolean
-        get() = schoolAnnouncementAdapter.items.isEmpty()
+        get() = schoolAnnouncementAdapter.isEmpty()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,17 +61,11 @@ class SchoolAnnouncementFragment :
     }
 
     override fun updateData(data: List<SchoolAnnouncement>) {
-        with(schoolAnnouncementAdapter) {
-            items = data
-            notifyDataSetChanged()
-        }
+        schoolAnnouncementAdapter.submitList(data)
     }
 
     override fun clearData() {
-        with(schoolAnnouncementAdapter) {
-            items = listOf()
-            notifyDataSetChanged()
-        }
+        schoolAnnouncementAdapter.submitList(emptyList())
     }
 
     override fun showEmpty(show: Boolean) {

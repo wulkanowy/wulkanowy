@@ -13,12 +13,14 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.ItemMessageBinding
 import io.github.wulkanowy.databinding.ItemMessageChipsBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.toFormattedString
 import javax.inject.Inject
 
-class MessageTabAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MessageTabAdapter @Inject constructor() :
+    SyncListAdapter<MessageTabDataItem, RecyclerView.ViewHolder>(MessageTabDiffer) {
 
     lateinit var onItemClickListener: (MessageTabDataItem.MessageItem, position: Int) -> Unit
 
@@ -30,23 +32,14 @@ class MessageTabAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerVie
 
     lateinit var onChangesDetectedListener: () -> Unit
 
-    private var items = mutableListOf<MessageTabDataItem>()
-
-    fun submitData(data: List<MessageTabDataItem>) {
-        val originalMessagesSize = items.count { it.viewType == MessageItemViewType.MESSAGE }
-        val newMessagesSize = data.count { it.viewType == MessageItemViewType.MESSAGE }
+    override fun onSubmit(old: List<MessageTabDataItem>, new: List<MessageTabDataItem>) {
+        val originalMessagesSize = old.count { it.viewType == MessageItemViewType.MESSAGE }
+        val newMessagesSize = new.count { it.viewType == MessageItemViewType.MESSAGE }
 
         if (originalMessagesSize != newMessagesSize) onChangesDetectedListener()
-
-        val diffResult = DiffUtil.calculateDiff(MessageTabDiffUtil(items, data))
-        items = data.toMutableList()
-
-        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun getItemViewType(position: Int) = items[position].viewType.ordinal
-
-    override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -169,26 +162,20 @@ class MessageTabAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerVie
     class HeaderViewHolder(val binding: ItemMessageChipsBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    private class MessageTabDiffUtil(
-        private val old: List<MessageTabDataItem>, private val new: List<MessageTabDataItem>
-    ) : DiffUtil.Callback() {
-
-        override fun getOldListSize(): Int = old.size
-
-        override fun getNewListSize(): Int = new.size
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            val oldItem = old[oldItemPosition]
-            val newItem = new[newItemPosition]
-
-            return if (oldItem is MessageTabDataItem.MessageItem && newItem is MessageTabDataItem.MessageItem) {
+    private object MessageTabDiffer : DiffUtil.ItemCallback<MessageTabDataItem>() {
+        override fun areItemsTheSame(
+            oldItem: MessageTabDataItem,
+            newItem: MessageTabDataItem
+        ) =
+            if (oldItem is MessageTabDataItem.MessageItem && newItem is MessageTabDataItem.MessageItem) {
                 oldItem.message.messageGlobalKey == newItem.message.messageGlobalKey
             } else {
                 oldItem.viewType == newItem.viewType
-            }
         }
 
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-            old[oldItemPosition] == new[newItemPosition]
+        override fun areContentsTheSame(
+            oldItem: MessageTabDataItem,
+            newItem: MessageTabDataItem
+        ) = oldItem == newItem
     }
 }

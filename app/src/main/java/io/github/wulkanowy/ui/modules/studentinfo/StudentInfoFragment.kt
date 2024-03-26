@@ -53,7 +53,7 @@ class StudentInfoFragment :
             else -> R.string.student_info_title
         }
 
-    override val isViewEmpty get() = studentInfoAdapter.items.isEmpty()
+    override val isViewEmpty get() = studentInfoAdapter.isEmpty()
 
     companion object {
 
@@ -113,10 +113,7 @@ class StudentInfoFragment :
     }
 
     override fun updateData(data: List<StudentInfoItem>) {
-        with(studentInfoAdapter) {
-            items = data
-            notifyDataSetChanged()
-        }
+        studentInfoAdapter.submitList(data)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

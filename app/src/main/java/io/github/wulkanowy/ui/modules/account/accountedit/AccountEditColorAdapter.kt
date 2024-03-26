@@ -11,16 +11,13 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.databinding.ItemAccountEditColorBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import javax.inject.Inject
 
 class AccountEditColorAdapter @Inject constructor() :
-    RecyclerView.Adapter<AccountEditColorAdapter.ViewHolder>() {
-
-    var items = listOf<Int>()
+    SyncListAdapter<Int, AccountEditColorAdapter.ViewHolder>() {
 
     var selectedColor = 0
-
-    override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         ItemAccountEditColorBinding.inflate(LayoutInflater.from(parent.context), parent, false)

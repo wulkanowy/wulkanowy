@@ -5,14 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.data.db.entities.Conference
 import io.github.wulkanowy.databinding.SubitemDashboardConferencesBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import io.github.wulkanowy.utils.toFormattedString
 
 class DashboardConferencesAdapter :
-    RecyclerView.Adapter<DashboardConferencesAdapter.ViewHolder>() {
-
-    var items = emptyList<Conference>()
-
-    override fun getItemCount() = items.size
+    SyncListAdapter<Conference, DashboardConferencesAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         SubitemDashboardConferencesBinding.inflate(

@@ -7,17 +7,14 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.data.db.entities.TimetableAdditional
 import io.github.wulkanowy.databinding.ItemTimetableAdditionalBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import io.github.wulkanowy.utils.toFormattedString
 import javax.inject.Inject
 
 class AdditionalLessonsAdapter @Inject constructor() :
-    RecyclerView.Adapter<AdditionalLessonsAdapter.ItemViewHolder>() {
-
-    var items = emptyList<TimetableAdditional>()
+    SyncListAdapter<TimetableAdditional, AdditionalLessonsAdapter.ItemViewHolder>() {
 
     var onDeleteClickListener: (timetableAdditional: TimetableAdditional) -> Unit = {}
-
-    override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
         ItemTimetableAdditionalBinding.inflate(LayoutInflater.from(parent.context), parent, false)

@@ -7,19 +7,16 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.databinding.HeaderExamBinding
 import io.github.wulkanowy.databinding.ItemExamBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import io.github.wulkanowy.utils.capitalise
 import io.github.wulkanowy.utils.toFormattedString
 import io.github.wulkanowy.utils.weekDayName
 import java.time.LocalDate
 import javax.inject.Inject
 
-class ExamAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    var items = emptyList<ExamItem<*>>()
+class ExamAdapter @Inject constructor() : SyncListAdapter<ExamItem<*>, RecyclerView.ViewHolder>() {
 
     var onClickListener: (Exam) -> Unit = {}
-
-    override fun getItemCount() = items.size
 
     override fun getItemViewType(position: Int) = items[position].viewType.id
 

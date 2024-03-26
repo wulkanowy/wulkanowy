@@ -37,7 +37,7 @@ class HomeworkFragment : BaseFragment<FragmentHomeworkBinding>(R.layout.fragment
 
     override val titleStringId get() = R.string.homework_title
 
-    override val isViewEmpty get() = homeworkAdapter.items.isEmpty()
+    override val isViewEmpty get() = homeworkAdapter.isEmpty()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -72,17 +72,11 @@ class HomeworkFragment : BaseFragment<FragmentHomeworkBinding>(R.layout.fragment
     }
 
     override fun updateData(data: List<HomeworkItem<*>>) {
-        with(homeworkAdapter) {
-            items = data
-            notifyDataSetChanged()
-        }
+        homeworkAdapter.submitList(data)
     }
 
     override fun clearData() {
-        with(homeworkAdapter) {
-            items = emptyList()
-            notifyDataSetChanged()
-        }
+        homeworkAdapter.submitList(emptyList())
     }
 
     override fun updateNavigationWeek(date: String) {

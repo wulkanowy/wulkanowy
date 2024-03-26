@@ -1,6 +1,8 @@
 package io.github.wulkanowy.ui.modules.luckynumberwidget
 
-import android.appwidget.AppWidgetManager.*
+import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
+import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
+import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -54,8 +56,7 @@ class LuckyNumberWidgetConfigureActivity :
     override fun updateData(data: List<StudentWithSemesters>, selectedStudentId: Long) {
         with(configureAdapter) {
             selectedId = selectedStudentId
-            items = data
-            notifyDataSetChanged()
+            submitList(data)
         }
     }
 

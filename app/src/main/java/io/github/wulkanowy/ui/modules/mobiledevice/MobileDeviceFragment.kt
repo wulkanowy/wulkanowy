@@ -38,7 +38,7 @@ class MobileDeviceFragment :
         get() = R.string.mobile_devices_title
 
     override val isViewEmpty: Boolean
-        get() = devicesAdapter.items.isEmpty()
+        get() = devicesAdapter.isEmpty()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,26 +67,15 @@ class MobileDeviceFragment :
     }
 
     override fun updateData(data: List<MobileDevice>) {
-        with(devicesAdapter) {
-            items = data.toMutableList()
-            notifyDataSetChanged()
-        }
+        devicesAdapter.submitList(data)
     }
 
     override fun deleteItem(device: MobileDevice, position: Int) {
-        with(devicesAdapter) {
-            items.removeAt(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, itemCount)
-        }
+        devicesAdapter.removeItemAt(position)
     }
 
     override fun restoreDeleteItem(device: MobileDevice, position: Int) {
-        with(devicesAdapter) {
-            items.add(position, device)
-            notifyItemInserted(position)
-            notifyItemRangeChanged(position, itemCount)
-        }
+        devicesAdapter.addItemAt(position, device)
     }
 
     override fun showUndo(device: MobileDevice, position: Int) {

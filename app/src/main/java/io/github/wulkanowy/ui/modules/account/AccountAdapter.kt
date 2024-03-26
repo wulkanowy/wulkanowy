@@ -11,20 +11,18 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.HeaderAccountBinding
 import io.github.wulkanowy.databinding.ItemAccountBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import io.github.wulkanowy.utils.createNameInitialsDrawable
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.nickOrName
 import javax.inject.Inject
 
-class AccountAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AccountAdapter @Inject constructor() :
+    SyncListAdapter<AccountItem<*>, RecyclerView.ViewHolder>() {
 
     var isAccountQuickDialogMode = false
 
-    var items = emptyList<AccountItem<*>>()
-
     var onClickListener: (StudentWithSemesters) -> Unit = {}
-
-    override fun getItemCount() = items.size
 
     override fun getItemViewType(position: Int) = items[position].viewType.id
 

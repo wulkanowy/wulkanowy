@@ -4,16 +4,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.MailboxType
 import io.github.wulkanowy.databinding.ItemMailboxChooserBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import javax.inject.Inject
 
 class MailboxChooserAdapter @Inject constructor() :
-    ListAdapter<MailboxChooserItem, MailboxChooserAdapter.ItemViewHolder>(Differ) {
+    SyncListAdapter<MailboxChooserItem, MailboxChooserAdapter.ItemViewHolder>(Differ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
         ItemMailboxChooserBinding.inflate(
@@ -22,7 +22,7 @@ class MailboxChooserAdapter @Inject constructor() :
     )
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(items[position])
     }
 
     class ItemViewHolder(

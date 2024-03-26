@@ -7,16 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.databinding.SubitemDashboardExamsBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.toFormattedString
 import java.time.LocalDate
 
 class DashboardExamsAdapter :
-    RecyclerView.Adapter<DashboardExamsAdapter.ViewHolder>() {
-
-    var items = emptyList<Exam>()
-
-    override fun getItemCount() = items.size
+    SyncListAdapter<Exam, DashboardExamsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         SubitemDashboardExamsBinding.inflate(

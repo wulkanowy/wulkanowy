@@ -6,18 +6,15 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.databinding.ItemStudentInfoBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import javax.inject.Inject
 
 class StudentInfoAdapter @Inject constructor() :
-    RecyclerView.Adapter<StudentInfoAdapter.ViewHolder>() {
-
-    var items = listOf<StudentInfoItem>()
+    SyncListAdapter<StudentInfoItem, StudentInfoAdapter.ViewHolder>() {
 
     var onItemClickListener: (StudentInfoView.Type?) -> Unit = {}
 
     var onItemLongClickListener: (text: String) -> Unit = {}
-
-    override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         ItemStudentInfoBinding.inflate(LayoutInflater.from(parent.context), parent, false)

@@ -9,6 +9,7 @@ import io.github.wulkanowy.data.enums.TimetableGapsMode.NO_GAPS
 import io.github.wulkanowy.data.enums.TimetableMode
 import io.github.wulkanowy.data.flatResourceFlow
 import io.github.wulkanowy.data.logResourceStatus
+import io.github.wulkanowy.data.mapResourceData
 import io.github.wulkanowy.data.onResourceData
 import io.github.wulkanowy.data.onResourceError
 import io.github.wulkanowy.data.onResourceIntermediate
@@ -149,35 +150,36 @@ class TimetablePresenter @Inject constructor(
         flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
+            val currentDate = currentDate ?: now()
 
             isEduOne = student.isEduOne == true
             checkInitialAndCurrentDate(semester)
             timetableRepository.getTimetable(
                 student = student,
                 semester = semester,
-                start = currentDate ?: now(),
+                start = currentDate,
                 end = currentDate ?: now(),
                 forceRefresh = forceRefresh,
                 timetableType = TimetableRepository.TimetableType.NORMAL
-            )
+            ).mapResourceData { it to currentDate }
         }
             .logResourceStatus("load timetable data")
-            .onResourceData {
+            .onResourceData { (it, currentDate) ->
                 isWeekendHasLessons = isWeekendHasLessons || isWeekendHasLessonsUseCase(it.lessons)
 
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
                     showErrorView(false)
+                    updateData(it.lessons, currentDate)
                     showContent(it.lessons.isNotEmpty())
                     showEmpty(it.lessons.isEmpty())
-                    updateData(it.lessons)
                     setDayHeaderMessage(it.headers.find { header -> header.date == currentDate }?.content)
                     reloadNavigation()
                 }
             }
             .onResourceIntermediate { view?.showRefresh(true) }
-            .onResourceSuccess {
+            .onResourceSuccess { (it) ->
                 analytics.logEvent(
                     "load_data",
                     "type" to "timetable",
@@ -216,15 +218,17 @@ class TimetablePresenter @Inject constructor(
         }
     }
 
-    private fun updateData(lessons: List<Timetable>) {
+    private fun updateData(lessons: List<Timetable>, currentDate: LocalDate) {
         tickTimer?.cancel()
 
-        if (currentDate != now()) {
-            view?.updateData(createItems(lessons))
-        } else {
-            tickTimer = timer(period = 2_000) {
+        view?.updateData(createItems(lessons), currentDate)
+        if (currentDate == now()) {
+            tickTimer = timer(period = 2_000, initialDelay = 2_000) {
                 Handler(Looper.getMainLooper()).post {
-                    view?.updateData(createItems(lessons))
+                    if (this@TimetablePresenter.currentDate != currentDate) {
+                        return@post
+                    }
+                    view?.updateData(createItems(lessons), currentDate)
                 }
             }
         }

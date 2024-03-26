@@ -8,19 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.databinding.HeaderHomeworkBinding
 import io.github.wulkanowy.databinding.ItemHomeworkBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import io.github.wulkanowy.utils.capitalise
 import io.github.wulkanowy.utils.toFormattedString
 import io.github.wulkanowy.utils.weekDayName
 import java.time.LocalDate
 import javax.inject.Inject
 
-class HomeworkAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    var items = emptyList<HomeworkItem<*>>()
+class HomeworkAdapter @Inject constructor() :
+    SyncListAdapter<HomeworkItem<*>, RecyclerView.ViewHolder>() {
 
     var onClickListener: (Homework) -> Unit = {}
-
-    override fun getItemCount() = items.size
 
     override fun getItemViewType(position: Int) = items[position].viewType.id
 

@@ -5,15 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.aboutlibraries.entity.Library
 import io.github.wulkanowy.databinding.ItemLicenseBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import javax.inject.Inject
 
-class LicenseAdapter @Inject constructor() : RecyclerView.Adapter<LicenseAdapter.ItemViewHolder>() {
-
-    var items = emptyList<Library>()
+class LicenseAdapter @Inject constructor() :
+    SyncListAdapter<Library, LicenseAdapter.ItemViewHolder>() {
 
     var onClickListener: (Library) -> Unit = {}
-
-    override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
         ItemLicenseBinding.inflate(LayoutInflater.from(parent.context), parent, false)

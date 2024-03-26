@@ -6,17 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.data.db.entities.Conference
 import io.github.wulkanowy.databinding.ItemConferenceBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import io.github.wulkanowy.utils.toFormattedString
 import javax.inject.Inject
 
 class ConferenceAdapter @Inject constructor() :
-    RecyclerView.Adapter<ConferenceAdapter.ItemViewHolder>() {
-
-    var items = emptyList<Conference>()
+    SyncListAdapter<Conference, ConferenceAdapter.ItemViewHolder>() {
 
     var onItemClickListener: (Conference) -> Unit = {}
-
-    override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
         ItemConferenceBinding.inflate(LayoutInflater.from(parent.context), parent, false)

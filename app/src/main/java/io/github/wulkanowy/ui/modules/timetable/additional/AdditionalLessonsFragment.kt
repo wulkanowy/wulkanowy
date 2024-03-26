@@ -13,7 +13,11 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.timetable.additional.add.AdditionalLessonAddDialog
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
-import io.github.wulkanowy.utils.*
+import io.github.wulkanowy.utils.dpToPx
+import io.github.wulkanowy.utils.firstSchoolDayInSchoolYear
+import io.github.wulkanowy.utils.getThemeAttrColor
+import io.github.wulkanowy.utils.lastSchoolDayInSchoolYear
+import io.github.wulkanowy.utils.openMaterialDatePicker
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -36,7 +40,7 @@ class AdditionalLessonsFragment :
 
     override val titleStringId get() = R.string.additional_lessons_title
 
-    override val isViewEmpty get() = additionalLessonsAdapter.items.isEmpty()
+    override val isViewEmpty get() = additionalLessonsAdapter.isEmpty()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -74,17 +78,11 @@ class AdditionalLessonsFragment :
     }
 
     override fun updateData(data: List<TimetableAdditional>) {
-        with(additionalLessonsAdapter) {
-            items = data
-            notifyDataSetChanged()
-        }
+        additionalLessonsAdapter.submitList(data)
     }
 
     override fun clearData() {
-        with(additionalLessonsAdapter) {
-            items = emptyList()
-            notifyDataSetChanged()
-        }
+        additionalLessonsAdapter.submitList(emptyList())
     }
 
     override fun showSuccessMessage() {

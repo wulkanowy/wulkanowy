@@ -37,7 +37,7 @@ class LuckyNumberHistoryFragment :
     override val titleStringId: Int
         get() = R.string.lucky_number_history_title
 
-    override val isViewEmpty get() = luckyNumberHistoryAdapter.items.isEmpty()
+    override val isViewEmpty get() = luckyNumberHistoryAdapter.isEmpty()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,17 +66,11 @@ class LuckyNumberHistoryFragment :
     }
 
     override fun updateData(data: List<LuckyNumber>) {
-        with(luckyNumberHistoryAdapter) {
-            items = data
-            notifyDataSetChanged()
-        }
+        luckyNumberHistoryAdapter.submitList(data)
     }
 
     override fun clearData() {
-        with(luckyNumberHistoryAdapter) {
-            items = emptyList()
-            notifyDataSetChanged()
-        }
+        luckyNumberHistoryAdapter.submitList(emptyList())
     }
 
     override fun showEmpty(show: Boolean) {

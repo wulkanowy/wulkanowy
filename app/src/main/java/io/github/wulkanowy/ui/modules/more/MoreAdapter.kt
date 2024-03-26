@@ -4,15 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.databinding.ItemMoreBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import javax.inject.Inject
 
-class MoreAdapter @Inject constructor() : RecyclerView.Adapter<MoreAdapter.ItemViewHolder>() {
-
-    var items = emptyList<MoreItem>()
+class MoreAdapter @Inject constructor() : SyncListAdapter<MoreItem, MoreAdapter.ItemViewHolder>() {
 
     var onClickListener: (moreItem: MoreItem) -> Unit = {}
-
-    override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
         ItemMoreBinding.inflate(LayoutInflater.from(parent.context), parent, false)

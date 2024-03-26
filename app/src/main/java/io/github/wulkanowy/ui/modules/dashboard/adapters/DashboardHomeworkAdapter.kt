@@ -7,16 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.databinding.SubitemDashboardHomeworkBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.toFormattedString
 import java.time.LocalDate
 
-class DashboardHomeworkAdapter : RecyclerView.Adapter<DashboardHomeworkAdapter.ViewHolder>() {
-
-    var items = emptyList<Homework>()
-
-    override fun getItemCount() = items.size
-
+class DashboardHomeworkAdapter : SyncListAdapter<Homework, DashboardHomeworkAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         SubitemDashboardHomeworkBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )

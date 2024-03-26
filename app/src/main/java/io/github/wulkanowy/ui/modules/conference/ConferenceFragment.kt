@@ -29,7 +29,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>(R.layout.frag
     }
 
     override val isViewEmpty: Boolean
-        get() = conferencesAdapter.items.isEmpty()
+        get() = conferencesAdapter.isEmpty()
 
     override val titleStringId: Int
         get() = R.string.conferences_title
@@ -64,17 +64,11 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>(R.layout.frag
     }
 
     override fun updateData(data: List<Conference>) {
-        with(conferencesAdapter) {
-            items = data
-            notifyDataSetChanged()
-        }
+        conferencesAdapter.submitList(data)
     }
 
     override fun clearData() {
-        with(conferencesAdapter) {
-            items = emptyList()
-            notifyDataSetChanged()
-        }
+        conferencesAdapter.submitList(emptyList())
     }
 
     override fun showRefresh(show: Boolean) {

@@ -2,7 +2,9 @@ package io.github.wulkanowy.ui.modules.timetable.completed
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -12,7 +14,12 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
-import io.github.wulkanowy.utils.*
+import io.github.wulkanowy.utils.dpToPx
+import io.github.wulkanowy.utils.firstSchoolDayInSchoolYear
+import io.github.wulkanowy.utils.getCompatDrawable
+import io.github.wulkanowy.utils.getThemeAttrColor
+import io.github.wulkanowy.utils.lastSchoolDayInSchoolYear
+import io.github.wulkanowy.utils.openMaterialDatePicker
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -35,7 +42,7 @@ class CompletedLessonsFragment :
 
     override val titleStringId get() = R.string.completed_lessons_title
 
-    override val isViewEmpty get() = completedLessonsAdapter.items.isEmpty()
+    override val isViewEmpty get() = completedLessonsAdapter.isEmpty()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,17 +78,11 @@ class CompletedLessonsFragment :
     }
 
     override fun updateData(data: List<CompletedLesson>) {
-        with(completedLessonsAdapter) {
-            items = data
-            notifyDataSetChanged()
-        }
+        completedLessonsAdapter.submitList(data)
     }
 
     override fun clearData() {
-        with(completedLessonsAdapter) {
-            items = emptyList()
-            notifyDataSetChanged()
-        }
+        completedLessonsAdapter.submitList(emptyList())
     }
 
     override fun updateNavigationDay(date: String) {

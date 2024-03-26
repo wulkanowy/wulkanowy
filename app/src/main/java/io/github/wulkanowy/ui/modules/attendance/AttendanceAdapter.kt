@@ -11,23 +11,20 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.enums.SentExcuseStatus
 import io.github.wulkanowy.databinding.ItemAttendanceBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import io.github.wulkanowy.utils.descriptionRes
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.isExcusableOrNotExcused
 import javax.inject.Inject
 
 class AttendanceAdapter @Inject constructor() :
-    RecyclerView.Adapter<AttendanceAdapter.ItemViewHolder>() {
-
-    var items = emptyList<Attendance>()
+    SyncListAdapter<Attendance, AttendanceAdapter.ItemViewHolder>() {
 
     var excuseActionMode: Boolean = false
 
     var onClickListener: (Attendance) -> Unit = {}
 
     var onExcuseCheckboxSelect: (attendanceItem: Attendance, checked: Boolean) -> Unit = { _, _ -> }
-
-    override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
         ItemAttendanceBinding.inflate(LayoutInflater.from(parent.context), parent, false)

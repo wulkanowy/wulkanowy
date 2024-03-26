@@ -68,10 +68,7 @@ class AccountEditDialog : BaseDialogFragment<DialogAccountEditBinding>(), Accoun
     }
 
     override fun updateColorsData(colors: List<Int>) {
-        with(accountEditColorAdapter) {
-            items = colors
-            notifyDataSetChanged()
-        }
+        accountEditColorAdapter.submitList(colors)
     }
 
     override fun showCurrentNick(nick: String) {

@@ -6,17 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.databinding.ItemLuckyNumberHistoryBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import io.github.wulkanowy.utils.capitalise
 import io.github.wulkanowy.utils.toFormattedString
 import io.github.wulkanowy.utils.weekDayName
 import javax.inject.Inject
 
 class LuckyNumberHistoryAdapter @Inject constructor() :
-    RecyclerView.Adapter<LuckyNumberHistoryAdapter.ItemViewHolder>() {
-
-    var items = emptyList<LuckyNumber>()
-
-    override fun getItemCount() = items.size
+    SyncListAdapter<LuckyNumber, LuckyNumberHistoryAdapter.ItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
         ItemLuckyNumberHistoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)

@@ -33,7 +33,7 @@ class NotificationsCenterFragment :
         get() = R.string.notifications_center_title
 
     override val isViewEmpty: Boolean
-        get() = notificationsCenterAdapter.itemCount == 0
+        get() = notificationsCenterAdapter.isEmpty()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

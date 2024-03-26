@@ -4,7 +4,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.ui.modules.dashboard.adapters.DashboardAdapter
 import io.github.wulkanowy.ui.modules.dashboard.viewholders.AdminMessageViewHolder
-import java.util.*
 
 class DashboardItemMoveCallback(
     private val dashboardAdapter: DashboardAdapter,
@@ -41,11 +40,7 @@ class DashboardItemMoveCallback(
         viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean {
-        val list = dashboardAdapter.items.toMutableList()
-
-        Collections.swap(list, viewHolder.bindingAdapterPosition, target.bindingAdapterPosition)
-
-        dashboardAdapter.submitList(list)
+        dashboardAdapter.moveItem(viewHolder.bindingAdapterPosition, target.bindingAdapterPosition)
         return true
     }
 

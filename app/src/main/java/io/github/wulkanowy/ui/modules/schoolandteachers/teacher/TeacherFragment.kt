@@ -37,7 +37,7 @@ class TeacherFragment : BaseFragment<FragmentTeacherBinding>(R.layout.fragment_t
     override val noSubjectString get() = getString(R.string.teacher_no_subject)
 
     override val isViewEmpty: Boolean
-        get() = teacherAdapter.items.isEmpty()
+        get() = teacherAdapter.isEmpty()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,10 +61,7 @@ class TeacherFragment : BaseFragment<FragmentTeacherBinding>(R.layout.fragment_t
     }
 
     override fun updateData(data: List<Teacher>) {
-        with(teacherAdapter) {
-            items = data
-            notifyDataSetChanged()
-        }
+        teacherAdapter.submitList(data)
     }
 
     override fun showEmpty(show: Boolean) {

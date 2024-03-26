@@ -11,17 +11,14 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.databinding.ItemNoteBinding
 import io.github.wulkanowy.sdk.scrapper.notes.NoteCategory
+import io.github.wulkanowy.utils.SyncListAdapter
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.toFormattedString
 import javax.inject.Inject
 
-class NoteAdapter @Inject constructor() : RecyclerView.Adapter<NoteAdapter.ItemViewHolder>() {
-
-    var items = mutableListOf<Note>()
+class NoteAdapter @Inject constructor() : SyncListAdapter<Note, NoteAdapter.ItemViewHolder>() {
 
     var onClickListener: (Note, position: Int) -> Unit = { _, _ -> }
-
-    override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
         ItemNoteBinding.inflate(LayoutInflater.from(parent.context), parent, false)

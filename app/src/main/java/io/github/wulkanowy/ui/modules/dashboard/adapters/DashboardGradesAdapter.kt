@@ -8,16 +8,14 @@ import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.enums.GradeColorTheme
 import io.github.wulkanowy.databinding.SubitemDashboardGradesBinding
 import io.github.wulkanowy.databinding.SubitemDashboardSmallGradeBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import io.github.wulkanowy.utils.getBackgroundColor
 import io.github.wulkanowy.utils.getCompatColor
 
-class DashboardGradesAdapter : RecyclerView.Adapter<DashboardGradesAdapter.ViewHolder>() {
-
-    var items = listOf<Pair<String, List<Grade>>>()
+class DashboardGradesAdapter :
+    SyncListAdapter<Pair<String, List<Grade>>, DashboardGradesAdapter.ViewHolder>() {
 
     lateinit var gradeColorTheme: GradeColorTheme
-
-    override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         SubitemDashboardGradesBinding.inflate(LayoutInflater.from(parent.context), parent, false)

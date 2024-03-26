@@ -40,7 +40,6 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
         setHasOptionsMenu(true)
     }
 
-    @Suppress("UNCHECKED_CAST")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -64,10 +63,7 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
     }
 
     override fun updateData(data: List<AccountItem<*>>) {
-        with(accountAdapter) {
-            items = data
-            notifyDataSetChanged()
-        }
+        accountAdapter.submitList(data)
     }
 
     override fun openLoginView() {

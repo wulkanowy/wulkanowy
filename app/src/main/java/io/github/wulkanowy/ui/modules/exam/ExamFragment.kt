@@ -2,7 +2,9 @@ package io.github.wulkanowy.ui.modules.exam
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -34,7 +36,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(R.layout.fragment_exam), 
 
     override val titleStringId get() = R.string.exam_title
 
-    override val isViewEmpty get() = examAdapter.items.isEmpty()
+    override val isViewEmpty get() = examAdapter.isEmpty()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,10 +73,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(R.layout.fragment_exam), 
     }
 
     override fun updateData(data: List<ExamItem<*>>) {
-        with(examAdapter) {
-            items = data
-            notifyDataSetChanged()
-        }
+        examAdapter.submitList(data)
     }
 
     override fun updateNavigationWeek(date: String) {
@@ -82,10 +81,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(R.layout.fragment_exam), 
     }
 
     override fun clearData() {
-        with(examAdapter) {
-            items = emptyList()
-            notifyDataSetChanged()
-        }
+        examAdapter.submitList(emptyList())
     }
 
     override fun showEmpty(show: Boolean) {

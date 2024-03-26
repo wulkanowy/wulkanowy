@@ -9,21 +9,18 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.ItemAccountBinding
+import io.github.wulkanowy.utils.SyncListAdapter
 import io.github.wulkanowy.utils.createNameInitialsDrawable
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.nickOrName
 import javax.inject.Inject
 
 class WidgetConfigureAdapter @Inject constructor() :
-    RecyclerView.Adapter<WidgetConfigureAdapter.ItemViewHolder>() {
-
-    var items = emptyList<StudentWithSemesters>()
+    SyncListAdapter<StudentWithSemesters, WidgetConfigureAdapter.ItemViewHolder>() {
 
     var selectedId = -1L
 
     var onClickListener: (Student) -> Unit = {}
-
-    override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
         ItemAccountBinding.inflate(LayoutInflater.from(parent.context), parent, false)
