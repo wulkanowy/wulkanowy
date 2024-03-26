@@ -18,6 +18,10 @@ import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoa
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityScoped
 import io.github.wulkanowy.BuildConfig
@@ -26,24 +30,39 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import timber.log.Timber
 import java.net.UnknownHostException
 import java.util.concurrent.atomic.AtomicBoolean
-import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-@ActivityScoped
-class AdsHelper @Inject constructor(
+
+@Module
+@InstallIn(ActivityComponent::class)
+internal class AdModule {
+    @ActivityScoped
+    @Provides
+    fun provideAdsHelper(
+        activity: Activity,
+        @ApplicationContext appContext: Context,
+        preferencesRepository: PreferencesRepository
+    ): AdsHelper = PlayAdsHelper(
+        activity,
+        appContext,
+        preferencesRepository
+    )
+}
+
+class PlayAdsHelper(
     private val activity: Activity,
-    @ApplicationContext private val context: Context,
+    private val context: Context,
     preferencesRepository: PreferencesRepository
-) {
+) : AdsHelper {
 
     private var isMobileAdsInitializeCalled = AtomicBoolean(false)
     private var consentInformation: ConsentInformation? = null
 
     private val canRequestAd get() = consentInformation?.canRequestAds() == true
-    val isMobileAdsSdkInitialized = MutableStateFlow(false)
-    val canShowAd get() = isMobileAdsSdkInitialized.value && canRequestAd
+    override val isMobileAdsSdkInitialized = MutableStateFlow(false)
+    override val canShowAd get() = isMobileAdsSdkInitialized.value && canRequestAd
 
     init {
         if (preferencesRepository.isAdsEnabled) {
@@ -51,7 +70,7 @@ class AdsHelper @Inject constructor(
         }
     }
 
-    fun initialize() {
+    override fun initialize() {
         val consentRequestParameters = ConsentRequestParameters.Builder()
             .build()
 
@@ -82,7 +101,7 @@ class AdsHelper @Inject constructor(
         }
     }
 
-    fun openAdsUmpAgreements() {
+    override fun openAgreements() {
         UserMessagingPlatform.showPrivacyOptionsForm(activity) {
             if (it != null) {
                 Timber.e(IllegalStateException("${it.errorCode}: ${it.message}"))
@@ -102,7 +121,7 @@ class AdsHelper @Inject constructor(
         }
     }
 
-    suspend fun getSupportAd(): RewardedInterstitialAd? {
+    override suspend fun getSupportAd(): PlaySupportAd? {
         if (!canRequestAd) return null
         if (!context.isInternetConnected()) {
             throw UnknownHostException()
@@ -118,7 +137,7 @@ class AdsHelper @Inject constructor(
                 adRequest,
                 object : RewardedInterstitialAdLoadCallback() {
                     override fun onAdLoaded(rewardedInterstitialAd: RewardedInterstitialAd) {
-                        it.resume(rewardedInterstitialAd)
+                        it.resume(PlaySupportAd(rewardedInterstitialAd))
                     }
 
                     override fun onAdFailedToLoad(loadAdError: LoadAdError) {
@@ -128,7 +147,7 @@ class AdsHelper @Inject constructor(
         }
     }
 
-    suspend fun getDashboardTileAdBanner(width: Int): AdBanner {
+    override suspend fun getDashboardTileAdBanner(width: Int): AdBanner {
         if (!canShowAd) throw IllegalStateException("Cannot show ad")
         val adRequest = AdRequest.Builder()
             .build()
@@ -167,4 +186,8 @@ private fun Context.isInternetConnected(): Boolean {
     }
 }
 
-data class AdBanner(val view: View)
+data class PlaySupportAd(private val ad: RewardedInterstitialAd) : SupportAd {
+    override fun show(activity: Activity) {
+        ad.show(activity) {}
+    }
+}

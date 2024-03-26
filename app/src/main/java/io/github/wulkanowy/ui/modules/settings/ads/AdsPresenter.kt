@@ -53,7 +53,7 @@ class AdsPresenter @Inject constructor(
         }
     }
 
-    fun onUmpAgreementsSelected() {
-        adsHelper.openAdsUmpAgreements()
+    fun onAgreementsSelected() {
+        adsHelper.openAgreements()
     }
 }

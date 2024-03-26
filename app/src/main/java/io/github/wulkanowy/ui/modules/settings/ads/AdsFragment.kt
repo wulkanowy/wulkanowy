@@ -5,7 +5,6 @@ import android.view.View
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
-import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
@@ -13,6 +12,7 @@ import io.github.wulkanowy.ui.base.ErrorDialog
 import io.github.wulkanowy.ui.modules.auth.AuthDialog
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.AdsHelper
+import io.github.wulkanowy.utils.SupportAd
 import io.github.wulkanowy.utils.openInternetBrowser
 import javax.inject.Inject
 
@@ -48,7 +48,7 @@ class AdsFragment : PreferenceFragmentCompat(), MainView.TitledView, AdsView {
         }
 
         findPreference<Preference>(getString(R.string.pref_key_ads_ump_agreements))?.setOnPreferenceClickListener {
-            presenter.onUmpAgreementsSelected()
+            presenter.onAgreementsSelected()
             true
         }
 
@@ -61,9 +61,9 @@ class AdsFragment : PreferenceFragmentCompat(), MainView.TitledView, AdsView {
         }
     }
 
-    override fun showAd(ad: RewardedInterstitialAd) {
+    override fun showAd(ad: SupportAd) {
         if (isVisible) {
-            ad.show(requireActivity()) {}
+            ad.show(requireActivity())
         }
     }
 

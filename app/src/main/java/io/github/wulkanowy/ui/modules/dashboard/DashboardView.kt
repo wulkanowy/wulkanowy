@@ -12,7 +12,7 @@ interface DashboardView : BaseView {
 
     fun updateData(data: List<DashboardItem>)
 
-    fun showDashboardTileSettings(selectedItems: List<DashboardItem.Tile>)
+    fun showDashboardTileSettings(selectedItems: Iterable<DashboardItem.Tile>)
 
     fun showProgress(show: Boolean)
 

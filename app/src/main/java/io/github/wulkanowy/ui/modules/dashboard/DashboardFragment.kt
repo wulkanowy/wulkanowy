@@ -161,7 +161,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
         }
     }
 
-    override fun showDashboardTileSettings(selectedItems: List<DashboardItem.Tile>) {
+    override fun showDashboardTileSettings(selectedItems: Iterable<DashboardItem.Tile>) {
         val entries = requireContext().resources.getStringArray(R.array.dashboard_tile_entries)
         val values = requireContext().resources.getStringArray(R.array.dashboard_tile_values)
         val selectedItemsState = values.map { value -> selectedItems.any { it.name == value } }
@@ -180,7 +180,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
     }
 
     override fun updateData(data: List<DashboardItem>) {
-        dashboardAdapter.submitList(data.toMutableList())
+        dashboardAdapter.submitList(data)
     }
 
     override fun showMessage(text: String) {

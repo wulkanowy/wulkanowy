@@ -7,6 +7,7 @@ import androidx.core.content.edit
 import com.fredporciuncula.flow.preferences.FlowSharedPreferences
 import com.fredporciuncula.flow.preferences.Preference
 import com.fredporciuncula.flow.preferences.Serializer
+import com.fredporciuncula.flow.preferences.map
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.enums.AppTheme
@@ -19,6 +20,7 @@ import io.github.wulkanowy.data.enums.TimetableMode
 import io.github.wulkanowy.ui.modules.dashboard.DashboardItem
 import io.github.wulkanowy.ui.modules.grade.GradeAverageMode
 import io.github.wulkanowy.ui.modules.settings.appearance.menuorder.AppMenuItem
+import io.github.wulkanowy.utils.toEnumSet
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.encodeToString
@@ -111,6 +113,13 @@ class PreferencesRepository @Inject constructor(
                 R.string.pref_default_grade_color_scheme
             )
         )
+
+    val gradeColorThemeFlow: Flow<GradeColorTheme>
+        get() = getStringFlow(
+            R.string.pref_key_grade_color_scheme,
+            R.string.pref_default_grade_color_scheme
+        ).asFlow().map(GradeColorTheme::getByValue)
+
 
     val appLanguageKey = context.getString(R.string.pref_key_app_language)
     val appLanguage
@@ -261,46 +270,30 @@ class PreferencesRepository @Inject constructor(
 
     val selectedDashboardTilesFlow: Flow<Set<DashboardItem.Tile>>
         get() = selectedDashboardTilesPreference.asFlow()
-            .map { set ->
-                set.map { DashboardItem.Tile.valueOf(it) }
-                    .plus(
-                        listOfNotNull(
-                            DashboardItem.Tile.ACCOUNT,
-                            DashboardItem.Tile.ADMIN_MESSAGE,
-                            DashboardItem.Tile.ADS.takeIf { isAdsEnabled }
-                        )
-                    )
-                    .toSet()
-            }
 
     var selectedDashboardTiles: Set<DashboardItem.Tile>
         get() = selectedDashboardTilesPreference.get()
-            .map { DashboardItem.Tile.valueOf(it) }
-            .plus(
-                listOfNotNull(
-                    DashboardItem.Tile.ACCOUNT,
-                    DashboardItem.Tile.ADMIN_MESSAGE,
-                    DashboardItem.Tile.ADS.takeIf { isAdsEnabled }
-                )
-            )
-            .toSet()
-        set(value) {
-            val filteredValue = value.filterNot {
-                it == DashboardItem.Tile.ACCOUNT || it == DashboardItem.Tile.ADMIN_MESSAGE
-            }
-                .map { it.name }
-                .toSet()
+        set(value) = selectedDashboardTilesPreference.set(value)
 
-            selectedDashboardTilesPreference.set(filteredValue)
-        }
-
-    private val selectedDashboardTilesPreference: Preference<Set<String>>
+    private val selectedDashboardTilesPreference: Preference<Set<DashboardItem.Tile>>
         get() {
             val defaultSet =
                 context.resources.getStringArray(R.array.pref_default_dashboard_tiles).toSet()
             val prefKey = context.getString(R.string.pref_key_dashboard_tiles)
 
-            return flowSharedPref.getStringSet(prefKey, defaultSet)
+            return flowSharedPref.getStringSet(prefKey, defaultSet).map(
+                mapper = {
+                    it
+                        .map(DashboardItem.Tile::valueOf)
+                        .plus(DashboardItem.Tile.allAlwaysEnabled())
+                        .toEnumSet()
+                }, reverse = {
+                    it
+                        .filterNot(DashboardItem.Tile::alwaysEnabled)
+                        .map(DashboardItem.Tile::name)
+                        .toSet()
+                }
+            )
         }
 
     var dismissedAdminMessageIds: List<Int>

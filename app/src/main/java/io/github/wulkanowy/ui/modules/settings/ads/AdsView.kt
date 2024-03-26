@@ -1,13 +1,13 @@
 package io.github.wulkanowy.ui.modules.settings.ads
 
-import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import io.github.wulkanowy.ui.base.BaseView
+import io.github.wulkanowy.utils.SupportAd
 
 interface AdsView : BaseView {
 
     fun initView()
 
-    fun showAd(ad: RewardedInterstitialAd)
+    fun showAd(ad: SupportAd)
 
     fun openPrivacyPolicy()
 

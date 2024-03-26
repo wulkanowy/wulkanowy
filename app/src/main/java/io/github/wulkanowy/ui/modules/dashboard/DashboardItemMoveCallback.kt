@@ -2,13 +2,14 @@ package io.github.wulkanowy.ui.modules.dashboard
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.NO_POSITION
+import io.github.wulkanowy.ui.modules.dashboard.DashboardItem.Reorderable
 import io.github.wulkanowy.ui.modules.dashboard.adapters.DashboardAdapter
-import io.github.wulkanowy.ui.modules.dashboard.viewholders.AdminMessageViewHolder
-import java.util.*
+import java.util.Collections
 
 class DashboardItemMoveCallback(
     private val dashboardAdapter: DashboardAdapter,
-    private var onUserInteractionEndListener: (List<DashboardItem>) -> Unit = {}
+    private val onUserInteractionEndListener: (List<DashboardItem>) -> Unit = {}
 ) : ItemTouchHelper.Callback() {
 
     override fun isLongPressDragEnabled() = true
@@ -23,9 +24,8 @@ class DashboardItemMoveCallback(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
     ): Int {
-        val dragFlags = if (!viewHolder.isAdminMessageOrAccountItem) {
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN
-        } else 0
+        val dragFlags =
+            if (recyclerView.isReorderable(viewHolder)) ItemTouchHelper.UP or ItemTouchHelper.DOWN else 0
 
         return makeMovementFlags(dragFlags, 0)
     }
@@ -34,7 +34,7 @@ class DashboardItemMoveCallback(
         recyclerView: RecyclerView,
         current: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
-    ) = !target.isAdminMessageOrAccountItem
+    ) = recyclerView.isReorderable(target)
 
     override fun onMove(
         recyclerView: RecyclerView,
@@ -55,6 +55,17 @@ class DashboardItemMoveCallback(
         onUserInteractionEndListener(dashboardAdapter.items.toList())
     }
 
-    private val RecyclerView.ViewHolder.isAdminMessageOrAccountItem: Boolean
-        get() = this is AdminMessageViewHolder || this is DashboardAdapter.AccountViewHolder
+    private fun RecyclerView.isReorderable(viewHolder: RecyclerView.ViewHolder): Boolean {
+        val pos =
+            if (adapter == dashboardAdapter) viewHolder.absoluteAdapterPosition else viewHolder.bindingAdapterPosition
+        return if (pos != NO_POSITION) {
+            val item = dashboardAdapter.items[pos]
+            when (item.type.reorderable) {
+                Reorderable.Yes -> true
+                Reorderable.No -> false
+            }
+        } else {
+            false
+        }
+    }
 }

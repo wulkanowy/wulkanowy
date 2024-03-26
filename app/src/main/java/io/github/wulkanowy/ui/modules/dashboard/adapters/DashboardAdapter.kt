@@ -20,16 +20,30 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.db.entities.TimetableHeader
 import io.github.wulkanowy.data.enums.GradeColorTheme
-import io.github.wulkanowy.databinding.*
+import io.github.wulkanowy.databinding.ItemDashboardAccountBinding
+import io.github.wulkanowy.databinding.ItemDashboardAdminMessageBinding
+import io.github.wulkanowy.databinding.ItemDashboardAdsBinding
+import io.github.wulkanowy.databinding.ItemDashboardAnnouncementsBinding
+import io.github.wulkanowy.databinding.ItemDashboardConferencesBinding
+import io.github.wulkanowy.databinding.ItemDashboardExamsBinding
+import io.github.wulkanowy.databinding.ItemDashboardGradesBinding
+import io.github.wulkanowy.databinding.ItemDashboardHomeworkBinding
+import io.github.wulkanowy.databinding.ItemDashboardHorizontalGroupBinding
+import io.github.wulkanowy.databinding.ItemDashboardLessonsBinding
 import io.github.wulkanowy.ui.modules.dashboard.DashboardItem
 import io.github.wulkanowy.ui.modules.dashboard.viewholders.AdminMessageViewHolder
-import io.github.wulkanowy.utils.*
+import io.github.wulkanowy.utils.createNameInitialsDrawable
+import io.github.wulkanowy.utils.dpToPx
+import io.github.wulkanowy.utils.getThemeAttrColor
+import io.github.wulkanowy.utils.left
+import io.github.wulkanowy.utils.nickOrName
+import io.github.wulkanowy.utils.toFormattedString
 import timber.log.Timber
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.*
+import java.util.Timer
 import javax.inject.Inject
 import kotlin.concurrent.timer
 
@@ -172,8 +186,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         position: Int
     ) {
         val item = items[position] as DashboardItem.HorizontalGroup
-        val isLoadingVisible =
-            (item.isLoading && !item.isDataLoaded) || (item.isLoading && !item.isFullDataLoaded)
+        val isLoadingVisible = item.isLoading && (!item.isDataLoaded || !item.isFullDataLoaded)
         val isWideErrorShow = isLoadingVisible || item.error != null
 
         with(horizontalGroupViewHolder.binding) {
@@ -192,12 +205,12 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         isWideErrorShow: Boolean
     ) {
         with(dashboardHorizontalGroupItemLuckyValue) {
-            isVisible = item.luckyNumber?.error != true
+            isVisible = item.luckyNumber?.error == null
             text = if (item.luckyNumber?.data == 0) {
                 context.getString(R.string.dashboard_horizontal_group_no_data)
             } else item.luckyNumber?.data?.toString()
         }
-        dashboardHorizontalGroupItemLuckyError.isVisible = item.luckyNumber?.error == true
+        dashboardHorizontalGroupItemLuckyError.isVisible = item.luckyNumber?.error != null
         with(dashboardHorizontalGroupItemLuckyContainer) {
             isVisible = item.luckyNumber?.isHidden == false && !isWideErrorShow
             setOnClickListener { onLuckyNumberTileClickListener() }
@@ -220,9 +233,9 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         item: DashboardItem.HorizontalGroup,
         isWideErrorShow: Boolean
     ) {
-        dashboardHorizontalGroupItemMessageError.isVisible = item.unreadMessagesCount?.error == true
+        dashboardHorizontalGroupItemMessageError.isVisible = item.unreadMessagesCount?.error != null
         with(dashboardHorizontalGroupItemMessageValue) {
-            isVisible = item.unreadMessagesCount?.error != true
+            isVisible = item.unreadMessagesCount?.error == null
             text = item.unreadMessagesCount?.data.toString()
         }
         with(dashboardHorizontalGroupItemMessageContainer) {
@@ -255,9 +268,9 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         }
 
         dashboardHorizontalGroupItemAttendanceError.isVisible =
-            item.attendancePercentage?.error == true
+            item.attendancePercentage?.error != null
         with(dashboardHorizontalGroupItemAttendanceValue) {
-            isVisible = item.attendancePercentage?.error != true
+            isVisible = item.attendancePercentage?.error == null
             text = attendanceString
             setTextColor(attendanceColor)
         }
