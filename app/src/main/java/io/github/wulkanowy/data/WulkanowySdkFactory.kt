@@ -23,7 +23,7 @@ class WulkanowySdkFactory @Inject constructor(
 ) {
 
     private val eduOneMutex = Mutex()
-    private val isMigrationFailedMap = mutableMapOf<Long, Boolean>()
+    private val migrationFailedStudentIds = mutableSetOf<Long>()
 
     private val sdk = Sdk().apply {
         androidVersion = android.os.Build.VERSION.RELEASE
@@ -79,13 +79,13 @@ class WulkanowySdkFactory @Inject constructor(
     private suspend fun checkEduOneAndMigrateIfNecessary(student: Student): Boolean {
         if (student.isEduOne != null) return student.isEduOne
 
-        if (isMigrationFailedMap[student.id] == true) {
+        if (student.id in migrationFailedStudentIds) {
             Timber.i("Migration eduOne: skipping because of previous failure")
             return false
         }
 
         eduOneMutex.withLock {
-            if (isMigrationFailedMap[student.id] == true) {
+            if (student.id in migrationFailedStudentIds) {
                 Timber.i("Migration eduOne: skipping because of previous failure")
                 return false
             }
@@ -108,7 +108,7 @@ class WulkanowySdkFactory @Inject constructor(
 
             if (newCurrentStudent == null) {
                 Timber.i("Migration eduOne: failed, so skipping")
-                isMigrationFailedMap[student.id] = true
+                migrationFailedStudentIds.add(student.id)
                 return false
             }
 
