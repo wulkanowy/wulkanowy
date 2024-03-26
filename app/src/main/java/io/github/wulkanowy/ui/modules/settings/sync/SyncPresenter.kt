@@ -60,6 +60,9 @@ class SyncPresenter @Inject constructor(
                     }
 
                     WorkInfo.State.FAILED -> {
+                        workInfo.outputData.getString("required_captcha_url")?.let {
+                            errorHandler.onCaptchaVerificationRequired(it)
+                        }
                         showError(
                             syncFailedString,
                             Throwable(

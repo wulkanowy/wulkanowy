@@ -12,6 +12,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
+import io.github.wulkanowy.services.sync.channels.CaptchaRequiredChannel
 import io.github.wulkanowy.services.sync.channels.Channel
 import io.github.wulkanowy.services.sync.channels.DebugChannel
 import io.github.wulkanowy.services.sync.channels.LuckyNumberChannel
@@ -125,6 +126,10 @@ abstract class ServicesModule {
     @Binds
     @IntoSet
     abstract fun provideSchoolAnnouncementWork(work: SchoolAnnouncementWork): Work
+
+    @Binds
+    @IntoSet
+    abstract fun provideCaptchaRequiredChannel(channel: CaptchaRequiredChannel): Channel
 
     @Binds
     @IntoSet

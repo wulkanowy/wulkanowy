@@ -1,6 +1,7 @@
 package io.github.wulkanowy.services.sync.notifications
 
 import io.github.wulkanowy.R
+import io.github.wulkanowy.services.sync.channels.CaptchaRequiredChannel
 import io.github.wulkanowy.services.sync.channels.LuckyNumberChannel
 import io.github.wulkanowy.services.sync.channels.NewAttendanceChannel
 import io.github.wulkanowy.services.sync.channels.NewConferencesChannel
@@ -17,6 +18,10 @@ enum class NotificationType(
     val channel: String,
     val icon: Int
 ) {
+    CAPTCHA_REQUIRED(
+        channel = CaptchaRequiredChannel.CHANNEL_ID,
+        icon = R.drawable.ic_stat_all
+    ),
     NEW_CONFERENCE(
         channel = NewConferencesChannel.CHANNEL_ID,
         icon = R.drawable.ic_more_conferences,

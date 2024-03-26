@@ -3,6 +3,7 @@ package io.github.wulkanowy.services.sync.works
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.GradeRepository
+import io.github.wulkanowy.data.throwOnCaptchaException
 import io.github.wulkanowy.data.waitForResult
 import io.github.wulkanowy.services.sync.notifications.NewGradeNotification
 import kotlinx.coroutines.flow.first
@@ -19,7 +20,7 @@ class GradeWork @Inject constructor(
             semester = semester,
             forceRefresh = true,
             notify = notify,
-        ).waitForResult()
+        ).throwOnCaptchaException().waitForResult()
 
         gradeRepository.getGradesFromDatabase(semester).first()
             .filter { !it.isNotified }.let {

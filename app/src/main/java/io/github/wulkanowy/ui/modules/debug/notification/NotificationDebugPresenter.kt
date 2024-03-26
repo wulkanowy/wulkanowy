@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.modules.debug.notification
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.services.sync.notifications.CaptchaRequiredNotification
 import io.github.wulkanowy.services.sync.notifications.ChangeTimetableNotification
 import io.github.wulkanowy.services.sync.notifications.NewAttendanceNotification
 import io.github.wulkanowy.services.sync.notifications.NewConferenceNotification
@@ -44,6 +45,7 @@ class NotificationDebugPresenter @Inject constructor(
     private val newLuckyNumberNotification: NewLuckyNumberNotification,
     private val changeTimetableNotification: ChangeTimetableNotification,
     private val newAttendanceNotification: NewAttendanceNotification,
+    private val captchaRequiredNotification: CaptchaRequiredNotification,
 ) : BasePresenter<NotificationDebugView>(errorHandler, studentRepository) {
 
     private val items = listOf(
@@ -97,6 +99,11 @@ class NotificationDebugPresenter @Inject constructor(
                 }
             }
         },
+        NotificationDebugItem(R.string.captcha_required_notify_title) { n ->
+            repeat(n) { _ ->
+                withStudent { captchaRequiredNotification.notify(it) }
+            }
+        }
     )
 
     override fun onAttachView(view: NotificationDebugView) {

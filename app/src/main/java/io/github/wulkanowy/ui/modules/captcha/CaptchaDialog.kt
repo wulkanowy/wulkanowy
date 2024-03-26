@@ -11,6 +11,7 @@ import androidx.core.os.bundleOf
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.WulkanowySdkFactory
+import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.databinding.DialogCaptchaBinding
 import io.github.wulkanowy.ui.base.BaseDialogFragment
 import io.github.wulkanowy.utils.WebkitCookieManagerProxy
@@ -25,6 +26,9 @@ class CaptchaDialog : BaseDialogFragment<DialogCaptchaBinding>() {
 
     @Inject
     lateinit var webkitCookieManagerProxy: WebkitCookieManagerProxy
+
+    @Inject
+    lateinit var preferencesRepository: PreferencesRepository
 
     private var webView: WebView? = null
 
@@ -79,6 +83,7 @@ class CaptchaDialog : BaseDialogFragment<DialogCaptchaBinding>() {
     private fun onChallengeAccepted() {
         runCatching { parentFragmentManager.setFragmentResult(CAPTCHA_SUCCESS, bundleOf()) }
             .onFailure { Timber.e(it) }
+        preferencesRepository.sentCaptchaNotification = false
         showMessage(getString(R.string.captcha_verified_message))
         dismissAllowingStateLoss()
     }

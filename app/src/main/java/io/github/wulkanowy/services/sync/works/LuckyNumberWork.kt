@@ -3,6 +3,7 @@ package io.github.wulkanowy.services.sync.works
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.LuckyNumberRepository
+import io.github.wulkanowy.data.throwOnCaptchaException
 import io.github.wulkanowy.data.waitForResult
 import io.github.wulkanowy.services.sync.notifications.NewLuckyNumberNotification
 import javax.inject.Inject
@@ -17,7 +18,7 @@ class LuckyNumberWork @Inject constructor(
             student = student,
             forceRefresh = true,
             notify = notify,
-        ).waitForResult()
+        ).throwOnCaptchaException().waitForResult()
 
         luckyNumberRepository.getNotNotifiedLuckyNumber(student)?.let {
             newLuckyNumberNotification.notify(it, student)

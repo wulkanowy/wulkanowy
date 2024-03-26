@@ -30,44 +30,55 @@ class AppNotificationManager @Inject constructor(
     private val notificationRepository: NotificationRepository
 ) {
 
+    suspend fun trySendSingletonNotification(
+        notificationData: NotificationData,
+        notificationType: NotificationType,
+        student: Student,
+        id: Int = notificationType.ordinal
+    ): Boolean {
+        val exists =
+            notificationManager.activeNotifications.any { it.tag == notificationType.name && it.id == id }
+        if (exists) return false
+
+        val notification = buildSingleNotification(notificationData, notificationType, student)
+        notificationManager.notify(notificationType.name, id, notification)
+        saveNotification(notificationData, notificationType, student)
+        return true
+    }
+
     @SuppressLint("InlinedApi")
     suspend fun sendSingleNotification(
         notificationData: NotificationData,
         notificationType: NotificationType,
         student: Student
     ) {
-        val notification = NotificationCompat.Builder(context, notificationType.channel)
-            .setLargeIcon(context.getCompatBitmap(notificationType.icon, R.color.colorPrimary))
-            .setSmallIcon(R.drawable.ic_stat_all)
-            .setAutoCancel(true)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setColor(context.getCompatColor(R.color.colorPrimary))
-            .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
-            .setContentIntent(
-                PendingIntent.getActivity(
-                    context,
-                    Random.nextInt(),
-                    SplashActivity.getStartIntent(context, notificationData.destination),
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
-                )
-            )
-            .setContentTitle(notificationData.title)
-            .setContentText(notificationData.content)
-            .setStyle(
-                NotificationCompat.BigTextStyle()
-                    .bigText(notificationData.content)
-                    .also { builder ->
-                        if (!studentRepository.isOneUniqueStudent()) {
-                            builder.setSummaryText(student.nickOrName)
-                        }
-                    }
-            )
-            .build()
+        val notification = buildSingleNotification(notificationData, notificationType, student)
 
         notificationManager.notify(Random.nextInt(), notification)
         saveNotification(notificationData, notificationType, student)
     }
+
+    private suspend fun buildSingleNotification(
+        notificationData: NotificationData, notificationType: NotificationType, student: Student
+    ) = NotificationCompat.Builder(context, notificationType.channel)
+        .setLargeIcon(context.getCompatBitmap(notificationType.icon, R.color.colorPrimary))
+        .setSmallIcon(R.drawable.ic_stat_all).setAutoCancel(true)
+        .setDefaults(NotificationCompat.DEFAULT_ALL).setPriority(NotificationCompat.PRIORITY_HIGH)
+        .setColor(context.getCompatColor(R.color.colorPrimary))
+        .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY).setContentIntent(
+            PendingIntent.getActivity(
+                context,
+                Random.nextInt(),
+                SplashActivity.getStartIntent(context, notificationData.destination),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+            )
+        ).setContentTitle(notificationData.title).setContentText(notificationData.content)
+        .setStyle(NotificationCompat.BigTextStyle().bigText(notificationData.content)
+            .also { builder ->
+                if (!studentRepository.isOneUniqueStudent()) {
+                    builder.setSummaryText(student.nickOrName)
+                }
+            }).build()
 
     @SuppressLint("InlinedApi")
     suspend fun sendMultipleNotifications(

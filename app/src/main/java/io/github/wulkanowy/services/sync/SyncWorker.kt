@@ -16,9 +16,11 @@ import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.sdk.exception.FeatureNotAvailableException
+import io.github.wulkanowy.sdk.scrapper.exception.CloudflareVerificationException
 import io.github.wulkanowy.sdk.scrapper.exception.FeatureDisabledException
 import io.github.wulkanowy.sdk.scrapper.exception.FeatureUnavailableException
 import io.github.wulkanowy.services.sync.channels.DebugChannel
+import io.github.wulkanowy.services.sync.notifications.CaptchaRequiredNotification
 import io.github.wulkanowy.services.sync.works.Work
 import io.github.wulkanowy.utils.DispatchersProvider
 import io.github.wulkanowy.utils.getCompatColor
@@ -36,7 +38,8 @@ class SyncWorker @AssistedInject constructor(
     private val works: Set<@JvmSuppressWildcards Work>,
     private val preferencesRepository: PreferencesRepository,
     private val notificationManager: NotificationManagerCompat,
-    private val dispatchersProvider: DispatchersProvider
+    private val dispatchersProvider: DispatchersProvider,
+    private val captchaRequiredNotification: CaptchaRequiredNotification,
 ) : CoroutineWorker(appContext, workerParameters) {
 
     override suspend fun doWork(): Result = withContext(dispatchersProvider.io) {
@@ -69,6 +72,11 @@ class SyncWorker @AssistedInject constructor(
                 }
             }
         }
+        val captchaException = exceptions.any { it is CloudflareVerificationException }
+        if (!isOneOff() && captchaException) {
+            captchaRequiredNotification.notify(student)
+        }
+
         val result = getResultFromErrors(exceptions)
 
         if (preferencesRepository.isDebugNotificationEnable) notify(result)
@@ -77,17 +85,24 @@ class SyncWorker @AssistedInject constructor(
         return@withContext result
     }
 
+    private fun isOneOff(): Boolean = inputData.getBoolean("one_time", false)
+
     private fun isNotificationsEnabled(): Boolean {
         val quiet = inputData.getBoolean("quiet", false)
         return preferencesRepository.isNotificationsEnable && !quiet
     }
 
     private fun getResultFromErrors(errors: List<Throwable>): Result = when {
-        errors.isNotEmpty() && inputData.getBoolean("one_time", false) -> {
+        errors.isNotEmpty() && isOneOff() -> {
             Result.failure(
                 Data.Builder()
                     .putString("error_message", errors.joinToString { it.message.toString() })
                     .putString("error_stack", errors.map { it.stackTraceToString() }.toString())
+                    .putString(
+                        "required_captcha_url",
+                        errors.filterIsInstance<CloudflareVerificationException>()
+                            .map { it.originalUrl }.first()
+                    )
                     .build()
             )
         }

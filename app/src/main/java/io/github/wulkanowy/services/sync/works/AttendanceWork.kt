@@ -3,6 +3,7 @@ package io.github.wulkanowy.services.sync.works
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.AttendanceRepository
+import io.github.wulkanowy.data.throwOnCaptchaException
 import io.github.wulkanowy.data.waitForResult
 import io.github.wulkanowy.services.sync.notifications.NewAttendanceNotification
 import io.github.wulkanowy.utils.previousOrSameSchoolDay
@@ -26,8 +27,7 @@ class AttendanceWork @Inject constructor(
             end = endDate,
             forceRefresh = true,
             notify = notify,
-        )
-            .waitForResult()
+        ).throwOnCaptchaException().waitForResult()
 
         attendanceRepository.getAttendanceFromDatabase(
             semester = semester,

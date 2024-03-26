@@ -1,13 +1,11 @@
 package io.github.wulkanowy.utils
 
-import android.content.Context
-import dagger.hilt.android.qualifiers.ApplicationContext
-import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.enums.MessageFolder
+import io.github.wulkanowy.data.repositories.PreferencesRepository
 import timber.log.Timber
 import java.time.Duration.ofMinutes
 import java.time.Instant
@@ -31,13 +29,13 @@ fun getRefreshKey(name: String, mailbox: Mailbox?, folder: MessageFolder): Strin
 }
 
 class AutoRefreshHelper @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val sharedPref: SharedPrefProvider
+    private val sharedPref: SharedPrefProvider,
+    private val preferencesRepository: PreferencesRepository,
 ) {
 
     fun shouldBeRefreshed(key: String): Boolean {
         val timestamp = sharedPref.getLong(key, 0).let(Instant::ofEpochMilli)
-        val servicesInterval = sharedPref.getString(context.getString(R.string.pref_key_services_interval), context.getString(R.string.pref_default_services_interval)).toLong()
+        val servicesInterval = preferencesRepository.servicesInterval
 
         val shouldBeRefreshed = timestamp < Instant.now().minus(ofMinutes(servicesInterval))
 

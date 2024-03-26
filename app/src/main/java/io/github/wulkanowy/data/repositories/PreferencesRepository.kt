@@ -2,6 +2,7 @@ package io.github.wulkanowy.data.repositories
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.annotation.BoolRes
 import androidx.annotation.StringRes
 import androidx.core.content.edit
 import com.fredporciuncula.flow.preferences.FlowSharedPreferences
@@ -27,6 +28,8 @@ import java.time.Instant
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 @Singleton
 class PreferencesRepository @Inject constructor(
@@ -119,6 +122,32 @@ class PreferencesRepository @Inject constructor(
     val serviceEnableKey = context.getString(R.string.pref_key_services_enable)
     val isServiceEnabled: Boolean
         get() = getBoolean(serviceEnableKey, R.bool.pref_default_services_enable)
+
+    val captchaRequiredNotificationEnabled: Boolean
+        get() = getBoolean(
+            R.string.pref_services_captcha_notification_switch,
+            R.bool.pref_default_services_captcha_notification_enable
+        )
+    val minTimeBetweenCaptchaRequiredNotification: Duration
+        get() = getString(
+            R.string.pref_key_services_interval_captcha,
+            R.string.pref_default_services_captcha_interval
+        ).toLong().minutes
+    var lastCaptchaRequiredNotificationTime: Instant?
+        get() = getLong(
+            R.string.pref_key_last_captcha_notification,
+            R.string.pref_default_last_captcha_notification
+        ).takeIf { it != 0L }?.let(Instant::ofEpochMilli)
+        set(value) = sharedPref.edit {
+            putLong(
+                context.getString(R.string.pref_key_last_captcha_notification),
+                value?.toEpochMilli() ?: 0
+            )
+        }
+
+    var sentCaptchaNotification: Boolean
+        get() = sharedPref.getBoolean("sentCaptchaNotification", false)
+        set(value) = sharedPref.edit { putBoolean("sentCaptchaNotification", value) }
 
     val servicesIntervalKey = context.getString(R.string.pref_key_services_interval)
     val servicesInterval: Long
@@ -374,9 +403,10 @@ class PreferencesRepository @Inject constructor(
         }
     }
 
-    private fun getLong(id: Int, default: Int) = getLong(context.getString(id), default)
+    private fun getLong(@StringRes id: Int, @StringRes default: Int) =
+        getLong(context.getString(id), default)
 
-    private fun getLong(id: String, default: Int) =
+    private fun getLong(id: String, @StringRes default: Int) =
         sharedPref.getLong(id, context.resources.getString(default).toLong())
 
     private fun getStringFlow(id: Int, default: Int) =
@@ -394,14 +424,16 @@ class PreferencesRepository @Inject constructor(
         )
     )
 
-    private fun getString(id: Int, default: Int) = getString(context.getString(id), default)
+    private fun getString(@StringRes id: Int, @StringRes default: Int) =
+        getString(context.getString(id), default)
 
-    private fun getString(id: String, default: Int) =
+    private fun getString(id: String, @StringRes default: Int) =
         sharedPref.getString(id, context.getString(default)) ?: context.getString(default)
 
-    private fun getBoolean(id: Int, default: Int) = getBoolean(context.getString(id), default)
+    private fun getBoolean(@StringRes id: Int, @BoolRes default: Int) =
+        getBoolean(context.getString(id), default)
 
-    private fun getBoolean(id: String, default: Int) =
+    private fun getBoolean(id: String, @BoolRes default: Int) =
         sharedPref.getBoolean(id, context.resources.getBoolean(default))
 
     private companion object {

@@ -10,18 +10,33 @@
             app:title="@string/pref_services_switch" />
         <SwitchPreferenceCompat
             app:defaultValue="@bool/pref_default_services_wifi_only"
-            app:dependency="services_enable"
+            app:dependency="@string/pref_key_services_enable"
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_services_wifi_only"
             app:title="@string/pref_services_wifi" />
         <ListPreference
             app:defaultValue="@string/pref_default_services_interval"
-            app:dependency="services_enable"
+            app:dependency="@string/pref_key_services_enable"
             app:entries="@array/services_interval_entries"
             app:entryValues="@array/services_interval_value"
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_services_interval"
             app:title="@string/pref_services_interval"
+            app:useSimpleSummaryProvider="true" />
+        <SwitchPreferenceCompat
+            app:defaultValue="@bool/pref_default_services_captcha_notification_enable"
+            app:iconSpaceReserved="false"
+            app:dependency="@string/pref_key_services_enable"
+            app:key="@string/pref_key_services_captcha_notification_enable"
+            app:title="@string/pref_services_captcha_notification_switch" />
+        <ListPreference
+            app:defaultValue="@string/pref_default_services_captcha_interval"
+            app:dependency="@string/pref_key_services_captcha_notification_enable"
+            app:entries="@array/services_interval_captcha_entries"
+            app:entryValues="@array/services_interval_captcha_value"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_key_services_interval_captcha"
+            app:title="@string/pref_services_interval_captcha"
             app:useSimpleSummaryProvider="true" />
         <Preference
             app:iconSpaceReserved="false"

@@ -1,5 +1,6 @@
 package io.github.wulkanowy.data
 
+import io.github.wulkanowy.sdk.scrapper.exception.CloudflareVerificationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -186,6 +187,12 @@ fun <T> Flow<Resource<T>>.onResourceNotLoading(block: suspend () -> Unit) = onEa
 suspend fun <T> Flow<Resource<T>>.toFirstResult() = filter { it !is Resource.Loading }.first()
 
 suspend fun <T> Flow<Resource<T>>.waitForResult() = takeWhile { it is Resource.Loading }.collect()
+
+fun <T> Flow<Resource<T>>.throwOnCaptchaException() = onResourceError {
+    if (it is CloudflareVerificationException) {
+        throw it
+    }
+}
 
 // Can cause excessive amounts of `Resource.Intermediate` to be emitted. Unless that is desired,
 // use `debounceIntermediates` to alleviate this behavior.

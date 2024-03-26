@@ -455,6 +455,9 @@
     <string name="lucky_number_notify_new_item">Today\'s lucky number is: %s</string>
     <string name="lucky_number_history_button">Show history</string>
 
+    <!--Captcha required-->
+    <string name="captcha_required_notify_title">Captcha required</string>
+    <string name="captcha_required_notify_content">Please complete captcha</string>
 
     <!--Lucky number history-->
     <string name="lucky_number_history_title">Lucky number history</string>
@@ -756,8 +759,10 @@
     <string name="pref_notification_go_to_settings">Go to settings</string>
     <string name="pref_services_header">Synchronization</string>
     <string name="pref_services_switch">Automatic update</string>
+    <string name="pref_services_captcha_notification_switch">Captcha required notifications</string>
     <string name="pref_services_suspended">Suspended on holidays</string>
     <string name="pref_services_interval">Updates interval</string>
+    <string name="pref_services_interval_captcha">Minimum time between captcha notification</string>
     <string name="pref_services_wifi">Wi-Fi only</string>
     <string name="pref_services_force_sync">Sync now</string>
     <string name="pref_services_message_sync_success">Synced!</string>
@@ -809,6 +814,7 @@
 
 
     <!--Notification Channels-->
+    <string name="channel_captcha_required">Captcha required</string>
     <string name="channel_new_grades">New grades</string>
     <string name="channel_new_homework">New homework</string>
     <string name="channel_new_conference">New conferences</string>

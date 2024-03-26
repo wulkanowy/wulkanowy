@@ -3,6 +3,7 @@ package io.github.wulkanowy.services.sync.works
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.NoteRepository
+import io.github.wulkanowy.data.throwOnCaptchaException
 import io.github.wulkanowy.data.waitForResult
 import io.github.wulkanowy.services.sync.notifications.NewNoteNotification
 import kotlinx.coroutines.flow.first
@@ -19,7 +20,7 @@ class NoteWork @Inject constructor(
             semester = semester,
             forceRefresh = true,
             notify = notify,
-        ).waitForResult()
+        ).throwOnCaptchaException().waitForResult()
 
         noteRepository.getNotesFromDatabase(student).first()
             .filter { !it.isNotified }.let {

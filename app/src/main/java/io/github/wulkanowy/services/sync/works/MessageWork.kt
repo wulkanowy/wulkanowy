@@ -4,6 +4,7 @@ import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.enums.MessageFolder.RECEIVED
 import io.github.wulkanowy.data.repositories.MessageRepository
+import io.github.wulkanowy.data.throwOnCaptchaException
 import io.github.wulkanowy.data.waitForResult
 import io.github.wulkanowy.services.sync.notifications.NewMessageNotification
 import kotlinx.coroutines.flow.first
@@ -22,7 +23,7 @@ class MessageWork @Inject constructor(
             folder = RECEIVED,
             forceRefresh = true,
             notify = notify
-        ).waitForResult()
+        ).throwOnCaptchaException().waitForResult()
 
         messageRepository.getMessagesFromDatabase(student, mailbox).first()
             .filter { !it.isNotified && it.unread }.let {

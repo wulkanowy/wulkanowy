@@ -71,6 +71,25 @@
         <item>1440</item>
     </string-array>
 
+    <string-array name="services_interval_captcha_entries">
+        <item>Notify every time</item>
+        <item>2 hours</item>
+        <item>6 hours</item>
+        <item>12 hours</item>
+        <item>24 hours</item>
+        <item>2 days</item>
+        <item>3 days</item>
+    </string-array>
+    <string-array name="services_interval_captcha_value" translatable="false">
+        <item>0</item>
+        <item>120</item>
+        <item>360</item>
+        <item>720</item>
+        <item>1440</item>
+        <item>2880</item>
+        <item>4320</item>
+    </string-array>
+
     <string-array name="grade_modifier_entries">
         <item>0,00</item>
         <item>0,25</item>
