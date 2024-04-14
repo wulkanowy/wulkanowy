@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.data.db.entities.Student
 import javax.inject.Singleton
 
 @Singleton
@@ -14,6 +15,11 @@ interface SemesterDao : BaseDao<Semester> {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSemesters(items: List<Semester>): List<Long>
 
-    @Query("SELECT * FROM Semesters WHERE (student_id = :studentId AND class_id = :classId) OR (student_id = :studentId AND class_id = 0)")
+    @Query("SELECT * FROM Semesters WHERE (student_id = :studentId AND class_id = :classId)")
     suspend fun loadAll(studentId: Int, classId: Int): List<Semester>
+
+    suspend fun loadAll(student: Student): List<Semester> {
+        val classId = if (student.isEduOne == true) 0 else student.classId
+        return loadAll(student.studentId, classId)
+    }
 }
