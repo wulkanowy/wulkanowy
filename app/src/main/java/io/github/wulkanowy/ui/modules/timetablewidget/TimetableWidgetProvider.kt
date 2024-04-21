@@ -2,7 +2,11 @@ package io.github.wulkanowy.ui.modules.timetablewidget
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetManager.*
+import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_DELETED
+import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
+import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
+import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
+import android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -22,7 +26,14 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.widgets.TimetableWidgetService
 import io.github.wulkanowy.ui.modules.Destination
 import io.github.wulkanowy.ui.modules.splash.SplashActivity
-import io.github.wulkanowy.utils.*
+import io.github.wulkanowy.utils.AnalyticsHelper
+import io.github.wulkanowy.utils.PendingIntentCompat
+import io.github.wulkanowy.utils.capitalise
+import io.github.wulkanowy.utils.nextOrSameSchoolDay
+import io.github.wulkanowy.utils.nextSchoolDay
+import io.github.wulkanowy.utils.nickOrName
+import io.github.wulkanowy.utils.previousSchoolDay
+import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -244,7 +255,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
 
     private suspend fun getStudent(studentId: Long, appWidgetId: Int) = try {
         val students = studentRepository.getSavedStudents(false)
-        val student = students.singleOrNull { it.student.id == studentId }?.student
+        val student = students.singleOrNull { it.id == studentId }
         when {
             student != null -> student
             studentId != 0L && studentRepository.isCurrentStudentSet() -> {
@@ -263,7 +274,10 @@ class TimetableWidgetProvider : BroadcastReceiver() {
     }
 
     private fun setupAccountView(
-        context: Context, student: Student, remoteViews: RemoteViews, widgetId: Int
+        context: Context,
+        student: Student,
+        remoteViews: RemoteViews,
+        widgetId: Int
     ) {
         val accountInitials = getAccountInitials(student.nickOrName)
         val accountPickerPendingIntent = createAccountPickerPendingIntent(context, widgetId)

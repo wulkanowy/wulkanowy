@@ -1,8 +1,12 @@
 package io.github.wulkanowy.ui.modules.account.accountquick
 
-import io.github.wulkanowy.data.*
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
+import io.github.wulkanowy.data.logResourceStatus
+import io.github.wulkanowy.data.onResourceError
+import io.github.wulkanowy.data.onResourceNotLoading
+import io.github.wulkanowy.data.onResourceSuccess
 import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.data.resourceFlow
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.ui.modules.account.AccountItem
@@ -40,7 +44,7 @@ class AccountQuickPresenter @Inject constructor(
             return
         }
 
-        resourceFlow { studentRepository.switchStudent(studentWithSemesters) }
+        resourceFlow { studentRepository.switchStudent(studentWithSemesters.student) }
             .logResourceStatus("change student")
             .onResourceSuccess { view?.recreateMainView() }
             .onResourceNotLoading { view?.popView() }

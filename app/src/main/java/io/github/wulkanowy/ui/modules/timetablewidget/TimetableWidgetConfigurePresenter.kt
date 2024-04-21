@@ -42,22 +42,24 @@ class TimetableWidgetConfigurePresenter @Inject constructor(
     }
 
     private fun loadData() {
-        resourceFlow { studentRepository.getSavedStudents(false) }.onEach {
-            when (it) {
-                is Resource.Loading -> Timber.d("Timetable widget configure students data load")
-                is Resource.Success -> {
-                    val selectedStudentId = appWidgetId?.let { id ->
-                        sharedPref.getLong(getStudentWidgetKey(id), 0)
-                    } ?: -1
-                    when {
-                        it.data.isEmpty() -> view?.openLoginView()
-                        it.data.size == 1 && !isFromProvider -> onItemSelect(it.data.single().student)
-                        else -> view?.updateData(it.data, selectedStudentId)
+        resourceFlow { studentRepository.getSavedStudentsWithSemesters(false) }
+            .onEach {
+                when (it) {
+                    is Resource.Loading -> Timber.d("Timetable widget configure students data load")
+                    is Resource.Success -> {
+                        val selectedStudentId = appWidgetId?.let { id ->
+                            sharedPref.getLong(getStudentWidgetKey(id), 0)
+                        } ?: -1
+                        when {
+                            it.data.isEmpty() -> view?.openLoginView()
+                            it.data.size == 1 && !isFromProvider -> onItemSelect(it.data.single().student)
+                            else -> view?.updateData(it.data, selectedStudentId)
+                        }
                     }
+
+                    is Resource.Error -> errorHandler.dispatch(it.error)
                 }
-                is Resource.Error -> errorHandler.dispatch(it.error)
-            }
-        }.launch()
+            }.launch()
     }
 
     private fun registerStudent(student: Student?) {

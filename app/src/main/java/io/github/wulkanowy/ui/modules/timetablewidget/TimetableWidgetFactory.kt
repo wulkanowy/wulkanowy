@@ -95,7 +95,7 @@ class TimetableWidgetFactory(
 
     private suspend fun getStudent(studentId: Long): Student? {
         val students = studentRepository.getSavedStudents()
-        return students.singleOrNull { it.student.id == studentId }?.student
+        return students.singleOrNull { it.id == studentId }
     }
 
     private suspend fun getLessons(

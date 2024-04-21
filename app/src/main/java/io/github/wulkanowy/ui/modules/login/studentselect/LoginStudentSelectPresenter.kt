@@ -69,7 +69,7 @@ class LoginStudentSelectPresenter @Inject constructor(
     private fun loadData() {
         resetSelectedState()
 
-        resourceFlow { studentRepository.getSavedStudents(false) }.onEach {
+        resourceFlow { studentRepository.getSavedStudentsWithSemesters(false) }.onEach {
             students = it.dataOrNull.orEmpty()
             when (it) {
                 is Resource.Loading -> Timber.d("Login student select students load started")

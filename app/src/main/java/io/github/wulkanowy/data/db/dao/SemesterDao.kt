@@ -16,10 +16,16 @@ interface SemesterDao : BaseDao<Semester> {
     suspend fun insertSemesters(items: List<Semester>): List<Long>
 
     @Query("SELECT * FROM Semesters WHERE (student_id = :studentId AND class_id = :classId)")
-    suspend fun loadAll(studentId: Int, classId: Int): List<Semester>
+    suspend fun loadAllWithClassId(studentId: Int, classId: Int): List<Semester>
+
+    @Query("SELECT * FROM Semesters WHERE student_id = :studentId")
+    suspend fun loadAllNoClassId(studentId: Int): List<Semester>
 
     suspend fun loadAll(student: Student): List<Semester> {
-        val classId = if (student.isEduOne == true) 0 else student.classId
-        return loadAll(student.studentId, classId)
+        return if (student.isEduOne == true) {
+            loadAllNoClassId(student.studentId)
+        } else {
+            loadAllWithClassId(student.studentId, student.classId)
+        }
     }
 }

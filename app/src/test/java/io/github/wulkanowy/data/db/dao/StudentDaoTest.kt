@@ -37,7 +37,7 @@ class StudentDaoTest {
     }
 
     @Test
-    fun `get students associated with correct semester`() = runTest {
+    fun `get students associated with correct semester with same studentId`() = runTest {
         val notEduOneStudent = getStudentEntity()
             .copy(
                 isEduOne = false,
@@ -65,6 +65,64 @@ class StudentDaoTest {
                 studentId = eduOneStudent.studentId,
                 classId = eduOneStudent.classId,
                 diaryId = 2 // make semester unique
+            )
+            .apply { id = 0 }
+
+        studentDao.insertAll(listOf(notEduOneStudent, eduOneStudent))
+        semesterDao.insertAll(
+            listOf(
+                semesterAssociatedWithNotEduOneStudent,
+                semesterAssociatedWithEduOneStudent
+            )
+        )
+
+        val studentsWithSemesters = studentDao.loadStudentsWithSemesters()
+        val notEduOneSemestersResult = studentsWithSemesters.entries
+            .find { (student, _) -> student.id == notEduOneStudent.id }
+            ?.value
+        val eduOneSemestersResult = studentsWithSemesters.entries
+            .find { (student, _) -> student.id == eduOneStudent.id }
+            ?.value
+
+        assertEquals(2, studentsWithSemesters.size)
+
+        assertEquals(1, notEduOneSemestersResult?.size)
+        assertEquals(1, eduOneSemestersResult?.size)
+
+        assertEquals(semesterAssociatedWithEduOneStudent, eduOneSemestersResult?.firstOrNull())
+        assertEquals(
+            semesterAssociatedWithNotEduOneStudent,
+            notEduOneSemestersResult?.firstOrNull()
+        )
+    }
+
+    @Test
+    fun `get students associated with correct semester with different studentId`() = runTest {
+        val notEduOneStudent = getStudentEntity()
+            .copy(
+                isEduOne = false,
+                classId = 42,
+                studentId = 100
+            )
+            .apply { id = 1 }
+        val eduOneStudent = getStudentEntity()
+            .copy(
+                isEduOne = true,
+                classId = 0,
+                studentId = 101
+            )
+            .apply { id = 2 }
+
+        val semesterAssociatedWithNotEduOneStudent = getSemesterEntity()
+            .copy(
+                studentId = notEduOneStudent.studentId,
+                classId = notEduOneStudent.classId,
+            )
+            .apply { id = 0 }
+        val semesterAssociatedWithEduOneStudent = getSemesterEntity()
+            .copy(
+                studentId = eduOneStudent.studentId,
+                classId = eduOneStudent.classId,
             )
             .apply { id = 0 }
 

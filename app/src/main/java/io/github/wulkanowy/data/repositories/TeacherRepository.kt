@@ -35,7 +35,7 @@ class TeacherRepository @Inject constructor(
             val isExpired = refreshHelper.shouldBeRefreshed(getRefreshKey(cacheKey, semester))
             it.isEmpty() || forceRefresh || isExpired
         },
-        query = { teacherDb.loadAll(semester.studentId, semester.classId) },
+        query = { teacherDb.loadAll(student) },
         fetch = {
             wulkanowySdkFactory.create(student, semester)
                 .getTeachers()

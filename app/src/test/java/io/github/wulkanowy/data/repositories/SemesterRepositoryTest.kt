@@ -76,7 +76,9 @@ class SemesterRepositoryTest {
             getSemesterPojo(123, 2, now().minusMonths(3), now())
         )
 
-        coEvery { semesterDb.loadAll(student) } returns badSemesters.mapToEntities(student.studentId)
+        coEvery {
+            semesterDb.loadAll(student)
+        } returns badSemesters.mapToEntities(student.studentId)
         coEvery { sdk.getSemesters() } returns goodSemesters
         coEvery { semesterDb.removeOldAndSaveNew(any(), any()) } just Runs
 
@@ -188,7 +190,9 @@ class SemesterRepositoryTest {
             getSemesterPojo(2, 2, now().plusMonths(5), now().plusMonths(11)),
         )
 
-        coEvery { semesterDb.loadAll(student) } returns semestersWithNoCurrent
+        coEvery {
+            semesterDb.loadAll(student)
+        } returns semestersWithNoCurrent
         coEvery { sdk.getSemesters() } returns newSemesters
         coEvery { semesterDb.removeOldAndSaveNew(any(), any()) } just Runs
 

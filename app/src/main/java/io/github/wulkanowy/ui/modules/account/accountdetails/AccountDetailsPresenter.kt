@@ -1,9 +1,15 @@
 package io.github.wulkanowy.ui.modules.account.accountdetails
 
-import io.github.wulkanowy.data.*
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
+import io.github.wulkanowy.data.logResourceStatus
+import io.github.wulkanowy.data.onResourceError
+import io.github.wulkanowy.data.onResourceLoading
+import io.github.wulkanowy.data.onResourceNotLoading
+import io.github.wulkanowy.data.onResourceSuccess
+import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.data.resourceFlow
 import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
@@ -14,6 +20,7 @@ import javax.inject.Inject
 class AccountDetailsPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
+    private val semeRepository: SemesterRepository,
     private val syncManager: SyncManager
 ) : BasePresenter<AccountDetailsView>(errorHandler, studentRepository) {
 
@@ -46,7 +53,12 @@ class AccountDetailsPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        resourceFlow { studentRepository.getSavedStudentById(studentId ?: -1) }
+        resourceFlow {
+            val student = studentRepository.getStudentById(studentId ?: -1)
+            val semesters = semeRepository.getSemesters(student)
+
+            StudentWithSemesters(student, semesters)
+        }
             .logResourceStatus("loading account details view")
             .onResourceLoading {
                 view?.run {
@@ -85,7 +97,7 @@ class AccountDetailsPresenter @Inject constructor(
 
         Timber.i("Select student ${studentWithSemesters!!.student.id}")
 
-        resourceFlow { studentRepository.switchStudent(studentWithSemesters!!) }
+        resourceFlow { studentRepository.switchStudent(studentWithSemesters!!.student) }
             .logResourceStatus("change student")
             .onResourceSuccess { view?.recreateMainView() }
             .onResourceNotLoading { view?.popViewToMain() }
@@ -122,10 +134,12 @@ class AccountDetailsPresenter @Inject constructor(
                             syncManager.stopSyncWorker()
                             openClearLoginView()
                         }
+
                         studentWithSemesters?.student?.isCurrent == true -> {
                             Timber.i("Logout result: Logout student and switch to another")
                             recreateMainView()
                         }
+
                         else -> {
                             Timber.i("Logout result: Logout student")
                             recreateMainView()

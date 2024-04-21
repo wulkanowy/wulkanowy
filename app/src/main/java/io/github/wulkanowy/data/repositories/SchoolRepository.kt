@@ -36,7 +36,7 @@ class SchoolRepository @Inject constructor(
             )
             it == null || forceRefresh || isExpired
         },
-        query = { schoolDb.load(semester.studentId, semester.classId) },
+        query = { schoolDb.load(student) },
         fetch = {
             wulkanowySdkFactory.create(student, semester)
                 .getSchool()

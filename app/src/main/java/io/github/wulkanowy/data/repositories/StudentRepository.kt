@@ -12,6 +12,7 @@ import io.github.wulkanowy.data.db.entities.StudentName
 import io.github.wulkanowy.data.db.entities.StudentNickAndAvatar
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
+import io.github.wulkanowy.data.exceptions.NoSuchStudentException
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.data.mappers.mapToPojo
 import io.github.wulkanowy.data.pojos.RegisterUser
@@ -65,7 +66,8 @@ class StudentRepository @Inject constructor(
         .mapToPojo(password)
         .also { it.logErrors() }
 
-    suspend fun getSavedStudents(decryptPass: Boolean = true): List<StudentWithSemesters> {
+    @Deprecated("Semesters are not synced within this method and students with empty semesters are not returned")
+    suspend fun getSavedStudentsWithSemesters(decryptPass: Boolean = true): List<StudentWithSemesters> {
         return studentDb.loadStudentsWithSemesters().map { (student, semesters) ->
             StudentWithSemesters(
                 student = student.apply {
@@ -80,22 +82,25 @@ class StudentRepository @Inject constructor(
         }
     }
 
-    suspend fun getSavedStudentById(id: Long, decryptPass: Boolean = true): StudentWithSemesters? =
-        studentDb.loadStudentWithSemestersById(id).let { res ->
-            StudentWithSemesters(
-                student = res.keys.firstOrNull() ?: return null,
-                semesters = res.values.first(),
-            )
-        }.apply {
-            if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HEBE) {
-                student.password = withContext(dispatchers.io) {
+    suspend fun getSavedStudents(decryptPass: Boolean = true): List<Student> {
+        val students = studentDb.loadAll()
+        if (!decryptPass) return students
+
+        return students.map { student ->
+            if (Sdk.Mode.valueOf(student.loginMode) == Sdk.Mode.HEBE) {
+                return@map student
+            }
+
+            student.apply {
+                password = withContext(dispatchers.io) {
                     scrambler.decrypt(student.password)
                 }
             }
         }
+    }
 
     suspend fun getStudentById(id: Long, decryptPass: Boolean = true): Student {
-        val student = studentDb.loadById(id) ?: throw NoCurrentStudentException()
+        val student = studentDb.loadById(id) ?: throw NoSuchStudentException(id)
 
         if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.HEBE) {
             student.password = withContext(dispatchers.io) {
@@ -181,8 +186,8 @@ class StudentRepository @Inject constructor(
         }
     }
 
-    suspend fun switchStudent(studentWithSemesters: StudentWithSemesters) {
-        studentDb.switchCurrent(studentWithSemesters.student.id)
+    suspend fun switchStudent(student: Student) {
+        studentDb.switchCurrent(student.id)
     }
 
     suspend fun logoutStudent(student: Student) = studentDb.delete(student)
@@ -190,8 +195,8 @@ class StudentRepository @Inject constructor(
     suspend fun updateStudentNickAndAvatar(studentNickAndAvatar: StudentNickAndAvatar) =
         studentDb.update(studentNickAndAvatar)
 
-    suspend fun isOneUniqueStudent() = getSavedStudents(false)
-        .distinctBy { it.student.studentName }.size == 1
+    suspend fun isOneUniqueStudent() = studentDb.loadAll()
+        .distinctBy { it.studentName }.size == 1
 
     suspend fun authorizePermission(student: Student, semester: Semester, pesel: String) =
         wulkanowySdkFactory.create(student, semester)
@@ -199,7 +204,7 @@ class StudentRepository @Inject constructor(
 
     suspend fun refreshStudentAfterAuthorize(student: Student, semester: Semester) {
         val wulkanowySdk = wulkanowySdkFactory.create(student, semester)
-            val newCurrentApiStudent = runCatching { wulkanowySdk.getCurrentStudent() }
+        val newCurrentApiStudent = runCatching { wulkanowySdk.getCurrentStudent() }
             .onFailure { Timber.e(it, "Can't find student with id ${student.studentId}") }
             .getOrNull() ?: return
 

@@ -12,9 +12,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import kotlin.random.Random
 import kotlin.test.Test
-import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 @HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
@@ -22,9 +20,10 @@ import kotlin.test.assertTrue
 class Migration63Test : AbstractMigrationTest() {
 
     @Test
-    fun `update is_edu_one to null if 0`() = runTest {
+    fun `update is_edu_one to null`() = runTest {
         with(helper.createDatabase(dbName, 62)) {
             createStudent(1, 0)
+            createStudent(2, 1)
             close()
         }
 
@@ -32,28 +31,12 @@ class Migration63Test : AbstractMigrationTest() {
 
         val database = getMigratedRoomDatabase()
         val studentDb = database.studentDao
-        val student = studentDb.loadById(1)
+        val student1 = studentDb.loadById(1)
+        val student2 = studentDb.loadById(2)
 
-        assertNull(student!!.isEduOne)
+        assertNull(student1!!.isEduOne)
+        assertNull(student2!!.isEduOne)
 
-        database.close()
-    }
-
-    @Test
-    fun `check is_edu_one is stay same`() = runTest {
-        with(helper.createDatabase(dbName, 62)) {
-            createStudent(1, 1)
-            close()
-        }
-
-        helper.runMigrationsAndValidate(dbName, 63, true)
-
-        val database = getMigratedRoomDatabase()
-        val studentDb = database.studentDao
-        val student = studentDb.loadById(1)
-
-        val isEduOne = assertNotNull(student!!.isEduOne)
-        assertTrue(isEduOne)
         database.close()
     }
 
