@@ -56,6 +56,11 @@
         <item>Iba medzi lekciami</item>
         <item>Pred a medzi lekciami</item>
     </string-array>
+    <string-array name="timetable_show_additional_lessons_entries">
+        <item>Nezobrazovať</item>
+        <item>Zobraziť v rade</item>
+        <item>Zobraziť pod pravidelnými hodinami</item>
+    </string-array>
     <string-array name="dashboard_tile_entries">
         <item>Šťastné číslo</item>
         <item>Neprečítané správy</item>

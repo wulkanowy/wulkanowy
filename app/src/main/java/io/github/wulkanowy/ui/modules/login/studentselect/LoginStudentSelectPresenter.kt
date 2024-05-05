@@ -2,16 +2,24 @@ package io.github.wulkanowy.ui.modules.login.studentselect
 
 import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.dataOrNull
+import io.github.wulkanowy.data.db.entities.AdminMessage
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
+import io.github.wulkanowy.data.enums.MessageType
+import io.github.wulkanowy.data.flatResourceFlow
 import io.github.wulkanowy.data.logResourceStatus
 import io.github.wulkanowy.data.mappers.mapToStudentWithSemesters
+import io.github.wulkanowy.data.onResourceData
+import io.github.wulkanowy.data.onResourceError
 import io.github.wulkanowy.data.pojos.RegisterStudent
 import io.github.wulkanowy.data.pojos.RegisterSymbol
 import io.github.wulkanowy.data.pojos.RegisterUnit
 import io.github.wulkanowy.data.pojos.RegisterUser
+import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SchoolsRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.resourceFlow
+import io.github.wulkanowy.domain.adminmessage.GetAppropriateAdminMessageUseCase
+import io.github.wulkanowy.sdk.scrapper.exception.StudentGraduateException
 import io.github.wulkanowy.sdk.scrapper.login.InvalidSymbolException
 import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -32,6 +40,8 @@ class LoginStudentSelectPresenter @Inject constructor(
     private val syncManager: SyncManager,
     private val analytics: AnalyticsHelper,
     private val appInfo: AppInfo,
+    private val preferencesRepository: PreferencesRepository,
+    private val getAppropriateAdminMessageUseCase: GetAppropriateAdminMessageUseCase
 ) : BasePresenter<LoginStudentSelectView>(loginErrorHandler, studentRepository) {
 
     private var lastError: Throwable? = null
@@ -64,6 +74,7 @@ class LoginStudentSelectPresenter @Inject constructor(
         this.loginData = loginData
         this.registerUser = registerUser
         loadData()
+        loadAdminMessage()
     }
 
     private fun loadData() {
@@ -87,7 +98,20 @@ class LoginStudentSelectPresenter @Inject constructor(
                     refreshItems()
                 }
             }
-        }.launch()
+        }.launch("load_data")
+    }
+
+    private fun loadAdminMessage() {
+        flatResourceFlow {
+            getAppropriateAdminMessageUseCase(
+                scrapperBaseUrl = registerUser.scrapperBaseUrl.orEmpty(),
+                type = MessageType.LOGIN_STUDENT_SELECT_MESSAGE,
+            )
+        }
+            .logResourceStatus("load login admin message")
+            .onResourceData { view?.showAdminMessage(it) }
+            .onResourceError { view?.showAdminMessage(null) }
+            .launch("load_admin_message")
     }
 
     private fun getStudentsWithCurrentlyActiveSemesters(): List<LoginStudentSelectItem.Student> {
@@ -108,8 +132,8 @@ class LoginStudentSelectPresenter @Inject constructor(
     }
 
     private fun createItems(): List<LoginStudentSelectItem> = buildList {
-        val notEmptySymbols = registerUser.symbols.filter { it.schools.isNotEmpty() }
-        val emptySymbols = registerUser.symbols.filter { it.schools.isEmpty() }
+        val notEmptySymbols = registerUser.symbols.filter { it.shouldShowOnTop() }
+        val emptySymbols = registerUser.symbols.filter { !it.shouldShowOnTop() }
 
         if (emptySymbols.isNotEmpty() && notEmptySymbols.isNotEmpty() && emptySymbols.any { it.symbol == loginData.userEnteredSymbol }) {
             add(createEmptySymbolItem(emptySymbols.first { it.symbol == loginData.userEnteredSymbol }))
@@ -125,6 +149,10 @@ class LoginStudentSelectPresenter @Inject constructor(
             isSymbolButtonVisible = "login" !in loginData.baseUrl,
         )
         add(helpItem)
+    }
+
+    private fun RegisterSymbol.shouldShowOnTop(): Boolean {
+        return schools.isNotEmpty() || error is StudentGraduateException
     }
 
     private fun createNotEmptySymbolItems(
@@ -335,5 +363,15 @@ class LoginStudentSelectPresenter @Inject constructor(
                 "error" to (error?.message?.ifBlank { "No message" } ?: "No error")
             )
         }
+    }
+
+    fun onAdminMessageSelected(url: String?) {
+        url?.let { view?.openInternetBrowser(it) }
+    }
+
+    fun onAdminMessageDismissed(adminMessage: AdminMessage) {
+        preferencesRepository.dismissedAdminMessageIds += adminMessage.id
+
+        view?.showAdminMessage(null)
     }
 }
